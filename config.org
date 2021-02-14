@@ -17,7 +17,8 @@ Automattically hard-wrap text on 80 chars.
 #+end_src
 
 *** Startup color theme
-#+being_src
+
+#+being_src emacs-lisp
 (load-theme 'tango-dark)
 #+end_src
 
@@ -180,4 +181,3 @@ The most amazing vim plugin in existence.
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 #+end_src
-
