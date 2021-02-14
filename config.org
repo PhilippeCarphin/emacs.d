@@ -1,35 +1,73 @@
+#+OPTIONS: toc:1
+#+REVEAL_MIN_SCALE: 0.1
+#+REVEAL_HLEVEL: 2
+#+STARTUP: inlineimages
+#+ATTR_ORG: :width 500px
+
 * Top
-** MISC
-*** Scrolling behavior
+
+** Intro
+#+REVEAL: split
+An elementary that can be taken as is to start from oriented towards leveragin
+the full power of orgmode immediately.
+- Sane miscellaneous defaults
+- A built in color theme that looks good in orgmode exports
+- Evil mode if you know vim but not emacs
+- Basic helper frameworks that are defacto standard
+- Elementary org configuration allowing immediate use of built in package babel.
+
+** Scrolling behavior
+
 =scroll-margin= makes the window start scrolling when the curson gets N lines
 from the top or bottom and =scroll-step= makes the window move one line at a time.
+
 #+BEGIN_SRC emacs-lisp
 (setq scroll-step 1)
 (setq-default scroll-margin 10)
 #+end_src
 
-*** Wrapping
+** Wrapping
 
 Automattically hard-wrap text on 80 chars.
+
 #+begin_src emacs-lisp
 (setq-default auto-fill-function 'do-auto-fill)
 (setq-default fill-column 80)
 #+end_src
 
-*** Startup color theme
+** Startup color theme
+
+Dark theme that exports well
 
 #+begin_src emacs-lisp
-(load-theme 'tango-dark)
+(load-theme 'misterioso)
 #+end_src
+
+**** Explanation                                                   :noexport_reveal:
+
+    The default emacs theme looks good when exporting to HTML.  But because of
+    =htmlize=, with dark themes, the code can come out looking bad in exports
+    when text colors meant for dark backgrounds appear over the light background
+    of the HTML.
+
+    One of the built-in color themes where code looks good on light backgrounds
+    and which is easy on the eyes is =misterioso=
+
+    Although the default emacs theme exports well, it's not easy on the eyes in
+    emacs itself.  A light theme that exports well and looks good in emacs is
+    =leuven=.
 
 ** Evil mode
 *** Install and activate
+
 #+begin_src emacs-lisp
 (use-package evil
-  :ensure t)
-(evil-mode 1)
+  :ensure t
+  :config (evil-mode))
 #+end_src
+
 *** Vim like window split keys
+
 #+begin_src emacs-lisp
 (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
 (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
@@ -39,20 +77,28 @@ Automattically hard-wrap text on 80 chars.
 ** Helper frameworks
 *** Helm
 
+Improve searching interface all over emacs.
+
+Calling =helm-mode= remaps lots of emacs functions to their =helm=-ized
+equivalents.
+
+We also add a few ourselves.
+
 #+begin_src emacs-lisp
-(use-package helm
-  :ensure t
+(use-package helm :ensure t
   :preface (require 'helm-config)
   :config (helm-mode)
   :bind (("M-x" . helm-M-x)
-         ("C-x C-f" . helm-find-files)
-         ("C-x f" . helm-recentf)
-         ("C-x b" . helm-buffers-list)))
+	 ("C-x C-f" . helm-find-files)
+	 ("C-x f" . helm-recentf)
+	 ("C-x b" . helm-buffers-list)))
 #+end_src
 
 *** Which-key
-    
-Popup describing possible key bingings at each step of a key sequence.
+
+Help discovering available key sequences in all contexts.
+
+Originally developped for spacemacs, now part of the standard emacs packages.
 
 #+begin_src emacs-lisp
 (use-package which-key
@@ -67,14 +113,11 @@ Popup describing possible key bingings at each step of a key sequence.
 
 ** Org configuration
 *** Looks
-
 **** Bullets
 
-     All this does is turn all the stars except the last the same color as the
-     background and make the last one show as a nice unicode bullet.
-     
-     I think this is essencial to being able to navigate an arbitrarily deep
-     tree easily.
+Show nice bullets
+
+Essential for easy tree viewing
 
 #+begin_src emacs-lisp
 (use-package org-bullets
@@ -83,31 +126,24 @@ Popup describing possible key bingings at each step of a key sequence.
 #+end_src
 
 *** Exporting
-    
-I use Twitter Bootstrap to export to emails.  I use the RST to write sphinx-doc
-documentation.
 
-Reveal.js is for presentations.
+- =ox-twbs= to export to beautiful HTML
+- =ox-reveal= to export to Reveal.js presentation
+- =ox-rst= to generate Restructured Text for sphinx documentation
+- =htmlize= for colored code in all export formats
 
-And the =htmlize= package makes code listings appear with color in all the
-export formats.
-    
 #+begin_src emacs-lisp
-(use-package ox-rst
-  :ensure t)
-(use-package ox-twbs
-  :ensure t)
-(use-package ox-reveal
-  :ensure t
+(use-package ox-rst :ensure t)
+(use-package ox-twbs :ensure t)
+(use-package ox-reveal :ensure t
   :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
-(use-package htmlize
-  :ensure t)
+(use-package htmlize :ensure t)
 #+end_src
 
 *** Organization
 
 **** Todo keywords for GTD
-     
+
 The first set of keywords is a generic set of keywords that I can give TODO
 keywords to items without having them be part of my GTD.
 
@@ -122,7 +158,7 @@ can be.
 #+end_src
 
 **** Agenda files
-     
+
 To begin using org-agenda, all we need to do is to give it a directory that
 contains orgmode files.
 
@@ -130,7 +166,7 @@ contains orgmode files.
 (setq org-agenda-files '("~/Dropbox/Notes/gtd/"))
 #+end_src
 
-     
+
 **** Agenda Key
 I mapped a key because I like to pop in and out of it.
 #+begin_src emacs-lisp
@@ -138,7 +174,7 @@ I mapped a key because I like to pop in and out of it.
 #+end_src
 
 **** Date interval for agenda view
-      
+
 The default is kind of annoying.  It shows a week starting on a Sunday but what
 is annoying about that is that on Sunday, the agenda won't show what you have
 tomorrow!
@@ -172,7 +208,7 @@ but some of them require installing extra packages.
 #+end_src
 
 ** Magit
-   
+
 The most amazing vim plugin in existence.
 
 #+begin_src emacs-lisp
