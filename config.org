@@ -1,22 +1,5 @@
-
+* Top
 ** MISC
-
-*** Startup color theme
-#+begin_src emacs-lisp
-(load-theme 'deeper-blue)
-#+end_src
-*** Quick reload function
-#+begin_src emacs-lisp
-(defun reload-user-init-file()
-  (interactive)
-  (load-file user-init-file))
-#+end_src
-
-*** Recent files
-#+begin_src emacs-lisp
-(recentf-mode 1)
-(setq-default recent-save-file "~/.emacs.d/recentf")  
-#+end_src
 *** Scrolling behavior
 =scroll-margin= makes the window start scrolling when the curson gets N lines
 from the top or bottom and =scroll-step= makes the window move one line at a time.
@@ -31,6 +14,11 @@ Automattically hard-wrap text on 80 chars.
 #+begin_src emacs-lisp
 (setq-default auto-fill-function 'do-auto-fill)
 (setq-default fill-column 80)
+#+end_src
+
+*** Startup color theme
+#+being_src
+(load-theme 'tango-dark)
 #+end_src
 
 ** Evil mode
@@ -53,16 +41,19 @@ Automattically hard-wrap text on 80 chars.
 #+begin_src emacs-lisp
 (use-package helm
   :ensure t
+  :preface (require 'helm-config)
+  :config (helm-mode)
   :bind (("M-x" . helm-M-x)
          ("C-x C-f" . helm-find-files)
          ("C-x f" . helm-recentf)
-         ("C-x b" . helm-buffers-list))
-  :preface (require 'helm-config))
+         ("C-x b" . helm-buffers-list)))
 #+end_src
+
 *** Which-key
+    
+Popup describing possible key bingings at each step of a key sequence.
 
 #+begin_src emacs-lisp
-;; Popup avec les keybindings disponibles
 (use-package which-key
   :ensure t
   :delight
@@ -74,19 +65,33 @@ Automattically hard-wrap text on 80 chars.
 #+end_src
 
 ** Org configuration
-   
 *** Looks
+
 **** Bullets
+
+     All this does is turn all the stars except the last the same color as the
+     background and make the last one show as a nice unicode bullet.
+     
+     I think this is essencial to being able to navigate an arbitrarily deep
+     tree easily.
 
 #+begin_src emacs-lisp
 (use-package org-bullets
-  :ensure t)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  :ensure t
+  :hook (org-mode . org-bullets-mode))
 #+end_src
 
 *** Exporting
+    
+I use Twitter Bootstrap to export to emails.  I use the RST to write sphinx-doc
+documentation.
+
+Reveal.js is for presentations.
+
+And the =htmlize= package makes code listings appear with color in all the
+export formats.
+    
 #+begin_src emacs-lisp
-;;; ============================= ORG MODE ==========================================
 (use-package ox-rst
   :ensure t)
 (use-package ox-twbs
@@ -101,6 +106,12 @@ Automattically hard-wrap text on 80 chars.
 *** Organization
 
 **** Todo keywords for GTD
+     
+The first set of keywords is a generic set of keywords that I can give TODO
+keywords to items without having them be part of my GTD.
+
+The GTD-* keywords map to the various things that what David Allen calls "stuff"
+can be.
 
 #+begin_src emacs-lisp
 (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
@@ -110,29 +121,28 @@ Automattically hard-wrap text on 80 chars.
 #+end_src
 
 **** Agenda files
+     
+To begin using org-agenda, all we need to do is to give it a directory that
+contains orgmode files.
 
 #+begin_src emacs-lisp
-(add-hook 'org-mode-hook 'org-set-make-code-block-key)
-(setq gtd-directory "~/Dropbox/Notes/gtd/")
-(setq gtd-in-tray-file (concat gtd-directory "GTD_InTray.org")
-      gtd-next-actions-file (concat gtd-directory "GTD_NextActions.org")
-      gtd-project-list-file (concat gtd-directory "GTD_ProjectList.org")
-      gtd-reference-file (concat gtd-directory "GTD_Reference.org")
-      gtd-someday-maybe-file (concat gtd-directory "GTD_SomedayMaybe.org")
-      gtd-tickler-file (concat gtd-directory "GTD_Tickler.org")
-      gtd-journal-file (concat gtd-directory "GTD_Journal.org"))
 (setq org-agenda-files '("~/Dropbox/Notes/gtd/"))
 #+end_src
 
-**** Agenda config
      
-***** Key
-
+**** Agenda Key
+I mapped a key because I like to pop in and out of it.
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-c a") 'org-agenda)
 #+end_src
 
-***** Date interval for agenda view
+**** Date interval for agenda view
+      
+The default is kind of annoying.  It shows a week starting on a Sunday but what
+is annoying about that is that on Sunday, the agenda won't show what you have
+tomorrow!
+
+The way this is set, it will show 10 days starting 3 days in the past.
 
 #+begin_src emacs-lisp
 (setq org-agenda-span 10
@@ -141,20 +151,28 @@ Automattically hard-wrap text on 80 chars.
 #+end_src
 
 *** Babel
+**** Babel Intro
+Babel allows running of code blocks.  It is what enables this config to be in
+orgmode format.
+
+The ability to evaluate code in orgmode source blocks is built in with emacs but
+must be activated to be used:
+
 https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
 
-Activate the packages that you want.  =ob-go= needs to be installed to activate
-go language.
+**** Babel config
+We simply add languages that we want to become available.  There are many more
+but some of them require installing extra packages.
+
 #+begin_src emacs-lisp
-(use-package ob-go
-  :ensure t)
 (org-babel-do-load-languages 'org-babel-load-languages
     '((shell . t)
-      (python . t)
-      (go . t)))
+      (python . t)))
 #+end_src
 
 ** Magit
+   
+The most amazing vim plugin in existence.
 
 #+begin_src emacs-lisp
 (use-package magit
