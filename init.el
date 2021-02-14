@@ -55,7 +55,6 @@
 ;; The helm-config function remaps a bunch of them and I remap a couple of other ones.
 ;; Do M-x helm-... to see available helm functions
 (unless (package-installed-p 'helm)
-  (package-refresh-contents)
   (package-install 'helm))
 (require 'helm-config)
 (setq helm-completion-style 'fuzzy)
@@ -89,6 +88,7 @@
 
 (unless (package-installed-p 'ox-reveal)
   (package-install 'ox-reveal))
+(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
 (use-package ox-reveal
   :ensure ox-reveal)
 
