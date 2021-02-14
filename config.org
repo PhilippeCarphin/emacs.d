@@ -63,6 +63,9 @@
   (setq which-key-prefix-prefix "+")
   :config
   (which-key-mode))
+#+end_src
+
+#+begin_src emacs-lisp
 
 ;;; ============================= ORG MODE ==========================================
 (unless (package-installed-p 'ox-rst)
@@ -112,6 +115,9 @@
   (org-make-code-block lang start end))
 (defun org-set-make-code-block-key ()
   (define-key evil-visual-state-map (kbd "C-o") 'org-make-code-block-command))
+#+end_src
+
+#+begin_src emacs-lisp
 ;;; =============== ORG AGENDA STUFF ===========================================
 ;; This function will set C-o to do its thing when in org-mode buffers
 (add-hook 'org-mode-hook 'org-set-make-code-block-key)
@@ -131,6 +137,9 @@
       org-agenda-start-on-weekday nil
       org-agenda-start-day "-3d")
 
+#+end_src
+
+#+begin_src emacs-lisp
 ;;; ======================== BABEL ==============================================
 ;; https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
 ;; Activate the list of languages that you want
@@ -141,6 +150,9 @@
       (python . t)
       (go . t)))
 
+#+end_src
+
+#+begin_src emacs-lisp
 ;;; ============================= magit =========================================
 (unless (package-installed-p 'magit)
   (package-install 'magit))
@@ -152,9 +164,11 @@
   (interactive)
   (load-file user-init-file))
 
+#+end_src
+
+#+begin_src emacs-lisp
 ;;; ============================ WINDOW COMMANDS ================================
 (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
 (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
 (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-
 #+END_SRC
