@@ -18,7 +18,7 @@ Automattically hard-wrap text on 80 chars.
 
 *** Startup color theme
 
-#+being_src emacs-lisp
+#+begin_src emacs-lisp
 (load-theme 'tango-dark)
 #+end_src
 
