@@ -22,26 +22,23 @@ from the top or bottom and =scroll-step= makes the window move one line at a tim
 
 ** Wrapping
 
-;;; ============================ HELM FRAMEWORK =====================================
-;; Helm for the helm-config package and helm-mode:  This remaps common functionalities
-;; lke find-files, buffers-list to other things.
-;; The helm-config function remaps a bunch of them and I remap a couple of other ones.
-;; Do M-x helm-... to see available helm functions
-(unless (package-installed-p 'helm)
-  (package-install 'helm))
-(require 'helm-config)
-(setq helm-completion-style 'fuzzy)
-(helm-mode 1)
-(global-set-key (kbd "C-x C-f") 'helm-find-files)
-(global-set-key (kbd "C-x f") 'helm-recentf)
-(global-set-key (kbd "C-x b") 'helm-buffers-list)
-(global-set-key (kbd "M-x") 'helm-M-x)
 Automattically hard-wrap text on 80 chars.
 #+begin_src emacs-lisp
 (setq-default auto-fill-function 'do-auto-fill)
 (setq-default fill-column 80)
 #+end_src
 
+#+begin_src emacs-lisp
+(use-package helm
+  :ensure t
+  :bind (("M-x" . helm-M-x)
+         ("C-x C-f" . helm-find-files)
+         ("C-x f" . helm-recentf)
+         ("C-x b" . helm-buffers-list))
+  :preface (require 'helm-config))
+#+end_src
+
+#+begin_src emacs-lisp
 (recentf-mode 1)
 (setq-default recent-save-file "~/.emacs.d/recentf")  
 #+end_src
