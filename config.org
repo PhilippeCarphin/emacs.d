@@ -1,5 +1,23 @@
 
-** Scrolling behavior
+** MISC
+
+*** Startup color theme
+#+begin_src emacs-lisp
+(load-theme 'deeper-blue)
+#+end_src
+*** Quick reload function
+#+begin_src emacs-lisp
+(defun reload-user-init-file()
+  (interactive)
+  (load-file user-init-file))
+#+end_src
+
+*** Recent files
+#+begin_src emacs-lisp
+(recentf-mode 1)
+(setq-default recent-save-file "~/.emacs.d/recentf")  
+#+end_src
+*** Scrolling behavior
 =scroll-margin= makes the window start scrolling when the curson gets N lines
 from the top or bottom and =scroll-step= makes the window move one line at a time.
 #+BEGIN_SRC emacs-lisp
@@ -7,26 +25,31 @@ from the top or bottom and =scroll-step= makes the window move one line at a tim
 (setq-default scroll-margin 10)
 #+end_src
 
-** Evil mode
-#+begin_src emacs-lisp
-(unless (package-installed-p 'evil)
-  (package-install 'evil))
-(require 'evil)
-(evil-mode 1)
-#+end_src
-
-#+begin_src emacs-lisp
-(setq inhibit-startup-message t)
-(load-theme 'deeper-blue)
-#+end_src
-
-** Wrapping
+*** Wrapping
 
 Automattically hard-wrap text on 80 chars.
 #+begin_src emacs-lisp
 (setq-default auto-fill-function 'do-auto-fill)
 (setq-default fill-column 80)
 #+end_src
+
+** Evil mode
+*** Install and activate
+#+begin_src emacs-lisp
+(unless (package-installed-p 'evil)
+  (package-install 'evil))
+(require 'evil)
+(evil-mode 1)
+#+end_src
+*** Vim like window split keys
+#+begin_src emacs-lisp
+(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
+(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
+(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
+#+END_SRC
+
+** Helper frameworks
+*** Helm
 
 #+begin_src emacs-lisp
 (use-package helm
@@ -37,11 +60,7 @@ Automattically hard-wrap text on 80 chars.
          ("C-x b" . helm-buffers-list))
   :preface (require 'helm-config))
 #+end_src
-
-#+begin_src emacs-lisp
-(recentf-mode 1)
-(setq-default recent-save-file "~/.emacs.d/recentf")  
-#+end_src
+*** Which-key
 
 #+begin_src emacs-lisp
 ;; Popup avec les keybindings disponibles
@@ -55,8 +74,20 @@ Automattically hard-wrap text on 80 chars.
   (which-key-mode))
 #+end_src
 
-#+begin_src emacs-lisp
+** Org configuration
+   
+*** Looks
+**** Bullets
 
+#+begin_src emacs-lisp
+(unless (package-installed-p 'org-bullets)
+  (package-install 'org-bullets))
+(use-package org-bullets)
+(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+#+end_src
+
+*** Exporting
+#+begin_src emacs-lisp
 ;;; ============================= ORG MODE ==========================================
 (unless (package-installed-p 'ox-rst)
   (package-install 'ox-rst))
@@ -75,41 +106,22 @@ Automattically hard-wrap text on 80 chars.
 (unless (package-installed-p 'htmlize)
   (package-install 'htmlize))
 (use-package htmlize)
+#+end_src
 
-(unless (package-installed-p 'org-bullets)
-  (package-install 'org-bullets))
-(use-package org-bullets)
-(add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+*** Organization
 
+**** Todo keywords for GTD
+
+#+begin_src emacs-lisp
 (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
 			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)" "GTD-PROJECT(p)"
 				    "GTD-SOMEDAY-MAYBE(s)" "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)"
 				    "GTD-WAITING(w)" "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)" "GTD-DONE(d)")))
-
-;; Set C-o in VISUAL MODE to ask for a language and insert #+BEGIN_SRC $lang\n
-;; at the start and $+END_SRC at the end.
-(defun surround-strings (start end start-string end-string)
-  (save-excursion (goto-char end)
-                  (insert end-string)
-                  (goto-char start)
-                  (insert start-string)))
-(defun org-make-code-block (lang start end)
-  (surround-strings start
-                    end
-                    (concat "#+BEGIN_SRC " lang "\n")
-                    "#+END_SRC\n"))
-(defun org-make-code-block-command (lang start end)
-  (interactive (list (read-string "Enter a language (default C): " "" nil "c")
-                     (region-beginning)
-                     (region-end)))
-  (org-make-code-block lang start end))
-(defun org-set-make-code-block-key ()
-  (define-key evil-visual-state-map (kbd "C-o") 'org-make-code-block-command))
 #+end_src
 
+**** Agenda files
+
 #+begin_src emacs-lisp
-;;; =============== ORG AGENDA STUFF ===========================================
-;; This function will set C-o to do its thing when in org-mode buffers
 (add-hook 'org-mode-hook 'org-set-make-code-block-key)
 (setq gtd-directory "~/Dropbox/Notes/gtd/")
 (setq gtd-in-tray-file (concat gtd-directory "GTD_InTray.org")
@@ -120,45 +132,45 @@ Automattically hard-wrap text on 80 chars.
       gtd-tickler-file (concat gtd-directory "GTD_Tickler.org")
       gtd-journal-file (concat gtd-directory "GTD_Journal.org"))
 (setq org-agenda-files '("~/Dropbox/Notes/gtd/"))
+#+end_src
 
+**** Agenda config
+     
+***** Key
+
+#+begin_src emacs-lisp
 (global-set-key (kbd "C-c a") 'org-agenda)
+#+end_src
 
+***** Date interval for agenda view
+
+#+begin_src emacs-lisp
 (setq org-agenda-span 10
       org-agenda-start-on-weekday nil
       org-agenda-start-day "-3d")
-
 #+end_src
 
+*** Babel
+https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
+
+Activate the packages that you want.  =ob-go= needs to be installed to activate
+go language.
 #+begin_src emacs-lisp
-;;; ======================== BABEL ==============================================
-;; https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
-;; Activate the list of languages that you want
 (unless (package-installed-p 'ob-go)
   (package-install 'ob-go))
 (org-babel-do-load-languages 'org-babel-load-languages
     '((shell . t)
       (python . t)
       (go . t)))
-
 #+end_src
 
+** Magit
+
 #+begin_src emacs-lisp
-;;; ============================= magit =========================================
 (unless (package-installed-p 'magit)
   (package-install 'magit))
 (use-package magit
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-;;; ========================= For quick reloading ===============================
-(defun reload-user-init-file()
-  (interactive)
-  (load-file user-init-file))
-
 #+end_src
 
-#+begin_src emacs-lisp
-;;; ============================ WINDOW COMMANDS ================================
-(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-#+END_SRC
