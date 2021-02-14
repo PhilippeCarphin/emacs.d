@@ -1,40 +1,26 @@
 
+** Scrolling behavior
+=scroll-margin= makes the window start scrolling when the curson gets N lines
+from the top or bottom and =scroll-step= makes the window move one line at a time.
 #+BEGIN_SRC emacs-lisp
-;;; ============================ SCROLLING BEHAVIOR =============================
-;; The first command makes the text scroll one line at a time when the cursor hits
-;; the top or bottom of the window.  Otherwise the window will jump a whole page
-;; when the cursor hits the top or bottom.  Setting this to one makes the second
-;; command more relevant.
-(setq scroll-step 1)             ;; instead of the default behavior of jumping
-(setq-default scroll-margin 10)  ;; Prevent the cursor from getting too close to the edges
+(setq scroll-step 1)
+(setq-default scroll-margin 10)
+#+end_src
 
-;;; ========================== EVIL MODE ========================================
-;; This gives emacs vim functionnality.
+** Evil mode
+#+begin_src emacs-lisp
 (unless (package-installed-p 'evil)
   (package-install 'evil))
 (require 'evil)
 (evil-mode 1)
+#+end_src
 
-;; ====================== SIMPLE CONFIGS FROM VANILLAMACS ========================
-(setq inhibit-startup-message t) ;; Turn off the welcome screen
-;; (unless (package-installed-p 'spacemacs-theme)
-;;   (package-install 'spacemacs-theme))
-;; (load-theme 'spacemacs-dark)        ;; Set startup theme
+#+begin_src emacs-lisp
+(setq inhibit-startup-message t)
 (load-theme 'deeper-blue)
-;; (electric-pair-mode 1)           ;; Automatic parens pairing
-(delete-selection-mode 1)        ;; Typing when you have text selected deletes the selected text
-(global-subword-mode 1)          ;; make cursor movement stop in between camelCase words.
-(global-hl-line-mode 1)          ;; turn on highlighting current line
-(show-paren-mode 1)              ;; Highlight matching parens
-(save-place-mode 1)              ;; Remember position in files for when reopening
-(display-line-numbers-mode)      ;; Activate display of line numbers
-(column-number-mode 1)           ;; Column number in modeline
+#+end_src
 
-
-;;; ====================== WRAPPING BEHAVIOR ========================================
-(setq-default auto-fill-function 'do-auto-fill) ;; Automatically hard-wrap everything
-(setq-default fill-column 80) ;; Set text width
-
+** Wrapping
 
 ;;; ============================ HELM FRAMEWORK =====================================
 ;; Helm for the helm-config package and helm-mode:  This remaps common functionalities
@@ -50,10 +36,17 @@
 (global-set-key (kbd "C-x f") 'helm-recentf)
 (global-set-key (kbd "C-x b") 'helm-buffers-list)
 (global-set-key (kbd "M-x") 'helm-M-x)
+Automattically hard-wrap text on 80 chars.
+#+begin_src emacs-lisp
+(setq-default auto-fill-function 'do-auto-fill)
+(setq-default fill-column 80)
+#+end_src
 
 (recentf-mode 1)
 (setq-default recent-save-file "~/.emacs.d/recentf")  
+#+end_src
 
+#+begin_src emacs-lisp
 ;; Popup avec les keybindings disponibles
 (use-package which-key
   :ensure t
