@@ -69,11 +69,11 @@ Automattically hard-wrap text on 80 chars.
   (package-install 'ox-twbs))
 (require 'ox-twbs)
 
-(unless (package-installed-p 'ox-reveal)
-  (package-install 'ox-reveal))
+;; (unless (package-installed-p 'ox-reveal)
+;;   (package-install 'ox-reveal))
 (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
 (use-package ox-reveal
-  :ensure ox-reveal)
+  :ensure t)
 
 (unless (package-installed-p 'htmlize)
   (package-install 'htmlize))
