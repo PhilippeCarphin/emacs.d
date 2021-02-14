@@ -36,9 +36,8 @@ Automattically hard-wrap text on 80 chars.
 ** Evil mode
 *** Install and activate
 #+begin_src emacs-lisp
-(unless (package-installed-p 'evil)
-  (package-install 'evil))
-(require 'evil)
+(use-package evil
+  :ensure t)
 (evil-mode 1)
 #+end_src
 *** Vim like window split keys
@@ -80,32 +79,23 @@ Automattically hard-wrap text on 80 chars.
 **** Bullets
 
 #+begin_src emacs-lisp
-(unless (package-installed-p 'org-bullets)
-  (package-install 'org-bullets))
-(use-package org-bullets)
+(use-package org-bullets
+  :ensure t)
 (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
 #+end_src
 
 *** Exporting
 #+begin_src emacs-lisp
 ;;; ============================= ORG MODE ==========================================
-(unless (package-installed-p 'ox-rst)
-  (package-install 'ox-rst))
-(require 'ox-rst)
-
-(unless (package-installed-p 'ox-twbs)
-  (package-install 'ox-twbs))
-(require 'ox-twbs)
-
-;; (unless (package-installed-p 'ox-reveal)
-;;   (package-install 'ox-reveal))
-(setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js")
-(use-package ox-reveal
+(use-package ox-rst
   :ensure t)
-
-(unless (package-installed-p 'htmlize)
-  (package-install 'htmlize))
-(use-package htmlize)
+(use-package ox-twbs
+  :ensure t)
+(use-package ox-reveal
+  :ensure t
+  :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
+(use-package htmlize
+  :ensure t)
 #+end_src
 
 *** Organization
@@ -156,8 +146,8 @@ https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
 Activate the packages that you want.  =ob-go= needs to be installed to activate
 go language.
 #+begin_src emacs-lisp
-(unless (package-installed-p 'ob-go)
-  (package-install 'ob-go))
+(use-package ob-go
+  :ensure t)
 (org-babel-do-load-languages 'org-babel-load-languages
     '((shell . t)
       (python . t)
@@ -167,9 +157,8 @@ go language.
 ** Magit
 
 #+begin_src emacs-lisp
-(unless (package-installed-p 'magit)
-  (package-install 'magit))
 (use-package magit
+  :ensure t
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 #+end_src
