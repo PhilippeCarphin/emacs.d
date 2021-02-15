@@ -216,6 +216,12 @@ but some of them require installing extra packages.
       (python . t)))
 #+end_src
 
+**** Disable prompt
+As a security precaution this is off by default.
+
+#+begin_src emacs-lisp
+(setq org-confirm-babel-evaluate nil)
+#+end_src
 ** Magit
 
 The most amazing vim plugin in existence.

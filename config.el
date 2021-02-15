@@ -14,14 +14,13 @@
 (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
 (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
 
-(use-package helm
-  :ensure t
+(use-package helm :ensure t
   :preface (require 'helm-config)
   :config (helm-mode)
   :bind (("M-x" . helm-M-x)
-         ("C-x C-f" . helm-find-files)
-         ("C-x f" . helm-recentf)
-         ("C-x b" . helm-buffers-list)))
+	 ("C-x C-f" . helm-find-files)
+	 ("C-x f" . helm-recentf)
+	 ("C-x b" . helm-buffers-list)))
 
 (use-package which-key
   :ensure t
@@ -64,6 +63,8 @@
 (org-babel-do-load-languages 'org-babel-load-languages
     '((shell . t)
       (python . t)))
+
+(setq org-confirm-babel-evaluate nil)
 
 (use-package magit
   :ensure t
