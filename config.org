@@ -112,6 +112,14 @@ Originally developped for spacemacs, now part of the standard emacs packages.
   (which-key-mode))
 #+end_src
 
+*** Standard autocomplete
+
+#+begin_src emacs-lisp
+(use-package company
+  :ensure t
+  :config (global-company-mode)
+          (setq company-idle-delay 0))
+#+end_src
 ** Org configuration
 *** Looks
 **** Bullets
