@@ -33,6 +33,11 @@
   :config
   (which-key-mode))
 
+(use-package company
+  :ensure t
+  :config (global-company-mode)
+          (setq company-idle-delay 0))
+
 (use-package org-bullets
   :ensure t
   :hook (org-mode . org-bullets-mode))
