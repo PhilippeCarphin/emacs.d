@@ -29,6 +29,7 @@
   :init
   (setq which-key-separator " ")
   (setq which-key-prefix-prefix "+")
+  (setq which-key-idle-delay 0.01)
   :config
   (which-key-mode))
 
