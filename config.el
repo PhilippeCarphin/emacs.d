@@ -36,15 +36,11 @@
   :ensure t
   :hook (org-mode . org-bullets-mode))
 
-(use-package ox-rst
-  :ensure t)
-(use-package ox-twbs
-  :ensure t)
-(use-package ox-reveal
-  :ensure t
+(use-package ox-rst :ensure t)
+(use-package ox-twbs :ensure t)
+(use-package ox-reveal :ensure t
   :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
-(use-package htmlize
-  :ensure t)
+(use-package htmlize :ensure t)
 
 (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
 			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)" "GTD-PROJECT(p)"
