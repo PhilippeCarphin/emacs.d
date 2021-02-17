@@ -14,6 +14,11 @@
 (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
 (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
 
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+
+(global-undo-tree-mode)
+
 (use-package helm :ensure t
   :preface (require 'helm-config)
   :config (helm-mode)

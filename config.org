@@ -74,7 +74,19 @@ Dark theme that exports well
 (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
 #+END_SRC
 
+*** Map undo keys to undo-tree function
+
+#+begin_src emacs-lisp
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+#+end_src
+
 ** Helper frameworks
+
+*** Undo tree
+#+begin_src emacs-lisp
+(global-undo-tree-mode)
+#+END_SRC
 *** Helm
 
 Improve searching interface all over emacs.
