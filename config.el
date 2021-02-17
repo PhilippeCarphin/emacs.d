@@ -25,6 +25,7 @@
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)
 	 ("C-x f" . helm-recentf)
+	 ("C-c g" . helm-grep-do-git-grep)
 	 ("C-x b" . helm-buffers-list)))
 
 (use-package which-key
