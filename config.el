@@ -17,7 +17,9 @@
 (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
 
-(global-undo-tree-mode)
+(use-package undo-tree
+  :ensure t
+  :config (global-undo-tree-mode))
 
 (use-package helm :ensure t
   :preface (require 'helm-config)
