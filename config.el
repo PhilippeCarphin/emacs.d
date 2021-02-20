@@ -55,24 +55,34 @@
   :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
 (use-package htmlize :ensure t)
 
-(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)" "GTD-PROJECT(p)"
-				    "GTD-SOMEDAY-MAYBE(s)" "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)"
-				    "GTD-WAITING(w)" "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)" "GTD-DONE(d)")))
-
-(setq org-agenda-files '("~/Dropbox/Notes/gtd/"))
-
-(global-set-key (kbd "C-c a") 'org-agenda)
-
-(setq org-agenda-span 10
-      org-agenda-start-on-weekday nil
-      org-agenda-start-day "-3d")
-
 (org-babel-do-load-languages 'org-babel-load-languages
     '((shell . t)
       (python . t)))
 
 (setq org-confirm-babel-evaluate nil)
+
+(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
+			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)"
+			  "GTD-PROJECT(p)" "GTD-SOMEDAY-MAYBE(s)"
+			  "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)" "GTD-WAITING(w)"
+			  "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)"
+			  "GTD-DONE(d)")))
+
+(setq org-agenda-span 10
+      org-agenda-start-on-weekday nil
+      org-agenda-start-day "-3d")
+
+(setq org-agenda-files '("~/NDocuments/gtd/"))
+
+(global-set-key (kbd "C-c a") 'org-agenda)
+
+(setq org-stuck-projects '("TODO=\"GTD-PROJECT\"" ("GTD-NEXT-ACTION") () ""))
+
+(setq org-agenda-custom-commands '(("c" "Simple agenda view" ((tags
+      "PRIORITY=\"A\"") (agenda "") (todo "GTD-NEXT-ACTION") (todo "GTD-ACTION")
+      (stuck "" ))) ("g" . "GTD keyword searches searches") ("ga" todo
+      "GTD-ACTION") ("gn" todo-tree "GTD-NEXT-ACTION") ("gp" todo
+      "GTD-PROJECT")))
 
 (use-package magit
   :ensure t

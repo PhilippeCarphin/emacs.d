@@ -179,53 +179,6 @@ Essential for easy tree viewing
 (use-package htmlize :ensure t)
 #+end_src
 
-*** Organization
-
-**** Todo keywords for GTD
-
-The first set of keywords is a generic set of keywords that I can give TODO
-keywords to items without having them be part of my GTD.
-
-The GTD-* keywords map to the various things that what David Allen calls "stuff"
-can be.
-
-#+begin_src emacs-lisp
-(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)" "GTD-PROJECT(p)"
-				    "GTD-SOMEDAY-MAYBE(s)" "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)"
-				    "GTD-WAITING(w)" "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)" "GTD-DONE(d)")))
-#+end_src
-
-**** Agenda files
-
-To begin using org-agenda, all we need to do is to give it a directory that
-contains orgmode files.
-
-#+begin_src emacs-lisp
-(setq org-agenda-files '("~/Dropbox/Notes/gtd/"))
-#+end_src
-
-
-**** Agenda Key
-I mapped a key because I like to pop in and out of it.
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-c a") 'org-agenda)
-#+end_src
-
-**** Date interval for agenda view
-
-The default is kind of annoying.  It shows a week starting on a Sunday but what
-is annoying about that is that on Sunday, the agenda won't show what you have
-tomorrow!
-
-The way this is set, it will show 10 days starting 3 days in the past.
-
-#+begin_src emacs-lisp
-(setq org-agenda-span 10
-      org-agenda-start-on-weekday nil
-      org-agenda-start-day "-3d")
-#+end_src
-
 *** Babel
 **** Babel Intro
 Babel allows running of code blocks.  It is what enables this config to be in
@@ -252,6 +205,73 @@ As a security precaution this is off by default.
 #+begin_src emacs-lisp
 (setq org-confirm-babel-evaluate nil)
 #+end_src
+*** Agenda
+**** Todo keywords for GTD
+
+The first set of keywords is a generic set of keywords that I can give TODO
+keywords to items without having them be part of my GTD.
+
+The GTD-* keywords map to the various things that what David Allen calls "stuff"
+can be.
+
+#+begin_src emacs-lisp
+(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
+			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)"
+			  "GTD-PROJECT(p)" "GTD-SOMEDAY-MAYBE(s)"
+			  "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)" "GTD-WAITING(w)"
+			  "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)"
+			  "GTD-DONE(d)")))
+#+end_src
+
+**** Date interval for agenda view
+
+The default is kind of annoying.  It shows a week starting on a Sunday but what
+is annoying about that is that on Sunday, the agenda won't show what you have
+tomorrow!
+
+The way this is set, it will show 10 days starting 3 days in the past.
+
+#+begin_src emacs-lisp
+(setq org-agenda-span 10
+      org-agenda-start-on-weekday nil
+      org-agenda-start-day "-3d")
+#+end_src
+
+**** Agenda files
+
+To begin using org-agenda, all we need to do is to give it a directory that
+contains orgmode files.
+
+#+begin_src emacs-lisp
+(setq org-agenda-files '("~/NDocuments/gtd/"))
+#+end_src
+
+**** Agenda Key
+I mapped a key because I like to pop in and out of it.
+
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c a") 'org-agenda)
+#+end_src
+
+**** Definition of stuck projects
+
+In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
+This says that a stuck project is a headline where the todo keyword is
+=GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
+#+begin_src emacs-lisp
+(setq org-stuck-projects '("TODO=\"GTD-PROJECT\"" ("GTD-NEXT-ACTION") () ""))
+#+end_src
+
+**** Agenda custom commands
+
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands '(("c" "Simple agenda view" ((tags
+      "PRIORITY=\"A\"") (agenda "") (todo "GTD-NEXT-ACTION") (todo "GTD-ACTION")
+      (stuck "" ))) ("g" . "GTD keyword searches searches") ("ga" todo
+      "GTD-ACTION") ("gn" todo-tree "GTD-NEXT-ACTION") ("gp" todo
+      "GTD-PROJECT")))
+#+end_src
+
 ** Magit
 
 The most amazing vim plugin in existence.
