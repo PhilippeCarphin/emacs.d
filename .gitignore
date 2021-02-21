@@ -5,3 +5,4 @@ recentf
 transient
 
 config.el
+*.html
