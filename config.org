@@ -281,6 +281,7 @@ Wrong type argument : stringp, org-agenda-dir.
  #+begin_src emacs-lisp
    (define-key gtd (kbd "i") (lambda () (interactive) (gtd-open-agenda-file "GTD_InTray.org")))
    (define-key gtd (kbd "p") (lambda () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org")))
+   (define-key gtd (kbd "r") (lambda () (interactive) (gtd-open-agenda-file "GTD_Reference.org")))
    (define-key gtd (kbd "n") (lambda () (interactive) (gtd-open-agenda-file "GTD_NextActions.org")))
  #+end_src
 
