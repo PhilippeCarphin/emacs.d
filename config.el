@@ -16,6 +16,8 @@
 
 (load-theme 'misterioso)
 
+(custom-set-faces '(default ((t (:height 200)))))
+
 (use-package undo-tree
   :ensure t
   :config (global-undo-tree-mode))

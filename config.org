@@ -80,6 +80,16 @@ Dark theme that exports well
     emacs itself.  A light theme that exports well and looks good in emacs is
     =leuven=.
 
+** Startup font
+   
+To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
+
+#+begin_src emacs-lisp
+(custom-set-faces '(default ((t (:height 200)))))
+#+end_src
+
+#+RESULTS:
+
 ** Helper frameworks
 
 *** Undo tree
