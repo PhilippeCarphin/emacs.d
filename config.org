@@ -16,6 +16,20 @@ the full power of orgmode immediately.
 - Basic helper frameworks that are defacto standard
 - Elementary org configuration allowing immediate use of built in package babel.
 
+** Font
+
+To change the font, as per this
+[[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]]
+use =M-x customize-group RET faces RET= and then go in =Basic Faces= then
+=Default= and set the height.
+
+I looked in the =custom-set-variables= part at the end of the =init.el= and
+stripped it to get this.
+
+#+begin_src emacs-lisp
+(custom-set-faces '(default ((t (:height 250)))))
+#+end_src
+
 ** Scrolling behavior
 
 =scroll-margin= makes the window start scrolling when the curson gets N lines

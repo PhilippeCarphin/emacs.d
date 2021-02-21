@@ -1,3 +1,5 @@
+(custom-set-faces '(default ((t (:height 250)))))
+
 (setq scroll-step 1)
 (setq-default scroll-margin 10)
 
