@@ -1,3 +1,13 @@
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(package-initialize)
+
+(unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+(eval-when-compile (require 'use-package))
+
 (setq scroll-step 1)
 (setq-default scroll-margin 10)
 
@@ -49,68 +59,3 @@
       (python . t)))
 
 (setq org-confirm-babel-evaluate nil)
-
-(custom-set-faces '(default ((t (:height 250)))))
-
-(use-package evil
-  :ensure t
-  :config (evil-mode))
-
-(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-
-(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
-
-(setq org-agenda-dir "~/NDocuments/gtd")
-(setq org-agenda-files '("~/NDocuments/gtd"))
-
-(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)"
-			  "GTD-PROJECT(p)" "GTD-SOMEDAY-MAYBE(s)"
-			  "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)" "GTD-WAITING(w)"
-			  "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)"
-			  "GTD-DONE(d)")))
-
-(define-prefix-command 'gtd)
-(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
-
-(defun gtd-open-agenda-file (file)
-  (interactive)
-  (find-file (concat org-agenda-dir "/" file)))
-
-(define-key gtd (kbd "i") (lambda () (interactive) (gtd-open-agenda-file "GTD_InTray.org")))
-(define-key gtd (kbd "p") (lambda () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org")))
-(define-key gtd (kbd "r") (lambda () (interactive) (gtd-open-agenda-file "GTD_Reference.org")))
-(define-key gtd (kbd "n") (lambda () (interactive) (gtd-open-agenda-file "GTD_NextActions.org")))
-
-(setq org-stuck-projects
-      '("TODO=\"GTD-PROJECT\"" ;; Search query
-        ("GTD-NEXT-ACTION")    ;; Not stuck if contains
-        ()                     ;; Stuck if contains
-        ""))                   ;; General regex
-
-(setq org-agenda-span 10
-      org-agenda-start-on-weekday nil
-      org-agenda-start-day "-3d")
-
-(global-set-key (kbd "C-c a") 'org-agenda)
-
-(setq org-agenda-custom-commands
-      '(("c" "Simple agenda view"
-          ((tags "PRIORITY=\"A\"")
-           (stuck "" )
-           (agenda "")
-           (todo "GTD-ACTION")))
-        ("g" . "GTD keyword searches searches")
-        ("gi" todo "GTD-IN")
-        ("gc" todo "GTD-CLARIFY")
-        ("ga" todo "GTD-ACTION")
-        ("gn" todo-tree "GTD-NEXT-ACTION")
-        ("gp" todo "GTD-PROJECT")))
-
-(use-package magit
-  :ensure t
-  :custom
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
