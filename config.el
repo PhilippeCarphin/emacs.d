@@ -78,11 +78,18 @@
 
 (setq org-stuck-projects '("TODO=\"GTD-PROJECT\"" ("GTD-NEXT-ACTION") () ""))
 
-(setq org-agenda-custom-commands '(("c" "Simple agenda view" ((tags
-      "PRIORITY=\"A\"") (agenda "") (todo "GTD-NEXT-ACTION") (todo "GTD-ACTION")
-      (stuck "" ))) ("g" . "GTD keyword searches searches") ("ga" todo
-      "GTD-ACTION") ("gn" todo-tree "GTD-NEXT-ACTION") ("gp" todo
-      "GTD-PROJECT")))
+(setq org-agenda-custom-commands
+      '(("c" "Simple agenda view"
+          ((tags "PRIORITY=\"A\"")
+           (stuck "" )
+           (agenda "")
+           (todo "GTD-ACTION")))
+        ("g" . "GTD keyword searches searches")
+        ("gi" todo "GTD-IN")
+        ("gc" todo "GTD-CLARIFY")
+        ("ga" todo "GTD-ACTION")
+        ("gn" todo-tree "GTD-NEXT-ACTION")
+        ("gp" todo "GTD-PROJECT")))
 
 (use-package magit
   :ensure t
