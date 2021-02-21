@@ -1,5 +1,3 @@
-(custom-set-faces '(default ((t (:height 250)))))
-
 (setq scroll-step 1)
 (setq-default scroll-margin 10)
 
@@ -7,17 +5,6 @@
 (setq-default fill-column 80)
 
 (load-theme 'misterioso)
-
-(use-package evil
-  :ensure t
-  :config (evil-mode))
-
-(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-
-(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
 
 (use-package undo-tree
   :ensure t
@@ -63,6 +50,22 @@
 
 (setq org-confirm-babel-evaluate nil)
 
+(custom-set-faces '(default ((t (:height 250)))))
+
+(use-package evil
+  :ensure t
+  :config (evil-mode))
+
+(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
+(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
+(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
+
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+
+(setq org-agenda-dir "~/NDocuments/gtd")
+(setq org-agenda-files '("~/NDocuments/gtd"))
+
 (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
 			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)"
 			  "GTD-PROJECT(p)" "GTD-SOMEDAY-MAYBE(s)"
@@ -70,15 +73,28 @@
 			  "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)"
 			  "GTD-DONE(d)")))
 
+(define-prefix-command 'gtd)
+(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+
+(defun gtd-open-agenda-file (file)
+  (interactive)
+  (find-file (concat org-agenda-dir "/" file)))
+
+(define-key gtd (kbd "i") (lambda () (interactive) (gtd-open-agenda-file "GTD_InTray.org")))
+(define-key gtd (kbd "p") (lambda () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org")))
+(define-key gtd (kbd "n") (lambda () (interactive) (gtd-open-agenda-file "GTD_NextActions.org")))
+
+(setq org-stuck-projects
+      '("TODO=\"GTD-PROJECT\"" ;; Search query
+        ("GTD-NEXT-ACTION")    ;; Not stuck if contains
+        ()                     ;; Stuck if contains
+        ""))                   ;; General regex
+
 (setq org-agenda-span 10
       org-agenda-start-on-weekday nil
       org-agenda-start-day "-3d")
 
-(setq org-agenda-files '("~/NDocuments/gtd/"))
-
 (global-set-key (kbd "C-c a") 'org-agenda)
-
-(setq org-stuck-projects '("TODO=\"GTD-PROJECT\"" ("GTD-NEXT-ACTION") () ""))
 
 (setq org-agenda-custom-commands
       '(("c" "Simple agenda view"

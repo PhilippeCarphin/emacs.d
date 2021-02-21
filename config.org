@@ -4,7 +4,7 @@
 #+STARTUP: inlineimages
 #+ATTR_ORG: :width 500px
 
-* Top
+* Minimalistic config
 
 ** Intro
 #+REVEAL: split
@@ -16,24 +16,10 @@ the full power of orgmode immediately.
 - Basic helper frameworks that are defacto standard
 - Elementary org configuration allowing immediate use of built in package babel.
 
-** Font
-
-To change the font, as per this
-[[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]]
-use =M-x customize-group RET faces RET= and then go in =Basic Faces= then
-=Default= and set the height.
-
-I looked in the =custom-set-variables= part at the end of the =init.el= and
-stripped it to get this.
-
-#+begin_src emacs-lisp
-(custom-set-faces '(default ((t (:height 250)))))
-#+end_src
-
 ** Scrolling behavior
 
-=scroll-margin= makes the window start scrolling when the curson gets N lines
-from the top or bottom and =scroll-step= makes the window move one line at a time.
+- =scroll-margin= Distance between cursor and top/bottom before scrolling starts.
+- =scroll-step= makes the window move one line at a time.
 
 #+BEGIN_SRC emacs-lisp
 (setq scroll-step 1)
@@ -71,38 +57,15 @@ Dark theme that exports well
     emacs itself.  A light theme that exports well and looks good in emacs is
     =leuven=.
 
-** Evil mode
-*** Install and activate
-
-#+begin_src emacs-lisp
-(use-package evil
-  :ensure t
-  :config (evil-mode))
-#+end_src
-
-*** Vim like window split keys
-
-#+begin_src emacs-lisp
-(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-#+END_SRC
-
-*** Map undo keys to undo-tree function
-
-#+begin_src emacs-lisp
-(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
-#+end_src
-
 ** Helper frameworks
 
 *** Undo tree
+    Use =C-x u= to get an undo tree buffer, really strong!
 #+begin_src emacs-lisp
 (use-package undo-tree
   :ensure t
   :config (global-undo-tree-mode))
-#+END_SRC
+#+end_src
 *** Helm
 
 Improve searching interface all over emacs.
@@ -125,6 +88,7 @@ We also add a few ourselves.
 
 **** Remapped functions
 
+     Notable remapped functions:
 - =M-x= adds helm when writing function
 - Files and buffers
   - =helm-recentf=
@@ -214,84 +178,184 @@ but some of them require installing extra packages.
 #+end_src
 
 **** Disable prompt
-As a security precaution this is off by default.
+As a security precaution this is off by default.  It would indeed be quite
+surprising if your text editor runs a shell command if you accidently do =C-c
+C-c=.
+
+But if you know it exists, then there is no big deal.  Indeed one is not
+surprised that a command runs when the press enter in a shell.
 
 #+begin_src emacs-lisp
 (setq org-confirm-babel-evaluate nil)
 #+end_src
-*** Agenda
+    
+
+* Advanced
+** Font
+   
+To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]]
+
+#+begin_src emacs-lisp
+(custom-set-faces '(default ((t (:height 250)))))
+#+end_src
+
+** Evil mode
+*** Install and activate
+
+#+begin_src emacs-lisp
+(use-package evil
+  :ensure t
+  :config (evil-mode))
+#+end_src
+
+*** Vim like window split keys
+
+#+begin_src emacs-lisp
+(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
+(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
+(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
+#+END_SRC
+
+*** Map undo keys to undo-tree function
+
+#+begin_src emacs-lisp
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+#+end_src
+
+
+** Orgmode implementation of GTD
+*** Agenda files
+
+ To begin using org-agenda, all we need to do is to give it a directory that
+ contains orgmode files.
+
+ #+begin_src emacs-lisp
+ (setq org-agenda-dir "~/NDocuments/gtd")
+ (setq org-agenda-files '("~/NDocuments/gtd"))
+ #+end_src
+
+I don't know why I can't use org-agenda-dir here but if I put org-agenda-dir
+where the string litteral is, it doesn't work.
+
+It gives the message
+
+#+begin_src text
+Wrong type argument : stringp, org-agenda-dir.
+#+end_src
+
+*** GTD
+
 **** Todo keywords for GTD
 
-The first set of keywords is a generic set of keywords that I can give TODO
-keywords to items without having them be part of my GTD.
+ The first set of keywords is a generic set of keywords that I can give TODO
+ keywords to items without having them be part of my GTD.
 
-The GTD-* keywords map to the various things that what David Allen calls "stuff"
-can be.
+ The GTD-* keywords map to the various things that what David Allen calls "stuff"
+ can be.
 
-#+begin_src emacs-lisp
-(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)"
-			  "GTD-PROJECT(p)" "GTD-SOMEDAY-MAYBE(s)"
-			  "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)" "GTD-WAITING(w)"
-			  "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)"
-			  "GTD-DONE(d)")))
-#+end_src
+ #+begin_src emacs-lisp
+ (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
+			   (sequence "GTD-IN(i)" "GTD-CLARIFY(c)"
+			   "GTD-PROJECT(p)" "GTD-SOMEDAY-MAYBE(s)"
+			   "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)" "GTD-WAITING(w)"
+			   "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)"
+			   "GTD-DONE(d)")))
+ #+end_src
 
-**** Date interval for agenda view
+**** Keymap for GTD keybindings
+      We define a keymap that will be accessed with =SPC a g=
+ #+begin_src emacs-lisp
+   (define-prefix-command 'gtd)
+   (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+ #+end_src
 
-The default is kind of annoying.  It shows a week starting on a Sunday but what
-is annoying about that is that on Sunday, the agenda won't show what you have
-tomorrow!
+**** Quick access to GTD files
+ This helper function opens files in the =org-agenda-dir=
+ #+begin_src emacs-lisp
+   (defun gtd-open-agenda-file (file)
+     (interactive)
+     (find-file (concat org-agenda-dir "/" file)))
+ #+end_src
+ We use it to create bindings in the =gtd= map to open files
+ #+begin_src emacs-lisp
+   (define-key gtd (kbd "i") (lambda () (interactive) (gtd-open-agenda-file "GTD_InTray.org")))
+   (define-key gtd (kbd "p") (lambda () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org")))
+   (define-key gtd (kbd "n") (lambda () (interactive) (gtd-open-agenda-file "GTD_NextActions.org")))
+ #+end_src
 
-The way this is set, it will show 10 days starting 3 days in the past.
-
-#+begin_src emacs-lisp
-(setq org-agenda-span 10
-      org-agenda-start-on-weekday nil
-      org-agenda-start-day "-3d")
-#+end_src
-
-**** Agenda files
-
-To begin using org-agenda, all we need to do is to give it a directory that
-contains orgmode files.
-
-#+begin_src emacs-lisp
-(setq org-agenda-files '("~/NDocuments/gtd/"))
-#+end_src
-
-**** Agenda Key
-I mapped a key because I like to pop in and out of it.
-
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-c a") 'org-agenda)
-#+end_src
-
+ #+RESULTS:
+ | lambda | nil | (interactive) | (gtd-open-agenda-file GTD_NextActions.org) |
 **** Definition of stuck projects
 
-In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
-This says that a stuck project is a headline where the todo keyword is
-=GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
-#+begin_src emacs-lisp
-(setq org-stuck-projects '("TODO=\"GTD-PROJECT\"" ("GTD-NEXT-ACTION") () ""))
-#+end_src
+ In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
+ This says that a stuck project is a headline where the todo keyword is
+ =GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
+
+ #+begin_src emacs-lisp
+ (setq org-stuck-projects
+       '("TODO=\"GTD-PROJECT\"" ;; Search query
+         ("GTD-NEXT-ACTION")    ;; Not stuck if contains
+         ()                     ;; Stuck if contains
+         ""))                   ;; General regex
+ #+end_src
+
+*** Org Agenda
+    
+**** Intro
+ The agenda has features for working with tags and todo keywords.
+
+ It provides ways of
+
+ - Searching
+ - Bulk editing
+ - Creating views
+
+ based on
+
+ - TODO keywords
+ - Tags
+ - Dates (using the =DEADLINE= and =SCHEDULED= properties)
+  
+ I have adapted my use of the agenda to GTD but the methods here can serve as
+ general examples nonetheless.
+**** Date interval for agenda view
+
+ The default is kind of annoying.  It shows a week starting on a Sunday but what
+ is annoying about that is that on Sunday, the agenda won't show what you have
+ tomorrow!
+
+ The way this is set, it will show 10 days starting 3 days in the past.
+
+ #+begin_src emacs-lisp
+ (setq org-agenda-span 10
+       org-agenda-start-on-weekday nil
+       org-agenda-start-day "-3d")
+ #+end_src
+
+**** Agenda Key
+ I mapped a key because I like to pop in and out of it.
+
+ #+begin_src emacs-lisp
+ (global-set-key (kbd "C-c a") 'org-agenda)
+ #+end_src
 
 **** Agenda custom commands
 
-#+begin_src emacs-lisp
-(setq org-agenda-custom-commands
-      '(("c" "Simple agenda view"
-          ((tags "PRIORITY=\"A\"")
-           (stuck "" )
-           (agenda "")
-           (todo "GTD-ACTION")))
-        ("g" . "GTD keyword searches searches")
-        ("gi" todo "GTD-IN")
-        ("gc" todo "GTD-CLARIFY")
-        ("ga" todo "GTD-ACTION")
-        ("gn" todo-tree "GTD-NEXT-ACTION")
-        ("gp" todo "GTD-PROJECT")))
-#+end_src
+ #+begin_src emacs-lisp
+ (setq org-agenda-custom-commands
+       '(("c" "Simple agenda view"
+           ((tags "PRIORITY=\"A\"")
+            (stuck "" )
+            (agenda "")
+            (todo "GTD-ACTION")))
+         ("g" . "GTD keyword searches searches")
+         ("gi" todo "GTD-IN")
+         ("gc" todo "GTD-CLARIFY")
+         ("ga" todo "GTD-ACTION")
+         ("gn" todo-tree "GTD-NEXT-ACTION")
+         ("gp" todo "GTD-PROJECT")))
+ #+end_src
 
 ** Magit
 
