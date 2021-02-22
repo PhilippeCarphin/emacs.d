@@ -94,7 +94,6 @@
      ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
      ("GTD-SOMEDAY-MAYBE" :foreground "#00ff00" :weight normal :underline nil)
      ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
-     (org-mode)
 
 (define-prefix-command 'gtd)
 (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)

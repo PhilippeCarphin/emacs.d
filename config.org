@@ -302,7 +302,6 @@ Wrong type argument : stringp, org-agenda-dir.
       ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
       ("GTD-SOMEDAY-MAYBE" :foreground "#00ff00" :weight normal :underline nil)
       ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
-      (org-mode)
  #+end_src
 
 **** Keymap for GTD keybindings
