@@ -1,0 +1,45 @@
+* Minimalistic starter config for emacs
+
+This config aims to be a minimalistic git repo with starter config for emacs.
+
+The idea is that you can use this to start your own repo for tracking your
+emacs config.  It also comes with a starter config that has the bare minimum
+plus helm and which-key since they are essential to learning emacs.
+
+** Install
+
+#+begin_src shell
+git clone https://github.com/philippecarphin/emacs.d ~/.emacs.d
+#+end_src
+
+** Usage
+
+Start emacs.  The config uses =(use-package _ :ensure t)= to download
+packages if needed.
+
+** Functionning
+
+At startup, emacs reads =~/.emacs.d/init.el= which delegates to
+=~/.emacs.d/config.org= via the =org-babel-load-file= function.
+
+Orgmode SRC blocks in the =emacs-lisp= language are extracted into
+=~/.emacs.d/config.el= (unless they have the =:tangle no= property) and the
+file is executed.
+
+** Evil mode
+
+If evil mode is desired, change the =:tangle no= to =:tangle yes= in the
+=evil-mode= section of =~/.emacs.d/config.org=.
+
+** Further configuration
+
+Continue adding sections and emacs LISP SRC blocks.
+
+Anywhere in emacs, =C-x C-e= will run the expression before the cursor.  This
+way, you can add to =config.org= and see the effects without reloading Emacs.
+
+In orgmode, doing =C-c C-c= while on an SRC block will evaluate the entire
+block.
+
+Make commits and push to your fork of this repo to sync your config between
+computers
