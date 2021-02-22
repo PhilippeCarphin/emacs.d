@@ -85,6 +85,17 @@
 			  "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)"
 			  "GTD-DONE(d)")))
 
+(setq org-todo-keyword-faces
+   '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
+     ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
+     ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
+     ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
+     ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
+     ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
+     ("GTD-SOMEDAY-MAYBE" :foreground "#00ff00" :weight normal :underline nil)
+     ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
+     (org-mode)
+
 (define-prefix-command 'gtd)
 (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 
