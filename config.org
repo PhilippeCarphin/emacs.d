@@ -3,6 +3,7 @@
 #+REVEAL_HLEVEL: 2
 #+STARTUP: inlineimages
 #+ATTR_ORG: :width 500px
+#+PROPERTY: hearder-args :tangle yes
 
 * Minimalistic config
 
