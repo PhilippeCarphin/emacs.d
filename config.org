@@ -5,7 +5,7 @@
 
 * Intro
 #+REVEAL: split
-An elementary that can be taken as is to start from oriented towards leveragin
+An elementary config that can be taken as is to start from oriented towards leveragin
 the full power of orgmode immediately.
 - Sane miscellaneous defaults
 - A built in color theme that looks good in orgmode exports
