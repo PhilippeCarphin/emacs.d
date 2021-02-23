@@ -249,8 +249,9 @@ surprised that a command runs when the press enter in a shell.
     
 * Evil mode
   :PROPERTIES:
-  :header-args: :tangle no
+  :header-args: :tangle yes
   :END:
+
 ** Install and activate
 
 #+begin_src emacs-lisp
@@ -311,4 +312,13 @@ the TAB key doesn't work properly if we don't put it there.
 (use-package htmlize :ensure t)
 (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) (python . t)))
 (setq org-confirm-babel-evaluate nil)
+#+end_src
+And a little bit more for vim, there are some keys that are essential to remap.
+#+begin_src emacs-lisp
+(use-package evil :ensure t :init (setq evil-want-C-i-jump nil) :config (evil-mode))
+(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
+(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
+(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
 #+end_src
