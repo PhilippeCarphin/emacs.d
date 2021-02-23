@@ -99,7 +99,7 @@
      ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
      ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
      ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
-     ("GTD-SOMEDAY-MAYBE" :foreground "#00ff00" :weight normal :underline nil)
+     ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
      ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
 
 (define-prefix-command 'gtd)
