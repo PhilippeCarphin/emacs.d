@@ -13,9 +13,37 @@ the full power of orgmode immediately.
 - Basic helper frameworks that are defacto standard
 - Elementary org configuration allowing immediate use of built in package babel.
 
-** This config file
+** Orgmode config file
 
-Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
+- Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.
+- The =~/.emacs.d/init.el contains only
+#+begin_src emacs-lisp :tangle no
+;;; Delegate configuration to orgmode config file
+(org-babel-load-file (concat user-emacs-directory "config.org"))
+#+end_src
+- Our code is in an orgmode file in the form of SRC blocks:
+#+begin_src org
+,#+begin_src emacs-lisp :tangle yes
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org" . "http://orgmode.org/elpa/") t)
+(package-initialize)
+,#+end_src
+#+end_src
+- The =:tangle= can be set to yes or no to control whether or not
+=org-babel-load-file= will take that block or not.
+
+** BTW
+
+This file IS =~/.emacs.d/config.org=!
+
+*** Details
+
+- Orgmode files can be exported in many formats.
+- The =ox-reveal= package allows exporting to Reveal.JS presentations.
+- See the section on configuring orgmode for other formats.
+- I just press =C-c C-e R B= to get a Reveal.JS slideshow
+
 * Package stuff
 
    Standard stuff that is at the start of everyone's config file.
@@ -234,7 +262,7 @@ surprised that a command runs when the press enter in a shell.
 #+end_src
 
 The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
-the TAB key doesn't work properly.
+the TAB key doesn't work properly if we don't put it there.
 
 ** Vim like window split keys
 
