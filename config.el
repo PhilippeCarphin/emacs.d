@@ -79,11 +79,18 @@
 (setq org-agenda-files '("~/NDocuments/gtd"))
 
 (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			  (sequence "GTD-IN(i)" "GTD-CLARIFY(c)"
-			  "GTD-PROJECT(p)" "GTD-SOMEDAY-MAYBE(s)"
-			  "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)" "GTD-WAITING(w)"
-			  "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)"
-			  "GTD-DONE(d)")))
+			  (sequence 
+                             "GTD-IN(i)"
+                             "GTD-CLARIFY(c)"
+			     "GTD-PROJECT(p)"
+                             "GTD-SOMEDAY-MAYBE(s)"
+			     "GTD-ACTION(a)"
+                             "GTD-NEXT-ACTION(n)"
+                             "GTD-WAITING(w)"
+			     "|"
+                             "GTD-REFERENCE(r)"
+                             "GTD-DELEGATED(g)"
+			     "GTD-DONE(d)")))
 
 (setq org-todo-keyword-faces
    '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
@@ -102,10 +109,14 @@
   (interactive)
   (find-file (concat org-agenda-dir "/" file)))
 
-(define-key gtd (kbd "i") (lambda () (interactive) (gtd-open-agenda-file "GTD_InTray.org")))
-(define-key gtd (kbd "p") (lambda () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org")))
-(define-key gtd (kbd "r") (lambda () (interactive) (gtd-open-agenda-file "GTD_Reference.org")))
-(define-key gtd (kbd "n") (lambda () (interactive) (gtd-open-agenda-file "GTD_NextActions.org")))
+(defun gtd-open-in-tray      () (interactive) (gtd-open-agenda-file "GTD_InTray.org"))
+(defun gtd-open-project-list () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org"))
+(defun gtd-open-references   () (interactive) (gtd-open-agenda-file "GTD_Reference.org"))
+(defun gtd-open-next-actions () (interactive) (gtd-open-agenda-file "GTD_NextActions.org"))
+(define-key gtd (kbd "i") 'gtd-open-in-tray)
+(define-key gtd (kbd "p") 'gtd-open-project-list)
+(define-key gtd (kbd "r") 'gtd-open-reference)
+(define-key gtd (kbd "n") 'gtd-open-next-actions)
 
 (setq org-stuck-projects
       '("TODO=\"GTD-PROJECT\"" ;; Search query

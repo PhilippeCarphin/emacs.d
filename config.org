@@ -1,6 +1,6 @@
 #+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
-#+REVEAL_HLEVEL: 2
+#+REVEAL_HLEVEL: 4
 #+PROPERTY: hearder-args :tangle yes
 
 * Minimalistic config
@@ -272,6 +272,7 @@ Wrong type argument : stringp, org-agenda-dir.
 
 *** GTD
     
+   #+REVEAL: split
 **** Todo keywords for GTD
 
  The first set of keywords is a generic set of keywords that I can give TODO
@@ -282,11 +283,18 @@ Wrong type argument : stringp, org-agenda-dir.
 
  #+begin_src emacs-lisp
  (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			   (sequence "GTD-IN(i)" "GTD-CLARIFY(c)"
-			   "GTD-PROJECT(p)" "GTD-SOMEDAY-MAYBE(s)"
-			   "GTD-ACTION(a)" "GTD-NEXT-ACTION(n)" "GTD-WAITING(w)"
-			   "|" "GTD-REFERENCE(r)" "GTD-DELEGATED(g)"
-			   "GTD-DONE(d)")))
+			   (sequence 
+                              "GTD-IN(i)"
+                              "GTD-CLARIFY(c)"
+			      "GTD-PROJECT(p)"
+                              "GTD-SOMEDAY-MAYBE(s)"
+			      "GTD-ACTION(a)"
+                              "GTD-NEXT-ACTION(n)"
+                              "GTD-WAITING(w)"
+			      "|"
+                              "GTD-REFERENCE(r)"
+                              "GTD-DELEGATED(g)"
+			      "GTD-DONE(d)")))
 			   
  (setq org-todo-keyword-faces
     '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
@@ -299,6 +307,7 @@ Wrong type argument : stringp, org-agenda-dir.
       ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
  #+end_src
 
+   #+REVEAL: split
 **** Keymap for GTD keybindings
       We define a keymap that will be accessed with =SPC a g=
  #+begin_src emacs-lisp
@@ -306,6 +315,7 @@ Wrong type argument : stringp, org-agenda-dir.
    (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
  #+end_src
 
+   #+REVEAL: split
 **** Quick access to GTD files
  This helper function opens files in the =org-agenda-dir=
  #+begin_src emacs-lisp
@@ -315,14 +325,17 @@ Wrong type argument : stringp, org-agenda-dir.
  #+end_src
  We use it to create bindings in the =gtd= map to open files
  #+begin_src emacs-lisp
-   (define-key gtd (kbd "i") (lambda () (interactive) (gtd-open-agenda-file "GTD_InTray.org")))
-   (define-key gtd (kbd "p") (lambda () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org")))
-   (define-key gtd (kbd "r") (lambda () (interactive) (gtd-open-agenda-file "GTD_Reference.org")))
-   (define-key gtd (kbd "n") (lambda () (interactive) (gtd-open-agenda-file "GTD_NextActions.org")))
+   (defun gtd-open-in-tray      () (interactive) (gtd-open-agenda-file "GTD_InTray.org"))
+   (defun gtd-open-project-list () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org"))
+   (defun gtd-open-references   () (interactive) (gtd-open-agenda-file "GTD_Reference.org"))
+   (defun gtd-open-next-actions () (interactive) (gtd-open-agenda-file "GTD_NextActions.org"))
+   (define-key gtd (kbd "i") 'gtd-open-in-tray)
+   (define-key gtd (kbd "p") 'gtd-open-project-list)
+   (define-key gtd (kbd "r") 'gtd-open-reference)
+   (define-key gtd (kbd "n") 'gtd-open-next-actions)
  #+end_src
 
- #+RESULTS:
- | lambda | nil | (interactive) | (gtd-open-agenda-file GTD_NextActions.org) |
+   #+REVEAL: split
 **** Definition of stuck projects
 
  In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
@@ -338,6 +351,7 @@ Wrong type argument : stringp, org-agenda-dir.
  #+end_src
 
 *** Org Agenda
+   #+REVEAL: split
     
 **** Intro
  The agenda has features for working with tags and todo keywords.
@@ -356,6 +370,8 @@ Wrong type argument : stringp, org-agenda-dir.
   
  I have adapted my use of the agenda to GTD but the methods here can serve as
  general examples nonetheless.
+   #+REVEAL: split
+    
 **** Date interval for agenda view
 
  The default is kind of annoying.  It shows a week starting on a Sunday but what
@@ -370,6 +386,8 @@ Wrong type argument : stringp, org-agenda-dir.
        org-agenda-start-day "-3d")
  #+end_src
 
+   #+REVEAL: split
+    
 **** Agenda Key
  I mapped a key because I like to pop in and out of it.
 
@@ -377,6 +395,8 @@ Wrong type argument : stringp, org-agenda-dir.
  (global-set-key (kbd "C-c a") 'org-agenda)
  #+end_src
 
+   #+REVEAL: split
+    
 **** Agenda custom commands
 
  #+begin_src emacs-lisp
