@@ -12,6 +12,10 @@ plus helm and which-key since they are essential to learning emacs.
 git clone https://github.com/philippecarphin/emacs.d ~/.emacs.d
 #+end_src
 
+** Presentation
+
+[[https://philippe-carphin.ca/resources/emacs_config.html]]
+
 ** Usage
 
 Start emacs.  The config uses =(use-package _ :ensure t)= to download
