@@ -1,7 +1,7 @@
 #+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
 #+REVEAL_HLEVEL: 2
-#+PROPERTY: hearder-args :tangle yes
+#+PROPERTY: header-args :tangle yes
 
 * Intro
 #+REVEAL: split
@@ -281,7 +281,7 @@ the TAB key doesn't work properly if we don't put it there.
 
 * Extracted code
     :PROPERTIES:
-    :header_args: :tangle no
+    :header-args: :tangle no
     :END:
 ** Misc stuff
 #+begin_src emacs-lisp
