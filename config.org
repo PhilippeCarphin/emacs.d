@@ -3,9 +3,7 @@
 #+REVEAL_HLEVEL: 2
 #+PROPERTY: hearder-args :tangle yes
 
-* Minimalistic config
-
-** Intro
+* Intro
 #+REVEAL: split
 An elementary that can be taken as is to start from oriented towards leveragin
 the full power of orgmode immediately.
@@ -15,10 +13,10 @@ the full power of orgmode immediately.
 - Basic helper frameworks that are defacto standard
 - Elementary org configuration allowing immediate use of built in package babel.
 
-*** This config file
+** This config file
 
 Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
-** Package stuff
+* Package stuff
 
    Standard stuff that is at the start of everyone's config file.
 #+begin_src emacs-lisp
@@ -38,7 +36,7 @@ a-package)= and adds convenience functions.
 (eval-when-compile (require 'use-package))
 #+end_src
 
-** Scrolling behavior
+* Scrolling behavior
 
 - =scroll-margin= Distance between cursor and top/bottom before scrolling starts.
 - =scroll-step= makes the window move one line at a time.
@@ -48,7 +46,7 @@ a-package)= and adds convenience functions.
 (setq-default scroll-margin 10)
 #+end_src
 
-** Wrapping
+* Wrapping
 
 Automattically hard-wrap text on 80 chars.
 
@@ -57,7 +55,7 @@ Automattically hard-wrap text on 80 chars.
 (setq-default fill-column 80)
 #+end_src
 
-** Startup color theme
+* Startup color theme
 
 Dark theme that exports well
 
@@ -65,21 +63,21 @@ Dark theme that exports well
 (load-theme 'misterioso)
 #+end_src
 
-**** Explanation                                                   :noexport_reveal:
+*** Explanation                                             :noexport_reveal:
 
-    The default emacs theme looks good when exporting to HTML.  But because of
-    =htmlize=, with dark themes, the code can come out looking bad in exports
-    when text colors meant for dark backgrounds appear over the light background
-    of the HTML.
+   The default emacs theme looks good when exporting to HTML.  But because of
+   =htmlize=, with dark themes, the code can come out looking bad in exports
+   when text colors meant for dark backgrounds appear over the light background
+   of the HTML.
 
-    One of the built-in color themes where code looks good on light backgrounds
-    and which is easy on the eyes is =misterioso=
+   One of the built-in color themes where code looks good on light backgrounds
+   and which is easy on the eyes is =misterioso=
 
-    Although the default emacs theme exports well, it's not easy on the eyes in
-    emacs itself.  A light theme that exports well and looks good in emacs is
-    =leuven=.
+   Although the default emacs theme exports well, it's not easy on the eyes in
+   emacs itself.  A light theme that exports well and looks good in emacs is
+   =leuven=.
 
-** Startup font
+* Startup font
    
 To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
 
@@ -89,16 +87,16 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 
 #+RESULTS:
 
-** Helper frameworks
+* Helper frameworks
 
-*** Undo tree
+** Undo tree
     Use =C-x u= to get an undo tree buffer, really strong!
 #+begin_src emacs-lisp
 (use-package undo-tree
   :ensure t
   :config (global-undo-tree-mode))
 #+end_src
-*** Helm
+** Helm
 
 Improve searching interface all over emacs.
 
@@ -118,7 +116,7 @@ We also add a few ourselves.
 	 ("C-x b" . helm-buffers-list)))
 #+end_src
 
-**** Remapped functions
+*** Remapped functions
 
      Notable remapped functions:
 - =M-x= adds helm when writing function
@@ -130,11 +128,11 @@ We also add a few ourselves.
   - =describe-function=
   - =describe-symbol=
 
-**** Powerful tools
+*** Powerful tools
 
 - =helm-grep-do-git-grep=
 
-*** Which-key
+** Which-key
 
 Help discovering available key sequences in all contexts.
 
@@ -152,7 +150,7 @@ Originally developped for spacemacs, now part of the standard emacs packages.
   (which-key-mode))
 #+end_src
 
-*** Standard autocomplete
+** Standard autocomplete
 
 #+begin_src emacs-lisp
 (use-package company
@@ -160,9 +158,9 @@ Originally developped for spacemacs, now part of the standard emacs packages.
   :config (global-company-mode)
           (setq company-idle-delay 0))
 #+end_src
-** Org configuration
-*** Looks
-**** Bullets
+* Org configuration
+** Looks
+*** Bullets
 
 Show nice bullets
 
@@ -174,7 +172,7 @@ Essential for easy tree viewing
   :hook (org-mode . org-bullets-mode))
 #+end_src
 
-*** Exporting
+** Exporting
 
 - =ox-twbs= to export to beautiful HTML
 - =ox-reveal= to export to Reveal.js presentation
@@ -189,8 +187,8 @@ Essential for easy tree viewing
 (use-package htmlize :ensure t)
 #+end_src
 
-*** Babel
-**** Babel Intro
+** Babel
+*** Babel Intro
 Babel allows running of code blocks.  It is what enables this config to be in
 orgmode format.
 
@@ -199,7 +197,7 @@ must be activated to be used:
 
 https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
 
-**** Babel config
+*** Babel config
 We simply add languages that we want to become available.  There are many more
 but some of them require installing extra packages.
 
@@ -209,7 +207,7 @@ but some of them require installing extra packages.
       (python . t)))
 #+end_src
 
-**** Disable prompt
+*** Disable prompt
 As a security precaution this is off by default.  It would indeed be quite
 surprising if your text editor runs a shell command if you accidently do =C-c
 C-c=.
@@ -221,11 +219,11 @@ surprised that a command runs when the press enter in a shell.
 (setq org-confirm-babel-evaluate nil)
 #+end_src
     
-** Evil mode
-   :PROPERTIES:
-   :header-args: :tangle no
-   :END:
-*** Install and activate
+* Evil mode
+  :PROPERTIES:
+  :header-args: :tangle no
+  :END:
+** Install and activate
 
 #+begin_src emacs-lisp
 (use-package evil
@@ -238,7 +236,7 @@ surprised that a command runs when the press enter in a shell.
 The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
 the TAB key doesn't work properly.
 
-*** Vim like window split keys
+** Vim like window split keys
 
 #+begin_src emacs-lisp
 (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
@@ -246,17 +244,17 @@ the TAB key doesn't work properly.
 (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
 #+END_SRC
 
-*** Map undo keys to undo-tree function
+** Map undo keys to undo-tree function
 
 #+begin_src emacs-lisp
 (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
 #+end_src
 
-** Extracted code
+* Extracted code
 
 
-*** Misc stuff
+** Misc stuff
 #+begin_src emacs-lisp :tangle no
 (require 'package)
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
@@ -271,7 +269,7 @@ the TAB key doesn't work properly.
 (load-theme 'misterioso)
 (custom-set-faces '(default ((t (:height 200)))))
 #+end_src
-*** Package configs
+** Package configs
 #+begin_src emacs-lisp :tangle no
 (use-package undo-tree :ensure t :config (global-undo-tree-mode))
 (use-package helm :ensure t :preface (require 'helm-config) :config (helm-mode) :bind (("M-x" . helm-M-x) ("C-x C-f" . helm-find-files) ("C-x f" . helm-recentf) ("C-c g" . helm-grep-do-git-grep) ("C-x b" . helm-buffers-list)))
