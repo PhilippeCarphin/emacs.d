@@ -3,12 +3,9 @@
 #+REVEAL_HLEVEL: 2
 #+STARTUP: inlineimages
 #+ATTR_ORG: :width 500px
+#+PROPERTY: hearder-args :tangle yes
 
 * Minimalistic config
-   :PROPERTIES:
-   :header-args: :tangle yes
-   :END:
-
 ** Intro
 #+REVEAL: split
 An elementary that can be taken as is to start from oriented towards leveragin
