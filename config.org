@@ -21,6 +21,8 @@ the full power of orgmode immediately.
 ;;; Delegate configuration to orgmode config file
 (org-babel-load-file (concat user-emacs-directory "config.org"))
 #+end_src
+
+** Src blocs containing configuration code
 - Our code is in an orgmode file in the form of SRC blocks:
 #+begin_src org
 ,#+begin_src emacs-lisp :tangle yes
@@ -30,12 +32,12 @@ the full power of orgmode immediately.
 (package-initialize)
 ,#+end_src
 #+end_src
-- The =:tangle= can be set to yes or no to control whether or not
-=org-babel-load-file= will take that block or not.
+- The =:tangle= keyword can is used to control whether or not
+  =org-babel-load-file= will take that block or not.
 
 ** BTW
 
-This file IS =~/.emacs.d/config.org=!
+- This file IS =~/.emacs.d/config.org=!
 
 *** Details
 
@@ -251,6 +253,9 @@ surprised that a command runs when the press enter in a shell.
   :PROPERTIES:
   :header-args: :tangle yes
   :END:
+
+Set the =header-args= to =:tangle no= right above this text in =config.org= to
+exclude evil-mode.
 
 ** Install and activate
 

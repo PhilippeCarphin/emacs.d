@@ -26,32 +26,32 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h2 class="author">Philippe Carphin</h2><p class="date">Created: 2021-02-23 Tue 11:09</p>
+<section id="sec-title-slide"><h2 class="author">Philippe Carphin</h2><p class="date">Created: 2021-02-23 Tue 11:23</p>
 </section>
 <section id="table-of-contents"><div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#/slide-org4895fb9">1. Intro</a></li>
-<li><a href="#/slide-org969ef7d">2. Package stuff</a></li>
-<li><a href="#/slide-orga05867f">3. Scrolling behavior</a></li>
-<li><a href="#/slide-orgf754432">4. Wrapping</a></li>
-<li><a href="#/slide-orga985c2c">5. Startup color theme</a></li>
-<li><a href="#/slide-org67ff899">6. Startup font</a></li>
-<li><a href="#/slide-orgfd02030">7. Helper frameworks</a></li>
-<li><a href="#/slide-orgb510188">8. Org configuration</a></li>
-<li><a href="#/slide-org6971130">9. Evil mode</a></li>
-<li><a href="#/slide-org6928f60">10. Extracted code</a></li>
+<li><a href="#/slide-orgd2e4e75">1. Intro</a></li>
+<li><a href="#/slide-org42ce0e0">2. Package stuff</a></li>
+<li><a href="#/slide-org38dacb1">3. Scrolling behavior</a></li>
+<li><a href="#/slide-org81e55a1">4. Wrapping</a></li>
+<li><a href="#/slide-orgfddcdff">5. Startup color theme</a></li>
+<li><a href="#/slide-org1139364">6. Startup font</a></li>
+<li><a href="#/slide-org1b5b730">7. Helper frameworks</a></li>
+<li><a href="#/slide-org89c72ec">8. Org configuration</a></li>
+<li><a href="#/slide-org9253781">9. Evil mode</a></li>
+<li><a href="#/slide-org7176f77">10. Extracted code</a></li>
 </ul>
 </div>
 </div>
 </section>
 
 <section>
-<section id="slide-org4895fb9">
-<h2 id="org4895fb9"><span class="section-number-2">1</span> Intro</h2>
+<section id="slide-orgd2e4e75">
+<h2 id="orgd2e4e75"><span class="section-number-2">1</span> Intro</h2>
 </section>
-<section id="slide-org4895fb9-split">
+<section id="slide-orgd2e4e75-split">
 <p>
 An elementary that can be taken as is to start from oriented towards leveragin
 the full power of orgmode immediately.
@@ -68,8 +68,8 @@ the full power of orgmode immediately.
 </section>
 </section>
 <section>
-<section id="slide-orgbda7743">
-<h3 id="orgbda7743"><span class="section-number-3">1.1</span> Orgmode config file</h3>
+<section id="slide-org64d9243">
+<h3 id="org64d9243"><span class="section-number-3">1.1</span> Orgmode config file</h3>
 <ul>
 <li>Emacs loads one file at startup from <code>~/.emacs</code>, <code>~/.emacs.d/init.el</code>.</li>
 <li>The =~/.emacs.d/init.el contains only</li>
@@ -81,6 +81,12 @@ the full power of orgmode immediately.
 (org-babel-load-file (concat user-emacs-directory <span style="color: #e67128;">"config.org"</span>))
 </code></pre>
 </div>
+
+</section>
+</section>
+<section>
+<section id="slide-org69a1aa5">
+<h3 id="org69a1aa5"><span class="section-number-3">1.2</span> Src blocs containing configuration code</h3>
 <ul>
 <li>Our code is in an orgmode file in the form of SRC blocks:</li>
 
@@ -96,25 +102,24 @@ the full power of orgmode immediately.
 </code></pre>
 </div>
 <ul>
-<li>The <code>:tangle</code> can be set to yes or no to control whether or not</li>
+<li>The <code>:tangle</code> can be set to yes or no to control whether or not
+<code>org-babel-load-file</code> will take that block or not.</li>
 
 </ul>
-<p>
-<code>org-babel-load-file</code> will take that block or not.
-</p>
 
 </section>
 </section>
 <section>
-<section id="slide-org5db3be4">
-<h3 id="org5db3be4"><span class="section-number-3">1.2</span> BTW</h3>
-<p>
-This file IS <code>~/.emacs.d/config.org</code>!
-</p>
+<section id="slide-org40edbdf">
+<h3 id="org40edbdf"><span class="section-number-3">1.3</span> BTW</h3>
+<ul>
+<li>This file IS <code>~/.emacs.d/config.org</code>!</li>
+
+</ul>
 
 </section>
-<section id="slide-org618a25a">
-<h4 id="org618a25a"><span class="section-number-4">1.2.1</span> Details</h4>
+<section id="slide-org1a805fa">
+<h4 id="org1a805fa"><span class="section-number-4">1.3.1</span> Details</h4>
 <ul>
 <li>Orgmode files can be exported in many formats.</li>
 <li>The <code>ox-reveal</code> package allows exporting to Reveal.JS presentations.</li>
@@ -126,8 +131,8 @@ This file IS <code>~/.emacs.d/config.org</code>!
 </section>
 </section>
 <section>
-<section id="slide-org969ef7d">
-<h2 id="org969ef7d"><span class="section-number-2">2</span> Package stuff</h2>
+<section id="slide-org42ce0e0">
+<h2 id="org42ce0e0"><span class="section-number-2">2</span> Package stuff</h2>
 <p>
 Standard stuff that is at the start of everyone's config file.
 </p>
@@ -157,8 +162,8 @@ a-package)</code> and adds convenience functions.
 </section>
 </section>
 <section>
-<section id="slide-orga05867f">
-<h2 id="orga05867f"><span class="section-number-2">3</span> Scrolling behavior</h2>
+<section id="slide-org38dacb1">
+<h2 id="org38dacb1"><span class="section-number-2">3</span> Scrolling behavior</h2>
 <ul>
 <li><code>scroll-margin</code> Distance between cursor and top/bottom before scrolling starts.</li>
 <li><code>scroll-step</code> makes the window move one line at a time.</li>
@@ -175,8 +180,8 @@ a-package)</code> and adds convenience functions.
 </section>
 </section>
 <section>
-<section id="slide-orgf754432">
-<h2 id="orgf754432"><span class="section-number-2">4</span> Wrapping</h2>
+<section id="slide-org81e55a1">
+<h2 id="org81e55a1"><span class="section-number-2">4</span> Wrapping</h2>
 <p>
 Automattically hard-wrap text on 80 chars.
 </p>
@@ -191,8 +196,8 @@ Automattically hard-wrap text on 80 chars.
 </section>
 </section>
 <section>
-<section id="slide-orga985c2c">
-<h2 id="orga985c2c"><span class="section-number-2">5</span> Startup color theme</h2>
+<section id="slide-orgfddcdff">
+<h2 id="orgfddcdff"><span class="section-number-2">5</span> Startup color theme</h2>
 <p>
 Dark theme that exports well
 </p>
@@ -206,8 +211,8 @@ Dark theme that exports well
 </section>
 </section>
 <section>
-<section id="slide-org67ff899">
-<h2 id="org67ff899"><span class="section-number-2">6</span> Startup font</h2>
+<section id="slide-org1139364">
+<h2 id="org1139364"><span class="section-number-2">6</span> Startup font</h2>
 <p>
 To change the font, as per this <a href="http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html">Mailing list post</a>.
 </p>
@@ -221,15 +226,15 @@ To change the font, as per this <a href="http://emacs.1067599.n8.nabble.com/Chan
 </section>
 </section>
 <section>
-<section id="slide-orgfd02030">
-<h2 id="orgfd02030"><span class="section-number-2">7</span> Helper frameworks</h2>
+<section id="slide-org1b5b730">
+<h2 id="org1b5b730"><span class="section-number-2">7</span> Helper frameworks</h2>
 <div class="outline-text-2" id="text-7">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-orgffe3869">
-<h3 id="orgffe3869"><span class="section-number-3">7.1</span> Undo tree</h3>
+<section id="slide-orgb5390da">
+<h3 id="orgb5390da"><span class="section-number-3">7.1</span> Undo tree</h3>
 <p>
 Use <code>C-x u</code> to get an undo tree buffer, really strong!
 </p>
@@ -243,8 +248,8 @@ Use <code>C-x u</code> to get an undo tree buffer, really strong!
 </section>
 </section>
 <section>
-<section id="slide-org7db31d6">
-<h3 id="org7db31d6"><span class="section-number-3">7.2</span> Helm</h3>
+<section id="slide-org5be325f">
+<h3 id="org5be325f"><span class="section-number-3">7.2</span> Helm</h3>
 <p>
 Improve searching interface all over emacs.
 </p>
@@ -272,8 +277,8 @@ We also add a few ourselves.
 </div>
 
 </section>
-<section id="slide-org867e3bd">
-<h4 id="org867e3bd"><span class="section-number-4">7.2.1</span> Remapped functions</h4>
+<section id="slide-orgd62e21b">
+<h4 id="orgd62e21b"><span class="section-number-4">7.2.1</span> Remapped functions</h4>
 <p>
 Notable remapped functions:
 </p>
@@ -296,8 +301,8 @@ Notable remapped functions:
 </ul>
 
 </section>
-<section id="slide-orgeeeeb51">
-<h4 id="orgeeeeb51"><span class="section-number-4">7.2.2</span> Powerful tools</h4>
+<section id="slide-org980c909">
+<h4 id="org980c909"><span class="section-number-4">7.2.2</span> Powerful tools</h4>
 <ul>
 <li><code>helm-grep-do-git-grep</code></li>
 
@@ -306,8 +311,8 @@ Notable remapped functions:
 </section>
 </section>
 <section>
-<section id="slide-orgdebdc29">
-<h3 id="orgdebdc29"><span class="section-number-3">7.3</span> Which-key</h3>
+<section id="slide-org59e2520">
+<h3 id="org59e2520"><span class="section-number-3">7.3</span> Which-key</h3>
 <p>
 Help discovering available key sequences in all contexts.
 </p>
@@ -333,8 +338,8 @@ Originally developped for spacemacs, now part of the standard emacs packages.
 </section>
 </section>
 <section>
-<section id="slide-orga8d0860">
-<h3 id="orga8d0860"><span class="section-number-3">7.4</span> Standard autocomplete</h3>
+<section id="slide-org8d9d79a">
+<h3 id="org8d9d79a"><span class="section-number-3">7.4</span> Standard autocomplete</h3>
 <div class="org-src-container">
 
 <pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">company</span>
@@ -346,20 +351,20 @@ Originally developped for spacemacs, now part of the standard emacs packages.
 </section>
 </section>
 <section>
-<section id="slide-orgb510188">
-<h2 id="orgb510188"><span class="section-number-2">8</span> Org configuration</h2>
+<section id="slide-org89c72ec">
+<h2 id="org89c72ec"><span class="section-number-2">8</span> Org configuration</h2>
 <div class="outline-text-2" id="text-8">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org6e2f5a3">
-<h3 id="org6e2f5a3"><span class="section-number-3">8.1</span> Looks</h3>
+<section id="slide-orga5be167">
+<h3 id="orga5be167"><span class="section-number-3">8.1</span> Looks</h3>
 <div class="outline-text-3" id="text-8-1">
 </div>
 </section>
-<section id="slide-orgabde9c4">
-<h4 id="orgabde9c4"><span class="section-number-4">8.1.1</span> Bullets</h4>
+<section id="slide-org405c57d">
+<h4 id="org405c57d"><span class="section-number-4">8.1.1</span> Bullets</h4>
 <p>
 Show nice bullets
 </p>
@@ -379,8 +384,8 @@ Essential for easy tree viewing
 </section>
 </section>
 <section>
-<section id="slide-org1943b91">
-<h3 id="org1943b91"><span class="section-number-3">8.2</span> Exporting</h3>
+<section id="slide-org27b42a9">
+<h3 id="org27b42a9"><span class="section-number-3">8.2</span> Exporting</h3>
 <ul>
 <li><code>ox-twbs</code> to export to beautiful HTML</li>
 <li><code>ox-reveal</code> to export to Reveal.js presentation</li>
@@ -402,13 +407,13 @@ Essential for easy tree viewing
 </section>
 </section>
 <section>
-<section id="slide-org37054c9">
-<h3 id="org37054c9"><span class="section-number-3">8.3</span> Babel</h3>
+<section id="slide-orgbcabe80">
+<h3 id="orgbcabe80"><span class="section-number-3">8.3</span> Babel</h3>
 <div class="outline-text-3" id="text-8-3">
 </div>
 </section>
-<section id="slide-orga115eaf">
-<h4 id="orga115eaf"><span class="section-number-4">8.3.1</span> Babel Intro</h4>
+<section id="slide-orgef6a3b8">
+<h4 id="orgef6a3b8"><span class="section-number-4">8.3.1</span> Babel Intro</h4>
 <p>
 Babel allows running of code blocks.  It is what enables this config to be in
 orgmode format.
@@ -424,8 +429,8 @@ must be activated to be used:
 </p>
 
 </section>
-<section id="slide-org68cc8ae">
-<h4 id="org68cc8ae"><span class="section-number-4">8.3.2</span> Babel config</h4>
+<section id="slide-org2b6b727">
+<h4 id="org2b6b727"><span class="section-number-4">8.3.2</span> Babel config</h4>
 <p>
 We simply add languages that we want to become available.  There are many more
 but some of them require installing extra packages.
@@ -440,8 +445,8 @@ but some of them require installing extra packages.
 </div>
 
 </section>
-<section id="slide-orgdc41a58">
-<h4 id="orgdc41a58"><span class="section-number-4">8.3.3</span> Disable prompt</h4>
+<section id="slide-orgecbc1d8">
+<h4 id="orgecbc1d8"><span class="section-number-4">8.3.3</span> Disable prompt</h4>
 <p>
 As a security precaution this is off by default.  It would indeed be quite
 surprising if your text editor runs a shell command if you accidently do <code>C-c
@@ -462,13 +467,18 @@ surprised that a command runs when the press enter in a shell.
 </section>
 </section>
 <section>
-<section id="slide-org6971130">
-<h2 id="org6971130"><span class="section-number-2">9</span> Evil mode</h2>
+<section id="slide-org9253781">
+<h2 id="org9253781"><span class="section-number-2">9</span> Evil mode</h2>
+<p>
+Set the <code>header-args</code> to <code>:tangle no</code> right above this text in <code>config.org</code> to
+exclude evil-mode.
+</p>
+
 </section>
 </section>
 <section>
-<section id="slide-org84ad32a">
-<h3 id="org84ad32a"><span class="section-number-3">9.1</span> Install and activate</h3>
+<section id="slide-org28fc9c2">
+<h3 id="org28fc9c2"><span class="section-number-3">9.1</span> Install and activate</h3>
 <div class="org-src-container">
 
 <pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">evil</span>
@@ -487,8 +497,8 @@ the TAB key doesn't work properly if we don't put it there.
 </section>
 </section>
 <section>
-<section id="slide-orgb826823">
-<h3 id="orgb826823"><span class="section-number-3">9.2</span> Vim like window split keys</h3>
+<section id="slide-org8e04fb7">
+<h3 id="org8e04fb7"><span class="section-number-3">9.2</span> Vim like window split keys</h3>
 <div class="org-src-container">
 
 <pre  class="src src-emacs-lisp"><code trim>(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w"</span>) evil-window-map)
@@ -500,8 +510,8 @@ the TAB key doesn't work properly if we don't put it there.
 </section>
 </section>
 <section>
-<section id="slide-org2173349">
-<h3 id="org2173349"><span class="section-number-3">9.3</span> Map undo keys to undo-tree function</h3>
+<section id="slide-org7465395">
+<h3 id="org7465395"><span class="section-number-3">9.3</span> Map undo keys to undo-tree function</h3>
 <div class="org-src-container">
 
 <pre  class="src src-emacs-lisp"><code trim>(define-key evil-normal-state-map (kbd <span style="color: #e67128;">"C-r"</span>) 'undo-tree-redo)
@@ -512,13 +522,13 @@ the TAB key doesn't work properly if we don't put it there.
 </section>
 </section>
 <section>
-<section id="slide-org6928f60">
-<h2 id="org6928f60"><span class="section-number-2">10</span> Extracted code</h2>
+<section id="slide-org7176f77">
+<h2 id="org7176f77"><span class="section-number-2">10</span> Extracted code</h2>
 </section>
 </section>
 <section>
-<section id="slide-org6e1d1e0">
-<h3 id="org6e1d1e0"><span class="section-number-3">10.1</span> Misc stuff</h3>
+<section id="slide-org23e2d44">
+<h3 id="org23e2d44"><span class="section-number-3">10.1</span> Misc stuff</h3>
 <div class="org-src-container">
 
 <pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">require</span> '<span style="color: #008b8b;">package</span>)
@@ -538,8 +548,8 @@ the TAB key doesn't work properly if we don't put it there.
 </section>
 </section>
 <section>
-<section id="slide-org0797e86">
-<h3 id="org0797e86"><span class="section-number-3">10.2</span> Package configs</h3>
+<section id="slide-org85abeb8">
+<h3 id="org85abeb8"><span class="section-number-3">10.2</span> Package configs</h3>
 <div class="org-src-container">
 
 <pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">undo-tree</span> <span style="color: #23d7d7;">:ensure</span> t <span style="color: #23d7d7;">:config</span> (global-undo-tree-mode))
@@ -553,6 +563,19 @@ the TAB key doesn't work properly if we don't put it there.
 (<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">htmlize</span> <span style="color: #23d7d7;">:ensure</span> t)
 (org-babel-do-load-languages 'org-babel-load-languages '((shell . t) (python . t)))
 (<span style="color: #ffad29; font-weight: bold;">setq</span> org-confirm-babel-evaluate nil)
+</code></pre>
+</div>
+<p>
+And a little bit more for vim, there are some keys that are essential to remap.
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">evil</span> <span style="color: #23d7d7;">:ensure</span> t <span style="color: #23d7d7;">:init</span> (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-want-C-i-jump nil) <span style="color: #23d7d7;">:config</span> (evil-mode))
+(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w"</span>) evil-window-map)
+(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w /"</span>) 'split-window-right)
+(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w -"</span>) 'split-window-below)
+(define-key evil-normal-state-map (kbd <span style="color: #e67128;">"C-r"</span>) 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd <span style="color: #e67128;">"u"</span>) 'undo-tree-undo)
 </code></pre>
 </div>
 </section>
