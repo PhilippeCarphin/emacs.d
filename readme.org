@@ -32,7 +32,7 @@ file is executed.
 
 ** Evil mode
 
-If evil mode is desired, change the =:tangle no= to =:tangle yes= in the
+If evil mode is not desired, change the =:tangle yes= to =:tangle no= in the
 =evil-mode= section of =~/.emacs.d/config.org=.
 
 ** Further configuration
