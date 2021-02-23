@@ -231,8 +231,13 @@ surprised that a command runs when the press enter in a shell.
 #+begin_src emacs-lisp
 (use-package evil
   :ensure t
+  :init
+  (setq evil-want-C-i-jump nil)
   :config (evil-mode))
 #+end_src
+
+The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
+the TAB key doesn't work properly.
 
 *** Vim like window split keys
 
