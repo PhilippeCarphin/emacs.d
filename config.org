@@ -5,6 +5,9 @@
 #+ATTR_ORG: :width 500px
 
 * Minimalistic config
+   :PROPERTIES:
+   :header-args: :tangle yes
+   :END:
 
 ** Intro
 #+REVEAL: split
