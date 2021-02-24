@@ -66,7 +66,26 @@
   :ensure t
   :init
   (setq evil-want-C-i-jump nil)
-  :config (evil-mode))
+  (setq evil-want-integration t)
+  (setq evil-want-C-u-scroll t)
+  :config
+
+  (evil-mode 1)
+
+  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+
+  (setq evil-default-state 'emacs)
+  (setq evil-insert-state-modes nil)
+  (setq evil-motion-state-modes nil)
+  (setq evil-normal-state-modes '(fundamental-mode
+                                  conf-mode
+                                  prog-mode
+                                  text-mode
+                                  dired))
+
+  (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
 (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
 (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
