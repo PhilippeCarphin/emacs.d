@@ -313,6 +313,7 @@ Wrong type argument : stringp, org-agenda-dir.
  #+begin_src emacs-lisp
    (define-prefix-command 'gtd)
    (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+   (define-key gtd (kbd "a") 'org-agenda)
  #+end_src
 
    #+REVEAL: split

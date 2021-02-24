@@ -104,6 +104,7 @@
 
 (define-prefix-command 'gtd)
 (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+(define-key gtd (kbd "a") 'org-agenda)
 
 (defun gtd-open-agenda-file (file)
   (interactive)
