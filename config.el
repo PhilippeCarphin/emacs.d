@@ -91,7 +91,7 @@
 
 (defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
 (defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
-(defun gtd-open-references   () (interactive) (find-file gtd-reference-file))
+(defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
 (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
 (define-key gtd (kbd "i") 'gtd-open-in-tray)
 (define-key gtd (kbd "p") 'gtd-open-project-list)
