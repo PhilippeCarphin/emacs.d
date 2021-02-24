@@ -252,6 +252,9 @@ the TAB key doesn't work properly.
 
 ** Orgmode implementation of GTD
 *** Agenda files
+   :PROPERTIES:
+   :header-args: :tangle no
+   :END:
 
  To begin using org-agenda, all we need to do is to give it a directory that
  contains orgmode files.
@@ -273,6 +276,45 @@ Wrong type argument : stringp, org-agenda-dir.
 *** GTD
     
    #+REVEAL: split
+**** Keymap for GTD keybindings
+      We define a keymap that will be accessed with =SPC a g=
+ #+begin_src emacs-lisp
+   (define-prefix-command 'gtd)
+   (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+   (define-key gtd (kbd "a") 'org-agenda)
+ #+end_src
+
+   #+REVEAL: split
+
+**** GTD files
+***** Filename symbols
+#+begin_src emacs-lisp :results none
+(setq org-agenda-dir "~/NDocuments/gtd")
+(setq org-agenda-files '("~/NDocuments/gtd"))
+(setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
+    gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
+    gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
+    gtd-reference-file (concat org-agenda-dir "GTD_Reference.org")
+    gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
+    gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
+    gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
+#+end_src
+***** Quick access to GTD files
+
+  We use it to create bindings in the =gtd= map to open files
+
+  #+begin_src emacs-lisp
+    (defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
+    (defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
+    (defun gtd-open-references   () (interactive) (find-file gtd-reference-file))
+    (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
+    (define-key gtd (kbd "i") 'gtd-open-in-tray)
+    (define-key gtd (kbd "p") 'gtd-open-project-list)
+    (define-key gtd (kbd "r") 'gtd-open-reference)
+    (define-key gtd (kbd "n") 'gtd-open-next-actions)
+  #+end_src
+
+    #+REVEAL: split
 **** Todo keywords for GTD
 
  The first set of keywords is a generic set of keywords that I can give TODO
@@ -308,35 +350,6 @@ Wrong type argument : stringp, org-agenda-dir.
  #+end_src
 
    #+REVEAL: split
-**** Keymap for GTD keybindings
-      We define a keymap that will be accessed with =SPC a g=
- #+begin_src emacs-lisp
-   (define-prefix-command 'gtd)
-   (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
-   (define-key gtd (kbd "a") 'org-agenda)
- #+end_src
-
-   #+REVEAL: split
-**** Quick access to GTD files
- This helper function opens files in the =org-agenda-dir=
- #+begin_src emacs-lisp
-   (defun gtd-open-agenda-file (file)
-     (interactive)
-     (find-file (concat org-agenda-dir "/" file)))
- #+end_src
- We use it to create bindings in the =gtd= map to open files
- #+begin_src emacs-lisp
-   (defun gtd-open-in-tray      () (interactive) (gtd-open-agenda-file "GTD_InTray.org"))
-   (defun gtd-open-project-list () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org"))
-   (defun gtd-open-references   () (interactive) (gtd-open-agenda-file "GTD_Reference.org"))
-   (defun gtd-open-next-actions () (interactive) (gtd-open-agenda-file "GTD_NextActions.org"))
-   (define-key gtd (kbd "i") 'gtd-open-in-tray)
-   (define-key gtd (kbd "p") 'gtd-open-project-list)
-   (define-key gtd (kbd "r") 'gtd-open-reference)
-   (define-key gtd (kbd "n") 'gtd-open-next-actions)
- #+end_src
-
-   #+REVEAL: split
 **** Definition of stuck projects
 
  In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
@@ -350,6 +363,22 @@ Wrong type argument : stringp, org-agenda-dir.
          ()                     ;; Stuck if contains
          ""))                   ;; General regex
  #+end_src
+
+ 
+**** Capturing
+***** Capture templates
+ #+begin_src emacs-lisp
+ (setq org-capture-templates 
+   '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
+      "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
+ #+end_src
+***** Capture hotkey
+ #+begin_src emacs-lisp
+   (global-set-key (kbd "C-c c") 'org-capture)
+ #+end_src
+
+ #+RESULTS:
+ : org-capture
 
 *** Org Agenda
    #+REVEAL: split
@@ -425,3 +454,4 @@ The most amazing vim plugin in existence.
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 #+end_src
+

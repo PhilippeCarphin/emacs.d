@@ -75,8 +75,28 @@
 (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
 
+(define-prefix-command 'gtd)
+(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+(define-key gtd (kbd "a") 'org-agenda)
+
 (setq org-agenda-dir "~/NDocuments/gtd")
 (setq org-agenda-files '("~/NDocuments/gtd"))
+(setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
+    gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
+    gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
+    gtd-reference-file (concat org-agenda-dir "GTD_Reference.org")
+    gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
+    gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
+    gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
+
+(defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
+(defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
+(defun gtd-open-references   () (interactive) (find-file gtd-reference-file))
+(defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
+(define-key gtd (kbd "i") 'gtd-open-in-tray)
+(define-key gtd (kbd "p") 'gtd-open-project-list)
+(define-key gtd (kbd "r") 'gtd-open-reference)
+(define-key gtd (kbd "n") 'gtd-open-next-actions)
 
 (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
 			  (sequence 
@@ -102,28 +122,17 @@
      ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
      ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
 
-(define-prefix-command 'gtd)
-(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
-(define-key gtd (kbd "a") 'org-agenda)
-
-(defun gtd-open-agenda-file (file)
-  (interactive)
-  (find-file (concat org-agenda-dir "/" file)))
-
-(defun gtd-open-in-tray      () (interactive) (gtd-open-agenda-file "GTD_InTray.org"))
-(defun gtd-open-project-list () (interactive) (gtd-open-agenda-file "GTD_ProjectList.org"))
-(defun gtd-open-references   () (interactive) (gtd-open-agenda-file "GTD_Reference.org"))
-(defun gtd-open-next-actions () (interactive) (gtd-open-agenda-file "GTD_NextActions.org"))
-(define-key gtd (kbd "i") 'gtd-open-in-tray)
-(define-key gtd (kbd "p") 'gtd-open-project-list)
-(define-key gtd (kbd "r") 'gtd-open-reference)
-(define-key gtd (kbd "n") 'gtd-open-next-actions)
-
 (setq org-stuck-projects
       '("TODO=\"GTD-PROJECT\"" ;; Search query
         ("GTD-NEXT-ACTION")    ;; Not stuck if contains
         ()                     ;; Stuck if contains
         ""))                   ;; General regex
+
+(setq org-capture-templates 
+  '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
+     "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
+
+(global-set-key (kbd "C-c c") 'org-capture)
 
 (setq org-agenda-span 10
       org-agenda-start-on-weekday nil
