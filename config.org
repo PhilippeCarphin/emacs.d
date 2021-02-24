@@ -478,3 +478,21 @@ The most amazing vim plugin in existence.
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
 #+end_src
 
+
+* New
+
+** Yasnippet
+I thought this was going to give me the thing where doing =<sTAB= while in
+insert mode would expand to org mode source blocks.
+
+This [[https://emacs.stackexchange.com/questions/46988/why-do-easy-templates-e-g-s-tab-in-org-9-2-not-work/63561#63561][stack overflow post]] shows that org 9.2 simply changed it to =C-c C-,=.
+Knowing that, I think it's for the best since it now works with visual
+selections.
+
+Since I looked into [[https://www.emacswiki.org/emacs/Yasnippet][yasnippet]] I might as well install it and start using it.
+
+#+begin_src emacs-lisp :results none
+(use-package yasnippet
+  :ensure t
+  :config (yas-global-mode 1))
+#+end_src
