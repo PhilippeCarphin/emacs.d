@@ -79,7 +79,7 @@
 (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 (define-key gtd (kbd "a") 'org-agenda)
 
-(setq org-agenda-dir "~/NDocuments/gtd")
+(setq org-agenda-dir "~/NDocuments/gtd/")
 (setq org-agenda-files '("~/NDocuments/gtd"))
 (setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
     gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
