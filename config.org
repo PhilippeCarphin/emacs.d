@@ -1,7 +1,7 @@
 #+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
 #+REVEAL_HLEVEL: 4
-#+PROPERTY: hearder-args :tangle yes
+#+PROPERTY: header-args :tangle yes
 
 * Minimalistic config
 ** Intro
@@ -220,6 +220,9 @@ surprised that a command runs when the press enter in a shell.
 #+end_src
     
 ** Evil mode
+   :PROPERTIES:
+   :header-args: :tangle yes
+   :END:
 *** Install and activate
 
 #+begin_src emacs-lisp :results none
