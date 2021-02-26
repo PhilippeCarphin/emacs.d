@@ -177,9 +177,11 @@ Essential for easy tree viewing
 - =ox-twbs= to export to beautiful HTML
 - =ox-reveal= to export to Reveal.js presentation
 - =ox-rst= to generate Restructured Text for sphinx documentation
+- =ox-gfm= to generate github flavored markdown
 - =htmlize= for colored code in all export formats
 
 #+begin_src emacs-lisp
+(use-package ox-gfm :ensure t)
 (use-package ox-rst :ensure t)
 (use-package ox-twbs :ensure t)
 (use-package ox-reveal :ensure t
