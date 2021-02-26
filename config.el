@@ -167,6 +167,8 @@
         ("gn" todo-tree "GTD-NEXT-ACTION")
         ("gp" todo "GTD-PROJECT")))
 
+(setq org-log-done 'note)
+
 (use-package magit
   :ensure t
   :custom

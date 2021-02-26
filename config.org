@@ -465,6 +465,10 @@ Wrong type argument : stringp, org-agenda-dir.
          ("gp" todo "GTD-PROJECT")))
  #+end_src
 
+*** Closing notes
+#+begin_src emacs-lisp :results none
+(setq org-log-done 'note)
+#+end_src
 ** Magit
 
 The most amazing vim plugin in existence.
