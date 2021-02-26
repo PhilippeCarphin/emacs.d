@@ -282,7 +282,7 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
 
  #+begin_src emacs-lisp
  (setq org-agenda-dir "~/NDocuments/gtd")
- (setq org-agenda-files '("~/NDocuments/gtd"))
+ (setq org-agenda-files (list org-agenda-dir))
  #+end_src
 
 I don't know why I can't use org-agenda-dir here but if I put org-agenda-dir
