@@ -516,12 +516,47 @@ Since I looked into [[https://www.emacswiki.org/emacs/Yasnippet][yasnippet]] I m
      (easy-menu-define present-menu org-mode-map
        "Menu for word navigation commands."
        '("Present"
-	 ["Present Now" org-reveal-export-to-html-and-browse]
-	 ["Present Subtree Now" ox-reveal]
-	 ["Twitter Bootstrap HTML  now" ox-twbs]
-	 ["Twitter Bootstrap HTML  all now" ox-twbs-all]
-	 ["RST now" ox-rst]
-	 ["RST All now" ox-rst-all]
-	 ["View  straight-pipe HTML now" ox-html]
-	 ["View all straight-pipe HTML now" ox-html-all]))
+	 ["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
+	 ["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
+	 ["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
+	 ["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
+	 ["View RST Right Now (C-c C-e C-s r R)" ox-rst]
+	 ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
+	 ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
+	 ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
    #+end_src
+
+   
+** RSS
+
+#+begin_src emacs-lisp :results none
+;; data is stored in ~/.elfeed 
+(use-package elfeed :ensure t)
+(setq elfeed-feeds
+      '(
+        ;; programming
+        ("https://news.ycombinator.com/rss" hacker)
+        ("https://www.heise.de/developer/rss/news-atom.xml" heise)
+        ("https://www.reddit.com/r/programming.rss" programming)
+        ("https://www.reddit.com/r/emacs.rss" emacs)
+
+        ;; programming languages
+        ("https://www.reddit.com/r/golang.rss" golang)
+        ("https://www.reddit.com/r/java.rss" java)
+        ("https://www.reddit.com/r/javascript.rss" javascript)
+        ("https://www.reddit.com/r/typescript.rss" typescript)
+        ("https://www.reddit.com/r/clojure.rss" clojure)
+        ("https://www.reddit.com/r/python.rss" python)
+
+        ;; cloud
+        ("https://www.reddit.com/r/aws.rss" aws)
+        ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
+        ("https://www.reddit.com/r/azure.rss" azure)
+        ("https://www.reddit.com/r/devops.rss" devops)
+        ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
+))
+
+(setq-default elfeed-search-filter "@2-days-ago +unread")
+(setq-default elfeed-search-title-max-width 100)
+(setq-default elfeed-search-title-min-width 100)
+#+end_src
