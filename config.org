@@ -431,10 +431,10 @@ Wrong type argument : stringp, org-agenda-dir.
 
  The way this is set, it will show 10 days starting 3 days in the past.
 
- #+begin_src emacs-lisp
- (setq org-agenda-span 10
-       org-agenda-start-on-weekday nil
-       org-agenda-start-day "-3d")
+ #+begin_src emacs-lisp :results none
+ (setq org-agenda-span 7
+       org-agenda-start-on-weekday 0
+       org-agenda-start-day "-2d")
  #+end_src
 
    #+REVEAL: split

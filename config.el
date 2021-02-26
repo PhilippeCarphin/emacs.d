@@ -148,9 +148,9 @@
 
 (global-set-key (kbd "C-c c") 'org-capture)
 
-(setq org-agenda-span 10
-      org-agenda-start-on-weekday nil
-      org-agenda-start-day "-3d")
+(setq org-agenda-span 7
+      org-agenda-start-on-weekday 0
+      org-agenda-start-day "-2d")
 
 (global-set-key (kbd "C-c a") 'org-agenda)
 
