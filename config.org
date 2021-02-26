@@ -78,7 +78,7 @@ a-package)= and adds convenience functions.
 
 * Wrapping
 
-Automattically hard-wrap text on 80 chars.
+Automatically hard-wrap text on 80 chars.
 
 #+begin_src emacs-lisp
 (setq-default auto-fill-function 'do-auto-fill)
@@ -251,7 +251,7 @@ surprised that a command runs when the press enter in a shell.
     
 * Evil mode
   :PROPERTIES:
-  :header-args: :tangle yes
+  :header-args: :tangle no
   :END:
 
 Set the =header-args= to =:tangle no= right above this text in =config.org= to
