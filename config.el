@@ -51,6 +51,7 @@
   :ensure t
   :hook (org-mode . org-bullets-mode))
 
+(use-package ox-gfm :ensure t)
 (use-package ox-rst :ensure t)
 (use-package ox-twbs :ensure t)
 (use-package ox-reveal :ensure t
@@ -177,3 +178,22 @@
 (use-package yasnippet
   :ensure t
   :config (yas-global-mode 1))
+
+(defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
+(defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
+(defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
+(defun ox-html () (interactive) (browse-url (org-html-export-to-html nil t)))
+(defun ox-html-all () (interactive) (browse-url (org-html-export-to-html nil nil)))
+(defun ox-rst () (interactive) (org-open-file (org-rst-export-to-rst nil t)))
+(defun ox-rst-all () (interactive) (org-open-file (org-rst-export-to-rst nil nil)))
+(easy-menu-define present-menu org-mode-map
+  "Menu for word navigation commands."
+  '("Present"
+    ["Present Now" org-reveal-export-to-html-and-browse]
+    ["Present Subtree Now" ox-reveal]
+    ["Twitter Bootstrap HTML  now" ox-twbs]
+    ["Twitter Bootstrap HTML  all now" ox-twbs-all]
+    ["RST now" ox-rst]
+    ["RST All now" ox-rst-all]
+    ["View  straight-pipe HTML now" ox-html]
+    ["View all straight-pipe HTML now" ox-html-all]))
