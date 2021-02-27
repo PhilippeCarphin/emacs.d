@@ -20,7 +20,7 @@ the full power of orgmode immediately.
 *** This config file
    
 Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
-** Package stuff
+** Package stuff :phil:
 
    Standard stuff that is at the start of everyone's config file.
 #+begin_src emacs-lisp
@@ -344,9 +344,15 @@ Wrong type argument : stringp, org-agenda-dir.
       We define a keymap that will be accessed with =SPC a g=
  #+begin_src emacs-lisp
    (define-prefix-command 'gtd)
-   (global-set-key (kbd "C-c a g") 'gtd)
-   (define-key gtd (kbd "a") 'org-agenda)
  #+end_src
+   #+begin_src emacs-lisp
+   (global-set-key (kbd "S-SPC g") 'gtd)
+   (define-key gtd (kbd "a") 'org-agenda)
+   (define-key gtd (kbd "c") 'org-capture)
+   #+end_src
+
+ #+RESULTS:
+ : org-capture
 
 
    #+REVEAL: split
@@ -439,11 +445,11 @@ Wrong type argument : stringp, org-agenda-dir.
  #+end_src
 ***** Capture hotkey
  #+begin_src emacs-lisp
-   (global-set-key (kbd "C-c c") 'org-capture)
+   (define-key gtd (kbd "a") 'org-agenda)
  #+end_src
 
  #+RESULTS:
- : org-capture
+ : gtd-open-reference
 
 *** Org Agenda
    #+REVEAL: split
@@ -650,5 +656,62 @@ Emacs crashed while I had this going.  I don't know if it is related.
 
     I should put it in the evil mode config but I don't want it to depend on other things
    #+begin_src emacs-lisp
-   (global-set-key (kbd "SPC g") 'gtd)
+   (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
    #+end_src
+
+** Keymaps
+   
+La touche =C-|= (=C-S-\=) est une map de touches qui contient des
+fonctionnalité spécialement sélectionnées.
+
+Le choix de touche de départ est de choisr un binding qui fait chier à faire.
+
+Le but c'est d'explorer.  Quand on trouve quelque chose qu'on aime, on peut
+découvrir les bindings standards en faisant =C-h f= et écrire le nom de la
+fonction exécutée par la touche.  Ou faire =C-h k= et refaire la touche et
+l'aide nous dira quels sont les autres bindings pour la fonctionnalité.
+
+Si un binding a le même nom que la fonction comme =C-h=, c'est que ce groupe est
+une sélection des fonctions disponibles en faisant =C-h= normalement.
+
+Si le groupe contient le mot mode, c'est qu'il contient des fonctions qui sont
+seulement disponibles dans un certain mode.
+
+Les touches utilisées sont le plus souvent possible la même touche qu'on ferait
+normalement. Par exemple, =C-| o C-c C-,= insère un bloc de code source.  Le
+choix est fait comme ça parce que la touche =C-c C-,= est la touche native pour
+faire cette action.
+
+#+begin_src emacs-lisp
+  (define-prefix-command 'emacs-movement)
+  (global-set-key (kbd "C-| m") 'emacs-movement)
+  (define-key emacs-movement (kbd "C-f") 'forward-char)
+  (define-key emacs-movement (kbd "C-b") 'backward-char)
+  (define-key emacs-movement (kbd "C-p") 'previous-line)
+  (define-key emacs-movement (kbd "C-n") 'next-line)
+  (define-prefix-command 'C-h)
+  (global-set-key (kbd "C-| C-h") 'C-h)
+  (define-key C-h (kbd "C-i") 'helm-info)
+  (define-key C-h (kbd "o") 'describe-symbol)
+  (define-key C-h (kbd "f") 'describe-function)
+  (define-key C-h (kbd "k") 'describe-key)
+  (define-prefix-command 'orgmode)
+  (global-set-key (kbd "C-| o") 'orgmode)
+  (define-key orgmode (kbd "C-c C-,") 'org-insert-structure-template)
+  (define-key orgmode (kbd "C-c C-c") 'org-ctrl-c-ctrl-c)
+  (define-key orgmode (kbd "C-c '") 'org-edit-special)
+  (define-key orgmode (kbd "C-c .") 'org-time-stamp)
+  (define-key orgmode (kbd "C-c C-s") 'org-schedule)
+  (define-key orgmode (kbd "C-c C-d") 'org-deadline)
+  (define-key orgmode (kbd "a") 'org-agenda)
+  (define-key orgmode (kbd "v") 'org-tags-view)
+  (define-key orgmode (kbd "C-c /") 'org-match-sparse-tree)
+  (define-key orgmode (kbd "<M-S-left>") 'org-promote-subtree)
+  (define-key orgmode (kbd "<M-S-right>") 'org-demote-subtree)
+  (define-key orgmode (kbd "n") 'org-narrow-to-subtree)
+  (define-key orgmode (kbd "c") 'org-columns)
+#+end_src
+
+#+RESULTS:
+: org-columns
+

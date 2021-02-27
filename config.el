@@ -12,6 +12,10 @@
 (setq scroll-step 1)
 (setq-default scroll-margin 10)
 
+(setq-default cursor-type '(bar . 3))
+(set-cursor-color "light grey")
+(add-to-list 'default-frame-alist '(cursor-color . "palegoldenrod"))
+
 (setq-default auto-fill-function 'do-auto-fill)
 (setq-default fill-column 80)
 
@@ -29,6 +33,7 @@
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)
 	 ("C-x C-r" . helm-recentf)
+	 ("C-h C-i" . helm-info)
 	 ("C-x C-b" . helm-buffers-list)
 	 ("C-c g" . helm-grep-do-git-grep)))
 
@@ -56,7 +61,7 @@
 (use-package ox-twbs :ensure t)
 (use-package ox-reveal :ensure t
   :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
-(use-package htmlize :ensure t)
+;; (use-package htmlize :ensure t)
 
 (org-babel-do-load-languages 'org-babel-load-languages
     '((shell . t)
@@ -81,6 +86,8 @@
                                           prog-mode
                                           text-mode
                                           dired))
+	  (setq evil-insert-state-cursor '((bar . 3) "light cyan")
+	      evil-normal-state-cursor '(box "light grey"))
           (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
 (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
@@ -90,9 +97,14 @@
 (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
 
+(setq org-agenda-dir "~/NDocuments/gtd")
+(setq org-agenda-files (list org-agenda-dir "~/CloudStation/orgmom"))
+
 (define-prefix-command 'gtd)
-(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+
+(global-set-key (kbd "S-SPC g") 'gtd)
 (define-key gtd (kbd "a") 'org-agenda)
+(define-key gtd (kbd "c") 'org-capture)
 
 (setq org-agenda-dir "~/NDocuments/gtd/")
 (setq org-agenda-files '("~/NDocuments/gtd"))
@@ -147,13 +159,11 @@
   '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
      "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
 
-(global-set-key (kbd "C-c c") 'org-capture)
+(define-key gtd (kbd "a") 'org-agenda)
 
 (setq org-agenda-span 7
       org-agenda-start-on-weekday 0
       org-agenda-start-day "-2d")
-
-(global-set-key (kbd "C-c a") 'org-agenda)
 
 (setq org-agenda-custom-commands
       '(("c" "Simple agenda view"
@@ -189,11 +199,69 @@
 (easy-menu-define present-menu org-mode-map
   "Menu for word navigation commands."
   '("Present"
-    ["Present Now" org-reveal-export-to-html-and-browse]
-    ["Present Subtree Now" ox-reveal]
-    ["Twitter Bootstrap HTML  now" ox-twbs]
-    ["Twitter Bootstrap HTML  all now" ox-twbs-all]
-    ["RST now" ox-rst]
-    ["RST All now" ox-rst-all]
-    ["View  straight-pipe HTML now" ox-html]
-    ["View all straight-pipe HTML now" ox-html-all]))
+    ["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
+    ["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
+    ["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
+    ["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
+    ["View RST Right Now (C-c C-e C-s r R)" ox-rst]
+    ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
+    ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
+    ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
+
+;; data is stored in ~/.elfeed 
+(use-package elfeed :ensure t)
+(setq elfeed-feeds
+      '(
+        ;; programming
+        ("https://news.ycombinator.com/rss" hacker)
+        ("https://www.heise.de/developer/rss/news-atom.xml" heise)
+        ("https://www.reddit.com/r/programming.rss" programming)
+        ("https://www.reddit.com/r/emacs.rss" emacs)
+
+        ;; programming languages
+        ("https://www.reddit.com/r/golang.rss" golang)
+        ("https://www.reddit.com/r/java.rss" java)
+        ("https://www.reddit.com/r/javascript.rss" javascript)
+        ("https://www.reddit.com/r/typescript.rss" typescript)
+        ("https://www.reddit.com/r/clojure.rss" clojure)
+        ("https://www.reddit.com/r/python.rss" python)
+
+        ;; cloud
+        ("https://www.reddit.com/r/aws.rss" aws)
+        ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
+        ("https://www.reddit.com/r/azure.rss" azure)
+        ("https://www.reddit.com/r/devops.rss" devops)
+        ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
+))
+
+(setq-default elfeed-search-filter "@2-days-ago +unread")
+(setq-default elfeed-search-title-max-width 100)
+(setq-default elfeed-search-title-min-width 100)
+
+(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+
+(define-prefix-command 'emacs-movement)
+(global-set-key (kbd "C-| m") 'emacs-movement)
+(define-key emacs-movement (kbd "C-f") 'forward-char)
+(define-key emacs-movement (kbd "C-b") 'backward-char)
+(define-key emacs-movement (kbd "C-p") 'previous-line)
+(define-key emacs-movement (kbd "C-n") 'next-line)
+(define-prefix-command 'C-h)
+(global-set-key (kbd "C-| C-h") 'C-h)
+(define-key C-h (kbd "C-i") 'helm-info)
+(define-key C-h (kbd "o") 'describe-symbol)
+(define-key C-h (kbd "f") 'describe-function)
+(define-key C-h (kbd "k") 'describe-key)
+(define-prefix-command 'orgmode)
+(global-set-key (kbd "C-| o") 'orgmode)
+(define-key orgmode (kbd "t") 'org-insert-structure-template)
+(define-key orgmode (kbd "C-c") 'org-ctrl-c-ctrl-c)
+(define-key orgmode (kbd "e") 'org-edit-special)
+(define-key orgmode (kbd "a") 'org-agenda)
+(define-key orgmode (kbd "v") 'org-tags-view)
+(define-key orgmode (kbd "s") 'org-match-sparse-tree)
+(define-key orgmode (kbd "<M-S-left>") 'org-promote-subtree)
+(define-key orgmode (kbd "<M-S-right>") 'org-demote-subtree)
+(define-key orgmode (kbd "n") 'org-narrow-to-subtree)
+(define-key orgmode (kbd "p") 'org-promote-subtree)
+(define-key orgmode (kbd "c") 'org-columns)
