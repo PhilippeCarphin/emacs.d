@@ -3,6 +3,9 @@
 #+REVEAL_HLEVEL: 4
 #+PROPERTY: header-args :tangle yes
 
+#+COLUMNS: %25ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}]
+
+
 * Minimalistic config
 ** Intro
 #+REVEAL: split
@@ -15,7 +18,7 @@ the full power of orgmode immediately.
 - Elementary org configuration allowing immediate use of built in package babel.
 
 *** This config file
-
+   
 Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
 ** Package stuff
 
@@ -48,6 +51,26 @@ a-package)= and adds convenience functions.
 (setq-default scroll-margin 10)
 #+end_src
 
+** Cursor style
+   
+This will make our cursor a vertical bar instead of a box.
+
+If evil mode is active, this will cause our insert-mode cursor to be a bar and
+our normal mode cursor to be a box.
+
+#+begin_src emacs-lisp
+(setq-default cursor-type '(bar . 3))
+(set-cursor-color "light grey")
+(add-to-list 'default-frame-alist '(cursor-color . "palegoldenrod"))
+#+end_src
+
+#+RESULTS:
+: ((cursor-color . palegoldenrod))
+
+I use vi whenever I want to open files in a shell.  Because I use vi, when I see
+the box cursor, I feel like I'm in VI, but when I press keys, it just writes
+text.  So I press ESC, doesn't do anything, ESC again : "ESC ESC is not bound to
+anything".
 ** Wrapping
 
 Automattically hard-wrap text on 80 chars.
@@ -187,7 +210,7 @@ Essential for easy tree viewing
 (use-package ox-twbs :ensure t)
 (use-package ox-reveal :ensure t
   :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
-(use-package htmlize :ensure t)
+;; (use-package htmlize :ensure t)
 #+end_src
 
 *** Babel
@@ -224,8 +247,20 @@ surprised that a command runs when the press enter in a shell.
     
 ** Evil mode
    :PROPERTIES:
-   :header-args: :tangle yes
+   :HEADER-ARGS: :tangle yes
    :END:
+   
+Evil-mode is a by far the best VI emulation out there.  It is very exact.
+
+The only thing that is very different is that not all buffers are going to be in
+evil mode.
+
+At the start, this the most confusing thing in the world.  Once you get used to
+it it's not a big deal.  After a while, you still make mistakes in that sense
+but if you thought you were in evil mode and you pressed the wrong key, you know
+how to fix it.  It becomes like pressing backspace when you make a typo,
+something barely noticed.
+
 *** Install and activate
 
 #+begin_src emacs-lisp :results none
@@ -246,6 +281,8 @@ surprised that a command runs when the press enter in a shell.
                                             prog-mode
                                             text-mode
                                             dired))
+	    (setq evil-insert-state-cursor '((bar . 3) "light cyan")
+		evil-normal-state-cursor '(box "light grey"))
             (add-hook 'with-editor-mode-hook 'evil-insert-state))
 #+end_src
 
@@ -277,7 +314,7 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
 ** Orgmode implementation of GTD
 *** Agenda files
    :PROPERTIES:
-   :header-args: :tangle no
+   :header-args: :tangle yes
    :END:
 
  To begin using org-agenda, all we need to do is to give it a directory that
@@ -285,8 +322,11 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
 
  #+begin_src emacs-lisp
  (setq org-agenda-dir "~/NDocuments/gtd")
- (setq org-agenda-files (list org-agenda-dir))
+ (setq org-agenda-files (list org-agenda-dir "~/CloudStation/orgmom"))
  #+end_src
+
+ #+RESULTS:
+ | ~/NDocuments/gtd | ~/CloudStation/orgmom |
 
 I don't know why I can't use org-agenda-dir here but if I put org-agenda-dir
 where the string litteral is, it doesn't work.
@@ -304,9 +344,10 @@ Wrong type argument : stringp, org-agenda-dir.
       We define a keymap that will be accessed with =SPC a g=
  #+begin_src emacs-lisp
    (define-prefix-command 'gtd)
-   (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+   (global-set-key (kbd "C-c a g") 'gtd)
    (define-key gtd (kbd "a") 'org-agenda)
  #+end_src
+
 
    #+REVEAL: split
 
@@ -443,7 +484,11 @@ Wrong type argument : stringp, org-agenda-dir.
    #+REVEAL: split
     
 **** Agenda Key
- I mapped a key because I like to pop in and out of it.
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
+ I mapped a key because I like to pop in and out of it. I don't use it myself
+ because the I put =org-agenda= on a keymap for my GTD stuff.
 
  #+begin_src emacs-lisp
  (global-set-key (kbd "C-c a") 'org-agenda)
@@ -484,7 +529,7 @@ The most amazing vim plugin in existence.
 #+end_src
 
 
-* New
+Error (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntax* New
 
 ** Yasnippet
 I thought this was going to give me the thing where doing =<sTAB= while in
@@ -561,3 +606,49 @@ Since I looked into [[https://www.emacswiki.org/emacs/Yasnippet][yasnippet]] I m
 (setq-default elfeed-search-title-max-width 100)
 (setq-default elfeed-search-title-min-width 100)
 #+end_src
+
+
+** Dynamic cursor
+:PROPERTIES:
+:header-args: :tangle no
+:END:
+Emacs crashed while I had this going.  I don't know if it is related.
+#+begin_src emacs-lisp
+(setq djcb-read-only-color       "gray")
+;; valid values are t, nil, box, hollow, bar, (bar . WIDTH), hbar,
+;; (hbar. HEIGHT); see the docs for set-cursor-type
+
+(setq djcb-read-only-cursor-type 'hbar)
+(setq djcb-overwrite-color       "red")
+(setq djcb-overwrite-cursor-type 'box)
+(setq djcb-normal-color          "yellow")
+(setq djcb-normal-cursor-type    'bar)
+
+(defun djcb-set-cursor-according-to-mode ()
+  "change cursor color and type according to some minor modes."
+
+  (cond
+    (buffer-read-only
+      (set-cursor-color djcb-read-only-color)
+      (setq cursor-type djcb-read-only-cursor-type))
+    (overwrite-mode
+      (set-cursor-color djcb-overwrite-color)
+      (setq cursor-type djcb-overwrite-cursor-type))
+    (t 
+      (set-cursor-color djcb-normal-color)
+      (setq cursor-type djcb-normal-cursor-type))))
+
+(add-hook 'post-command-hook 'djcb-set-cursor-according-to-mode)
+#+end_src
+
+
+** Extra binding for evil
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+    Only use this if evil mode is activated
+
+    I should put it in the evil mode config but I don't want it to depend on other things
+   #+begin_src emacs-lisp
+   (global-set-key (kbd "SPC g") 'gtd)
+   #+end_src
