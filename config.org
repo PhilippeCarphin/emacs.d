@@ -90,6 +90,9 @@
  (load-theme 'misterioso)
  #+end_src
 
+ #+RESULTS:
+ : t
+
 ***** Explanation                                           :noexport_reveal:
 
      The default emacs theme looks good when exporting to HTML.  But because of
@@ -122,13 +125,8 @@
    :config (global-undo-tree-mode))
  #+end_src
 **** Helm
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle no
-     :END:
-    
-***** Original
       :PROPERTIES:
-      :HEADER-ARGS: :tangle yes
+      :HEADER-ARGS: :tangle no
       :END:
 
  Improve searching interface all over emacs.
