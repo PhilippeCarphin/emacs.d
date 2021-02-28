@@ -1,4 +1,4 @@
-e#+OPTIONS: toc:1
+#+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
 #+REVEAL_HLEVEL: 4
 #+PROPERTY: header-args :tangle yes :results none
