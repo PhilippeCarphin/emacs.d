@@ -226,7 +226,7 @@
                              "GTD-REFERENCE(r)"
                              "GTD-DELEGATED(g)"
 			     "GTD-DONE(d)")))
-			   
+
 (setq org-todo-keyword-faces
    '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
      ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
