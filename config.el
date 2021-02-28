@@ -299,8 +299,3 @@
      ["org-promote-subtree" org-promote-subtree]
      ["org-demote-subtree" org-demote-subtree]
      ["org-agenda-help" org-agenda-help]))
-
-(unless (display-graphic-p)
-          (require 'evil-terminal-cursor-changer)
-          (evil-terminal-cursor-changer-activate) ; or (etcc-on)
-          )
