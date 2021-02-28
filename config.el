@@ -52,46 +52,6 @@
   :config (global-company-mode)
           (setq company-idle-delay 0))
 
-(use-package org-bullets
-  :ensure t
-  :hook (org-mode . org-bullets-mode))
-
-(use-package ox-gfm :ensure t)
-(use-package ox-rst :ensure t)
-(use-package ox-twbs :ensure t)
-(use-package ox-reveal :ensure t
-  :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
-;; (use-package htmlize :ensure t)
-
-(org-babel-do-load-languages 'org-babel-load-languages
-    '((shell . t)
-      (python . t)))
-
-(setq org-confirm-babel-evaluate nil)
-
-(defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
-(defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
-(defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
-(defun ox-html () (interactive) (browse-url (org-html-export-to-html nil t)))
-(defun ox-html-all () (interactive) (browse-url (org-html-export-to-html nil nil)))
-(defun ox-rst () (interactive) (org-open-file (org-rst-export-to-rst nil t)))
-(defun ox-rst-all () (interactive) (org-open-file (org-rst-export-to-rst nil nil)))
-(easy-menu-define present-menu org-mode-map
-  "Menu for word navigation commands."
-  '("Present"
-    ["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
-    ["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
-    ["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
-    ["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
-    ["View RST Right Now (C-c C-e C-s r R)" ox-rst]
-    ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
-    ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
-    ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
-
-(setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
-(setq org-outline-path-complete-in-steps nil)
-(setq org-refile-use-outline-path 'file)
-
 (use-package evil
   :ensure t
   :init (setq evil-want-C-i-jump nil)
@@ -178,8 +138,55 @@
      ["org-demote-subtree" org-demote-subtree]
      ["org-agenda-help" org-agenda-help]))
 
+(use-package org-bullets
+  :ensure t
+  :hook (org-mode . org-bullets-mode))
+
+(use-package ox-gfm :ensure t)
+(use-package ox-rst :ensure t)
+(use-package ox-twbs :ensure t)
+(use-package ox-reveal :ensure t
+  :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
+;; (use-package htmlize :ensure t)
+
+(org-babel-do-load-languages 'org-babel-load-languages
+    '((shell . t)
+      (python . t)))
+
+(setq org-confirm-babel-evaluate nil)
+
 (setq org-agenda-dir "~/NDocuments/gtd")
-(setq org-agenda-files (list org-agenda-dir "~/CloudStation/orgmom"))
+(setq org-agenda-files (list org-agenda-dir))
+
+(setq org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 3)))
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-use-outline-path 'file)
+
+(setq org-capture-templates 
+  '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
+     "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
+
+(defun org-capture-input () (interactive) (org-capture nil "i"))
+(global-set-key (kbd "C-c c") 'org-capture-input)
+
+(defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
+(defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
+(defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
+(defun ox-html () (interactive) (browse-url (org-html-export-to-html nil t)))
+(defun ox-html-all () (interactive) (browse-url (org-html-export-to-html nil nil)))
+(defun ox-rst () (interactive) (org-open-file (org-rst-export-to-rst nil t)))
+(defun ox-rst-all () (interactive) (org-open-file (org-rst-export-to-rst nil nil)))
+(easy-menu-define present-menu org-mode-map
+  "Menu for word navigation commands."
+  '("Present"
+    ["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
+    ["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
+    ["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
+    ["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
+    ["View RST Right Now (C-c C-e C-s r R)" ox-rst]
+    ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
+    ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
+    ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
 
 (define-prefix-command 'gtd)
 
@@ -219,7 +226,7 @@
                              "GTD-REFERENCE(r)"
                              "GTD-DELEGATED(g)"
 			     "GTD-DONE(d)")))
-
+			   
 (setq org-todo-keyword-faces
    '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
      ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
@@ -235,13 +242,6 @@
         ("GTD-NEXT-ACTION")    ;; Not stuck if contains
         ()                     ;; Stuck if contains
         ""))                   ;; General regex
-
-(setq org-capture-templates 
-  '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
-     "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
-
-(defun org-capture-input () (interactive) (org-capture nil "i"))
-(global-set-key (kbd "C-c c") 'org-capture-input)
 
 (setq org-agenda-span 7
       org-agenda-start-on-weekday 0
@@ -267,6 +267,8 @@ gtd-project-list-file) (org-agenda nil "gn"))
 (global-set-key (kbd "C-c n") 'gtd-next-action-sparse-tree)
 
 (setq org-log-done 'note)
+
+(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 
 (use-package magit
   :ensure t
@@ -306,8 +308,6 @@ gtd-project-list-file) (org-agenda nil "gn"))
 (setq-default elfeed-search-filter "@2-days-ago +unread")
 (setq-default elfeed-search-title-max-width 100)
 (setq-default elfeed-search-title-min-width 100)
-
-(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 
 (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
 

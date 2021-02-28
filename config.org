@@ -185,103 +185,6 @@ Originally developped for spacemacs, now part of the standard emacs packages.
   :config (global-company-mode)
           (setq company-idle-delay 0))
 #+end_src
-** Org configuration
-*** Looks
-**** Bullets
-
-Show nice bullets
-
-Essential for easy tree viewing
-
-#+begin_src emacs-lisp
-(use-package org-bullets
-  :ensure t
-  :hook (org-mode . org-bullets-mode))
-#+end_src
-
-*** Exporting
-
-- =ox-twbs= to export to beautiful HTML
-- =ox-reveal= to export to Reveal.js presentation
-- =ox-rst= to generate Restructured Text for sphinx documentation
-- =ox-gfm= to generate github flavored markdown
-- =htmlize= for colored code in all export formats
-
-#+begin_src emacs-lisp
-(use-package ox-gfm :ensure t)
-(use-package ox-rst :ensure t)
-(use-package ox-twbs :ensure t)
-(use-package ox-reveal :ensure t
-  :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
-;; (use-package htmlize :ensure t)
-#+end_src
-
-*** Babel
-**** Babel Intro
-Babel allows running of code blocks.  It is what enables this config to be in
-orgmode format.
-
-The ability to evaluate code in orgmode source blocks is built in with emacs but
-must be activated to be used:
-
-https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
-
-**** Babel config
-We simply add languages that we want to become available.  There are many more
-but some of them require installing extra packages.
-
-#+begin_src emacs-lisp
-(org-babel-do-load-languages 'org-babel-load-languages
-    '((shell . t)
-      (python . t)))
-#+end_src
-
-**** Disable prompt
-As a security precaution this is off by default.  It would indeed be quite
-surprising if your text editor runs a shell command if you accidently do =C-c
-C-c=.
-
-But if you know it exists, then there is no big deal.  Indeed one is not
-surprised that a command runs when the press enter in a shell.
-
-#+begin_src emacs-lisp
-(setq org-confirm-babel-evaluate nil)
-#+end_src
-    
-*** Present GUI menu
-
-   This adds the "Present" menu at the top with menu item "Present Now".
-
-   #+begin_src emacs-lisp :results none
-     (defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
-     (defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
-     (defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
-     (defun ox-html () (interactive) (browse-url (org-html-export-to-html nil t)))
-     (defun ox-html-all () (interactive) (browse-url (org-html-export-to-html nil nil)))
-     (defun ox-rst () (interactive) (org-open-file (org-rst-export-to-rst nil t)))
-     (defun ox-rst-all () (interactive) (org-open-file (org-rst-export-to-rst nil nil)))
-     (easy-menu-define present-menu org-mode-map
-       "Menu for word navigation commands."
-       '("Present"
-	 ["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
-	 ["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
-	 ["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
-	 ["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
-	 ["View RST Right Now (C-c C-e C-s r R)" ox-rst]
-	 ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
-	 ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
-	 ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
-   #+end_src
-
-*** Refiling config
-
-https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
-#+begin_src emacs-lisp
-(setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
-(setq org-outline-path-complete-in-steps nil)
-(setq org-refile-use-outline-path 'file)
-#+end_src
-
 ** Evil mode
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -450,55 +353,151 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
    (define-key emacs-movement (kbd "C-b") 'backward-char)
    (define-key emacs-movement (kbd "C-p") 'previous-line)
    
-* Advanced
-** Orgmode implementation of GTD
-*** Agenda files
-   :PROPERTIES:
-   :header-args: :tangle yes
-   :END:
+* Basic org configuration
+** Looks
+*** Bullets
 
- To begin using org-agenda, all we need to do is to give it a directory that
- contains orgmode files.
+Show nice bullets
 
- #+begin_src emacs-lisp
- (setq org-agenda-dir "~/NDocuments/gtd")
- (setq org-agenda-files (list org-agenda-dir "~/CloudStation/orgmom"))
- #+end_src
+Essential for easy tree viewing
 
- #+RESULTS:
- | ~/NDocuments/gtd | ~/CloudStation/orgmom |
-
-I don't know why I can't use org-agenda-dir here but if I put org-agenda-dir
-where the string litteral is, it doesn't work.
-
-It gives the message
-
-#+begin_src text
-Wrong type argument : stringp, org-agenda-dir.
+#+begin_src emacs-lisp
+(use-package org-bullets
+  :ensure t
+  :hook (org-mode . org-bullets-mode))
 #+end_src
 
-*** GTD
+** Exporting
+
+- =ox-twbs= to export to beautiful HTML
+- =ox-reveal= to export to Reveal.js presentation
+- =ox-rst= to generate Restructured Text for sphinx documentation
+- =ox-gfm= to generate github flavored markdown
+- =htmlize= for colored code in all export formats
+
+#+begin_src emacs-lisp
+(use-package ox-gfm :ensure t)
+(use-package ox-rst :ensure t)
+(use-package ox-twbs :ensure t)
+(use-package ox-reveal :ensure t
+  :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
+;; (use-package htmlize :ensure t)
+#+end_src
+
+** Babel
+*** Babel Intro
+Babel allows running of code blocks.  It is what enables this config to be in
+orgmode format.
+
+The ability to evaluate code in orgmode source blocks is built in with emacs but
+must be activated to be used:
+
+https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
+
+*** Babel config
+We simply add languages that we want to become available.  There are many more
+but some of them require installing extra packages.
+
+#+begin_src emacs-lisp
+(org-babel-do-load-languages 'org-babel-load-languages
+    '((shell . t)
+      (python . t)))
+#+end_src
+
+*** Disable prompt
+As a security precaution this is off by default.  It would indeed be quite
+surprising if your text editor runs a shell command if you accidently do =C-c
+C-c=.
+
+But if you know it exists, then there is no big deal.  Indeed one is not
+surprised that a command runs when the press enter in a shell.
+
+#+begin_src emacs-lisp
+(setq org-confirm-babel-evaluate nil)
+#+end_src
     
-   #+REVEAL: split
-**** Keymap for GTD keybindings
-      We define a keymap that will be accessed with =SPC a g=
- #+begin_src emacs-lisp
-   (define-prefix-command 'gtd)
- #+end_src
-   #+begin_src emacs-lisp
-   (global-set-key (kbd "C-c a g") 'gtd)
-   (define-key gtd (kbd "a") 'org-agenda)
-   (define-key gtd (kbd "c") 'org-capture)
-   #+end_src
+** Agena files
+https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
+#+begin_src emacs-lisp
+(setq org-agenda-dir "~/NDocuments/gtd")
+(setq org-agenda-files (list org-agenda-dir))
+#+end_src
+** Agenda Key
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
+I mapped a key because I like to pop in and out of it. I don't use it myself
+because the I put =org-agenda= on a keymap for my GTD stuff.
 
- #+RESULTS:
- : org-capture
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-c a") 'org-agenda)
+#+end_src
+
+  #+REVEAL: split
+    
+** Refile targets
+#+begin_src emacs-lisp
+(setq org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 3)))
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-use-outline-path 'file)
+#+end_src
+** Capture templates
+#+begin_src emacs-lisp
+(setq org-capture-templates 
+  '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
+     "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
+#+end_src
+** Capture hotkey
+#+begin_src emacs-lisp
+(defun org-capture-input () (interactive) (org-capture nil "i"))
+(global-set-key (kbd "C-c c") 'org-capture-input)
+#+end_src
+
+** Present GUI menu
+
+  This adds the "Present" menu at the top with menu item "Present Now".
+
+  #+begin_src emacs-lisp :results none
+    (defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
+    (defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
+    (defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
+    (defun ox-html () (interactive) (browse-url (org-html-export-to-html nil t)))
+    (defun ox-html-all () (interactive) (browse-url (org-html-export-to-html nil nil)))
+    (defun ox-rst () (interactive) (org-open-file (org-rst-export-to-rst nil t)))
+    (defun ox-rst-all () (interactive) (org-open-file (org-rst-export-to-rst nil nil)))
+    (easy-menu-define present-menu org-mode-map
+      "Menu for word navigation commands."
+      '("Present"
+	["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
+	["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
+	["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
+	["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
+	["View RST Right Now (C-c C-e C-s r R)" ox-rst]
+	["View RST All Right Now (C-c C-e r R)" ox-rst-all]
+	["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
+	["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
+  #+end_src
+
+* GTD
+** Keymap for GTD keybindings
+     We define a keymap that will be accessed with =SPC a g=
+#+begin_src emacs-lisp
+  (define-prefix-command 'gtd)
+#+end_src
+  #+begin_src emacs-lisp
+  (global-set-key (kbd "C-c a g") 'gtd)
+  (define-key gtd (kbd "a") 'org-agenda)
+  (define-key gtd (kbd "c") 'org-capture)
+  #+end_src
+
+#+RESULTS:
+: org-capture
 
 
-   #+REVEAL: split
+  #+REVEAL: split
 
-**** GTD files
-***** Filename symbols
+** GTD files
+*** Filename symbols
 #+begin_src emacs-lisp :results none
 (setq org-agenda-dir "~/NDocuments/gtd/")
 (setq org-agenda-files '("~/NDocuments/gtd"))
@@ -510,137 +509,90 @@ Wrong type argument : stringp, org-agenda-dir.
     gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
     gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
 #+end_src
-***** Quick access to GTD files
+*** Quick access to GTD files
 
-  We use it to create bindings in the =gtd= map to open files
+We use it to create bindings in the =gtd= map to open files
 
-  #+begin_src emacs-lisp
-    (defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
-    (defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
-    (defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
-    (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
-    (define-key gtd (kbd "i") 'gtd-open-in-tray)
-    (define-key gtd (kbd "p") 'gtd-open-project-list)
-    (define-key gtd (kbd "r") 'gtd-open-reference)
-    (define-key gtd (kbd "n") 'gtd-open-next-actions)
-  #+end_src
-
-    #+REVEAL: split
-**** Todo keywords for GTD
-
- The first set of keywords is a generic set of keywords that I can give TODO
- keywords to items without having them be part of my GTD.
-
- The GTD-* keywords map to the various things that what David Allen calls "stuff"
- can be.
-
- #+begin_src emacs-lisp
- (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			   (sequence 
-                              "GTD-IN(i)"
-                              "GTD-CLARIFY(c)"
-			      "GTD-PROJECT(p)"
-                              "GTD-SOMEDAY-MAYBE(s)"
-			      "GTD-ACTION(a)"
-                              "GTD-NEXT-ACTION(n)"
-                              "GTD-WAITING(w)"
-			      "|"
-                              "GTD-REFERENCE(r)"
-                              "GTD-DELEGATED(g)"
-			      "GTD-DONE(d)")))
-			   
- (setq org-todo-keyword-faces
-    '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
-      ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
-      ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
-      ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
-      ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
-      ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
-      ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
-      ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
- #+end_src
-
-   #+REVEAL: split
-**** Definition of stuck projects
-
- In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
- This says that a stuck project is a headline where the todo keyword is
- =GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
-
- #+begin_src emacs-lisp
- (setq org-stuck-projects
-       '("TODO=\"GTD-PROJECT\"" ;; Search query
-         ("GTD-NEXT-ACTION")    ;; Not stuck if contains
-         ()                     ;; Stuck if contains
-         ""))                   ;; General regex
- #+end_src
-
-**** Capturing
-***** Capture templates
- #+begin_src emacs-lisp
- (setq org-capture-templates 
-   '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
-      "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
- #+end_src
-***** Capture hotkey
 #+begin_src emacs-lisp
-(defun org-capture-input () (interactive) (org-capture nil "i"))
-(global-set-key (kbd "C-c c") 'org-capture-input)
+  (defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
+  (defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
+  (defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
+  (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
+  (define-key gtd (kbd "i") 'gtd-open-in-tray)
+  (define-key gtd (kbd "p") 'gtd-open-project-list)
+  (define-key gtd (kbd "r") 'gtd-open-reference)
+  (define-key gtd (kbd "n") 'gtd-open-next-actions)
 #+end_src
 
-*** Org Agenda
-   #+REVEAL: split
+  #+REVEAL: split
+** Todo keywords for GTD
+
+The first set of keywords is a generic set of keywords that I can give TODO
+keywords to items without having them be part of my GTD.
+
+The GTD-* keywords map to the various things that what David Allen calls "stuff"
+can be.
+
+#+begin_src emacs-lisp
+(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
+			  (sequence 
+                             "GTD-IN(i)"
+                             "GTD-CLARIFY(c)"
+			     "GTD-PROJECT(p)"
+                             "GTD-SOMEDAY-MAYBE(s)"
+			     "GTD-ACTION(a)"
+                             "GTD-NEXT-ACTION(n)"
+                             "GTD-WAITING(w)"
+			     "|"
+                             "GTD-REFERENCE(r)"
+                             "GTD-DELEGATED(g)"
+			     "GTD-DONE(d)")))
+			   
+(setq org-todo-keyword-faces
+   '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
+     ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
+     ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
+     ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
+     ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
+     ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
+     ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
+     ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
+#+end_src
+
+  #+REVEAL: split
+** Definition of stuck projects
+
+In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
+This says that a stuck project is a headline where the todo keyword is
+=GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
+
+#+begin_src emacs-lisp
+(setq org-stuck-projects
+      '("TODO=\"GTD-PROJECT\"" ;; Search query
+        ("GTD-NEXT-ACTION")    ;; Not stuck if contains
+        ()                     ;; Stuck if contains
+        ""))                   ;; General regex
+#+end_src
+
     
-**** Intro
- The agenda has features for working with tags and todo keywords.
+** Date interval for agenda view
 
- It provides ways of
+The default is kind of annoying.  It shows a week starting on a Sunday but what
+is annoying about that is that on Sunday, the agenda won't show what you have
+tomorrow!
 
- - Searching
- - Bulk editing
- - Creating views
+The way this is set, it will show 10 days starting 3 days in the past.
 
- based on
+#+begin_src emacs-lisp :results none
+(setq org-agenda-span 7
+      org-agenda-start-on-weekday 0
+      org-agenda-start-day "-2d")
+#+end_src
 
- - TODO keywords
- - Tags
- - Dates (using the =DEADLINE= and =SCHEDULED= properties)
-  
- I have adapted my use of the agenda to GTD but the methods here can serve as
- general examples nonetheless.
-   #+REVEAL: split
+  #+REVEAL: split
     
-**** Date interval for agenda view
-
- The default is kind of annoying.  It shows a week starting on a Sunday but what
- is annoying about that is that on Sunday, the agenda won't show what you have
- tomorrow!
-
- The way this is set, it will show 10 days starting 3 days in the past.
-
- #+begin_src emacs-lisp :results none
- (setq org-agenda-span 7
-       org-agenda-start-on-weekday 0
-       org-agenda-start-day "-2d")
- #+end_src
-
-   #+REVEAL: split
-    
-**** Agenda Key
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle no
-     :END:
- I mapped a key because I like to pop in and out of it. I don't use it myself
- because the I put =org-agenda= on a keymap for my GTD stuff.
-
- #+begin_src emacs-lisp
- (global-set-key (kbd "C-c a") 'org-agenda)
- #+end_src
-
-   #+REVEAL: split
-    
-**** Agenda custom commands
-
+** Agenda custom commands
+*** Definition
  #+begin_src emacs-lisp
  (setq org-agenda-custom-commands
        '(("c" "Simple agenda view"
@@ -658,6 +610,7 @@ Wrong type argument : stringp, org-agenda-dir.
 
 Run the agenda with "c" custom command.
 
+*** Hotkeys in agenda binding
 #+begin_src emacs-lisp
 (defun gtd-agenda-view () (interactive) (org-agenda nil "c"))
 (defun gtd-next-action-sparse-tree () (interactive) (find-file
@@ -666,10 +619,22 @@ gtd-project-list-file) (org-agenda nil "gn"))
 (global-set-key (kbd "C-c n") 'gtd-next-action-sparse-tree)
 #+end_src
 
-*** Closing notes
+** Closing notes
 #+begin_src emacs-lisp :results none
 (setq org-log-done 'note)
 #+end_src
+** Evil mode agenda binding (SPC a g)
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+    Only use this if evil mode is activated
+
+    I should put it in the evil mode config but I don't want it to depend on other things
+   #+begin_src emacs-lisp
+   (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+   #+end_src
+
+* Advanced
 ** Magit
 
 The most amazing vim plugin in existence.
@@ -685,15 +650,9 @@ The most amazing vim plugin in existence.
 Error (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntax* New
 
 ** Yasnippet
-I thought this was going to give me the thing where doing =<sTAB= while in
-insert mode would expand to org mode source blocks.
-
-This [[https://emacs.stackexchange.com/questions/46988/why-do-easy-templates-e-g-s-tab-in-org-9-2-not-work/63561#63561][stack overflow post]] shows that org 9.2 simply changed it to =C-c C-,=.
-Knowing that, I think it's for the best since it now works with visual
-selections.
-
-Since I looked into [[https://www.emacswiki.org/emacs/Yasnippet][yasnippet]] I might as well install it and start using it.
-
+Note: package =yasnippet= doesn't come with the library of snippets but
+=yasnippet-snippets= comes with them and has =yasnippet= as a dependency
+therefore we only need to install this one.
 #+begin_src emacs-lisp :results none
 (use-package yasnippet-snippets
   :ensure t
@@ -701,6 +660,8 @@ Since I looked into [[https://www.emacswiki.org/emacs/Yasnippet][yasnippet]] I m
 #+end_src
 
 ** RSS
+
+From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
 
 #+begin_src emacs-lisp :results none
 ;; data is stored in ~/.elfeed 
@@ -733,17 +694,6 @@ Since I looked into [[https://www.emacswiki.org/emacs/Yasnippet][yasnippet]] I m
 (setq-default elfeed-search-title-max-width 100)
 (setq-default elfeed-search-title-min-width 100)
 #+end_src
-
-** Extra binding for evil
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-    Only use this if evil mode is activated
-
-    I should put it in the evil mode config but I don't want it to depend on other things
-   #+begin_src emacs-lisp
-   (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
-   #+end_src
 
 ** Remap C-x C-c for deamon usage
    I use :q to quit
@@ -797,9 +747,10 @@ Emacs crashed while I had this going.  I don't know if it is related.
           (evil-terminal-cursor-changer-activate) ; or (etcc-on)
           )
 #+end_src
-* NEW
   
 * Helm has to go last
+  
+This has to happen last.
 #+begin_src emacs-lisp
 (helm-mode)
 #+end_src
