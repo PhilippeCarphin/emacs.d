@@ -118,6 +118,11 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
   :config (global-undo-tree-mode))
 #+end_src
 *** Helm
+    
+**** Original
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
 
 Improve searching interface all over emacs.
 
@@ -128,8 +133,8 @@ We also add a few ourselves.
 
 #+begin_src emacs-lisp :results none
 (use-package helm :ensure t
-  :preface (require 'helm-config)
-  :config (helm-mode)
+  :config
+    (require 'helm-config)
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)
 	 ("C-x C-r" . helm-recentf)
@@ -268,6 +273,14 @@ surprised that a command runs when the press enter in a shell.
 	 ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
    #+end_src
 
+*** Refiling config
+https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
+#+begin_src emacs-lisp
+(setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-use-outline-path 'file)
+#+end_src
+
 ** Evil mode
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -334,12 +347,17 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
 ** Help   
 *** Helper keymap
    
- A keymap of keys to know to get started
+ A keymap of keys to know to get started.  You should get rid of this of this
+ section once you are familiar with the keys in order to learn the real bindings
+ for the functions given by this keymap.
    
  #+begin_src emacs-lisp
  (defun about-this-keymap () (interactive)
    (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
  #+end_src
+  
+  Also, how meta is it that we have a function whose implementation takes us to
+  see its implementation!
 
  #+begin_src emacs-lisp
    (define-prefix-command 'emacs-movement)
@@ -566,12 +584,10 @@ Wrong type argument : stringp, org-agenda-dir.
       "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
  #+end_src
 ***** Capture hotkey
- #+begin_src emacs-lisp
-   (define-key gtd (kbd "a") 'org-agenda)
- #+end_src
-
- #+RESULTS:
- : gtd-open-reference
+#+begin_src emacs-lisp
+(defun org-capture-input () (interactive) (org-capture nil "i"))
+(global-set-key (kbd "C-c c") 'org-capture-input)
+#+end_src
 
 *** Org Agenda
    #+REVEAL: split
@@ -727,10 +743,11 @@ Since I looked into [[https://www.emacswiki.org/emacs/Yasnippet][yasnippet]] I m
 #+end_src
 
 * Inactive stuff
+
 ** Dynamic cursor
-:PROPERTIES:
-:header-args: :tangle no
-:END:
+   :PROPERTIES:
+   :header-args: :tangle no
+   :END:
 Emacs crashed while I had this going.  I don't know if it is related.
 #+begin_src emacs-lisp
 (setq djcb-read-only-color       "gray")
@@ -770,4 +787,10 @@ Emacs crashed while I had this going.  I don't know if it is related.
           (require 'evil-terminal-cursor-changer)
           (evil-terminal-cursor-changer-activate) ; or (etcc-on)
           )
+#+end_src
+* NEW
+  
+* Helm has to go last
+#+begin_src emacs-lisp
+(helm-mode)
 #+end_src

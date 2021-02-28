@@ -28,8 +28,8 @@
   :config (global-undo-tree-mode))
 
 (use-package helm :ensure t
-  :preface (require 'helm-config)
-  :config (helm-mode)
+  :config
+    (require 'helm-config)
   :bind (("M-x" . helm-M-x)
 	 ("C-x C-f" . helm-find-files)
 	 ("C-x C-r" . helm-recentf)
@@ -87,6 +87,10 @@
     ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
     ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
     ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
+
+(setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-use-outline-path 'file)
 
 (use-package evil
   :ensure t
@@ -236,7 +240,8 @@
   '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
      "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
 
-(define-key gtd (kbd "a") 'org-agenda)
+(defun org-capture-input () (interactive) (org-capture nil "i"))
+(global-set-key (kbd "C-c c") 'org-capture-input)
 
 (setq org-agenda-span 7
       org-agenda-start-on-weekday 0
@@ -299,3 +304,5 @@
 (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 
 (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
+
+(helm-mode)
