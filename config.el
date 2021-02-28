@@ -155,20 +155,6 @@
 
 (setq org-confirm-babel-evaluate nil)
 
-(setq org-agenda-dir "~/NDocuments/gtd")
-(setq org-agenda-files (list org-agenda-dir))
-
-(setq org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 3)))
-(setq org-outline-path-complete-in-steps nil)
-(setq org-refile-use-outline-path 'file)
-
-(setq org-capture-templates 
-  '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
-     "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
-
-(defun org-capture-input () (interactive) (org-capture nil "i"))
-(global-set-key (kbd "C-c c") 'org-capture-input)
-
 (defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
 (defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
 (defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
@@ -187,6 +173,20 @@
     ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
     ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
     ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
+
+(setq org-agenda-dir "~/NDocuments/gtd")
+(setq org-agenda-files (list org-agenda-dir))
+
+(setq org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 3)))
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-use-outline-path 'file)
+
+(setq org-capture-templates 
+  '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
+     "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
+
+(defun org-capture-input () (interactive) (org-capture nil "i"))
+(global-set-key (kbd "C-c c") 'org-capture-input)
 
 (define-prefix-command 'gtd)
 
