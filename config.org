@@ -5,9 +5,12 @@
 #+COLUMNS: %25ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}]
 
 * Basic
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle yes
+  :END:
 ** Minimalistic config
 *** Intro
- #+REVEAL: split
+    #+REVEAL: split
  An elementary that can be taken as is to start from oriented towards leveragin
  the full power of orgmode immediately.
  - Sane miscellaneous defaults
@@ -119,6 +122,9 @@
    :config (global-undo-tree-mode))
  #+end_src
 **** Helm
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
     
 ***** Original
       :PROPERTIES:
@@ -179,6 +185,9 @@
  #+end_src
 
 **** Standard autocomplete
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
 
  #+begin_src emacs-lisp
  (use-package company
@@ -188,7 +197,7 @@
  #+end_src
 *** Evil mode
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle no
     :END:
    
  Evil-mode is a by far the best VI emulation out there.  It is very exact.
@@ -356,6 +365,9 @@
    
 ** Basic org configuration
 *** Bullets
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
 
  Show nice bullets
 
@@ -445,7 +457,7 @@
 *** Agena files
  https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
  #+begin_src emacs-lisp
- (setq org-agenda-dir "~/NDocuments/gtd")
+ (setq org-agenda-dir "~/Documents/gtd")
  (setq org-agenda-files (list org-agenda-dir))
  #+end_src
 *** Agenda Key
@@ -481,6 +493,9 @@
 
  
 * Phil
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle no
+  :END:
 ** GTD
 *** Keymap for GTD keybindings
       We define a keymap that will be accessed with =SPC a g=
@@ -627,7 +642,7 @@
  #+end_src
 *** Evil mode agenda binding (SPC a g)
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle no
     :END:
      Only use this if evil mode is activated
 

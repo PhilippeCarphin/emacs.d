@@ -47,39 +47,6 @@
   :config
   (which-key-mode))
 
-(use-package company
-  :ensure t
-  :config (global-company-mode)
-          (setq company-idle-delay 0))
-
-(use-package evil
-  :ensure t
-  :init (setq evil-want-C-i-jump nil)
-	(setq evil-want-integration t)
-	(setq evil-want-C-u-scroll t)
-  :config (evil-mode 1)
-          (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-          (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-          (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-          (setq evil-default-state 'emacs)
-          (setq evil-insert-state-modes nil)
-          (setq evil-motion-state-modes nil)
-          (setq evil-normal-state-modes '(fundamental-mode
-                                          conf-mode
-                                          prog-mode
-                                          text-mode
-                                          dired))
-	  (setq evil-insert-state-cursor '((bar . 3) "light cyan")
-	      evil-normal-state-cursor '(box "light grey"))
-          (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
-(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-
-(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
-
 (defun about-this-keymap () (interactive)
   (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
 
@@ -138,10 +105,6 @@
      ["org-demote-subtree" org-demote-subtree]
      ["org-agenda-help" org-agenda-help]))
 
-(use-package org-bullets
-  :ensure t
-  :hook (org-mode . org-bullets-mode))
-
 (use-package ox-gfm :ensure t)
 (use-package ox-rst :ensure t)
 (use-package ox-twbs :ensure t)
@@ -174,7 +137,7 @@
     ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
     ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
 
-(setq org-agenda-dir "~/NDocuments/gtd")
+(setq org-agenda-dir "~/Documents/gtd")
 (setq org-agenda-files (list org-agenda-dir))
 
 (setq org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 3)))
@@ -187,128 +150,3 @@
 
 (defun org-capture-input () (interactive) (org-capture nil "i"))
 (global-set-key (kbd "C-c c") 'org-capture-input)
-
-(define-prefix-command 'gtd)
-
-(global-set-key (kbd "C-c a g") 'gtd)
-(define-key gtd (kbd "a") 'org-agenda)
-(define-key gtd (kbd "c") 'org-capture)
-
-(setq org-agenda-dir "~/NDocuments/gtd/")
-(setq org-agenda-files '("~/NDocuments/gtd"))
-(setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
-    gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
-    gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
-    gtd-reference-file (concat org-agenda-dir "GTD_Reference.org")
-    gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
-    gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
-    gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
-
-(defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
-(defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
-(defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
-(defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
-(define-key gtd (kbd "i") 'gtd-open-in-tray)
-(define-key gtd (kbd "p") 'gtd-open-project-list)
-(define-key gtd (kbd "r") 'gtd-open-reference)
-(define-key gtd (kbd "n") 'gtd-open-next-actions)
-
-(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			  (sequence 
-                             "GTD-IN(i)"
-                             "GTD-CLARIFY(c)"
-			     "GTD-PROJECT(p)"
-                             "GTD-SOMEDAY-MAYBE(s)"
-			     "GTD-ACTION(a)"
-                             "GTD-NEXT-ACTION(n)"
-                             "GTD-WAITING(w)"
-			     "|"
-                             "GTD-REFERENCE(r)"
-                             "GTD-DELEGATED(g)"
-			     "GTD-DONE(d)")))
-
-(setq org-todo-keyword-faces
-   '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
-     ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
-     ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
-     ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
-     ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
-     ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
-     ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
-     ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
-
-(setq org-stuck-projects
-      '("TODO=\"GTD-PROJECT\"" ;; Search query
-        ("GTD-NEXT-ACTION")    ;; Not stuck if contains
-        ()                     ;; Stuck if contains
-        ""))                   ;; General regex
-
-(setq org-agenda-span 7
-      org-agenda-start-on-weekday 0
-      org-agenda-start-day "-2d")
-
-(setq org-agenda-custom-commands
-      '(("c" "Simple agenda view"
-          ((tags "PRIORITY=\"A\"")
-           (stuck "" )
-           (agenda "")
-           (todo "GTD-ACTION")))
-        ("g" . "GTD keyword searches searches")
-        ("gi" todo "GTD-IN")
-        ("gc" todo "GTD-CLARIFY")
-        ("ga" todo "GTD-ACTION")
-        ("gn" todo-tree "GTD-NEXT-ACTION")
-        ("gp" todo "GTD-PROJECT")))
-
-(defun gtd-agenda-view () (interactive) (org-agenda nil "c"))
-(defun gtd-next-action-sparse-tree () (interactive) (find-file
-gtd-project-list-file) (org-agenda nil "gn"))
-(global-set-key (kbd "C-c a") 'gtd-agenda-view)
-(global-set-key (kbd "C-c n") 'gtd-next-action-sparse-tree)
-
-(setq org-log-done 'note)
-
-(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
-
-(use-package magit
-  :ensure t
-  :custom
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-
-(use-package yasnippet-snippets
-  :ensure t
-  :config (yas-global-mode 1))
-
-;; data is stored in ~/.elfeed 
-(use-package elfeed :ensure t)
-(setq elfeed-feeds
-      '(
-        ;; programming
-        ("https://news.ycombinator.com/rss" hacker)
-        ("https://www.heise.de/developer/rss/news-atom.xml" heise)
-        ("https://www.reddit.com/r/programming.rss" programming)
-        ("https://www.reddit.com/r/emacs.rss" emacs)
-
-        ;; programming languages
-        ("https://www.reddit.com/r/golang.rss" golang)
-        ("https://www.reddit.com/r/java.rss" java)
-        ("https://www.reddit.com/r/javascript.rss" javascript)
-        ("https://www.reddit.com/r/typescript.rss" typescript)
-        ("https://www.reddit.com/r/clojure.rss" clojure)
-        ("https://www.reddit.com/r/python.rss" python)
-
-        ;; cloud
-        ("https://www.reddit.com/r/aws.rss" aws)
-        ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
-        ("https://www.reddit.com/r/azure.rss" azure)
-        ("https://www.reddit.com/r/devops.rss" devops)
-        ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
-))
-
-(setq-default elfeed-search-filter "@2-days-ago +unread")
-(setq-default elfeed-search-title-max-width 100)
-(setq-default elfeed-search-title-min-width 100)
-
-(global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
-
-(helm-mode)
