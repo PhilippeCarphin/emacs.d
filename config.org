@@ -99,7 +99,7 @@ Dark theme that exports well
     Although the default emacs theme exports well, it's not easy on the eyes in
     emacs itself.  A light theme that exports well and looks good in emacs is
     =leuven=.
-
+    
 ** Startup font
    
 To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
@@ -274,6 +274,7 @@ surprised that a command runs when the press enter in a shell.
    #+end_src
 
 *** Refiling config
+
 https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
 #+begin_src emacs-lisp
 (setq org-refile-targets '((org-agenda-files :maxlevel . 3)))
@@ -422,7 +423,6 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
  faire cette action.
 
 
-
 *** Help menu
       #+begin_src emacs-lisp
      (defun org-agenda-help () (interactive)
@@ -449,7 +449,7 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
    (define-key emacs-movement (kbd "C-f") 'forward-char)
    (define-key emacs-movement (kbd "C-b") 'backward-char)
    (define-key emacs-movement (kbd "C-p") 'previous-line)
-
+   
 * Advanced
 ** Orgmode implementation of GTD
 *** Agenda files
@@ -575,7 +575,6 @@ Wrong type argument : stringp, org-agenda-dir.
          ""))                   ;; General regex
  #+end_src
 
- 
 **** Capturing
 ***** Capture templates
  #+begin_src emacs-lisp
@@ -656,6 +655,16 @@ Wrong type argument : stringp, org-agenda-dir.
          ("gn" todo-tree "GTD-NEXT-ACTION")
          ("gp" todo "GTD-PROJECT")))
  #+end_src
+
+Run the agenda with "c" custom command.
+
+#+begin_src emacs-lisp
+(defun gtd-agenda-view () (interactive) (org-agenda nil "c"))
+(defun gtd-next-action-sparse-tree () (interactive) (find-file
+gtd-project-list-file) (org-agenda nil "gn"))
+(global-set-key (kbd "C-c a") 'gtd-agenda-view)
+(global-set-key (kbd "C-c n") 'gtd-next-action-sparse-tree)
+#+end_src
 
 *** Closing notes
 #+begin_src emacs-lisp :results none

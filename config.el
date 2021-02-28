@@ -260,6 +260,12 @@
         ("gn" todo-tree "GTD-NEXT-ACTION")
         ("gp" todo "GTD-PROJECT")))
 
+(defun gtd-agenda-view () (interactive) (org-agenda nil "c"))
+(defun gtd-next-action-sparse-tree () (interactive) (find-file
+gtd-project-list-file) (org-agenda nil "gn"))
+(global-set-key (kbd "C-c a") 'gtd-agenda-view)
+(global-set-key (kbd "C-c n") 'gtd-next-action-sparse-tree)
+
 (setq org-log-done 'note)
 
 (use-package magit
