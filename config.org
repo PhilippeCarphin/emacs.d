@@ -660,6 +660,11 @@ Emacs crashed while I had this going.  I don't know if it is related.
    #+end_src
 
 
+   
+** Daemon stuff
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
+#+end_src
 * Help   
 ** Helper keymap
    

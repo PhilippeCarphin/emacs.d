@@ -240,6 +240,8 @@
 
 (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 
+(global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
+
 (defun about-this-keymap () (interactive)
   (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
 
