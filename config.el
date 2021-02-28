@@ -69,40 +69,12 @@
 
 (setq org-confirm-babel-evaluate nil)
 
-(use-package evil
-  :ensure t
-  :init (setq evil-want-C-i-jump nil)
-	(setq evil-want-integration t)
-	(setq evil-want-C-u-scroll t)
-  :config (evil-mode 1)
-          (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-          (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-          (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-          (setq evil-default-state 'emacs)
-          (setq evil-insert-state-modes nil)
-          (setq evil-motion-state-modes nil)
-          (setq evil-normal-state-modes '(fundamental-mode
-                                          conf-mode
-                                          prog-mode
-                                          text-mode
-                                          dired))
-	  (setq evil-insert-state-cursor '((bar . 3) "light cyan")
-	      evil-normal-state-cursor '(box "light grey"))
-          (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
-(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-
-(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
-
 (setq org-agenda-dir "~/NDocuments/gtd")
 (setq org-agenda-files (list org-agenda-dir "~/CloudStation/orgmom"))
 
 (define-prefix-command 'gtd)
 
-(global-set-key (kbd "S-SPC g") 'gtd)
+(global-set-key (kbd "C-c a g") 'gtd)
 (define-key gtd (kbd "a") 'org-agenda)
 (define-key gtd (kbd "c") 'org-capture)
 
@@ -238,13 +210,23 @@
 (setq-default elfeed-search-title-max-width 100)
 (setq-default elfeed-search-title-min-width 100)
 
-(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+(defun about-this-keymap () (interactive)
+  (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
 
 (define-prefix-command 'emacs-movement)
 (global-set-key (kbd "C-| m") 'emacs-movement)
+(global-set-key (kbd "C-| h") 'about-this-keymap)
 (define-key emacs-movement (kbd "C-f") 'forward-char)
 (define-key emacs-movement (kbd "C-b") 'backward-char)
 (define-key emacs-movement (kbd "C-p") 'previous-line)
+(define-prefix-command 'C-x)
+(global-set-key (kbd "C-| C-x") 'C-x)
+(define-key C-x (kbd "C-f") 'helm-find-files)
+(define-key C-x (kbd "C-r") 'helm-recentf)
+(define-key C-x (kbd "C-b") 'helm-buffers-list)
+(define-key C-x (kbd "b") 'switch-to-buffer)
+(define-key C-x (kbd "C-s") 'save-buffer)
+(define-key C-x (kbd "C-c") 'save-buffers-kill-emacs)
 (define-key emacs-movement (kbd "C-n") 'next-line)
 (define-prefix-command 'C-h)
 (global-set-key (kbd "C-| C-h") 'C-h)
@@ -254,14 +236,34 @@
 (define-key C-h (kbd "k") 'describe-key)
 (define-prefix-command 'orgmode)
 (global-set-key (kbd "C-| o") 'orgmode)
-(define-key orgmode (kbd "t") 'org-insert-structure-template)
-(define-key orgmode (kbd "C-c") 'org-ctrl-c-ctrl-c)
-(define-key orgmode (kbd "e") 'org-edit-special)
+(define-key orgmode (kbd "C-c C-,") 'org-insert-structure-template)
+(define-key orgmode (kbd "C-c C-c") 'org-ctrl-c-ctrl-c)
+(define-key orgmode (kbd "C-c '") 'org-edit-special)
+(define-key orgmode (kbd "C-c .") 'org-time-stamp)
+(define-key orgmode (kbd "C-c C-s") 'org-schedule)
+(define-key orgmode (kbd "C-c C-d") 'org-deadline)
 (define-key orgmode (kbd "a") 'org-agenda)
 (define-key orgmode (kbd "v") 'org-tags-view)
-(define-key orgmode (kbd "s") 'org-match-sparse-tree)
+(define-key orgmode (kbd "C-c /") 'org-match-sparse-tree)
 (define-key orgmode (kbd "<M-S-left>") 'org-promote-subtree)
 (define-key orgmode (kbd "<M-S-right>") 'org-demote-subtree)
 (define-key orgmode (kbd "n") 'org-narrow-to-subtree)
-(define-key orgmode (kbd "p") 'org-promote-subtree)
 (define-key orgmode (kbd "c") 'org-columns)
+
+(defun org-agenda-help () (interactive)
+   (org-open-link-from-string "[[file:~/.emacs.d/config.org::*Orgmode implementation of GTD]]"))
+(define-prefix-command 'help-menu)
+(global-set-key (kbd "C-~") 'help-menu)
+(define-key 'help-menu (kbd "a") 'org-agenda-help)
+ (easy-menu-define h-menu global-map
+   "Menu for word navigation commands."
+   '("PhilHelp"
+     ["forward-char" forward-char]
+     ["backward-char" forward-char]
+     ["next-line" next-line]
+     ["previous-line" previous-line]
+     ["describe-key" describe-key]
+     ["org-time-stamp" org-time-stamp]
+     ["org-promote-subtree" org-promote-subtree]
+     ["org-demote-subtree" org-demote-subtree]
+     ["org-agenda-help" org-agenda-help]))

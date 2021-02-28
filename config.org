@@ -1,7 +1,7 @@
-#+OPTIONS: toc:1
+e#+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
 #+REVEAL_HLEVEL: 4
-#+PROPERTY: header-args :tangle yes
+#+PROPERTY: header-args :tangle yes :results none
 
 #+COLUMNS: %25ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}]
 
@@ -247,7 +247,7 @@ surprised that a command runs when the press enter in a shell.
     
 ** Evil mode
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
    
 Evil-mode is a by far the best VI emulation out there.  It is very exact.
@@ -346,7 +346,7 @@ Wrong type argument : stringp, org-agenda-dir.
    (define-prefix-command 'gtd)
  #+end_src
    #+begin_src emacs-lisp
-   (global-set-key (kbd "S-SPC g") 'gtd)
+   (global-set-key (kbd "C-c a g") 'gtd)
    (define-key gtd (kbd "a") 'org-agenda)
    (define-key gtd (kbd "c") 'org-capture)
    #+end_src
@@ -650,7 +650,7 @@ Emacs crashed while I had this going.  I don't know if it is related.
 
 ** Extra binding for evil
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
     Only use this if evil mode is activated
 
@@ -659,35 +659,32 @@ Emacs crashed while I had this going.  I don't know if it is related.
    (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
    #+end_src
 
-** Keymaps
+
+* Help   
+** Helper keymap
    
-La touche =C-|= (=C-S-\=) est une map de touches qui contient des
-fonctionnalité spécialement sélectionnées.
-
-Le choix de touche de départ est de choisr un binding qui fait chier à faire.
-
-Le but c'est d'explorer.  Quand on trouve quelque chose qu'on aime, on peut
-découvrir les bindings standards en faisant =C-h f= et écrire le nom de la
-fonction exécutée par la touche.  Ou faire =C-h k= et refaire la touche et
-l'aide nous dira quels sont les autres bindings pour la fonctionnalité.
-
-Si un binding a le même nom que la fonction comme =C-h=, c'est que ce groupe est
-une sélection des fonctions disponibles en faisant =C-h= normalement.
-
-Si le groupe contient le mot mode, c'est qu'il contient des fonctions qui sont
-seulement disponibles dans un certain mode.
-
-Les touches utilisées sont le plus souvent possible la même touche qu'on ferait
-normalement. Par exemple, =C-| o C-c C-,= insère un bloc de code source.  Le
-choix est fait comme ça parce que la touche =C-c C-,= est la touche native pour
-faire cette action.
+A keymap of keys to know to get started
+   
+#+begin_src emacs-lisp
+(defun about-this-keymap () (interactive)
+  (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
+#+end_src
 
 #+begin_src emacs-lisp
   (define-prefix-command 'emacs-movement)
   (global-set-key (kbd "C-| m") 'emacs-movement)
+  (global-set-key (kbd "C-| h") 'about-this-keymap)
   (define-key emacs-movement (kbd "C-f") 'forward-char)
   (define-key emacs-movement (kbd "C-b") 'backward-char)
   (define-key emacs-movement (kbd "C-p") 'previous-line)
+  (define-prefix-command 'C-x)
+  (global-set-key (kbd "C-| C-x") 'C-x)
+  (define-key C-x (kbd "C-f") 'helm-find-files)
+  (define-key C-x (kbd "C-r") 'helm-recentf)
+  (define-key C-x (kbd "C-b") 'helm-buffers-list)
+  (define-key C-x (kbd "b") 'switch-to-buffer)
+  (define-key C-x (kbd "C-s") 'save-buffer)
+  (define-key C-x (kbd "C-c") 'save-buffers-kill-emacs)
   (define-key emacs-movement (kbd "C-n") 'next-line)
   (define-prefix-command 'C-h)
   (global-set-key (kbd "C-| C-h") 'C-h)
@@ -712,6 +709,54 @@ faire cette action.
   (define-key orgmode (kbd "c") 'org-columns)
 #+end_src
 
-#+RESULTS:
-: org-columns
+*** Explanations
 
+La touche =C-|= (=C-S-\=) est une map de touches qui contient des
+fonctionnalité spécialement sélectionnées.
+
+Le choix de touche de départ est de choisr un binding qui fait chier à faire.
+
+Le but c'est d'explorer.  Quand on trouve quelque chose qu'on aime, on peut
+découvrir les bindings standards en faisant =C-h f= et écrire le nom de la
+fonction exécutée par la touche.  Ou faire =C-h k= et refaire la touche et
+l'aide nous dira quels sont les autres bindings pour la fonctionnalité.
+
+Si un binding a le même nom que la fonction comme =C-h=, c'est que ce groupe est
+une sélection des fonctions disponibles en faisant =C-h= normalement.
+
+Si le groupe contient le mot mode, c'est qu'il contient des fonctions qui sont
+seulement disponibles dans un certain mode.
+
+Les touches utilisées sont le plus souvent possible la même touche qu'on ferait
+normalement. Par exemple, =C-| o C-c C-,= insère un bloc de code source.  Le
+choix est fait comme ça parce que la touche =C-c C-,= est la touche native pour
+faire cette action.
+
+
+
+** Help menu
+     #+begin_src emacs-lisp
+    (defun org-agenda-help () (interactive)
+       (org-open-link-from-string "[[file:~/.emacs.d/config.org::*Orgmode implementation of GTD]]"))
+    (define-prefix-command 'help-menu)
+    (global-set-key (kbd "C-~") 'help-menu)
+    (define-key 'help-menu (kbd "a") 'org-agenda-help)
+     (easy-menu-define h-menu global-map
+       "Menu for word navigation commands."
+       '("PhilHelp"
+	 ["forward-char" forward-char]
+	 ["backward-char" forward-char]
+	 ["next-line" next-line]
+	 ["previous-line" previous-line]
+	 ["describe-key" describe-key]
+	 ["org-time-stamp" org-time-stamp]
+	 ["org-promote-subtree" org-promote-subtree]
+	 ["org-demote-subtree" org-demote-subtree]
+	 ["org-agenda-help" org-agenda-help]))
+     #+end_src
+
+  (global-set-key (kbd "C-| m") 'emacs-movement)
+  (global-set-key (kbd "C-| h") 'about-this-keymap)
+  (define-key emacs-movement (kbd "C-f") 'forward-char)
+  (define-key emacs-movement (kbd "C-b") 'backward-char)
+  (define-key emacs-movement (kbd "C-p") 'previous-line)
