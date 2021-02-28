@@ -765,3 +765,13 @@ faire cette action.
   (define-key emacs-movement (kbd "C-f") 'forward-char)
   (define-key emacs-movement (kbd "C-b") 'backward-char)
   (define-key emacs-movement (kbd "C-p") 'previous-line)
+
+
+* Evil terminal curson
+
+#+begin_src emacs-lisp
+(unless (display-graphic-p)
+          (require 'evil-terminal-cursor-changer)
+          (evil-terminal-cursor-changer-activate) ; or (etcc-on)
+          )
+#+end_src
