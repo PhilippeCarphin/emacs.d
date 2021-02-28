@@ -247,7 +247,7 @@ surprised that a command runs when the press enter in a shell.
     
 ** Evil mode
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
    
 Evil-mode is a by far the best VI emulation out there.  It is very exact.
@@ -650,7 +650,7 @@ Emacs crashed while I had this going.  I don't know if it is related.
 
 ** Extra binding for evil
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
     Only use this if evil mode is activated
 

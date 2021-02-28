@@ -69,6 +69,34 @@
 
 (setq org-confirm-babel-evaluate nil)
 
+(use-package evil
+  :ensure t
+  :init (setq evil-want-C-i-jump nil)
+	(setq evil-want-integration t)
+	(setq evil-want-C-u-scroll t)
+  :config (evil-mode 1)
+          (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+          (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+          (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+          (setq evil-default-state 'emacs)
+          (setq evil-insert-state-modes nil)
+          (setq evil-motion-state-modes nil)
+          (setq evil-normal-state-modes '(fundamental-mode
+                                          conf-mode
+                                          prog-mode
+                                          text-mode
+                                          dired))
+	  (setq evil-insert-state-cursor '((bar . 3) "light cyan")
+	      evil-normal-state-cursor '(box "light grey"))
+          (add-hook 'with-editor-mode-hook 'evil-insert-state))
+
+(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
+(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
+(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
+
+(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+
 (setq org-agenda-dir "~/NDocuments/gtd")
 (setq org-agenda-files (list org-agenda-dir "~/CloudStation/orgmom"))
 
@@ -209,6 +237,8 @@
 (setq-default elfeed-search-filter "@2-days-ago +unread")
 (setq-default elfeed-search-title-max-width 100)
 (setq-default elfeed-search-title-min-width 100)
+
+(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 
 (defun about-this-keymap () (interactive)
   (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
