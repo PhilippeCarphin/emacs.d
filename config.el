@@ -27,6 +27,16 @@
   :ensure t
   :config (global-undo-tree-mode))
 
+(use-package helm :ensure t
+  :config
+    (require 'helm-config)
+  :bind (("M-x" . helm-M-x)
+	 ("C-x C-f" . helm-find-files)
+	 ("C-x C-r" . helm-recentf)
+	 ("C-h C-i" . helm-info)
+	 ("C-x C-b" . helm-buffers-list)
+	 ("C-c g" . helm-grep-do-git-grep)))
+
 (use-package which-key
   :ensure t
   :delight

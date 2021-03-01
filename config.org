@@ -126,7 +126,7 @@
  #+end_src
 **** Helm
       :PROPERTIES:
-      :HEADER-ARGS: :tangle no
+      :HEADER-ARGS: :tangle yes
       :END:
 
  Improve searching interface all over emacs.
