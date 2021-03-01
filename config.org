@@ -409,7 +409,7 @@
  (use-package ox-twbs :ensure t)
  (use-package ox-reveal :ensure t
    :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
- ;; (use-package htmlize :ensure t)
+ (use-package htmlize :ensure t)
  #+end_src
 
 *** Babel
