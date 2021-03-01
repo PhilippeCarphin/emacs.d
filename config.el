@@ -93,6 +93,8 @@
 (define-key emacs-movement (kbd "C-p") 'previous-line)
 (define-key emacs-movement (kbd "C-v") 'scroll-up-command)
 (define-key emacs-movement (kbd "M-v") 'scroll-down-command)
+(define-key emacs-movement (kbd "C-s") 'isearch-forward)
+(define-key emacs-movement (kbd "C-r") 'isearch-backward)
 (define-prefix-command 'C-x)
 (global-set-key (kbd "C-| C-x") 'C-x)
 (define-key C-x (kbd "C-f") 'helm-find-files)
@@ -139,6 +141,8 @@
      ["describe-key" describe-key]
      ["scroll-up-command" scroll-up-command]
      ["scroll-down-command" scroll-down-command]
+     ["isearch-forward" isearch-forward]
+     ["isearch-backward" isearch-backward]
      ["org-time-stamp" org-time-stamp]
      ["org-promote-subtree" org-promote-subtree]
      ["org-demote-subtree" org-demote-subtree]
