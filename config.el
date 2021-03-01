@@ -187,12 +187,6 @@
 (setq org-agenda-dir "~/Documents/gtd")
 (setq org-agenda-files (list org-agenda-dir))
 
-(global-set-key (kbd "C-c a") 'org-agenda)
-
-(setq org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 3)))
-(setq org-outline-path-complete-in-steps nil)
-(setq org-refile-use-outline-path 'file)
-
 (setq org-capture-templates 
   '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
      "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
@@ -272,11 +266,19 @@
         ("gn" todo-tree "GTD-NEXT-ACTION")
         ("gp" todo "GTD-PROJECT")))
 
-(defun gtd-agenda-view () (interactive) (org-agenda nil "c"))
-(defun gtd-next-action-sparse-tree () (interactive) (find-file
-gtd-project-list-file) (org-agenda nil "gn"))
-(global-set-key (kbd "C-c a") 'gtd-agenda-view)
-(global-set-key (kbd "C-c n") 'gtd-next-action-sparse-tree)
+(defun gtd-agenda-view () (interactive)
+  (org-agenda nil "a"))
+
+(defun gtd-review-view () (interactive)
+  (org-agenda nil "c"))
+
+(defun gtd-next-action-sparse-tree () (interactive)
+  (find-file gtd-project-list-file)
+  (org-agenda nil "gn"))
+
+(global-set-key (kbd "C-c a a") 'gtd-agenda-view)
+(global-set-key (kbd "C-c a c") 'gtd-review-view)
+(global-set-key (kbd "C-c a n") 'gtd-next-action-sparse-tree)
 
 (setq org-log-done 'note)
 

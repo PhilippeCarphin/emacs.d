@@ -471,14 +471,13 @@
 
 ** Basic org agenda configuration
 *** Agena files
- https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
  #+begin_src emacs-lisp
  (setq org-agenda-dir "~/Documents/gtd")
  (setq org-agenda-files (list org-agenda-dir))
  #+end_src
 *** Agenda Key
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle no
     :END:
  I mapped a key because I like to pop in and out of it. I don't use it myself
  because the I put =org-agenda= on a keymap for my GTD stuff.
@@ -490,6 +489,10 @@
    #+REVEAL: split
     
 *** Refile targets
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
+ https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
  #+begin_src emacs-lisp
  (setq org-refile-targets '((nil :maxlevel . 2) (org-agenda-files :maxlevel . 3)))
  (setq org-outline-path-complete-in-steps nil)
@@ -644,13 +647,31 @@
 
  Run the agenda with "c" custom command.
 
-**** Hotkeys in agenda binding
+**** Agenda view commands
+This is equivalent to launching =org-agenda= and pressing a.
  #+begin_src emacs-lisp
- (defun gtd-agenda-view () (interactive) (org-agenda nil "c"))
- (defun gtd-next-action-sparse-tree () (interactive) (find-file
- gtd-project-list-file) (org-agenda nil "gn"))
- (global-set-key (kbd "C-c a") 'gtd-agenda-view)
- (global-set-key (kbd "C-c n") 'gtd-next-action-sparse-tree)
+ (defun gtd-agenda-view () (interactive)
+   (org-agenda nil "a"))
+ #+end_src
+ #+begin_src emacs-lisp
+ (defun gtd-review-view () (interactive)
+   (org-agenda nil "c"))
+ #+end_src
+
+ #+begin_src emacs-lisp
+ (defun gtd-next-action-sparse-tree () (interactive)
+   (find-file gtd-project-list-file)
+   (org-agenda nil "gn"))
+ #+end_src
+
+**** Agenda view hotkeys
+      Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
+      non-prefix key.
+
+ #+begin_src emacs-lisp
+ (global-set-key (kbd "C-c a a") 'gtd-agenda-view)
+ (global-set-key (kbd "C-c a c") 'gtd-review-view)
+ (global-set-key (kbd "C-c a n") 'gtd-next-action-sparse-tree)
  #+end_src
 
 *** Closing notes
