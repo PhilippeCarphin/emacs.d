@@ -537,8 +537,14 @@
 *** GTD files
 **** Filename symbols
  #+begin_src emacs-lisp :results none
- (setq org-agenda-dir "~/NDocuments/gtd/")
- (setq org-agenda-files '("~/NDocuments/gtd"))
+ (cond
+ ((string-equal system-type "windows-nt")
+  (progn (setq org-agenda-dir "c:\\Users\\phil1\\Documents\\gtd")))
+ ((string-equal system-type "darwin") ;  macOS
+  (progn (setq org-agenda-dir "~/Documents/gtd/")))
+ ((string-equal system-type "gnu/linux")
+  (progn (setq org-agenda-dir "~/Documents/gtd/"))))
+ (setq org-agenda-files (list org-agenda-dir))
  (setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
      gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
      gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
