@@ -22,7 +22,7 @@
 **** This config file
    
  Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
-*** Package stuff                                                      :phil:
+*** Package stuff
 
     Standard stuff that is at the start of everyone's config file.
  #+begin_src emacs-lisp
@@ -63,16 +63,23 @@
  #+begin_src emacs-lisp
  (setq-default cursor-type '(bar . 3))
  (set-cursor-color "light grey")
- (add-to-list 'default-frame-alist '(cursor-color . "palegoldenrod"))
+ (custom-set-faces '(cursor ((t (:background "SlateGray3")))))
  #+end_src
-
- #+RESULTS:
- : ((cursor-color . palegoldenrod))
 
  I use vi whenever I want to open files in a shell.  Because I use vi, when I see
  the box cursor, I feel like I'm in VI, but when I press keys, it just writes
  text.  So I press ESC, doesn't do anything, ESC again : "ESC ESC is not bound to
  anything".
+
+*** Cursor blink
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
+
+ #+begin_src emacs-lisp
+ (blink-cursor-mode)
+ #+end_src
+
 *** Wrapping
 
  Automattically hard-wrap text on 80 chars.
@@ -148,6 +155,9 @@
 	  ("C-c g" . helm-grep-do-git-grep)))
  #+end_src
 
+ #+begin_src emacs-lisp
+ (helm-mode)
+ #+end_src
 ***** Remapped functions
 
       Notable remapped functions:
@@ -184,7 +194,7 @@
 
 **** Standard autocomplete
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
 
  #+begin_src emacs-lisp
@@ -195,7 +205,7 @@
  #+end_src
 *** Evil mode
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
    
  Evil-mode is a by far the best VI emulation out there.  It is very exact.
@@ -229,8 +239,8 @@
                                              prog-mode
                                              text-mode
                                              dired))
-	     (setq evil-insert-state-cursor '((bar . 3) "light cyan")
-		 evil-normal-state-cursor '(box "light grey"))
+	     (setq evil-insert-state-cursor '((bar . 2) "lime green")
+		 evil-normal-state-cursor '(box "yellow"))
              (add-hook 'with-editor-mode-hook 'evil-insert-state))
  #+end_src
 
@@ -364,7 +374,7 @@
 ** Basic org configuration
 *** Bullets
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
 
  Show nice bullets
@@ -460,7 +470,7 @@
  #+end_src
 *** Agenda Key
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
  I mapped a key because I like to pop in and out of it. I don't use it myself
  because the I put =org-agenda= on a keymap for my GTD stuff.
@@ -489,10 +499,10 @@
  (global-set-key (kbd "C-c c") 'org-capture-input)
  #+end_src
 
- 
+
 * Phil
   :PROPERTIES:
-  :HEADER-ARGS: :tangle no
+  :HEADER-ARGS: :tangle yes
   :END:
 ** GTD
 *** Keymap for GTD keybindings
@@ -500,8 +510,9 @@
  #+begin_src emacs-lisp
    (define-prefix-command 'gtd)
  #+end_src
+
    #+begin_src emacs-lisp
-   (global-set-key (kbd "C-c a g") 'gtd)
+   ;; (global-set-key (kbd "C-c a g") 'gtd)
    (define-key gtd (kbd "a") 'org-agenda)
    (define-key gtd (kbd "c") 'org-capture)
    #+end_src
@@ -640,7 +651,7 @@
  #+end_src
 *** Evil mode agenda binding (SPC a g)
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
      Only use this if evil mode is activated
 
@@ -763,9 +774,4 @@
            )
  #+end_src
   
-** Helm has to go last
-  
- This has to happen last.
- #+begin_src emacs-lisp
- (helm-mode)
- #+end_src
+
