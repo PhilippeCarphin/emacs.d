@@ -201,99 +201,9 @@
 (defun org-capture-input () (interactive) (org-capture nil "i"))
 (global-set-key (kbd "C-c c") 'org-capture-input)
 
-(define-prefix-command 'gtd)
-
-;; (global-set-key (kbd "C-c a g") 'gtd)
-(define-key gtd (kbd "a") 'org-agenda)
-(define-key gtd (kbd "c") 'org-capture)
-
-(cond
-((string-equal system-type "windows-nt")
- (progn (setq org-agenda-dir "c:\\Users\\phil1\\Documents\\gtd")))
-((string-equal system-type "darwin") ;  macOS
- (progn (setq org-agenda-dir "~/Documents/gtd/")))
-((string-equal system-type "gnu/linux")
- (progn (setq org-agenda-dir "~/Documents/gtd/"))))
-(setq org-agenda-files (list org-agenda-dir))
-(setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
-    gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
-    gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
-    gtd-reference-file (concat org-agenda-dir "GTD_Reference.org")
-    gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
-    gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
-    gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
-
-(defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
-(defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
-(defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
-(defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
-(define-key gtd (kbd "i") 'gtd-open-in-tray)
-(define-key gtd (kbd "p") 'gtd-open-project-list)
-(define-key gtd (kbd "r") 'gtd-open-reference)
-(define-key gtd (kbd "n") 'gtd-open-next-actions)
-
-(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			  (sequence
-			     "GTD-IN(i)"
-			     "GTD-CLARIFY(c)"
-			     "GTD-PROJECT(p)"
-			     "GTD-SOMEDAY-MAYBE(s)"
-			     "GTD-ACTION(a)"
-			     "GTD-NEXT-ACTION(n)"
-			     "GTD-WAITING(w)"
-			     "|"
-			     "GTD-REFERENCE(r)"
-			     "GTD-DELEGATED(g)"
-			     "GTD-DONE(d)")))
-
-(setq org-todo-keyword-faces
-   '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
-     ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
-     ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
-     ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
-     ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
-     ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
-     ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
-     ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
-
-(setq org-stuck-projects
-      '("TODO=\"GTD-PROJECT\"" ;; Search query
-	("GTD-NEXT-ACTION")    ;; Not stuck if contains
-	()                     ;; Stuck if contains
-	""))                   ;; General regex
-
-(setq org-agenda-span 7
-      org-agenda-start-on-weekday 0
-      org-agenda-start-day "-2d")
-
-(setq org-agenda-custom-commands
-      '(("c" "Simple agenda view"
-	  ((tags "PRIORITY=\"A\"")
-	   (stuck "" )
-	   (agenda "")
-	   (todo "GTD-ACTION")))
-	("g" . "GTD keyword searches searches")
-	("gi" todo "GTD-IN")
-	("gc" todo "GTD-CLARIFY")
-	("ga" todo "GTD-ACTION")
-	("gn" todo-tree "GTD-NEXT-ACTION")
-	("gp" todo "GTD-PROJECT")))
-
-(defun gtd-agenda-view () (interactive)
-  (org-agenda nil "a"))
-
-(defun gtd-review-view () (interactive)
-  (org-agenda nil "c"))
-
-(defun gtd-next-action-sparse-tree () (interactive)
-  (find-file gtd-project-list-file)
-  (org-agenda nil "gn"))
-
 (global-set-key (kbd "C-c a a") 'gtd-agenda-view)
 (global-set-key (kbd "C-c a c") 'gtd-review-view)
 (global-set-key (kbd "C-c a n") 'gtd-next-action-sparse-tree)
-
-(setq org-log-done 'note)
 
 (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 
@@ -316,4 +226,8 @@ It normally does org-agenda-goto-date")))))
 k is deactivated
 It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
 
-(global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
+(defun org-post-global-cycle () (interactive)
+  (recenter)
+  (org-beginning-of-line))
+(advice-add 'org-global-cycle
+  :after #'org-post-global-cycle)
