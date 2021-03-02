@@ -27,7 +27,7 @@ being =C-p= and =C-n= to move
  - Elementary org configuration allowing immediate use of built in package babel.
 
 **** This config file
-   
+
  Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
 *** Package stuff
 
@@ -61,7 +61,7 @@ being =C-p= and =C-n= to move
  #+end_src
 
 *** Cursor style
-   
+
  This will make our cursor a vertical bar instead of a box.
 
  If evil mode is active, this will cause our insert-mode cursor to be a bar and
@@ -120,9 +120,9 @@ being =C-p= and =C-n= to move
      Although the default emacs theme exports well, it's not easy on the eyes in
      emacs itself.  A light theme that exports well and looks good in emacs is
      =leuven=.
-    
+
 *** Startup font
-   
+
  To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
 
  #+begin_src emacs-lisp
@@ -208,13 +208,13 @@ being =C-p= and =C-n= to move
  (use-package company
    :ensure t
    :config (global-company-mode)
-           (setq company-idle-delay 0))
+	   (setq company-idle-delay 0))
  #+end_src
 *** Evil mode
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
-   
+
  Evil-mode is a by far the best VI emulation out there.  It is very exact.
 
  The only thing that is very different is that not all buffers are going to be in
@@ -235,20 +235,20 @@ being =C-p= and =C-n= to move
 	   (setq evil-want-integration t)
 	   (setq evil-want-C-u-scroll t)
      :config (evil-mode 1)
-             (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-             (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-             (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-             (setq evil-default-state 'emacs)
-             (setq evil-insert-state-modes nil)
-             (setq evil-motion-state-modes nil)
-             (setq evil-normal-state-modes '(fundamental-mode
-                                             conf-mode
-                                             prog-mode
-                                             text-mode
-                                             dired))
+	     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+	     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+	     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+	     (setq evil-default-state 'emacs)
+	     (setq evil-insert-state-modes nil)
+	     (setq evil-motion-state-modes nil)
+	     (setq evil-normal-state-modes '(fundamental-mode
+					     conf-mode
+					     prog-mode
+					     text-mode
+					     dired))
 	     (setq evil-insert-state-cursor '((bar . 2) "lime green")
 		 evil-normal-state-cursor '(box "yellow"))
-             (add-hook 'with-editor-mode-hook 'evil-insert-state))
+	     (add-hook 'with-editor-mode-hook 'evil-insert-state))
  #+end_src
 
  The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
@@ -285,27 +285,27 @@ being =C-p= and =C-n= to move
 
   This sets the amount of cursor blinks before the flashing stop.
 
-  #+begin_src 
+  #+begin_src
   (setq blink-cursor-blinks 0)
   #+end_src
-  
+
   Make sure the cursor starts out not blinking
 
   #+begin_src emacs-lisp
   (blink-cursor-mode 0)
   #+end_src
-*** Help   
+*** Help
 **** Helper keymap
-   
+
   A keymap of keys to know to get started.  You should get rid of this of this
   section once you are familiar with the keys in order to learn the real bindings
   for the functions given by this keymap.
-   
+
   #+begin_src emacs-lisp
   (defun about-this-keymap () (interactive)
     (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
   #+end_src
-  
+
    Also, how meta is it that we have a function whose implementation takes us to
    see its implementation!
 
@@ -393,8 +393,8 @@ being =C-p= and =C-n= to move
 	   ["describe-key" describe-key]
 	   ["scroll-up-command" scroll-up-command]
 	   ["scroll-down-command" scroll-down-command]
-           ["isearch-forward" isearch-forward]
-           ["isearch-backward" isearch-backward]
+	   ["isearch-forward" isearch-forward]
+	   ["isearch-backward" isearch-backward]
 	   ["org-time-stamp" org-time-stamp]
 	   ["org-promote-subtree" org-promote-subtree]
 	   ["org-demote-subtree" org-demote-subtree]
@@ -406,7 +406,7 @@ being =C-p= and =C-n= to move
     (define-key emacs-movement (kbd "C-f") 'forward-char)
     (define-key emacs-movement (kbd "C-b") 'backward-char)
     (define-key emacs-movement (kbd "C-p") 'previous-line)
-   
+
 ** Basic org configuration
 *** Bullets
     :PROPERTIES:
@@ -471,7 +471,7 @@ being =C-p= and =C-n= to move
  #+begin_src emacs-lisp
  (setq org-confirm-babel-evaluate nil)
  #+end_src
-    
+
 *** Present GUI menu
 
    This adds the "Present" menu at the top with menu item "Present Now".
@@ -515,7 +515,7 @@ being =C-p= and =C-n= to move
  #+end_src
 
    #+REVEAL: split
-    
+
 *** Refile targets
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -528,7 +528,7 @@ being =C-p= and =C-n= to move
  #+end_src
 *** Capture templates
  #+begin_src emacs-lisp
- (setq org-capture-templates 
+ (setq org-capture-templates
    '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
       "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
  #+end_src
@@ -543,6 +543,7 @@ being =C-p= and =C-n= to move
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
   :END:
+
 ** GTD
 *** Keymap for GTD keybindings
       We define a keymap that will be accessed with =SPC a g=
@@ -607,19 +608,19 @@ being =C-p= and =C-n= to move
 
  #+begin_src emacs-lisp
  (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			   (sequence 
-                              "GTD-IN(i)"
-                              "GTD-CLARIFY(c)"
+			   (sequence
+			      "GTD-IN(i)"
+			      "GTD-CLARIFY(c)"
 			      "GTD-PROJECT(p)"
-                              "GTD-SOMEDAY-MAYBE(s)"
+			      "GTD-SOMEDAY-MAYBE(s)"
 			      "GTD-ACTION(a)"
-                              "GTD-NEXT-ACTION(n)"
-                              "GTD-WAITING(w)"
+			      "GTD-NEXT-ACTION(n)"
+			      "GTD-WAITING(w)"
 			      "|"
-                              "GTD-REFERENCE(r)"
-                              "GTD-DELEGATED(g)"
+			      "GTD-REFERENCE(r)"
+			      "GTD-DELEGATED(g)"
 			      "GTD-DONE(d)")))
-			   
+
  (setq org-todo-keyword-faces
     '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
       ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
@@ -641,9 +642,9 @@ being =C-p= and =C-n= to move
  #+begin_src emacs-lisp
  (setq org-stuck-projects
        '("TODO=\"GTD-PROJECT\"" ;; Search query
-         ("GTD-NEXT-ACTION")    ;; Not stuck if contains
-         ()                     ;; Stuck if contains
-         ""))                   ;; General regex
+	 ("GTD-NEXT-ACTION")    ;; Not stuck if contains
+	 ()                     ;; Stuck if contains
+	 ""))                   ;; General regex
  #+end_src
 
 *** Date interval for agenda view
@@ -661,22 +662,22 @@ being =C-p= and =C-n= to move
  #+end_src
 
    #+REVEAL: split
-    
+
 *** Agenda custom commands
 **** Definition
   #+begin_src emacs-lisp
   (setq org-agenda-custom-commands
 	'(("c" "Simple agenda view"
-            ((tags "PRIORITY=\"A\"")
-             (stuck "" )
-             (agenda "")
-             (todo "GTD-ACTION")))
-          ("g" . "GTD keyword searches searches")
-          ("gi" todo "GTD-IN")
-          ("gc" todo "GTD-CLARIFY")
-          ("ga" todo "GTD-ACTION")
-          ("gn" todo-tree "GTD-NEXT-ACTION")
-          ("gp" todo "GTD-PROJECT")))
+	    ((tags "PRIORITY=\"A\"")
+	     (stuck "" )
+	     (agenda "")
+	     (todo "GTD-ACTION")))
+	  ("g" . "GTD keyword searches searches")
+	  ("gi" todo "GTD-IN")
+	  ("gc" todo "GTD-CLARIFY")
+	  ("ga" todo "GTD-ACTION")
+	  ("gn" todo-tree "GTD-NEXT-ACTION")
+	  ("gp" todo "GTD-PROJECT")))
   #+end_src
 
  Run the agenda with "c" custom command.
@@ -741,10 +742,10 @@ to print a message.
 - Tulku: Cranston; Lamont Cranston.
 - Lamont Cranston: You know my real name?
 - Tulku: Yes. I also know that for as long as you can remember,
-         you struggled against your own black heart and always lost. You
-         watched your sprit, your very face change as the beast claws its
-         way out from within you.
-j is deactivated 
+	 you struggled against your own black heart and always lost. You
+	 watched your sprit, your very face change as the beast claws its
+	 way out from within you.
+j is deactivated
 It normally does org-agenda-goto-date")))))
 ;; Originally org-agenda-capture : I use C-c c and I can't use k
 (add-hook 'org-agenda-mode-hook (lambda ()
@@ -788,30 +789,30 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
  From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
 
  #+begin_src emacs-lisp :results none
- ;; data is stored in ~/.elfeed 
+ ;; data is stored in ~/.elfeed
  (use-package elfeed :ensure t)
  (setq elfeed-feeds
        '(
-         ;; programming
-         ("https://news.ycombinator.com/rss" hacker)
-         ("https://www.heise.de/developer/rss/news-atom.xml" heise)
-         ("https://www.reddit.com/r/programming.rss" programming)
-         ("https://www.reddit.com/r/emacs.rss" emacs)
+	 ;; programming
+	 ("https://news.ycombinator.com/rss" hacker)
+	 ("https://www.heise.de/developer/rss/news-atom.xml" heise)
+	 ("https://www.reddit.com/r/programming.rss" programming)
+	 ("https://www.reddit.com/r/emacs.rss" emacs)
 
-         ;; programming languages
-         ("https://www.reddit.com/r/golang.rss" golang)
-         ("https://www.reddit.com/r/java.rss" java)
-         ("https://www.reddit.com/r/javascript.rss" javascript)
-         ("https://www.reddit.com/r/typescript.rss" typescript)
-         ("https://www.reddit.com/r/clojure.rss" clojure)
-         ("https://www.reddit.com/r/python.rss" python)
+	 ;; programming languages
+	 ("https://www.reddit.com/r/golang.rss" golang)
+	 ("https://www.reddit.com/r/java.rss" java)
+	 ("https://www.reddit.com/r/javascript.rss" javascript)
+	 ("https://www.reddit.com/r/typescript.rss" typescript)
+	 ("https://www.reddit.com/r/clojure.rss" clojure)
+	 ("https://www.reddit.com/r/python.rss" python)
 
-         ;; cloud
-         ("https://www.reddit.com/r/aws.rss" aws)
-         ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
-         ("https://www.reddit.com/r/azure.rss" azure)
-         ("https://www.reddit.com/r/devops.rss" devops)
-         ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
+	 ;; cloud
+	 ("https://www.reddit.com/r/aws.rss" aws)
+	 ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
+	 ("https://www.reddit.com/r/azure.rss" azure)
+	 ("https://www.reddit.com/r/devops.rss" devops)
+	 ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
  ))
 
  (setq-default elfeed-search-filter "@2-days-ago +unread")
@@ -853,23 +854,22 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
      (overwrite-mode
        (set-cursor-color djcb-overwrite-color)
        (setq cursor-type djcb-overwrite-cursor-type))
-     (t 
+     (t
        (set-cursor-color djcb-normal-color)
        (setq cursor-type djcb-normal-cursor-type))))
 
  (add-hook 'post-command-hook 'djcb-set-cursor-according-to-mode)
  #+end_src
 
-*** Evil terminal curson
+*** Evil terminal cursor
     :PROPERTIES:
     :HEADER-ARGS: :tangle no
     :END:
 
  #+begin_src emacs-lisp
  (unless (display-graphic-p)
-           (require 'evil-terminal-cursor-changer)
-           (evil-terminal-cursor-changer-activate) ; or (etcc-on)
-           )
+	   (require 'evil-terminal-cursor-changer)
+	   (evil-terminal-cursor-changer-activate) ; or (etcc-on)
+	   )
  #+end_src
-  
 
