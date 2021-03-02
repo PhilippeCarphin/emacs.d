@@ -13,6 +13,7 @@
     #+REVEAL: split
  An elementary that can be taken as is to start from oriented towards leveragin
  the full power of orgmode immediately.
+ #+ATTR_REVEAL: :frag (appear)
  - Sane miscellaneous defaults
  - A built in color theme that looks good in orgmode exports
  - Evil mode if you know vim but not emacs
