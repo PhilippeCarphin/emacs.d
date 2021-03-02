@@ -1,3 +1,4 @@
+#+TITLE: Emacs config file
 #+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
 #+REVEAL_HLEVEL: 4
@@ -911,3 +912,53 @@ They changed the default behavior recently.  There must be a good reason for
 that so I want to try and get used to this new default.
 
 This is why I want to leave this with tangle no.
+
+* Org roam
+  
+If orgmode is a note taking tool, [[https://www.orgroam.com][org-roam]] is a knowledge management system.
+
+Here is the config from the [[https://github.com/org-roam/org-roam][official org-roam GitHub page]].
+
+#+begin_src emacs-lisp
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "~/Documents/org-roam/")
+      :bind (:map org-roam-mode-map
+              (("C-c n l" . org-roam)
+               ("C-c n f" . org-roam-find-file)
+               ("C-c n g" . org-roam-graph))
+              :map org-mode-map
+              (("C-c n i" . org-roam-insert))
+              (("C-c n I" . org-roam-insert-immediate))))
+#+end_src
+** Discussion
+
+From what I have seen, it seems that you would want this to be a different
+directory than the agenda dir.
+
+I plan to try it out but I have some reservations.
+
+[[https://org-roam.discourse.group/t/integrating-existing-org-files-into-org-roam/1094/4][this post]] shows what I plan to do: have my agenda separate.
+
+My reservations are about the tree structure of an orgmode document.  It is a
+limitation and a gift.
+
+In order to be able to navigate your tree you have to organize it in a certain
+way: nodes can't have too many children and other concerns that can make
+navigation easy or hard.
+
+This isn't a problem in org roam.  Because links aren't restricted to forming
+trees and can form arbitrary graphs.  This makes navigation of our notes super
+easy but it doesn't force us to work as hard to organize them.
+
+I have seen great benefit in arranging my knowledge in a tree structure that I
+could navigate easily.
+
+I could have achieved a structure that was more easy to navigate with less
+effort with something like org-roam but the work of creating this very good tree
+structure is something that paid off in other ways.
+
+
