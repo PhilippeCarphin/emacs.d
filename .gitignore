@@ -7,3 +7,4 @@ transient
 config.el
 tramp
 bookmarks
+org-roam.db

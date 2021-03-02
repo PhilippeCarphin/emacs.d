@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title></title>
+<title>Basic</title>
 <meta name="author" content="(Philippe Carphin)"/>
 <style type="text/css">
 .underline { text-decoration: underline; }
@@ -26,58 +26,80 @@
 <body>
 <div class="reveal">
 <div class="slides">
-<section id="sec-title-slide"><h2 class="author">Philippe Carphin</h2><p class="date">Created: 2021-02-26 Fri 15:00</p>
+<section id="sec-title-slide"><h1 class="title">Basic</h1><h2 class="author">Philippe Carphin</h2><p class="date">Created: 2021-03-02 Tue 08:25</p>
 </section>
 <section id="table-of-contents"><div id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#/slide-orgf51d29f">1. Minimalistic config</a></li>
-<li><a href="#/slide-orgcb49edd">2. Advanced</a></li>
-<li><a href="#/slide-orgbc03b18">3. New</a></li>
+<li><a href="#/slide-orge4f74d7">1. Documentation</a></li>
+<li><a href="#/slide-org2e9d763">2. Minimalistic config</a></li>
+<li><a href="#/slide-orgd56b454">3. Basic org configuration</a></li>
+<li><a href="#/slide-org46109ba">4. Basic org agenda configuration</a></li>
 </ul>
 </div>
 </div>
 </section>
-
 <section>
-<section id="slide-orgf51d29f">
-<h2 id="orgf51d29f"><span class="section-number-2">1</span> Minimalistic config</h2>
+<section id="slide-orge4f74d7">
+<h2 id="orge4f74d7"><span class="section-number-2">1</span> Documentation</h2>
 <div class="outline-text-2" id="text-1">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org1bed5e2">
-<h3 id="org1bed5e2"><span class="section-number-3">1.1</span> Intro</h3>
-</section>
-<section id="slide-org1bed5e2-split">
+<section id="slide-org55ecdf4">
+<h3 id="org55ecdf4"><span class="section-number-3">1.1</span> Tutorial</h3>
 <p>
-An elementary that can be taken as is to start from oriented towards leveragin
-the full power of orgmode immediately.
+The key sequence: <code>C-h t</code> 
 </p>
 <ul>
-<li>Sane miscellaneous defaults</li>
-<li>A built in color theme that looks good in orgmode exports</li>
-<li>Evil mode if you know vim but not emacs</li>
-<li>Basic helper frameworks that are defacto standard</li>
-<li>Elementary org configuration allowing immediate use of built in package babel.</li>
+<li class="fragment appear">Very short</li>
+<li class="fragment appear">Good selection of things that are immediately useful</li>
+<li class="fragment appear">Emacs movement</li>
 
 </ul>
 
 </section>
 </section>
 <section>
-<section id="slide-orgc3308dc">
-<h4 id="orgc3308dc"><span class="section-number-4">1.1.1</span> This config file</h4>
+<section id="slide-org2e9d763">
+<h2 id="org2e9d763"><span class="section-number-2">2</span> Minimalistic config</h2>
+<div class="outline-text-2" id="text-2">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgb65720c">
+<h3 id="orgb65720c"><span class="section-number-3">2.1</span> Intro</h3>
+</section>
+<section id="slide-orgb65720c-split">
+<p>
+An elementary that can be taken as is to start from oriented towards leveragin
+the full power of orgmode immediately.
+</p>
+<ul>
+<li class="fragment appear">Sane miscellaneous defaults</li>
+<li class="fragment appear">A built in color theme that looks good in orgmode exports</li>
+<li class="fragment appear">Evil mode if you know vim but not emacs</li>
+<li class="fragment appear">Basic helper frameworks that are defacto standard</li>
+<li class="fragment appear">Elementary org configuration allowing immediate use of built in package babel.</li>
+
+</ul>
+
+</section>
+</section>
+<section>
+<section id="slide-org92aee15">
+<h4 id="org92aee15"><span class="section-number-4">2.1.1</span> This config file</h4>
 <p>
 Emacs loads one file at startup from <code>~/.emacs</code>, <code>~/.emacs.d/init.el</code>.  The s
 </p>
 </section>
 </section>
 <section>
-<section id="slide-orgd1d2c70">
-<h3 id="orgd1d2c70"><span class="section-number-3">1.2</span> Package stuff</h3>
+<section id="slide-orgd75e9e9">
+<h3 id="orgd75e9e9"><span class="section-number-3">2.2</span> Package stuff</h3>
 <p>
 Standard stuff that is at the start of everyone's config file.
 </p>
@@ -93,7 +115,7 @@ Standard stuff that is at the start of everyone's config file.
 
 <p>
 Standard way for installing packages.  This replaces the use of <code>(require
-a-package)</code> and adds convenience functions.
+ a-package)</code> and adds convenience functions.
 </p>
 
 <div class="org-src-container">
@@ -108,8 +130,8 @@ a-package)</code> and adds convenience functions.
 </section>
 </section>
 <section>
-<section id="slide-org74f2512">
-<h3 id="org74f2512"><span class="section-number-3">1.3</span> Scrolling behavior</h3>
+<section id="slide-org74a3afa">
+<h3 id="org74a3afa"><span class="section-number-3">2.3</span> Scrolling behavior</h3>
 <ul>
 <li><code>scroll-margin</code> Distance between cursor and top/bottom before scrolling starts.</li>
 <li><code>scroll-step</code> makes the window move one line at a time.</li>
@@ -126,8 +148,48 @@ a-package)</code> and adds convenience functions.
 </section>
 </section>
 <section>
-<section id="slide-org49c6841">
-<h3 id="org49c6841"><span class="section-number-3">1.4</span> Wrapping</h3>
+<section id="slide-org4a95f25">
+<h3 id="org4a95f25"><span class="section-number-3">2.4</span> Cursor style</h3>
+<p>
+This will make our cursor a vertical bar instead of a box.
+</p>
+
+<p>
+If evil mode is active, this will cause our insert-mode cursor to be a bar and
+our normal mode cursor to be a box.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq-default</span> cursor-type '(bar . 3))
+(set-cursor-color <span style="color: #e67128;">"light grey"</span>)
+(custom-set-faces '(cursor ((t (<span style="color: #23d7d7;">:background</span> <span style="color: #e67128;">"SlateGray3"</span>)))))
+</code></pre>
+</div>
+
+<p>
+I use vi whenever I want to open files in a shell.  Because I use vi, when I see
+the box cursor, I feel like I'm in VI, but when I press keys, it just writes
+text.  So I press ESC, doesn't do anything, ESC again : "ESC ESC is not bound to
+anything".
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org08f8991">
+<h3 id="org08f8991"><span class="section-number-3">2.5</span> Cursor blink</h3>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(blink-cursor-mode)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org63dfcff">
+<h3 id="org63dfcff"><span class="section-number-3">2.6</span> Wrapping</h3>
 <p>
 Automattically hard-wrap text on 80 chars.
 </p>
@@ -142,8 +204,8 @@ Automattically hard-wrap text on 80 chars.
 </section>
 </section>
 <section>
-<section id="slide-orgd25d208">
-<h3 id="orgd25d208"><span class="section-number-3">1.5</span> Startup color theme</h3>
+<section id="slide-org6c82147">
+<h3 id="org6c82147"><span class="section-number-3">2.7</span> Startup color theme</h3>
 <p>
 Dark theme that exports well
 </p>
@@ -157,8 +219,8 @@ Dark theme that exports well
 </section>
 </section>
 <section>
-<section id="slide-org5889c21">
-<h3 id="org5889c21"><span class="section-number-3">1.6</span> Startup font</h3>
+<section id="slide-orga01ded0">
+<h3 id="orga01ded0"><span class="section-number-3">2.8</span> Startup font</h3>
 <p>
 To change the font, as per this <a href="http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html">Mailing list post</a>.
 </p>
@@ -172,15 +234,15 @@ To change the font, as per this <a href="http://emacs.1067599.n8.nabble.com/Chan
 </section>
 </section>
 <section>
-<section id="slide-orgd0a06cd">
-<h3 id="orgd0a06cd"><span class="section-number-3">1.7</span> Helper frameworks</h3>
-<div class="outline-text-3" id="text-1-7">
+<section id="slide-orga668cb7">
+<h3 id="orga668cb7"><span class="section-number-3">2.9</span> Helper frameworks</h3>
+<div class="outline-text-3" id="text-2-9">
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org72901d1">
-<h4 id="org72901d1"><span class="section-number-4">1.7.1</span> Undo tree</h4>
+<section id="slide-org1043e3e">
+<h4 id="org1043e3e"><span class="section-number-4">2.9.1</span> Undo tree</h4>
 <p>
 Use <code>C-x u</code> to get an undo tree buffer, really strong!
 </p>
@@ -194,8 +256,8 @@ Use <code>C-x u</code> to get an undo tree buffer, really strong!
 </section>
 </section>
 <section>
-<section id="slide-org0e6bfcc">
-<h4 id="org0e6bfcc"><span class="section-number-4">1.7.2</span> Helm</h4>
+<section id="slide-org8b3c100">
+<h4 id="org8b3c100"><span class="section-number-4">2.9.2</span> Helm</h4>
 <p>
 Improve searching interface all over emacs.
 </p>
@@ -212,18 +274,24 @@ We also add a few ourselves.
 <div class="org-src-container">
 
 <pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">helm</span> <span style="color: #23d7d7;">:ensure</span> t
-  <span style="color: #23d7d7;">:preface</span> (<span style="color: #ffad29; font-weight: bold;">require</span> '<span style="color: #008b8b;">helm-config</span>)
-  <span style="color: #23d7d7;">:config</span> (helm-mode)
+  <span style="color: #23d7d7;">:config</span>
+    (<span style="color: #ffad29; font-weight: bold;">require</span> '<span style="color: #008b8b;">helm-config</span>)
   <span style="color: #23d7d7;">:bind</span> ((<span style="color: #e67128;">"M-x"</span> . helm-M-x)
          (<span style="color: #e67128;">"C-x C-f"</span> . helm-find-files)
          (<span style="color: #e67128;">"C-x C-r"</span> . helm-recentf)
+         (<span style="color: #e67128;">"C-h C-i"</span> . helm-info)
          (<span style="color: #e67128;">"C-x C-b"</span> . helm-buffers-list)
          (<span style="color: #e67128;">"C-c g"</span> . helm-grep-do-git-grep)))
 </code></pre>
 </div>
 
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(helm-mode)
+</code></pre>
+</div>
 <ol class="org-ol">
-<li><a id="org884e357"></a>Remapped functions<br />
+<li><a id="orge3f7a34"></a>Remapped functions<br />
 <p>
 Notable remapped functions:
 </p>
@@ -246,7 +314,7 @@ Notable remapped functions:
 </ul>
 </li>
 
-<li><a id="org8d37896"></a>Powerful tools<br />
+<li><a id="orgf980294"></a>Powerful tools<br />
 <ul>
 <li><code>helm-grep-do-git-grep</code></li>
 
@@ -257,8 +325,8 @@ Notable remapped functions:
 </section>
 </section>
 <section>
-<section id="slide-org2e4709c">
-<h4 id="org2e4709c"><span class="section-number-4">1.7.3</span> Which-key</h4>
+<section id="slide-org1065d9e">
+<h4 id="org1065d9e"><span class="section-number-4">2.9.3</span> Which-key</h4>
 <p>
 Help discovering available key sequences in all contexts.
 </p>
@@ -284,8 +352,8 @@ Originally developped for spacemacs, now part of the standard emacs packages.
 </section>
 </section>
 <section>
-<section id="slide-orga8a6c59">
-<h4 id="orga8a6c59"><span class="section-number-4">1.7.4</span> Standard autocomplete</h4>
+<section id="slide-orga11f45a">
+<h4 id="orga11f45a"><span class="section-number-4">2.9.4</span> Standard autocomplete</h4>
 <div class="org-src-container">
 
 <pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">company</span>
@@ -297,19 +365,291 @@ Originally developped for spacemacs, now part of the standard emacs packages.
 </section>
 </section>
 <section>
-<section id="slide-org93cac1f">
-<h3 id="org93cac1f"><span class="section-number-3">1.8</span> Org configuration</h3>
-<div class="outline-text-3" id="text-1-8">
+<section id="slide-org34bf818">
+<h3 id="org34bf818"><span class="section-number-3">2.10</span> Evil mode</h3>
+<p>
+Evil-mode is a by far the best VI emulation out there.  It is very exact.
+</p>
+
+<p>
+The only thing that is very different is that not all buffers are going to be in
+evil mode.
+</p>
+
+<p>
+At the start, this the most confusing thing in the world.  Once you get used to
+it it's not a big deal.  After a while, you still make mistakes in that sense
+but if you thought you were in evil mode and you pressed the wrong key, you know
+how to fix it.  It becomes like pressing backspace when you make a typo,
+something barely noticed.
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-org02fcf0e">
+<h4 id="org02fcf0e"><span class="section-number-4">2.10.1</span> Install and activate</h4>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">evil</span>
+  <span style="color: #23d7d7;">:ensure</span> t
+  <span style="color: #23d7d7;">:init</span> (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-want-C-i-jump nil)
+        (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-want-integration t)
+        (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-want-C-u-scroll t)
+  <span style="color: #23d7d7;">:config</span> (evil-mode 1)
+          (define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-g"</span>) 'evil-normal-state)
+          (evil-global-set-key 'motion <span style="color: #e67128;">"j"</span> 'evil-next-visual-line)
+          (evil-global-set-key 'motion <span style="color: #e67128;">"k"</span> 'evil-previous-visual-line)
+          (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-default-state 'emacs)
+          (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-insert-state-modes nil)
+          (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-motion-state-modes nil)
+          (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-normal-state-modes '(fundamental-mode
+                                          conf-mode
+                                          prog-mode
+                                          text-mode
+                                          dired))
+          (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-insert-state-cursor '((bar . 2) <span style="color: #e67128;">"lime green"</span>)
+              evil-normal-state-cursor '(box <span style="color: #e67128;">"yellow"</span>))
+          (add-hook 'with-editor-mode-hook 'evil-insert-state))
+</code></pre>
+</div>
+
+<p>
+The <code>evil-want-C-i-jump</code> is very important.  When running emacs in the shell,
+the TAB key doesn't work properly.
+</p>
+
+<p>
+Reference : <a href="https://www.youtube.com/watch?v=xaZMwNELaJY">Emacs From Scratch #3 : Keybindings and Evil</a> et la config de Sam.
+</p>
+
+<ol class="org-ol">
+<li><a id="orgc18afd8"></a><span class="todo TODO">TODO</span> Look into rune/evil-hook<br /></li>
+</ol>
+
+</section>
+</section>
+<section>
+<section id="slide-org3207724">
+<h4 id="org3207724"><span class="section-number-4">2.10.2</span> Vim like window split keys</h4>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w"</span>) evil-window-map)
+(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w /"</span>) 'split-window-right)
+(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w -"</span>) 'split-window-below)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org4ca16b7">
+<h4 id="org4ca16b7"><span class="section-number-4">2.10.3</span> Map undo keys to undo-tree function</h4>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(define-key evil-normal-state-map (kbd <span style="color: #e67128;">"C-r"</span>) 'undo-tree-redo)
+(define-key evil-normal-state-map (kbd <span style="color: #e67128;">"u"</span>) 'undo-tree-undo)
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-orgc1a3edc">
+<h4 id="orgc1a3edc"><span class="section-number-4">2.10.4</span> Cursor blinking</h4>
+<p>
+Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
+fois avant d'arrêter).
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(add-hook 'evil-insert-state-exit-hook (<span style="color: #ffad29; font-weight: bold;">lambda</span> () (blink-cursor-mode 0)))
+(add-hook 'evil-insert-state-entry-hook (<span style="color: #ffad29; font-weight: bold;">lambda</span> () (blink-cursor-mode 1)))
+</code></pre>
+</div>
+
+<p>
+This sets the amount of cursor blinks before the flashing stop.
+</p>
+
+<pre  class="example">
+(setq blink-cursor-blinks 0)
+</pre>
+
+<p>
+Make sure the cursor starts out not blinking
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(blink-cursor-mode 0)
+</code></pre>
 </div>
 </section>
 </section>
 <section>
-<section id="slide-org0f1a249">
-<h4 id="org0f1a249"><span class="section-number-4">1.8.1</span> Looks</h4>
-<div class="outline-text-4" id="text-1-8-1">
+<section id="slide-orgcb673e4">
+<h3 id="orgcb673e4"><span class="section-number-3">2.11</span> Help</h3>
+<div class="outline-text-3" id="text-2-11">
 </div>
+</section>
+</section>
+<section>
+<section id="slide-orga063e25">
+<h4 id="orga063e25"><span class="section-number-4">2.11.1</span> Helper keymap</h4>
+<p>
+A keymap of keys to know to get started.  You should get rid of this of this
+section once you are familiar with the keys in order to learn the real bindings
+for the functions given by this keymap.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">defun</span> <span style="color: #00ede1; font-weight: bold;">about-this-keymap</span> () (<span style="color: #ffad29; font-weight: bold;">interactive</span>)
+  (org-open-link-from-string <span style="color: #e67128;">"[[file:~/.emacs.d/config.org::Helper keymap]]"</span>))
+</code></pre>
+</div>
+
+<p>
+Also, how meta is it that we have a function whose implementation takes us to
+see its implementation!
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(define-prefix-command 'emacs-movement)
+(global-set-key (kbd <span style="color: #e67128;">"C-| m"</span>) 'emacs-movement)
+(global-set-key (kbd <span style="color: #e67128;">"C-| h"</span>) 'about-this-keymap)
+(define-key emacs-movement (kbd <span style="color: #e67128;">"C-f"</span>) 'forward-char)
+(define-key emacs-movement (kbd <span style="color: #e67128;">"C-b"</span>) 'backward-char)
+(define-key emacs-movement (kbd <span style="color: #e67128;">"C-p"</span>) 'previous-line)
+(define-key emacs-movement (kbd <span style="color: #e67128;">"C-v"</span>) 'scroll-up-command)
+(define-key emacs-movement (kbd <span style="color: #e67128;">"M-v"</span>) 'scroll-down-command)
+(define-key emacs-movement (kbd <span style="color: #e67128;">"C-s"</span>) 'isearch-forward)
+(define-key emacs-movement (kbd <span style="color: #e67128;">"C-r"</span>) 'isearch-backward)
+(define-prefix-command 'C-x)
+(global-set-key (kbd <span style="color: #e67128;">"C-| C-x"</span>) 'C-x)
+(define-key C-x (kbd <span style="color: #e67128;">"C-f"</span>) 'helm-find-files)
+(define-key C-x (kbd <span style="color: #e67128;">"C-r"</span>) 'helm-recentf)
+(define-key C-x (kbd <span style="color: #e67128;">"C-b"</span>) 'helm-buffers-list)
+(define-key C-x (kbd <span style="color: #e67128;">"b"</span>) 'switch-to-buffer)
+(define-key C-x (kbd <span style="color: #e67128;">"C-s"</span>) 'save-buffer)
+(define-key C-x (kbd <span style="color: #e67128;">"C-c"</span>) 'save-buffers-kill-emacs)
+(define-key emacs-movement (kbd <span style="color: #e67128;">"C-n"</span>) 'next-line)
+(define-prefix-command 'C-h)
+(global-set-key (kbd <span style="color: #e67128;">"C-| C-h"</span>) 'C-h)
+(define-key C-h (kbd <span style="color: #e67128;">"C-i"</span>) 'helm-info)
+(define-key C-h (kbd <span style="color: #e67128;">"o"</span>) 'describe-symbol)
+(define-key C-h (kbd <span style="color: #e67128;">"f"</span>) 'describe-function)
+(define-key C-h (kbd <span style="color: #e67128;">"k"</span>) 'describe-key)
+(define-prefix-command 'orgmode)
+(global-set-key (kbd <span style="color: #e67128;">"C-| o"</span>) 'orgmode)
+(define-key orgmode (kbd <span style="color: #e67128;">"C-c C-,"</span>) 'org-insert-structure-template)
+(define-key orgmode (kbd <span style="color: #e67128;">"C-c C-c"</span>) 'org-ctrl-c-ctrl-c)
+(define-key orgmode (kbd <span style="color: #e67128;">"C-c '"</span>) 'org-edit-special)
+(define-key orgmode (kbd <span style="color: #e67128;">"C-c ."</span>) 'org-time-stamp)
+(define-key orgmode (kbd <span style="color: #e67128;">"C-c C-s"</span>) 'org-schedule)
+(define-key orgmode (kbd <span style="color: #e67128;">"C-c C-d"</span>) 'org-deadline)
+(define-key orgmode (kbd <span style="color: #e67128;">"a"</span>) 'org-agenda)
+(define-key orgmode (kbd <span style="color: #e67128;">"v"</span>) 'org-tags-view)
+(define-key orgmode (kbd <span style="color: #e67128;">"C-c /"</span>) 'org-match-sparse-tree)
+(define-key orgmode (kbd <span style="color: #e67128;">"&lt;M-S-left&gt;"</span>) 'org-promote-subtree)
+(define-key orgmode (kbd <span style="color: #e67128;">"&lt;M-S-right&gt;"</span>) 'org-demote-subtree)
+(define-key orgmode (kbd <span style="color: #e67128;">"n"</span>) 'org-narrow-to-subtree)
+(define-key orgmode (kbd <span style="color: #e67128;">"c"</span>) 'org-columns)
+</code></pre>
+</div>
+
 <ol class="org-ol">
-<li><a id="org7baca47"></a>Bullets<br />
+<li><a id="orgc8b4bd7"></a>Explanations<br />
+<p>
+La touche <code>C-|</code> (<code>C-S-\</code>) est une map de touches qui contient des
+fonctionnalité spécialement sélectionnées.
+</p>
+
+<p>
+Le choix de touche de départ est de choisr un binding qui fait chier à faire.
+</p>
+
+<p>
+Le but c'est d'explorer.  Quand on trouve quelque chose qu'on aime, on peut
+découvrir les bindings standards en faisant <code>C-h f</code> et écrire le nom de la
+fonction exécutée par la touche.  Ou faire <code>C-h k</code> et refaire la touche et
+l'aide nous dira quels sont les autres bindings pour la fonctionnalité.
+</p>
+
+<p>
+Si un binding a le même nom que la fonction comme <code>C-h</code>, c'est que ce groupe est
+une sélection des fonctions disponibles en faisant <code>C-h</code> normalement.
+</p>
+
+<p>
+Si le groupe contient le mot mode, c'est qu'il contient des fonctions qui sont
+seulement disponibles dans un certain mode.
+</p>
+
+<p>
+Les touches utilisées sont le plus souvent possible la même touche qu'on ferait
+normalement. Par exemple, <code>C-| o C-c C-,</code> insère un bloc de code source.  Le
+choix est fait comme ça parce que la touche <code>C-c C-,</code> est la touche native pour
+faire cette action.
+</p>
+</li>
+</ol>
+
+
+</section>
+</section>
+<section>
+<section id="slide-orgfeb7507">
+<h4 id="orgfeb7507"><span class="section-number-4">2.11.2</span> Help menu</h4>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">defun</span> <span style="color: #00ede1; font-weight: bold;">org-agenda-help</span> () (<span style="color: #ffad29; font-weight: bold;">interactive</span>)
+   (org-open-link-from-string <span style="color: #e67128;">"[[file:~/.emacs.d/config.org::*Orgmode implementation of GTD]]"</span>))
+(define-prefix-command 'help-menu)
+(global-set-key (kbd <span style="color: #e67128;">"C-~"</span>) 'help-menu)
+(define-key 'help-menu (kbd <span style="color: #e67128;">"a"</span>) 'org-agenda-help)
+ (<span style="color: #ffad29; font-weight: bold;">easy-menu-define</span> h-menu global-map
+   <span style="color: #e67128;">"Menu for word navigation commands."</span>
+   '(<span style="color: #e67128;">"PhilHelp"</span>
+     [<span style="color: #e67128;">"forward-char"</span> forward-char]
+     [<span style="color: #e67128;">"backward-char"</span> forward-char]
+     [<span style="color: #e67128;">"next-line"</span> next-line]
+     [<span style="color: #e67128;">"previous-line"</span> previous-line]
+     [<span style="color: #e67128;">"describe-key"</span> describe-key]
+     [<span style="color: #e67128;">"scroll-up-command"</span> scroll-up-command]
+     [<span style="color: #e67128;">"scroll-down-command"</span> scroll-down-command]
+     [<span style="color: #e67128;">"isearch-forward"</span> isearch-forward]
+     [<span style="color: #e67128;">"isearch-backward"</span> isearch-backward]
+     [<span style="color: #e67128;">"org-time-stamp"</span> org-time-stamp]
+     [<span style="color: #e67128;">"org-promote-subtree"</span> org-promote-subtree]
+     [<span style="color: #e67128;">"org-demote-subtree"</span> org-demote-subtree]
+     [<span style="color: #e67128;">"org-agenda-help"</span> org-agenda-help]))
+</code></pre>
+</div>
+
+<p>
+(global-set-key (kbd "C-| m") 'emacs-movement)
+(global-set-key (kbd "C-| h") 'about-this-keymap)
+(define-key emacs-movement (kbd "C-f") 'forward-char)
+(define-key emacs-movement (kbd "C-b") 'backward-char)
+(define-key emacs-movement (kbd "C-p") 'previous-line)
+</p>
+
+</section>
+</section>
+<section>
+<section id="slide-orgd56b454">
+<h2 id="orgd56b454"><span class="section-number-2">3</span> Basic org configuration</h2>
+<div class="outline-text-2" id="text-3">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org37e70ce">
+<h3 id="org37e70ce"><span class="section-number-3">3.1</span> Bullets</h3>
 <p>
 Show nice bullets
 </p>
@@ -325,14 +665,12 @@ Essential for easy tree viewing
   <span style="color: #23d7d7;">:hook</span> (org-mode . org-bullets-mode))
 </code></pre>
 </div>
-</li>
-</ol>
 
 </section>
 </section>
 <section>
-<section id="slide-org7474854">
-<h4 id="org7474854"><span class="section-number-4">1.8.2</span> Exporting</h4>
+<section id="slide-org8d49d36">
+<h3 id="org8d49d36"><span class="section-number-3">3.2</span> Exporting</h3>
 <ul>
 <li><code>ox-twbs</code> to export to beautiful HTML</li>
 <li><code>ox-reveal</code> to export to Reveal.js presentation</li>
@@ -356,12 +694,15 @@ Essential for easy tree viewing
 </section>
 </section>
 <section>
-<section id="slide-org3d7268d">
-<h4 id="org3d7268d"><span class="section-number-4">1.8.3</span> Babel</h4>
-<div class="outline-text-4" id="text-1-8-3">
+<section id="slide-orgfcb13de">
+<h3 id="orgfcb13de"><span class="section-number-3">3.3</span> Babel</h3>
+<div class="outline-text-3" id="text-3-3">
 </div>
-<ol class="org-ol">
-<li><a id="org94ff8e5"></a>Babel Intro<br />
+</section>
+</section>
+<section>
+<section id="slide-orge2a8a51">
+<h4 id="orge2a8a51"><span class="section-number-4">3.3.1</span> Babel Intro</h4>
 <p>
 Babel allows running of code blocks.  It is what enables this config to be in
 orgmode format.
@@ -375,9 +716,12 @@ must be activated to be used:
 <p>
 <a href="https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure">https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure</a>
 </p>
-</li>
 
-<li><a id="orgafec6bc"></a>Babel config<br />
+</section>
+</section>
+<section>
+<section id="slide-org9dd3721">
+<h4 id="org9dd3721"><span class="section-number-4">3.3.2</span> Babel config</h4>
 <p>
 We simply add languages that we want to become available.  There are many more
 but some of them require installing extra packages.
@@ -390,13 +734,16 @@ but some of them require installing extra packages.
       (python . t)))
 </code></pre>
 </div>
-</li>
 
-<li><a id="orge420a35"></a>Disable prompt<br />
+</section>
+</section>
+<section>
+<section id="slide-org47c4c8e">
+<h4 id="org47c4c8e"><span class="section-number-4">3.3.3</span> Disable prompt</h4>
 <p>
 As a security precaution this is off by default.  It would indeed be quite
 surprising if your text editor runs a shell command if you accidently do <code>C-c
-C-c</code>.
+ C-c</code>.
 </p>
 
 <p>
@@ -409,445 +756,12 @@ surprised that a command runs when the press enter in a shell.
 <pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-confirm-babel-evaluate nil)
 </code></pre>
 </div>
-</li>
-</ol>
 
 </section>
 </section>
 <section>
-<section id="slide-orgb52ffa8">
-<h3 id="orgb52ffa8"><span class="section-number-3">1.9</span> Evil mode</h3>
-</section>
-</section>
-<section>
-<section id="slide-orga627315">
-<h4 id="orga627315"><span class="section-number-4">1.9.1</span> Install and activate</h4>
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">evil</span>
-  <span style="color: #23d7d7;">:ensure</span> t
-  <span style="color: #23d7d7;">:init</span> (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-want-C-i-jump nil)
-        (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-want-integration t)
-        (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-want-C-u-scroll t)
-  <span style="color: #23d7d7;">:config</span> (evil-mode 1)
-          (define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-g"</span>) 'evil-normal-state)
-          (evil-global-set-key 'motion <span style="color: #e67128;">"j"</span> 'evil-next-visual-line)
-          (evil-global-set-key 'motion <span style="color: #e67128;">"k"</span> 'evil-previous-visual-line)
-          (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-default-state 'emacs)
-          (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-insert-state-modes nil)
-          (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-motion-state-modes nil)
-          (<span style="color: #ffad29; font-weight: bold;">setq</span> evil-normal-state-modes '(fundamental-mode
-                                          conf-mode
-                                          prog-mode
-                                          text-mode
-                                          dired))
-          (add-hook 'with-editor-mode-hook 'evil-insert-state))
-</code></pre>
-</div>
-
-<p>
-The <code>evil-want-C-i-jump</code> is very important.  When running emacs in the shell,
-the TAB key doesn't work properly.
-</p>
-
-<p>
-Reference : <a href="https://www.youtube.com/watch?v=xaZMwNELaJY">Emacs From Scratch #3 : Keybindings and Evil</a> et la config de Sam.
-</p>
-
-<ol class="org-ol">
-<li><a id="org1d3b0ba"></a><span class="todo TODO">TODO</span> Look into rune/evil-hook<br /></li>
-</ol>
-
-</section>
-</section>
-<section>
-<section id="slide-orga273e4a">
-<h4 id="orga273e4a"><span class="section-number-4">1.9.2</span> Vim like window split keys</h4>
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w"</span>) evil-window-map)
-(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w /"</span>) 'split-window-right)
-(define-key evil-insert-state-map (kbd <span style="color: #e67128;">"C-w -"</span>) 'split-window-below)
-</code></pre>
-</div>
-
-</section>
-</section>
-<section>
-<section id="slide-org2899d88">
-<h4 id="org2899d88"><span class="section-number-4">1.9.3</span> Map undo keys to undo-tree function</h4>
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(define-key evil-normal-state-map (kbd <span style="color: #e67128;">"C-r"</span>) 'undo-tree-redo)
-(define-key evil-normal-state-map (kbd <span style="color: #e67128;">"u"</span>) 'undo-tree-undo)
-</code></pre>
-</div>
-
-
-</section>
-</section>
-<section>
-<section id="slide-orgcb49edd">
-<h2 id="orgcb49edd"><span class="section-number-2">2</span> Advanced</h2>
-<div class="outline-text-2" id="text-2">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org7fb38a1">
-<h3 id="org7fb38a1"><span class="section-number-3">2.1</span> Orgmode implementation of GTD</h3>
-<div class="outline-text-3" id="text-2-1">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org906725c">
-<h4 id="org906725c"><span class="section-number-4">2.1.1</span> Agenda files</h4>
-<p>
-To begin using org-agenda, all we need to do is to give it a directory that
-contains orgmode files.
-</p>
-
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-agenda-dir <span style="color: #e67128;">"~/NDocuments/gtd"</span>)
-(<span style="color: #ffad29; font-weight: bold;">setq</span> org-agenda-files (list org-agenda-dir))
-</code></pre>
-</div>
-
-<p>
-I don't know why I can't use org-agenda-dir here but if I put org-agenda-dir
-where the string litteral is, it doesn't work.
-</p>
-
-<p>
-It gives the message
-</p>
-
-<div class="org-src-container">
-
-<pre  class="src src-text"><code trim>Wrong type argument : stringp, org-agenda-dir.
-</code></pre>
-</div>
-
-</section>
-</section>
-<section>
-<section id="slide-orgd9ac710">
-<h4 id="orgd9ac710"><span class="section-number-4">2.1.2</span> GTD</h4>
-</section>
-<section id="slide-orgd9ac710-split">
-<ol class="org-ol">
-<li><a id="org71165a2"></a>Keymap for GTD keybindings<br />
-<p>
-We define a keymap that will be accessed with <code>SPC a g</code>
-</p>
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(define-prefix-command 'gtd)
-(define-key evil-normal-state-map (kbd <span style="color: #e67128;">"SPC a g"</span>) 'gtd)
-(define-key gtd (kbd <span style="color: #e67128;">"a"</span>) 'org-agenda)
-</code></pre>
-</div>
-
-</section>
-<section id="slide-org71165a2-split">
-</li>
-
-<li><a id="orgcacc879"></a>GTD files<br />
-<ol class="org-ol">
-<li><a id="org12b97af"></a>Filename symbols<br />
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-agenda-dir <span style="color: #e67128;">"~/NDocuments/gtd/"</span>)
-(<span style="color: #ffad29; font-weight: bold;">setq</span> org-agenda-files '(<span style="color: #e67128;">"~/NDocuments/gtd"</span>))
-(<span style="color: #ffad29; font-weight: bold;">setq</span> gtd-in-tray-file (concat org-agenda-dir <span style="color: #e67128;">"GTD_InTray.org"</span>)
-    gtd-next-actions-file (concat org-agenda-dir <span style="color: #e67128;">"GTD_NextActions.org"</span>)
-    gtd-project-list-file (concat org-agenda-dir <span style="color: #e67128;">"GTD_ProjectList.org"</span>)
-    gtd-reference-file (concat org-agenda-dir <span style="color: #e67128;">"GTD_Reference.org"</span>)
-    gtd-someday-maybe-file (concat org-agenda-dir <span style="color: #e67128;">"GTD_SomedayMaybe.org"</span>)
-    gtd-tickler-file (concat org-agenda-dir <span style="color: #e67128;">"GTD_Tickler.org"</span>)
-    gtd-journal-file (concat org-agenda-dir <span style="color: #e67128;">"GTD_Journal.org"</span>))
-</code></pre>
-</div>
-</li>
-<li><a id="org94a880c"></a>Quick access to GTD files<br />
-<p>
-We use it to create bindings in the <code>gtd</code> map to open files
-</p>
-
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">defun</span> <span style="color: #00ede1; font-weight: bold;">gtd-open-in-tray</span>      () (<span style="color: #ffad29; font-weight: bold;">interactive</span>) (find-file gtd-in-tray-file))
-(<span style="color: #ffad29; font-weight: bold;">defun</span> <span style="color: #00ede1; font-weight: bold;">gtd-open-project-list</span> () (<span style="color: #ffad29; font-weight: bold;">interactive</span>) (find-file gtd-project-list-file))
-(<span style="color: #ffad29; font-weight: bold;">defun</span> <span style="color: #00ede1; font-weight: bold;">gtd-open-reference</span>   () (<span style="color: #ffad29; font-weight: bold;">interactive</span>) (find-file gtd-reference-file))
-(<span style="color: #ffad29; font-weight: bold;">defun</span> <span style="color: #00ede1; font-weight: bold;">gtd-open-next-actions</span> () (<span style="color: #ffad29; font-weight: bold;">interactive</span>) (find-file gtd-next-actions-file))
-(define-key gtd (kbd <span style="color: #e67128;">"i"</span>) 'gtd-open-in-tray)
-(define-key gtd (kbd <span style="color: #e67128;">"p"</span>) 'gtd-open-project-list)
-(define-key gtd (kbd <span style="color: #e67128;">"r"</span>) 'gtd-open-reference)
-(define-key gtd (kbd <span style="color: #e67128;">"n"</span>) 'gtd-open-next-actions)
-</code></pre>
-</div>
-
-</section>
-<section id="slide-org94a880c-split">
-</li>
-</ol>
-</li>
-<li><a id="org9d0a816"></a>Todo keywords for GTD<br />
-<p>
-The first set of keywords is a generic set of keywords that I can give TODO
-keywords to items without having them be part of my GTD.
-</p>
-
-<p>
-The GTD-* keywords map to the various things that what David Allen calls "stuff"
-can be.
-</p>
-
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-todo-keywords '((sequence <span style="color: #e67128;">"TODO"</span> <span style="color: #e67128;">"WAITING"</span> <span style="color: #e67128;">"VERIFY"</span> <span style="color: #e67128;">"|"</span> <span style="color: #e67128;">"DONE"</span>)
-                          (sequence 
-                             <span style="color: #e67128;">"GTD-IN(i)"</span>
-                             <span style="color: #e67128;">"GTD-CLARIFY(c)"</span>
-                             <span style="color: #e67128;">"GTD-PROJECT(p)"</span>
-                             <span style="color: #e67128;">"GTD-SOMEDAY-MAYBE(s)"</span>
-                             <span style="color: #e67128;">"GTD-ACTION(a)"</span>
-                             <span style="color: #e67128;">"GTD-NEXT-ACTION(n)"</span>
-                             <span style="color: #e67128;">"GTD-WAITING(w)"</span>
-                             <span style="color: #e67128;">"|"</span>
-                             <span style="color: #e67128;">"GTD-REFERENCE(r)"</span>
-                             <span style="color: #e67128;">"GTD-DELEGATED(g)"</span>
-                             <span style="color: #e67128;">"GTD-DONE(d)"</span>)))
-
-(<span style="color: #ffad29; font-weight: bold;">setq</span> org-todo-keyword-faces
-   '((<span style="color: #e67128;">"GTD-IN"</span> <span style="color: #23d7d7;">:foreground</span> <span style="color: #e67128;">"#ff8800"</span> <span style="color: #23d7d7;">:weight</span> normal <span style="color: #23d7d7;">:underline</span> t <span style="color: #23d7d7;">:size</span> small)
-     (<span style="color: #e67128;">"GTD-PROJECT"</span> <span style="color: #23d7d7;">:foreground</span> <span style="color: #e67128;">"#0088ff"</span> <span style="color: #23d7d7;">:weight</span> bold <span style="color: #23d7d7;">:underline</span> t)
-     (<span style="color: #e67128;">"GTD-ACTION"</span> <span style="color: #23d7d7;">:foreground</span> <span style="color: #e67128;">"#0088ff"</span> <span style="color: #23d7d7;">:weight</span> normal <span style="color: #23d7d7;">:underline</span> nil)
-     (<span style="color: #e67128;">"GTD-NEXT-ACTION"</span> <span style="color: #23d7d7;">:foreground</span> <span style="color: #e67128;">"#0088ff"</span> <span style="color: #23d7d7;">:weight</span> bold <span style="color: #23d7d7;">:underline</span> nil)
-     (<span style="color: #e67128;">"GTD-WAITING"</span> <span style="color: #23d7d7;">:foreground</span> <span style="color: #e67128;">"#aaaa00"</span> <span style="color: #23d7d7;">:weight</span> normal <span style="color: #23d7d7;">:underline</span> nil)
-     (<span style="color: #e67128;">"GTD-REFERENCE"</span> <span style="color: #23d7d7;">:foreground</span> <span style="color: #e67128;">"#00ff00"</span> <span style="color: #23d7d7;">:weight</span> normal <span style="color: #23d7d7;">:underline</span> nil)
-     (<span style="color: #e67128;">"GTD-SOMEDAY-MAYBE"</span> <span style="color: #23d7d7;">:foreground</span> <span style="color: #e67128;">"#7c7c74"</span> <span style="color: #23d7d7;">:weight</span> normal <span style="color: #23d7d7;">:underline</span> nil)
-     (<span style="color: #e67128;">"GTD-DONE"</span> <span style="color: #23d7d7;">:foreground</span> <span style="color: #e67128;">"#00ff00"</span> <span style="color: #23d7d7;">:weight</span> normal <span style="color: #23d7d7;">:underline</span> nil)))
-</code></pre>
-</div>
-
-</section>
-<section id="slide-org9d0a816-split">
-</li>
-<li><a id="org1553ce6"></a>Definition of stuck projects<br />
-<p>
-In GTD projects are called "stuck" if they do not contain a <code>GTD-NEXT-ACTION</code>.
-This says that a stuck project is a headline where the todo keyword is
-<code>GTD-PROJECT</code> that do not contain a heading matching <code>GTD-NEXT-ACTION</code>.
-</p>
-
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-stuck-projects
-      '(<span style="color: #e67128;">"TODO=\"GTD-PROJECT\""</span> <span style="color: #74af68;">;; </span><span style="color: #74af68;">Search query</span>
-        (<span style="color: #e67128;">"GTD-NEXT-ACTION"</span>)    <span style="color: #74af68;">;; </span><span style="color: #74af68;">Not stuck if contains</span>
-        ()                     <span style="color: #74af68;">;; </span><span style="color: #74af68;">Stuck if contains</span>
-        <span style="color: #e67128;">""</span>))                   <span style="color: #74af68;">;; </span><span style="color: #74af68;">General regex</span>
-</code></pre>
-</div>
-</li>
-
-
-<li><a id="orge0567c5"></a>Capturing<br />
-<ol class="org-ol">
-<li><a id="orgd0cbffb"></a>Capture templates<br />
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-capture-templates 
-  '((<span style="color: #e67128;">"i"</span> <span style="color: #e67128;">"GTD Input"</span> entry (file+headline gtd-in-tray-file <span style="color: #e67128;">"GTD Input Tray"</span>)
-     <span style="color: #e67128;">"* GTD-IN %?\n %i\n %a"</span> <span style="color: #23d7d7;">:kill-buffer</span> t)))
-</code></pre>
-</div>
-</li>
-<li><a id="orgfb65156"></a>Capture hotkey<br />
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(global-set-key (kbd <span style="color: #e67128;">"C-c c"</span>) 'org-capture)
-</code></pre>
-</div>
-</li>
-</ol>
-</li>
-</ol>
-
-</section>
-</section>
-<section>
-<section id="slide-org5ef38df">
-<h4 id="org5ef38df"><span class="section-number-4">2.1.3</span> Org Agenda</h4>
-</section>
-<section id="slide-org5ef38df-split">
-
-<ol class="org-ol">
-<li><a id="orgba4d66a"></a>Intro<br />
-<p>
-The agenda has features for working with tags and todo keywords.
-</p>
-
-<p>
-It provides ways of
-</p>
-
-<ul>
-<li>Searching</li>
-<li>Bulk editing</li>
-<li>Creating views</li>
-
-</ul>
-
-<p>
-based on
-</p>
-
-<ul>
-<li>TODO keywords</li>
-<li>Tags</li>
-<li>Dates (using the <code>DEADLINE</code> and <code>SCHEDULED</code> properties)</li>
-
-</ul>
-
-<p>
-I have adapted my use of the agenda to GTD but the methods here can serve as
-general examples nonetheless.
-</p>
-</section>
-<section id="slide-orgba4d66a-split">
-</li>
-
-<li><a id="org73b2302"></a>Date interval for agenda view<br />
-<p>
-The default is kind of annoying.  It shows a week starting on a Sunday but what
-is annoying about that is that on Sunday, the agenda won't show what you have
-tomorrow!
-</p>
-
-<p>
-The way this is set, it will show 10 days starting 3 days in the past.
-</p>
-
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-agenda-span 7
-      org-agenda-start-on-weekday 0
-      org-agenda-start-day <span style="color: #e67128;">"-2d"</span>)
-</code></pre>
-</div>
-
-</section>
-<section id="slide-org73b2302-split">
-</li>
-
-<li><a id="orge1af6ea"></a>Agenda Key<br />
-<p>
-I mapped a key because I like to pop in and out of it.
-</p>
-
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(global-set-key (kbd <span style="color: #e67128;">"C-c a"</span>) 'org-agenda)
-</code></pre>
-</div>
-
-</section>
-<section id="slide-orge1af6ea-split">
-</li>
-
-<li><a id="org644a775"></a>Agenda custom commands<br />
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-agenda-custom-commands
-      '((<span style="color: #e67128;">"c"</span> <span style="color: #e67128;">"Simple agenda view"</span>
-          ((tags <span style="color: #e67128;">"PRIORITY=\"A\""</span>)
-           (stuck <span style="color: #e67128;">""</span> )
-           (agenda <span style="color: #e67128;">""</span>)
-           (todo <span style="color: #e67128;">"GTD-ACTION"</span>)))
-        (<span style="color: #e67128;">"g"</span> . <span style="color: #e67128;">"GTD keyword searches searches"</span>)
-        (<span style="color: #e67128;">"gi"</span> todo <span style="color: #e67128;">"GTD-IN"</span>)
-        (<span style="color: #e67128;">"gc"</span> todo <span style="color: #e67128;">"GTD-CLARIFY"</span>)
-        (<span style="color: #e67128;">"ga"</span> todo <span style="color: #e67128;">"GTD-ACTION"</span>)
-        (<span style="color: #e67128;">"gn"</span> todo-tree <span style="color: #e67128;">"GTD-NEXT-ACTION"</span>)
-        (<span style="color: #e67128;">"gp"</span> todo <span style="color: #e67128;">"GTD-PROJECT"</span>)))
-</code></pre>
-</div>
-</li>
-</ol>
-
-</section>
-</section>
-<section>
-<section id="slide-org1b085cd">
-<h4 id="org1b085cd"><span class="section-number-4">2.1.4</span> Closing notes</h4>
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-log-done 'note)
-</code></pre>
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org7675b46">
-<h3 id="org7675b46"><span class="section-number-3">2.2</span> Magit</h3>
-<p>
-The most amazing vim plugin in existence.
-</p>
-
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">magit</span>
-  <span style="color: #23d7d7;">:ensure</span> t
-  <span style="color: #23d7d7;">:custom</span>
-  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-</code></pre>
-</div>
-
-
-</section>
-</section>
-<section>
-<section id="slide-orgbc03b18">
-<h2 id="orgbc03b18"><span class="section-number-2">3</span> New</h2>
-<div class="outline-text-2" id="text-3">
-</div>
-</section>
-</section>
-<section>
-<section id="slide-org0e08a4f">
-<h3 id="org0e08a4f"><span class="section-number-3">3.1</span> Yasnippet</h3>
-<p>
-I thought this was going to give me the thing where doing <code>&lt;sTAB</code> while in
-insert mode would expand to org mode source blocks.
-</p>
-
-<p>
-This <a href="https://emacs.stackexchange.com/questions/46988/why-do-easy-templates-e-g-s-tab-in-org-9-2-not-work/63561#63561">stack overflow post</a> shows that org 9.2 simply changed it to <code>C-c C-,</code>.
-Knowing that, I think it's for the best since it now works with visual
-selections.
-</p>
-
-<p>
-Since I looked into <a href="https://www.emacswiki.org/emacs/Yasnippet">yasnippet</a> I might as well install it and start using it.
-</p>
-
-<div class="org-src-container">
-
-<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">use-package</span> <span style="color: #008b8b;">yasnippet</span>
-  <span style="color: #23d7d7;">:ensure</span> t
-  <span style="color: #23d7d7;">:config</span> (yas-global-mode 1))
-</code></pre>
-</div>
-
-</section>
-</section>
-<section>
-<section id="slide-orgacdb4a8">
-<h3 id="orgacdb4a8"><span class="section-number-3">3.2</span> Add menu items</h3>
+<section id="slide-orga45154d">
+<h3 id="orga45154d"><span class="section-number-3">3.4</span> Present GUI menu</h3>
 <p>
 This adds the "Present" menu at the top with menu item "Present Now".
 </p>
@@ -864,14 +778,90 @@ This adds the "Present" menu at the top with menu item "Present Now".
 (<span style="color: #ffad29; font-weight: bold;">easy-menu-define</span> present-menu org-mode-map
   <span style="color: #e67128;">"Menu for word navigation commands."</span>
   '(<span style="color: #e67128;">"Present"</span>
-    [<span style="color: #e67128;">"Present Now"</span> org-reveal-export-to-html-and-browse]
-    [<span style="color: #e67128;">"Present Subtree Now"</span> ox-reveal]
-    [<span style="color: #e67128;">"Twitter Bootstrap HTML  now"</span> ox-twbs]
-    [<span style="color: #e67128;">"Twitter Bootstrap HTML  all now"</span> ox-twbs-all]
-    [<span style="color: #e67128;">"RST now"</span> ox-rst]
-    [<span style="color: #e67128;">"RST All now"</span> ox-rst-all]
-    [<span style="color: #e67128;">"View  straight-pipe HTML now"</span> ox-html]
-    [<span style="color: #e67128;">"View all straight-pipe HTML now"</span> ox-html-all]))
+    [<span style="color: #e67128;">"Present Right Now (C-c C-e R B)"</span> org-reveal-export-to-html-and-browse]
+    [<span style="color: #e67128;">"Present Subtree Right Now (C-c C-e C-s R B)"</span> ox-reveal]
+    [<span style="color: #e67128;">"View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)"</span> ox-twbs]
+    [<span style="color: #e67128;">"View Twitter Bootstrap HTML all Right now (C-c C-e w o)"</span> ox-twbs-all]
+    [<span style="color: #e67128;">"View RST Right Now (C-c C-e C-s r R)"</span> ox-rst]
+    [<span style="color: #e67128;">"View RST All Right Now (C-c C-e r R)"</span> ox-rst-all]
+    [<span style="color: #e67128;">"View straight-pipe HTML Right Now (C-c C-e C-s h o)"</span> ox-html]
+    [<span style="color: #e67128;">"View straight-pipe HTML All Right Now (C-c C-e h o)"</span> ox-html-all]))
+</code></pre>
+</div>
+
+</section>
+</section>
+<section>
+<section id="slide-org46109ba">
+<h2 id="org46109ba"><span class="section-number-2">4</span> Basic org agenda configuration</h2>
+<div class="outline-text-2" id="text-4">
+</div>
+</section>
+</section>
+<section>
+<section id="slide-orgdb4abaa">
+<h3 id="orgdb4abaa"><span class="section-number-3">4.1</span> Agena files</h3>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-agenda-dir <span style="color: #e67128;">"~/Documents/gtd"</span>)
+(<span style="color: #ffad29; font-weight: bold;">setq</span> org-agenda-files (list org-agenda-dir))
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org55eb18e">
+<h3 id="org55eb18e"><span class="section-number-3">4.2</span> Agenda Key</h3>
+<p>
+I mapped a key because I like to pop in and out of it. I don't use it myself
+because the I put <code>org-agenda</code> on a keymap for my GTD stuff.
+</p>
+
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(global-set-key (kbd <span style="color: #e67128;">"C-c a"</span>) 'org-agenda)
+</code></pre>
+</div>
+
+</section>
+<section id="slide-org55eb18e-split">
+
+</section>
+</section>
+<section>
+<section id="slide-orgb210b6f">
+<h3 id="orgb210b6f"><span class="section-number-3">4.3</span> Refile targets</h3>
+<p>
+<a href="https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html">https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html</a>
+</p>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-refile-targets '((nil <span style="color: #23d7d7;">:maxlevel</span> . 3) (org-agenda-files <span style="color: #23d7d7;">:maxlevel</span> . 3)))
+(<span style="color: #ffad29; font-weight: bold;">setq</span> org-outline-path-complete-in-steps nil)
+(<span style="color: #ffad29; font-weight: bold;">setq</span> org-refile-use-outline-path 'file)
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org3b079d3">
+<h3 id="org3b079d3"><span class="section-number-3">4.4</span> Capture templates</h3>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">setq</span> org-capture-templates
+  '((<span style="color: #e67128;">"i"</span> <span style="color: #e67128;">"GTD Input"</span> entry (file+headline gtd-in-tray-file <span style="color: #e67128;">"GTD Input Tray"</span>)
+     <span style="color: #e67128;">"* GTD-IN %?\n %i\n %a"</span> <span style="color: #23d7d7;">:kill-buffer</span> t)))
+</code></pre>
+</div>
+</section>
+</section>
+<section>
+<section id="slide-org4f9ee4c">
+<h3 id="org4f9ee4c"><span class="section-number-3">4.5</span> Capture hotkey</h3>
+<div class="org-src-container">
+
+<pre  class="src src-emacs-lisp"><code trim>(<span style="color: #ffad29; font-weight: bold;">defun</span> <span style="color: #00ede1; font-weight: bold;">org-capture-input</span> () (<span style="color: #ffad29; font-weight: bold;">interactive</span>) (org-capture nil <span style="color: #e67128;">"i"</span>))
+(global-set-key (kbd <span style="color: #e67128;">"C-c c"</span>) 'org-capture-input)
 </code></pre>
 </div>
 </section>

@@ -5,16 +5,19 @@
 #+PROPERTY: header-args :tangle yes :results none
 #+COLUMNS: %25ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}]
 
-* Documentation
-** Tutorial
-The =C-h t= key will give you the minimal set of keys.  The most important ones
-being =C-p= and =C-n= to move
-
 
 * Basic
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
   :END:
+** Documentation
+*** Tutorial
+The key sequence: =C-h t= 
+#+ATTR_REVEAL: :frag (appear)
+- Very short
+- Good selection of things that are immediately useful
+- Emacs movement
+
 ** Minimalistic config
 *** Intro
     #+REVEAL: split
@@ -540,10 +543,7 @@ being =C-p= and =C-n= to move
  #+end_src
 
 
-* Phil
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
-  :END:
+* Advanced orgmode and GTD
 
 ** GTD
 *** Keymap for GTD keybindings
@@ -684,21 +684,21 @@ being =C-p= and =C-n= to move
  Run the agenda with "c" custom command.
 
 **** Agenda view commands
-This is equivalent to launching =org-agenda= and pressing a.
- #+begin_src emacs-lisp
- (defun gtd-agenda-view () (interactive)
-   (org-agenda nil "a"))
- #+end_src
- #+begin_src emacs-lisp
- (defun gtd-review-view () (interactive)
-   (org-agenda nil "c"))
- #+end_src
+ This is equivalent to launching =org-agenda= and pressing a.
+  #+begin_src emacs-lisp
+  (defun gtd-agenda-view () (interactive)
+    (org-agenda nil "a"))
+  #+end_src
+  #+begin_src emacs-lisp
+  (defun gtd-review-view () (interactive)
+    (org-agenda nil "c"))
+  #+end_src
 
- #+begin_src emacs-lisp
- (defun gtd-next-action-sparse-tree () (interactive)
-   (find-file gtd-project-list-file)
-   (org-agenda nil "gn"))
- #+end_src
+  #+begin_src emacs-lisp
+  (defun gtd-next-action-sparse-tree () (interactive)
+    (find-file gtd-project-list-file)
+    (org-agenda nil "gn"))
+  #+end_src
 
 **** Agenda view hotkeys
       Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
@@ -725,43 +725,136 @@ This is equivalent to launching =org-agenda= and pressing a.
     (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
     #+end_src
 
-
+    
 *** Agenda mode map customization
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
 
-I want to learn Emacs keybindings for most things so I don't want to evilify
-every single mode out there.
+ I want to learn Emacs keybindings for most things so I don't want to evilify
+ every single mode out there.
 
-However, doing =j= and =k= is a hard habbit to lose.  So I just remap the keys
-to print a message.
-#+begin_src emacs-lisp
-(add-hook 'org-agenda-mode-hook (lambda ()
-(define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
-  (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
-- Tulku: Cranston; Lamont Cranston.
-- Lamont Cranston: You know my real name?
-- Tulku: Yes. I also know that for as long as you can remember,
-	 you struggled against your own black heart and always lost. You
-	 watched your sprit, your very face change as the beast claws its
-	 way out from within you.
-j is deactivated
-It normally does org-agenda-goto-date")))))
-;; Originally org-agenda-capture : I use C-c c and I can't use k
-(add-hook 'org-agenda-mode-hook (lambda ()
-  (define-key org-agenda-mode-map (kbd "k") (lambda () (interactive)
-    (message " The Shadow: I saved your life, Roy Tam. It now belongs to me.
-- Dr. Tam: It does?
-k is deactivated
-It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
-#+end_src
+ However, doing =j= and =k= is a hard habbit to lose.  So I just remap the keys
+ to print a message.
+ #+begin_src emacs-lisp
+ (add-hook 'org-agenda-mode-hook (lambda ()
+ (define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
+   (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
+ - Tulku: Cranston; Lamont Cranston.
+ - Lamont Cranston: You know my real name?
+ - Tulku: Yes. I also know that for as long as you can remember,
+	  you struggled against your own black heart and always lost. You
+	  watched your sprit, your very face change as the beast claws its
+	  way out from within you.
+ j is deactivated
+ It normally does org-agenda-goto-date")))))
+ ;; Originally org-agenda-capture : I use C-c c and I can't use k
+ (add-hook 'org-agenda-mode-hook (lambda ()
+   (define-key org-agenda-mode-map (kbd "k") (lambda () (interactive)
+     (message " The Shadow: I saved your life, Roy Tam. It now belongs to me.
+ - Dr. Tam: It does?
+ k is deactivated
+ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
+ #+end_src
 
-#+RESULTS:
-| lambda | nil | (interactive) | (message  The Shadow: I saved your life, Roy Tam. It now belongs to me. |
+ #+RESULTS:
+ | lambda | nil | (interactive) | (message  The Shadow: I saved your life, Roy Tam. It now belongs to me. |
 
-** Advanced
-*** Magit
+** Remap C-x C-c for deamon usage
+    I use :q to quit
+ #+begin_src emacs-lisp
+ (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
+ #+end_src
+
+** Center cursor after shift-tab in orgmode
+ Places the current line in the center of the screen after a =S-TAB= in orgmode.
+ #+begin_src emacs-lisp :tangle no
+ (defun org-post-global-cycle () (interactive)
+   (recenter)
+   (org-beginning-of-line))
+ (advice-add 'org-global-cycle
+   :after #'org-post-global-cycle)
+ #+end_src
+ See [[help:advice-add]], basically, we can ask Emacs to add code to be run before
+ and/or after an emacs function is run.
+
+ You can use this to remove the "advice".
+ #+begin_src emacs-lisp :tangle no
+ (advice-remove 'org-global-cycle #'org-post-global-cycle)
+ #+end_src
+
+** Sane search and visibility controls
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
+
+ [[help:org-show-context-detail]]
+
+ #+begin_src emacs-lisp
+ (custom-set-variables
+  '(org-show-context-detail
+    '((agenda . canonical)
+      (bookmark-jump . canonical)
+      (isearch . canonical)
+      (default . canonical)))
+ #+end_src
+
+ They changed the default behavior recently.  There must be a good reason for
+ that so I want to try and get used to this new default.
+
+ This is why I want to leave this with tangle no.
+
+** Org roam
+
+ If orgmode is a note taking tool, [[https://www.orgroam.com][org-roam]] is a knowledge management system.
+
+ Here is the config from the [[https://github.com/org-roam/org-roam][official org-roam GitHub page]].
+
+ #+begin_src emacs-lisp
+ (use-package org-roam
+       :ensure t
+       :hook
+       (after-init . org-roam-mode)
+       :custom
+       (org-roam-directory "~/Documents/org-roam/")
+       :bind (:map org-roam-mode-map
+	       (("C-c n l" . org-roam)
+		("C-c n f" . org-roam-find-file)
+		("C-c n g" . org-roam-graph))
+	       :map org-mode-map
+	       (("C-c n i" . org-roam-insert))
+	       (("C-c n I" . org-roam-insert-immediate))))
+ #+end_src
+*** Discussion
+
+ From what I have seen, it seems that you would want this to be a different
+ directory than the agenda dir.
+
+ I plan to try it out but I have some reservations.
+
+ [[https://org-roam.discourse.group/t/integrating-existing-org-files-into-org-roam/1094/4][this post]] shows what I plan to do: have my agenda separate.
+
+ My reservations are about the tree structure of an orgmode document.  It is a
+ limitation and a gift.
+
+ In order to be able to navigate your tree you have to organize it in a certain
+ way: nodes can't have too many children and other concerns that can make
+ navigation easy or hard.
+
+ This isn't a problem in org roam.  Because links aren't restricted to forming
+ trees and can form arbitrary graphs.  This makes navigation of our notes super
+ easy but it doesn't force us to work as hard to organize them.
+
+ I have seen great benefit in arranging my knowledge in a tree structure that I
+ could navigate easily.
+
+ I could have achieved a structure that was more easy to navigate with less
+ effort with something like org-roam but the work of creating this very good tree
+ structure is something that paid off in other ways.
+
+
+* Other packages
+** Magit
 
  The most amazing vim plugin in existence.
 
@@ -775,7 +868,7 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
 
  Error (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntax* New
 
-*** Yasnippet
+** Yasnippet
  Note: package =yasnippet= doesn't come with the library of snippets but
  =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
  therefore we only need to install this one.
@@ -785,7 +878,7 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
    :config (yas-global-mode 1))
  #+end_src
 
-*** RSS
+** RSS
 
  From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
 
@@ -820,145 +913,3 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
  (setq-default elfeed-search-title-max-width 100)
  (setq-default elfeed-search-title-min-width 100)
  #+end_src
-
-*** Remap C-x C-c for deamon usage
-    I use :q to quit
- #+begin_src emacs-lisp
- (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
- #+end_src
-
-** Inactive stuff
-
-*** Dynamic cursor
-    :PROPERTIES:
-    :header-args: :tangle no
-    :END:
- Emacs crashed while I had this going.  I don't know if it is related.
- #+begin_src emacs-lisp
- (setq djcb-read-only-color       "gray")
- ;; valid values are t, nil, box, hollow, bar, (bar . WIDTH), hbar,
- ;; (hbar. HEIGHT); see the docs for set-cursor-type
-
- (setq djcb-read-only-cursor-type 'hbar)
- (setq djcb-overwrite-color       "red")
- (setq djcb-overwrite-cursor-type 'box)
- (setq djcb-normal-color          "yellow")
- (setq djcb-normal-cursor-type    'bar)
-
- (defun djcb-set-cursor-according-to-mode ()
-   "change cursor color and type according to some minor modes."
-
-   (cond
-     (buffer-read-only
-       (set-cursor-color djcb-read-only-color)
-       (setq cursor-type djcb-read-only-cursor-type))
-     (overwrite-mode
-       (set-cursor-color djcb-overwrite-color)
-       (setq cursor-type djcb-overwrite-cursor-type))
-     (t
-       (set-cursor-color djcb-normal-color)
-       (setq cursor-type djcb-normal-cursor-type))))
-
- (add-hook 'post-command-hook 'djcb-set-cursor-according-to-mode)
- #+end_src
-
-*** Evil terminal cursor
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle no
-    :END:
-
- #+begin_src emacs-lisp
- (unless (display-graphic-p)
-	   (require 'evil-terminal-cursor-changer)
-	   (evil-terminal-cursor-changer-activate) ; or (etcc-on)
-	   )
- #+end_src
-
-
-* Center cursor after shift-tab in orgmode
-Places the current line in the center of the screen after a =S-TAB= in orgmode.
-#+begin_src emacs-lisp :tangle no
-(defun org-post-global-cycle () (interactive)
-  (recenter)
-  (org-beginning-of-line))
-(advice-add 'org-global-cycle
-  :after #'org-post-global-cycle)
-#+end_src
-See [[help:advice-add]], basically, we can ask Emacs to add code to be run before
-and/or after an emacs function is run.
-
-You can use this to remove the "advice".
-#+begin_src emacs-lisp :tangle no
-(advice-remove 'org-global-cycle #'org-post-global-cycle)
-#+end_src
-
-* Sane search and visibility controls
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle no
-  :END:
-
-[[help:org-show-context-detail]]
-
-#+begin_src emacs-lisp
-(custom-set-variables
- '(org-show-context-detail
-   '((agenda . canonical)
-     (bookmark-jump . canonical)
-     (isearch . canonical)
-     (default . canonical)))
-#+end_src
-
-They changed the default behavior recently.  There must be a good reason for
-that so I want to try and get used to this new default.
-
-This is why I want to leave this with tangle no.
-
-* Org roam
-  
-If orgmode is a note taking tool, [[https://www.orgroam.com][org-roam]] is a knowledge management system.
-
-Here is the config from the [[https://github.com/org-roam/org-roam][official org-roam GitHub page]].
-
-#+begin_src emacs-lisp
-(use-package org-roam
-      :ensure t
-      :hook
-      (after-init . org-roam-mode)
-      :custom
-      (org-roam-directory "~/Documents/org-roam/")
-      :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-               ("C-c n f" . org-roam-find-file)
-               ("C-c n g" . org-roam-graph))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert))
-              (("C-c n I" . org-roam-insert-immediate))))
-#+end_src
-** Discussion
-
-From what I have seen, it seems that you would want this to be a different
-directory than the agenda dir.
-
-I plan to try it out but I have some reservations.
-
-[[https://org-roam.discourse.group/t/integrating-existing-org-files-into-org-roam/1094/4][this post]] shows what I plan to do: have my agenda separate.
-
-My reservations are about the tree structure of an orgmode document.  It is a
-limitation and a gift.
-
-In order to be able to navigate your tree you have to organize it in a certain
-way: nodes can't have too many children and other concerns that can make
-navigation easy or hard.
-
-This isn't a problem in org roam.  Because links aren't restricted to forming
-trees and can form arbitrary graphs.  This makes navigation of our notes super
-easy but it doesn't force us to work as hard to organize them.
-
-I have seen great benefit in arranging my knowledge in a tree structure that I
-could navigate easily.
-
-I could have achieved a structure that was more easy to navigate with less
-effort with something like org-roam but the work of creating this very good tree
-structure is something that paid off in other ways.
-
-

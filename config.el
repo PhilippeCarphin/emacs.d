@@ -52,7 +52,7 @@
 (use-package company
   :ensure t
   :config (global-company-mode)
-          (setq company-idle-delay 0))
+	  (setq company-idle-delay 0))
 
 (use-package evil
   :ensure t
@@ -60,20 +60,20 @@
 	(setq evil-want-integration t)
 	(setq evil-want-C-u-scroll t)
   :config (evil-mode 1)
-          (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-          (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-          (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-          (setq evil-default-state 'emacs)
-          (setq evil-insert-state-modes nil)
-          (setq evil-motion-state-modes nil)
-          (setq evil-normal-state-modes '(fundamental-mode
-                                          conf-mode
-                                          prog-mode
-                                          text-mode
-                                          dired))
+	  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+	  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+	  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+	  (setq evil-default-state 'emacs)
+	  (setq evil-insert-state-modes nil)
+	  (setq evil-motion-state-modes nil)
+	  (setq evil-normal-state-modes '(fundamental-mode
+					  conf-mode
+					  prog-mode
+					  text-mode
+					  dired))
 	  (setq evil-insert-state-cursor '((bar . 2) "lime green")
 	      evil-normal-state-cursor '(box "yellow"))
-          (add-hook 'with-editor-mode-hook 'evil-insert-state))
+	  (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
 (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
 (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
@@ -81,6 +81,11 @@
 
 (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+
+(add-hook 'evil-insert-state-exit-hook (lambda () (blink-cursor-mode 0)))
+(add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 1)))
+
+(blink-cursor-mode 0)
 
 (defun about-this-keymap () (interactive)
   (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
@@ -187,7 +192,11 @@
 (setq org-agenda-dir "~/Documents/gtd")
 (setq org-agenda-files (list org-agenda-dir))
 
-(setq org-capture-templates 
+(setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-use-outline-path 'file)
+
+(setq org-capture-templates
   '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
      "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
 
@@ -226,17 +235,17 @@
 (define-key gtd (kbd "n") 'gtd-open-next-actions)
 
 (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			  (sequence 
-                             "GTD-IN(i)"
-                             "GTD-CLARIFY(c)"
+			  (sequence
+			     "GTD-IN(i)"
+			     "GTD-CLARIFY(c)"
 			     "GTD-PROJECT(p)"
-                             "GTD-SOMEDAY-MAYBE(s)"
+			     "GTD-SOMEDAY-MAYBE(s)"
 			     "GTD-ACTION(a)"
-                             "GTD-NEXT-ACTION(n)"
-                             "GTD-WAITING(w)"
+			     "GTD-NEXT-ACTION(n)"
+			     "GTD-WAITING(w)"
 			     "|"
-                             "GTD-REFERENCE(r)"
-                             "GTD-DELEGATED(g)"
+			     "GTD-REFERENCE(r)"
+			     "GTD-DELEGATED(g)"
 			     "GTD-DONE(d)")))
 
 (setq org-todo-keyword-faces
@@ -251,9 +260,9 @@
 
 (setq org-stuck-projects
       '("TODO=\"GTD-PROJECT\"" ;; Search query
-        ("GTD-NEXT-ACTION")    ;; Not stuck if contains
-        ()                     ;; Stuck if contains
-        ""))                   ;; General regex
+	("GTD-NEXT-ACTION")    ;; Not stuck if contains
+	()                     ;; Stuck if contains
+	""))                   ;; General regex
 
 (setq org-agenda-span 7
       org-agenda-start-on-weekday 0
@@ -261,16 +270,16 @@
 
 (setq org-agenda-custom-commands
       '(("c" "Simple agenda view"
-          ((tags "PRIORITY=\"A\"")
-           (stuck "" )
-           (agenda "")
-           (todo "GTD-ACTION")))
-        ("g" . "GTD keyword searches searches")
-        ("gi" todo "GTD-IN")
-        ("gc" todo "GTD-CLARIFY")
-        ("ga" todo "GTD-ACTION")
-        ("gn" todo-tree "GTD-NEXT-ACTION")
-        ("gp" todo "GTD-PROJECT")))
+	  ((tags "PRIORITY=\"A\"")
+	   (stuck "" )
+	   (agenda "")
+	   (todo "GTD-ACTION")))
+	("g" . "GTD keyword searches searches")
+	("gi" todo "GTD-IN")
+	("gc" todo "GTD-CLARIFY")
+	("ga" todo "GTD-ACTION")
+	("gn" todo-tree "GTD-NEXT-ACTION")
+	("gp" todo "GTD-PROJECT")))
 
 (defun gtd-agenda-view () (interactive)
   (org-agenda nil "a"))
@@ -296,10 +305,10 @@
 - Tulku: Cranston; Lamont Cranston.
 - Lamont Cranston: You know my real name?
 - Tulku: Yes. I also know that for as long as you can remember,
-         you struggled against your own black heart and always lost. You
-         watched your sprit, your very face change as the beast claws its
-         way out from within you.
-j is deactivated 
+	 you struggled against your own black heart and always lost. You
+	 watched your sprit, your very face change as the beast claws its
+	 way out from within you.
+j is deactivated
 It normally does org-agenda-goto-date")))))
 ;; Originally org-agenda-capture : I use C-c c and I can't use k
 (add-hook 'org-agenda-mode-hook (lambda ()
@@ -308,6 +317,22 @@ It normally does org-agenda-goto-date")))))
 - Dr. Tam: It does?
 k is deactivated
 It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
+
+(global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
+
+(use-package org-roam
+      :ensure t
+      :hook
+      (after-init . org-roam-mode)
+      :custom
+      (org-roam-directory "~/Documents/org-roam/")
+      :bind (:map org-roam-mode-map
+	      (("C-c n l" . org-roam)
+	       ("C-c n f" . org-roam-find-file)
+	       ("C-c n g" . org-roam-graph))
+	      :map org-mode-map
+	      (("C-c n i" . org-roam-insert))
+	      (("C-c n I" . org-roam-insert-immediate))))
 
 (use-package magit
   :ensure t
@@ -318,34 +343,32 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
   :ensure t
   :config (yas-global-mode 1))
 
-;; data is stored in ~/.elfeed 
+;; data is stored in ~/.elfeed
 (use-package elfeed :ensure t)
 (setq elfeed-feeds
       '(
-        ;; programming
-        ("https://news.ycombinator.com/rss" hacker)
-        ("https://www.heise.de/developer/rss/news-atom.xml" heise)
-        ("https://www.reddit.com/r/programming.rss" programming)
-        ("https://www.reddit.com/r/emacs.rss" emacs)
+	;; programming
+	("https://news.ycombinator.com/rss" hacker)
+	("https://www.heise.de/developer/rss/news-atom.xml" heise)
+	("https://www.reddit.com/r/programming.rss" programming)
+	("https://www.reddit.com/r/emacs.rss" emacs)
 
-        ;; programming languages
-        ("https://www.reddit.com/r/golang.rss" golang)
-        ("https://www.reddit.com/r/java.rss" java)
-        ("https://www.reddit.com/r/javascript.rss" javascript)
-        ("https://www.reddit.com/r/typescript.rss" typescript)
-        ("https://www.reddit.com/r/clojure.rss" clojure)
-        ("https://www.reddit.com/r/python.rss" python)
+	;; programming languages
+	("https://www.reddit.com/r/golang.rss" golang)
+	("https://www.reddit.com/r/java.rss" java)
+	("https://www.reddit.com/r/javascript.rss" javascript)
+	("https://www.reddit.com/r/typescript.rss" typescript)
+	("https://www.reddit.com/r/clojure.rss" clojure)
+	("https://www.reddit.com/r/python.rss" python)
 
-        ;; cloud
-        ("https://www.reddit.com/r/aws.rss" aws)
-        ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
-        ("https://www.reddit.com/r/azure.rss" azure)
-        ("https://www.reddit.com/r/devops.rss" devops)
-        ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
+	;; cloud
+	("https://www.reddit.com/r/aws.rss" aws)
+	("https://www.reddit.com/r/googlecloud.rss" googlecloud)
+	("https://www.reddit.com/r/azure.rss" azure)
+	("https://www.reddit.com/r/devops.rss" devops)
+	("https://www.reddit.com/r/kubernetes.rss" kubernetes)
 ))
 
 (setq-default elfeed-search-filter "@2-days-ago +unread")
 (setq-default elfeed-search-title-max-width 100)
 (setq-default elfeed-search-title-min-width 100)
-
-(global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
