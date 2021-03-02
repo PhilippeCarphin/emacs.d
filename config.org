@@ -516,7 +516,7 @@ being =C-p= and =C-n= to move
     
 *** Refile targets
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
  https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
  #+begin_src emacs-lisp
