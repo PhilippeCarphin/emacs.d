@@ -166,8 +166,6 @@
     '((shell . t)
       (python . t)))
 
-(setq org-confirm-babel-evaluate nil)
-
 (defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
 (defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
 (defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
