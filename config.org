@@ -266,6 +266,27 @@
  (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
  #+end_src
 
+**** Cursor blinking
+
+  Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
+  fois avant d'arrêter).
+
+  #+begin_src emacs-lisp
+  (add-hook 'evil-insert-state-exit-hook (lambda () (blink-cursor-mode 0)))
+  (add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 1)))
+  #+end_src
+
+  This sets the amount of cursor blinks before the flashing stop.
+
+  #+begin_src 
+  (setq blink-cursor-blinks 0)
+  #+end_src
+  
+  Make sure the cursor starts out not blinking
+
+  #+begin_src emacs-lisp
+  (blink-cursor-mode 0)
+  #+end_src
 *** Help   
 **** Helper keymap
    
