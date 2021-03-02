@@ -5,6 +5,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-show-context-detail
+   '((agenda . canonical)
+     (bookmark-jump . canonical)
+     (isearch . canonical)
+     (default . canonical)))
  '(package-selected-packages
    '(htmlize ox-reveal ox-twbs ox-rst ox-gfm org-bullets evil company which-key helm undo-tree use-package)))
 (custom-set-faces
@@ -12,4 +17,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(default ((t (:height 200))))
  '(cursor ((t (:background "SlateGray3")))))

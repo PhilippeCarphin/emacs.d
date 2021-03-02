@@ -163,6 +163,9 @@
 (defun org-capture-input () (interactive) (org-capture nil "i"))
 (global-set-key (kbd "C-c c") 'org-capture-input)
 
+(setq org-startup-with-inline-images t)
+(setq org-image-actual-width 100)
+
 (global-set-key (kbd "C-c a a") 'gtd-agenda-view)
 (global-set-key (kbd "C-c a c") 'gtd-review-view)
 (global-set-key (kbd "C-c a n") 'gtd-next-action-sparse-tree)
