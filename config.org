@@ -93,7 +93,7 @@ it is kind of annoying in =misterioso=.
 #+end_src
 *** Cursor style
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle no
     :END:
 
  This will make our cursor a vertical bar instead of a box.
@@ -123,7 +123,7 @@ it is kind of annoying in =misterioso=.
 
 *** Wrapping
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
 
  Automattically hard-wrap text on 80 chars.
@@ -160,7 +160,7 @@ it is kind of annoying in =misterioso=.
 
 *** Startup font
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
 
  To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
@@ -271,7 +271,7 @@ it is kind of annoying in =misterioso=.
 
 **** Install and activate
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
 
  #+begin_src emacs-lisp :results none
@@ -306,7 +306,7 @@ it is kind of annoying in =misterioso=.
 
 **** Vim like window split keys
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
 
  #+begin_src emacs-lisp
@@ -317,7 +317,7 @@ it is kind of annoying in =misterioso=.
 
 **** Map undo keys to undo-tree function
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
 
  #+begin_src emacs-lisp
@@ -327,7 +327,7 @@ it is kind of annoying in =misterioso=.
 
 **** Cursor blinking
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
 
   Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
@@ -592,7 +592,7 @@ dispatcher opens it after that function has run.
 
 **** Disable prompt
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
  As a security precaution this is off by default.  It would indeed be quite
  surprising if your text editor runs a shell command if you accidently do =C-c
@@ -722,7 +722,7 @@ is there, it will go in the export regardless of this setting.
 ** GTD
 *** Keymap for GTD keybindings
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
       We define a keymap that will be accessed with =SPC a g=
  #+begin_src emacs-lisp
@@ -738,7 +738,7 @@ is there, it will go in the export regardless of this setting.
 *** GTD files
 **** Filename symbols
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
  #+begin_src emacs-lisp :results none
  (cond
@@ -759,7 +759,7 @@ is there, it will go in the export regardless of this setting.
  #+end_src
 **** Quick access to GTD files
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
 
  We use it to create bindings in the =gtd= map to open files
@@ -778,7 +778,7 @@ is there, it will go in the export regardless of this setting.
    #+REVEAL: split
 *** Todo keywords for GTD
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
 
  The first set of keywords is a generic set of keywords that I can give TODO
@@ -816,7 +816,7 @@ is there, it will go in the export regardless of this setting.
    #+REVEAL: split
 *** Definition of stuck projects
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
 
  In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
@@ -833,7 +833,7 @@ is there, it will go in the export regardless of this setting.
 
 *** Date interval for agenda view
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
 
  The default is kind of annoying.  It shows a week starting on a Sunday but what
@@ -861,7 +861,7 @@ Don't show the file and control spacing so that all entries are aligned.
 *** Agenda custom commands
 **** Definition
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
   #+begin_src emacs-lisp
     (setq org-agenda-custom-commands
@@ -886,7 +886,7 @@ Don't show the file and control spacing so that all entries are aligned.
 
 **** Agenda view commands
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :HEADER-ARGS: :tangle yes
      :END:
  This is equivalent to launching =org-agenda= and pressing a.
   #+begin_src emacs-lisp
@@ -919,14 +919,14 @@ Don't show the file and control spacing so that all entries are aligned.
 
 *** Closing notes
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
  #+begin_src emacs-lisp :results none
  (setq org-log-done 'note)
  #+end_src
 *** Evil mode agenda binding (SPC a g)
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
      Only use this if evil mode is activated
 
@@ -969,7 +969,7 @@ Don't show the file and control spacing so that all entries are aligned.
 
 ** Remap C-x C-c for deamon usage
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
     I use :q to quit
  #+begin_src emacs-lisp
@@ -1001,6 +1001,9 @@ Don't show the file and control spacing so that all entries are aligned.
    :HEADER-ARGS: :tangle no
    :END:
 
+This affects how sparse trees are shown.  This setting makes sparse trees pretty
+much useless.
+
  [[help:org-show-context-detail]]
 
  #+begin_src emacs-lisp
@@ -1019,7 +1022,7 @@ Don't show the file and control spacing so that all entries are aligned.
 
 ** Org roam
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 
  If orgmode is a note taking tool, [[https://www.orgroam.com][org-roam]] is a knowledge management system.
@@ -1074,7 +1077,7 @@ get =Symbol's function definition is void: f-directory-p=.
 * Other packages
 ** Magit
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 
  The most amazing vim plugin in existence.
@@ -1091,7 +1094,7 @@ get =Symbol's function definition is void: f-directory-p=.
 
 ** Yasnippet
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
  Note: package =yasnippet= doesn't come with the library of snippets but
  =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
@@ -1104,7 +1107,7 @@ get =Symbol's function definition is void: f-directory-p=.
 
 ** RSS
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 
  From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
