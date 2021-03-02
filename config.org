@@ -6,6 +6,9 @@
 
 
 * Basic
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
 ** Documentation
 *** Tutorial
     :PROPERTIES:
@@ -620,6 +623,9 @@ The key sequence: =C-h t=
 
 
 * Advanced orgmode and GTD
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
 
 ** GTD
 *** Keymap for GTD keybindings
@@ -952,6 +958,9 @@ get =Symbol's function definition is void: f-directory-p=.
 
 
 * Other packages
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
 ** Magit
    :PROPERTIES:
    :header-args: :tangle no

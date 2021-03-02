@@ -84,25 +84,6 @@
     '((shell . t)
       (python . t)))
 
-(defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
-(defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
-(defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
-(defun ox-html () (interactive) (browse-url (org-html-export-to-html nil t)))
-(defun ox-html-all () (interactive) (browse-url (org-html-export-to-html nil nil)))
-(defun ox-rst () (interactive) (org-open-file (org-rst-export-to-rst nil t)))
-(defun ox-rst-all () (interactive) (org-open-file (org-rst-export-to-rst nil nil)))
-(easy-menu-define present-menu org-mode-map
-  "Menu for word navigation commands."
-  '("Present"
-    ["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
-    ["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
-    ["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
-    ["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
-    ["View RST Right Now (C-c C-e C-s r R)" ox-rst]
-    ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
-    ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
-    ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
-
 (setq org-agenda-dir "~/Documents/gtd")
 (setq org-agenda-files (list org-agenda-dir))
 
@@ -113,6 +94,3 @@
 (setq org-capture-templates
   '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
      "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
-
-(defun org-capture-input () (interactive) (org-capture nil "i"))
-(global-set-key (kbd "C-c c") 'org-capture-input)
