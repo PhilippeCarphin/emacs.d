@@ -34,6 +34,9 @@ The key sequence: =C-h t=
 
  Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
 *** Package stuff
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
     Standard stuff that is at the start of everyone's config file.
  #+begin_src emacs-lisp
