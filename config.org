@@ -873,3 +873,41 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
 	   )
  #+end_src
 
+
+* Center cursor after shift-tab in orgmode
+Places the current line in the center of the screen after a =S-TAB= in orgmode.
+#+begin_src emacs-lisp :tangle no
+(defun org-post-global-cycle () (interactive)
+  (recenter)
+  (org-beginning-of-line))
+(advice-add 'org-global-cycle
+  :after #'org-post-global-cycle)
+#+end_src
+See [[help:advice-add]], basically, we can ask Emacs to add code to be run before
+and/or after an emacs function is run.
+
+You can use this to remove the "advice".
+#+begin_src emacs-lisp :tangle no
+(advice-remove 'org-global-cycle #'org-post-global-cycle)
+#+end_src
+
+* Sane search and visibility controls
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle no
+  :END:
+
+[[help:org-show-context-detail]]
+
+#+begin_src emacs-lisp
+(custom-set-variables
+ '(org-show-context-detail
+   '((agenda . canonical)
+     (bookmark-jump . canonical)
+     (isearch . canonical)
+     (default . canonical)))
+#+end_src
+
+They changed the default behavior recently.  There must be a good reason for
+that so I want to try and get used to this new default.
+
+This is why I want to leave this with tangle no.
