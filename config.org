@@ -2,16 +2,15 @@
 #+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
 #+REVEAL_HLEVEL: 4
-#+PROPERTY: header-args :tangle yes :results none
 #+COLUMNS: %25ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}]
 
 
 * Basic
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
-  :END:
 ** Documentation
 *** Tutorial
+    :PROPERTIES:
+    :header-args: :tangle no
+    :END:
 The key sequence: =C-h t= 
 #+ATTR_REVEAL: :frag (appear)
 - Very short
@@ -20,6 +19,9 @@ The key sequence: =C-h t=
 
 ** Minimalistic config
 *** Intro
+    :PROPERTIES:
+    :header-args: :tangle no
+    :END:
     #+REVEAL: split
  An elementary that can be taken as is to start from oriented towards leveragin
  the full power of orgmode immediately.
@@ -34,6 +36,9 @@ The key sequence: =C-h t=
 
  Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
 *** Package stuff
+    :PROPERTIES:
+    :header-args: :tangle yes
+    :END:
 
     Standard stuff that is at the start of everyone's config file.
  #+begin_src emacs-lisp
@@ -43,6 +48,8 @@ The key sequence: =C-h t=
  (add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
  (package-initialize)
  #+end_src
+
+ #+RESULTS:
 
  Standard way for installing packages.  This replaces the use of =(require
  a-package)= and adds convenience functions.
@@ -55,6 +62,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Scrolling behavior
+    :PROPERTIES:
+    :header-args: :tangle yes
+    :END:
 
  - =scroll-margin= Distance between cursor and top/bottom before scrolling starts.
  - =scroll-step= makes the window move one line at a time.
@@ -65,6 +75,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Cursor style
+    :PROPERTIES:
+    :header-args: :tangle yes
+    :END:
 
  This will make our cursor a vertical bar instead of a box.
 
@@ -84,7 +97,7 @@ The key sequence: =C-h t=
 
 *** Cursor blink
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
 
  #+begin_src emacs-lisp
@@ -93,7 +106,7 @@ The key sequence: =C-h t=
 
 *** Wrapping
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
 
  Automattically hard-wrap text on 80 chars.
@@ -105,7 +118,7 @@ The key sequence: =C-h t=
 
 *** Startup color theme
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :header-args: :tangle yes
     :END:
 
  Dark theme that exports well
@@ -133,7 +146,7 @@ The key sequence: =C-h t=
 
 *** Startup font
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
 
  To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
@@ -146,7 +159,7 @@ The key sequence: =C-h t=
 
 **** Undo tree
      :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
+     :header-args: :tangle yes
      :END:
      Use =C-x u= to get an undo tree buffer, really strong!
  #+begin_src emacs-lisp
@@ -156,7 +169,7 @@ The key sequence: =C-h t=
  #+end_src
 **** Helm
       :PROPERTIES:
-      :HEADER-ARGS: :tangle yes
+      :header-args: :tangle yes
       :END:
 
  Improve searching interface all over emacs.
@@ -199,7 +212,7 @@ The key sequence: =C-h t=
 
 **** Which-key
      :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
+     :header-args: :tangle yes
      :END:
 
  Help discovering available key sequences in all contexts.
@@ -220,7 +233,7 @@ The key sequence: =C-h t=
 
 **** Standard autocomplete
      :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
+     :header-args: :tangle yes
      :END:
 
  #+begin_src emacs-lisp
@@ -231,7 +244,7 @@ The key sequence: =C-h t=
  #+end_src
 *** Evil mode
     :PROPERTIES:
-    :HEADER-ARGS:
+    :header-args:
     :END:
 
  Evil-mode is a by far the best VI emulation out there.  It is very exact.
@@ -247,7 +260,7 @@ The key sequence: =C-h t=
 
 **** Install and activate
      :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
+     :header-args: :tangle yes
      :END:
 
  #+begin_src emacs-lisp :results none
@@ -273,14 +286,14 @@ The key sequence: =C-h t=
 	     (add-hook 'with-editor-mode-hook 'evil-insert-state))
  #+end_src
 
+ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3 : Keybindings and Evil]] et la config de Sam.
+
  The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
  the TAB key doesn't work properly.
 
- Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3 : Keybindings and Evil]] et la config de Sam.
-
 **** Vim like window split keys
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :header-args: :tangle no
      :END:
 
  #+begin_src emacs-lisp
@@ -291,7 +304,7 @@ The key sequence: =C-h t=
 
 **** Map undo keys to undo-tree function
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :header-args: :tangle no
      :END:
 
  #+begin_src emacs-lisp
@@ -323,7 +336,7 @@ The key sequence: =C-h t=
 *** Help
 **** Helper keymap
      :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
+     :header-args: :tangle yes
      :END:
 
   A keymap of keys to know to get started.  You should get rid of this of this
@@ -407,7 +420,7 @@ The key sequence: =C-h t=
 
 **** Help menu
      :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
+     :header-args: :tangle yes
      :END:
        #+begin_src emacs-lisp
       (defun org-agenda-help () (interactive)
@@ -442,7 +455,7 @@ The key sequence: =C-h t=
 ** Basic org configuration
 *** Bullets
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :header-args: :tangle yes
     :END:
 
  Show nice bullets
@@ -457,7 +470,7 @@ The key sequence: =C-h t=
 
 *** Exporting
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :header-args: :tangle yes
     :END:
 
  - =ox-twbs= to export to beautiful HTML
@@ -487,7 +500,7 @@ The key sequence: =C-h t=
 
 **** Babel config
      :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
+     :header-args: :tangle yes
      :END:
  We simply add languages that we want to become available.  There are many more
  but some of them require installing extra packages.
@@ -500,7 +513,7 @@ The key sequence: =C-h t=
 
 **** Disable prompt
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :header-args: :tangle no
      :END:
  As a security precaution this is off by default.  It would indeed be quite
  surprising if your text editor runs a shell command if you accidently do =C-c
@@ -540,7 +553,7 @@ The key sequence: =C-h t=
 
 *** Center cursor after shift-tab in orgmode
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
   Places the current line in the center of the screen after a =S-TAB= in orgmode.
   #+begin_src emacs-lisp :tangle no
@@ -561,7 +574,7 @@ The key sequence: =C-h t=
 ** Basic org agenda configuration
 *** Agena files
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :header-args: :tangle yes
     :END:
  #+begin_src emacs-lisp
  (setq org-agenda-dir "~/Documents/gtd")
@@ -569,7 +582,7 @@ The key sequence: =C-h t=
  #+end_src
 *** Agenda Key
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
  I mapped a key because I like to pop in and out of it. I don't use it myself
  because the I put =org-agenda= on a keymap for my GTD stuff.
@@ -582,7 +595,7 @@ The key sequence: =C-h t=
 
 *** Refile targets
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :header-args: :tangle yes
     :END:
  https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
  #+begin_src emacs-lisp
@@ -592,7 +605,7 @@ The key sequence: =C-h t=
  #+end_src
 *** Capture templates
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :header-args: :tangle yes
     :END:
  #+begin_src emacs-lisp
  (setq org-capture-templates
@@ -611,7 +624,7 @@ The key sequence: =C-h t=
 ** GTD
 *** Keymap for GTD keybindings
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
       We define a keymap that will be accessed with =SPC a g=
  #+begin_src emacs-lisp
@@ -632,7 +645,7 @@ The key sequence: =C-h t=
 
 *** GTD files
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
 **** Filename symbols
  #+begin_src emacs-lisp :results none
@@ -670,7 +683,7 @@ The key sequence: =C-h t=
    #+REVEAL: split
 *** Todo keywords for GTD
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
 
  The first set of keywords is a generic set of keywords that I can give TODO
@@ -708,7 +721,7 @@ The key sequence: =C-h t=
    #+REVEAL: split
 *** Definition of stuck projects
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
 
  In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
@@ -725,7 +738,7 @@ The key sequence: =C-h t=
 
 *** Date interval for agenda view
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
 
  The default is kind of annoying.  It shows a week starting on a Sunday but what
@@ -744,11 +757,11 @@ The key sequence: =C-h t=
 
 *** Agenda custom commands
     :PROPERTIES:
-    :HEADER-ARGS:
+    :header-args:
     :END:
 **** Definition
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :header-args: :tangle no
      :END:
   #+begin_src emacs-lisp
   (setq org-agenda-custom-commands
@@ -769,7 +782,7 @@ The key sequence: =C-h t=
 
 **** Agenda view commands
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :header-args: :tangle no
      :END:
  This is equivalent to launching =org-agenda= and pressing a.
   #+begin_src emacs-lisp
@@ -789,7 +802,7 @@ The key sequence: =C-h t=
 
 **** Agenda view hotkeys
      :PROPERTIES:
-     :HEADER-ARGS: :tangle no
+     :header-args: :tangle no
      :END:
       Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
       non-prefix key.
@@ -802,14 +815,14 @@ The key sequence: =C-h t=
 
 *** Closing notes
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
  #+begin_src emacs-lisp :results none
  (setq org-log-done 'note)
  #+end_src
 *** Evil mode agenda binding (SPC a g)
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
      Only use this if evil mode is activated
 
@@ -821,7 +834,7 @@ The key sequence: =C-h t=
     
 *** Agenda mode map customization
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :header-args: :tangle no
     :END:
 
  I want to learn Emacs keybindings for most things so I don't want to evilify
@@ -855,7 +868,7 @@ The key sequence: =C-h t=
 
 ** Remap C-x C-c for deamon usage
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :header-args: :tangle no
    :END:
     I use :q to quit
  #+begin_src emacs-lisp
@@ -864,7 +877,7 @@ The key sequence: =C-h t=
 
 ** Sane search and visibility controls
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :header-args: :tangle no
    :END:
 
  [[help:org-show-context-detail]]
@@ -885,7 +898,7 @@ The key sequence: =C-h t=
 
 ** Org roam
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :header-args: :tangle no
    :END:
 
  If orgmode is a note taking tool, [[https://www.orgroam.com][org-roam]] is a knowledge management system.
@@ -941,7 +954,7 @@ get =Symbol's function definition is void: f-directory-p=.
 * Other packages
 ** Magit
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :header-args: :tangle no
    :END:
 
  The most amazing vim plugin in existence.
@@ -958,7 +971,7 @@ get =Symbol's function definition is void: f-directory-p=.
 
 ** Yasnippet
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :header-args: :tangle no
    :END:
  Note: package =yasnippet= doesn't come with the library of snippets but
  =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
@@ -971,7 +984,7 @@ get =Symbol's function definition is void: f-directory-p=.
 
 ** RSS
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :header-args: :tangle no
    :END:
 
  From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
