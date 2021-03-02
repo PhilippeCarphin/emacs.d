@@ -49,27 +49,6 @@
   :config (global-company-mode)
 	  (setq company-idle-delay 0))
 
-(use-package evil
-  :ensure t
-  :init (setq evil-want-C-i-jump nil)
-	(setq evil-want-integration t)
-	(setq evil-want-C-u-scroll t)
-  :config (evil-mode 1)
-	  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-	  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-	  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-	  (setq evil-default-state 'emacs)
-	  (setq evil-insert-state-modes nil)
-	  (setq evil-motion-state-modes nil)
-	  (setq evil-normal-state-modes '(fundamental-mode
-					  conf-mode
-					  prog-mode
-					  text-mode
-					  dired))
-	  (setq evil-insert-state-cursor '((bar . 2) "lime green")
-	      evil-normal-state-cursor '(box "yellow"))
-	  (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
 (defun about-this-keymap () (interactive)
   (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
 
@@ -187,8 +166,6 @@
 (global-set-key (kbd "C-c a a") 'gtd-agenda-view)
 (global-set-key (kbd "C-c a c") 'gtd-review-view)
 (global-set-key (kbd "C-c a n") 'gtd-next-action-sparse-tree)
-
-(define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 
 (add-hook 'org-agenda-mode-hook (lambda ()
 (define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)

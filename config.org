@@ -249,6 +249,9 @@ The key sequence: =C-h t=
  something barely noticed.
 
 **** Install and activate
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
 
  #+begin_src emacs-lisp :results none
    (use-package evil
@@ -800,7 +803,7 @@ The key sequence: =C-h t=
  #+end_src
 *** Evil mode agenda binding (SPC a g)
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle no
     :END:
      Only use this if evil mode is activated
 
