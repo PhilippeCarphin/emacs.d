@@ -867,6 +867,9 @@ get =Symbol's function definition is void: f-directory-p=.
 
 * Other packages
 ** Magit
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
 
  The most amazing vim plugin in existence.
 
@@ -881,6 +884,9 @@ get =Symbol's function definition is void: f-directory-p=.
  Error (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntax* New
 
 ** Yasnippet
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
  Note: package =yasnippet= doesn't come with the library of snippets but
  =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
  therefore we only need to install this one.
@@ -891,6 +897,9 @@ get =Symbol's function definition is void: f-directory-p=.
  #+end_src
 
 ** RSS
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
 
  From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
 
