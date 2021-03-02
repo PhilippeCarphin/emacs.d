@@ -157,7 +157,7 @@
 (use-package ox-twbs :ensure t)
 (use-package ox-reveal :ensure t
   :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
-;; (use-package htmlize :ensure t)
+(use-package htmlize :ensure t)
 
 (org-babel-do-load-languages 'org-babel-load-languages
     '((shell . t)
@@ -200,8 +200,14 @@
 (define-key gtd (kbd "a") 'org-agenda)
 (define-key gtd (kbd "c") 'org-capture)
 
-(setq org-agenda-dir "~/NDocuments/gtd/")
-(setq org-agenda-files '("~/NDocuments/gtd"))
+(cond
+((string-equal system-type "windows-nt")
+ (progn (setq org-agenda-dir "c:\\Users\\phil1\\Documents\\gtd")))
+((string-equal system-type "darwin") ;  macOS
+ (progn (setq org-agenda-dir "~/Documents/gtd/")))
+((string-equal system-type "gnu/linux")
+ (progn (setq org-agenda-dir "~/Documents/gtd/"))))
+(setq org-agenda-files (list org-agenda-dir))
 (setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
     gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
     gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
