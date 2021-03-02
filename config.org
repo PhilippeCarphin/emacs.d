@@ -3,6 +3,10 @@
 #+REVEAL_HLEVEL: 4
 #+PROPERTY: header-args :tangle yes :results none
 #+COLUMNS: %25ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}]
+* Documentation
+** Tutorial
+The =C-h t= key will give you the minimal set of keys.  The most important ones
+being =C-p= and =C-n= to move
 
 * Basic
   :PROPERTIES:
