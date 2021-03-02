@@ -805,27 +805,31 @@ The key sequence: =C-h t=
  This is why I want to leave this with tangle no.
 
 ** Org roam
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
 
  If orgmode is a note taking tool, [[https://www.orgroam.com][org-roam]] is a knowledge management system.
 
  Here is the config from the [[https://github.com/org-roam/org-roam][official org-roam GitHub page]].
-
- #+begin_src emacs-lisp :tangle no
- (if (f-directory-p "~/Documents/org-roam/")
-     (use-package org-roam
-       :ensure t
-       :hook
-       (after-init . org-roam-mode)
-       :custom
-       (org-roam-directory "~/Documents/org-roa/")
-       :bind (:map org-roam-mode-map
-              (("C-c n l" . org-roam)
-              ("C-c n f" . org-roam-find-file)
-              ("C-c n g" . org-roam-graph))
-              :map org-mode-map
-              (("C-c n i" . org-roam-insert))
-              (("C-c n I" . org-roam-insert-immediate))))
-     (message "Org-roam directory does not exist, activating org-roam-mode would make emacs hang"))
+ 
+*WARNING* This will make emacs hang at startup if the directory doesn't exist.
+See parent commit, I had an IF to check the directory using =f-directory-p=
+which worked when I pressed =C-c C-c= on a source block.  However at startup I
+get =Symbol's function definition is void: f-directory-p=.
+ 
+ #+begin_src emacs-lisp
+    (use-package org-roam
+    :ensure t
+    :hook (after-init . org-roam-mode)
+    :custom (org-roam-directory "~/Documents/org-roam/")
+    :bind (:map org-roam-mode-map
+	    (("C-c n l" . org-roam)
+	     ("C-c n f" . org-roam-find-file)
+	     ("C-c n g" . org-roam-graph))
+	   :map org-mode-map
+	    (("C-c n i" . org-roam-insert))
+	    (("C-c n I" . org-roam-insert-immediate))))
  #+end_src
 *** Discussion
 
