@@ -889,7 +889,7 @@ The key sequence: =C-h t=
     '((agenda . canonical)
       (bookmark-jump . canonical)
       (isearch . canonical)
-      (default . canonical)))
+      (default . canonical))))
  #+end_src
 
  They changed the default behavior recently.  There must be a good reason for
