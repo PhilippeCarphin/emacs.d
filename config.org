@@ -2,6 +2,7 @@
 #+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
 #+REVEAL_HLEVEL: 4
+#+PROPERTY: hearder-args :tangle no :results none
 #+COLUMNS: %25ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}]
 
 
@@ -313,6 +314,9 @@ The key sequence: =C-h t=
  #+end_src
 
 **** Cursor blinking
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
 
   Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
   fois avant d'arrêter).
@@ -527,6 +531,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Present GUI menu
+    :PROPERTIES:
+    :header-args: :tangle yes
+    :END:
 
    This adds the "Present" menu at the top with menu item "Present Now".
 
@@ -605,7 +612,7 @@ The key sequence: =C-h t=
  #+end_src
 *** Capture templates
     :PROPERTIES:
-    :header-args: :tangle yes
+    :header-args: :tangle no
     :END:
  #+begin_src emacs-lisp
  (setq org-capture-templates
@@ -613,6 +620,9 @@ The key sequence: =C-h t=
       "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
  #+end_src
 *** Capture hotkey
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
  #+begin_src emacs-lisp
  (defun org-capture-input () (interactive) (org-capture nil "i"))
  (global-set-key (kbd "C-c c") 'org-capture-input)

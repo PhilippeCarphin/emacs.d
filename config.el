@@ -1,7 +1,74 @@
-(add-hook 'evil-insert-state-exit-hook (lambda () (blink-cursor-mode 0)))
-(add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 1)))
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
+(package-initialize)
 
-(blink-cursor-mode 0)
+(unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+(eval-when-compile (require 'use-package))
+
+(setq scroll-step 1)
+(setq-default scroll-margin 10)
+
+(setq-default cursor-type '(bar . 3))
+(set-cursor-color "light grey")
+(custom-set-faces '(cursor ((t (:background "SlateGray3")))))
+
+(load-theme 'misterioso)
+
+(use-package undo-tree
+  :ensure t
+  :config (global-undo-tree-mode))
+
+(use-package helm :ensure t
+  :config
+    (require 'helm-config)
+  :bind (("M-x" . helm-M-x)
+	 ("C-x C-f" . helm-find-files)
+	 ("C-x C-r" . helm-recentf)
+	 ("C-h C-i" . helm-info)
+	 ("C-x C-b" . helm-buffers-list)
+	 ("C-c g" . helm-grep-do-git-grep)))
+
+(helm-mode)
+
+(use-package which-key
+  :ensure t
+  :delight
+  :init
+  (setq which-key-separator " ")
+  (setq which-key-prefix-prefix "+")
+  (setq which-key-idle-delay 0.01)
+  :config
+  (which-key-mode))
+
+(use-package company
+  :ensure t
+  :config (global-company-mode)
+	  (setq company-idle-delay 0))
+
+(use-package evil
+  :ensure t
+  :init (setq evil-want-C-i-jump nil)
+	(setq evil-want-integration t)
+	(setq evil-want-C-u-scroll t)
+  :config (evil-mode 1)
+	  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+	  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+	  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+	  (setq evil-default-state 'emacs)
+	  (setq evil-insert-state-modes nil)
+	  (setq evil-motion-state-modes nil)
+	  (setq evil-normal-state-modes '(fundamental-mode
+					  conf-mode
+					  prog-mode
+					  text-mode
+					  dired))
+	  (setq evil-insert-state-cursor '((bar . 2) "lime green")
+	      evil-normal-state-cursor '(box "yellow"))
+	  (add-hook 'with-editor-mode-hook 'evil-insert-state))
 
 (defun about-this-keymap () (interactive)
   (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))
@@ -109,10 +176,3 @@
 (setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
 (setq org-outline-path-complete-in-steps nil)
 (setq org-refile-use-outline-path 'file)
-
-(setq org-capture-templates
-  '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
-     "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
-
-(defun org-capture-input () (interactive) (org-capture nil "i"))
-(global-set-key (kbd "C-c c") 'org-capture-input)
