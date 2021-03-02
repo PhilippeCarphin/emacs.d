@@ -695,6 +695,41 @@ This is equivalent to launching =org-agenda= and pressing a.
     (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
     #+end_src
 
+
+*** Agenda mode map customization
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+I want to learn Emacs keybindings for most things so I don't want to evilify
+every single mode out there.
+
+However, doing =j= and =k= is a hard habbit to lose.  So I just remap the keys
+to print a message.
+#+begin_src emacs-lisp
+(add-hook 'org-agenda-mode-hook (lambda ()
+(define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
+  (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
+- Tulku: Cranston; Lamont Cranston.
+- Lamont Cranston: You know my real name?
+- Tulku: Yes. I also know that for as long as you can remember,
+         you struggled against your own black heart and always lost. You
+         watched your sprit, your very face change as the beast claws its
+         way out from within you.
+j is deactivated 
+It normally does org-agenda-goto-date")))))
+;; Originally org-agenda-capture : I use C-c c and I can't use k
+(add-hook 'org-agenda-mode-hook (lambda ()
+  (define-key org-agenda-mode-map (kbd "k") (lambda () (interactive)
+    (message " The Shadow: I saved your life, Roy Tam. It now belongs to me.
+- Dr. Tam: It does?
+k is deactivated
+It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
+#+end_src
+
+#+RESULTS:
+| lambda | nil | (interactive) | (message  The Shadow: I saved your life, Roy Tam. It now belongs to me. |
+
 ** Advanced
 *** Magit
 

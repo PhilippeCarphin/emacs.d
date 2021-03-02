@@ -284,6 +284,25 @@
 
 (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
 
+(add-hook 'org-agenda-mode-hook (lambda ()
+(define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
+  (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
+- Tulku: Cranston; Lamont Cranston.
+- Lamont Cranston: You know my real name?
+- Tulku: Yes. I also know that for as long as you can remember,
+         you struggled against your own black heart and always lost. You
+         watched your sprit, your very face change as the beast claws its
+         way out from within you.
+j is deactivated 
+It normally does org-agenda-goto-date")))))
+;; Originally org-agenda-capture : I use C-c c and I can't use k
+(add-hook 'org-agenda-mode-hook (lambda ()
+  (define-key org-agenda-mode-map (kbd "k") (lambda () (interactive)
+    (message " The Shadow: I saved your life, Roy Tam. It now belongs to me.
+- Dr. Tam: It does?
+k is deactivated
+It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
+
 (use-package magit
   :ensure t
   :custom
