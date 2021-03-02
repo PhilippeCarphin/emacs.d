@@ -16,9 +16,6 @@
 (set-cursor-color "light grey")
 (custom-set-faces '(cursor ((t (:background "SlateGray3")))))
 
-(setq-default auto-fill-function 'do-auto-fill)
-(setq-default fill-column 80)
-
 (load-theme 'misterioso)
 
 (use-package undo-tree
@@ -72,18 +69,6 @@
 	  (setq evil-insert-state-cursor '((bar . 2) "lime green")
 	      evil-normal-state-cursor '(box "yellow"))
 	  (add-hook 'with-editor-mode-hook 'evil-insert-state))
-
-(define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-(define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-(define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-
-(define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-(define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
-
-(add-hook 'evil-insert-state-exit-hook (lambda () (blink-cursor-mode 0)))
-(add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 1)))
-
-(blink-cursor-mode 0)
 
 (defun about-this-keymap () (interactive)
   (org-open-link-from-string "[[file:~/.emacs.d/config.org::Helper keymap]]"))

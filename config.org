@@ -7,9 +7,6 @@
 
 
 * Basic
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
-  :END:
 ** Documentation
 *** Tutorial
 The key sequence: =C-h t= 
@@ -58,6 +55,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Scrolling behavior
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
  - =scroll-margin= Distance between cursor and top/bottom before scrolling starts.
  - =scroll-step= makes the window move one line at a time.
@@ -68,6 +68,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Cursor style
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
  This will make our cursor a vertical bar instead of a box.
 
@@ -95,6 +98,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Wrapping
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
 
  Automattically hard-wrap text on 80 chars.
 
@@ -104,6 +110,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Startup color theme
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
  Dark theme that exports well
 
@@ -142,6 +151,9 @@ The key sequence: =C-h t=
 *** Helper frameworks
 
 **** Undo tree
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
      Use =C-x u= to get an undo tree buffer, really strong!
  #+begin_src emacs-lisp
  (use-package undo-tree
@@ -192,6 +204,9 @@ The key sequence: =C-h t=
  - =helm-grep-do-git-grep=
 
 **** Which-key
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
 
  Help discovering available key sequences in all contexts.
 
@@ -221,9 +236,6 @@ The key sequence: =C-h t=
 	   (setq company-idle-delay 0))
  #+end_src
 *** Evil mode
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
 
  Evil-mode is a by far the best VI emulation out there.  It is very exact.
 
@@ -269,6 +281,9 @@ The key sequence: =C-h t=
 ***** TODO Look into rune/evil-hook
 
 **** Vim like window split keys
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
 
  #+begin_src emacs-lisp
  (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
@@ -277,6 +292,9 @@ The key sequence: =C-h t=
  #+END_SRC
 
 **** Map undo keys to undo-tree function
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
 
  #+begin_src emacs-lisp
  (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
@@ -284,6 +302,9 @@ The key sequence: =C-h t=
  #+end_src
 
 **** Cursor blinking
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
 
   Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
   fois avant d'arrêter).
@@ -306,6 +327,9 @@ The key sequence: =C-h t=
   #+end_src
 *** Help
 **** Helper keymap
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
 
   A keymap of keys to know to get started.  You should get rid of this of this
   section once you are familiar with the keys in order to learn the real bindings
