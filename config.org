@@ -92,6 +92,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Wrapping
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
 
  Automattically hard-wrap text on 80 chars.
 
@@ -101,6 +104,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Startup color theme
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
  Dark theme that exports well
 
@@ -139,6 +145,9 @@ The key sequence: =C-h t=
 *** Helper frameworks
 
 **** Undo tree
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
      Use =C-x u= to get an undo tree buffer, really strong!
  #+begin_src emacs-lisp
  (use-package undo-tree
@@ -189,6 +198,9 @@ The key sequence: =C-h t=
  - =helm-grep-do-git-grep=
 
 **** Which-key
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
 
  Help discovering available key sequences in all contexts.
 
@@ -219,7 +231,7 @@ The key sequence: =C-h t=
  #+end_src
 *** Evil mode
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS:
     :END:
 
  Evil-mode is a by far the best VI emulation out there.  It is very exact.
@@ -234,6 +246,9 @@ The key sequence: =C-h t=
  something barely noticed.
 
 **** Install and activate
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
 
  #+begin_src emacs-lisp :results none
    (use-package evil
@@ -263,9 +278,10 @@ The key sequence: =C-h t=
 
  Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3 : Keybindings and Evil]] et la config de Sam.
 
-***** TODO Look into rune/evil-hook
-
 **** Vim like window split keys
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
 
  #+begin_src emacs-lisp
  (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
@@ -274,6 +290,9 @@ The key sequence: =C-h t=
  #+END_SRC
 
 **** Map undo keys to undo-tree function
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
 
  #+begin_src emacs-lisp
  (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
@@ -303,6 +322,9 @@ The key sequence: =C-h t=
   #+end_src
 *** Help
 **** Helper keymap
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
 
   A keymap of keys to know to get started.  You should get rid of this of this
   section once you are familiar with the keys in order to learn the real bindings
@@ -384,6 +406,9 @@ The key sequence: =C-h t=
 
 
 **** Help menu
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
        #+begin_src emacs-lisp
       (defun org-agenda-help () (interactive)
 	 (org-open-link-from-string "[[file:~/.emacs.d/config.org::*Orgmode implementation of GTD]]"))
@@ -431,6 +456,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Exporting
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
  - =ox-twbs= to export to beautiful HTML
  - =ox-reveal= to export to Reveal.js presentation
@@ -458,6 +486,9 @@ The key sequence: =C-h t=
  https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
 
 **** Babel config
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
  We simply add languages that we want to become available.  There are many more
  but some of them require installing extra packages.
 
@@ -468,6 +499,9 @@ The key sequence: =C-h t=
  #+end_src
 
 **** Disable prompt
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
  As a security precaution this is off by default.  It would indeed be quite
  surprising if your text editor runs a shell command if you accidently do =C-c
  C-c=.
@@ -504,8 +538,31 @@ The key sequence: =C-h t=
 	 ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
    #+end_src
 
+*** Center cursor after shift-tab in orgmode
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
+  Places the current line in the center of the screen after a =S-TAB= in orgmode.
+  #+begin_src emacs-lisp :tangle no
+  (defun org-post-global-cycle () (interactive)
+    (recenter)
+    (org-beginning-of-line))
+  (advice-add 'org-global-cycle
+    :after #'org-post-global-cycle)
+  #+end_src
+  See [[help:advice-add]], basically, we can ask Emacs to add code to be run before
+  and/or after an emacs function is run.
+
+  You can use this to remove the "advice".
+  #+begin_src emacs-lisp :tangle no
+  (advice-remove 'org-global-cycle #'org-post-global-cycle)
+  #+end_src
+
 ** Basic org agenda configuration
 *** Agena files
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
  #+begin_src emacs-lisp
  (setq org-agenda-dir "~/Documents/gtd")
  (setq org-agenda-files (list org-agenda-dir))
@@ -534,6 +591,9 @@ The key sequence: =C-h t=
  (setq org-refile-use-outline-path 'file)
  #+end_src
 *** Capture templates
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
  #+begin_src emacs-lisp
  (setq org-capture-templates
    '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
@@ -550,6 +610,9 @@ The key sequence: =C-h t=
 
 ** GTD
 *** Keymap for GTD keybindings
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
       We define a keymap that will be accessed with =SPC a g=
  #+begin_src emacs-lisp
    (define-prefix-command 'gtd)
@@ -568,6 +631,9 @@ The key sequence: =C-h t=
    #+REVEAL: split
 
 *** GTD files
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
 **** Filename symbols
  #+begin_src emacs-lisp :results none
  (cond
@@ -603,6 +669,9 @@ The key sequence: =C-h t=
 
    #+REVEAL: split
 *** Todo keywords for GTD
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
 
  The first set of keywords is a generic set of keywords that I can give TODO
  keywords to items without having them be part of my GTD.
@@ -638,6 +707,9 @@ The key sequence: =C-h t=
 
    #+REVEAL: split
 *** Definition of stuck projects
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
 
  In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
  This says that a stuck project is a headline where the todo keyword is
@@ -652,6 +724,9 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Date interval for agenda view
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
 
  The default is kind of annoying.  It shows a week starting on a Sunday but what
  is annoying about that is that on Sunday, the agenda won't show what you have
@@ -668,7 +743,13 @@ The key sequence: =C-h t=
    #+REVEAL: split
 
 *** Agenda custom commands
+    :PROPERTIES:
+    :HEADER-ARGS:
+    :END:
 **** Definition
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
   #+begin_src emacs-lisp
   (setq org-agenda-custom-commands
 	'(("c" "Simple agenda view"
@@ -687,6 +768,9 @@ The key sequence: =C-h t=
  Run the agenda with "c" custom command.
 
 **** Agenda view commands
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
  This is equivalent to launching =org-agenda= and pressing a.
   #+begin_src emacs-lisp
   (defun gtd-agenda-view () (interactive)
@@ -704,6 +788,9 @@ The key sequence: =C-h t=
   #+end_src
 
 **** Agenda view hotkeys
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle no
+     :END:
       Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
       non-prefix key.
 
@@ -714,12 +801,15 @@ The key sequence: =C-h t=
  #+end_src
 
 *** Closing notes
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
  #+begin_src emacs-lisp :results none
  (setq org-log-done 'note)
  #+end_src
 *** Evil mode agenda binding (SPC a g)
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle no
     :END:
      Only use this if evil mode is activated
 
@@ -731,7 +821,7 @@ The key sequence: =C-h t=
     
 *** Agenda mode map customization
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle no
     :END:
 
  I want to learn Emacs keybindings for most things so I don't want to evilify
@@ -764,26 +854,12 @@ The key sequence: =C-h t=
  | lambda | nil | (interactive) | (message  The Shadow: I saved your life, Roy Tam. It now belongs to me. |
 
 ** Remap C-x C-c for deamon usage
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
     I use :q to quit
  #+begin_src emacs-lisp
  (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
- #+end_src
-
-** Center cursor after shift-tab in orgmode
- Places the current line in the center of the screen after a =S-TAB= in orgmode.
- #+begin_src emacs-lisp :tangle no
- (defun org-post-global-cycle () (interactive)
-   (recenter)
-   (org-beginning-of-line))
- (advice-add 'org-global-cycle
-   :after #'org-post-global-cycle)
- #+end_src
- See [[help:advice-add]], basically, we can ask Emacs to add code to be run before
- and/or after an emacs function is run.
-
- You can use this to remove the "advice".
- #+begin_src emacs-lisp :tangle no
- (advice-remove 'org-global-cycle #'org-post-global-cycle)
  #+end_src
 
 ** Sane search and visibility controls
@@ -864,6 +940,9 @@ get =Symbol's function definition is void: f-directory-p=.
 
 * Other packages
 ** Magit
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
 
  The most amazing vim plugin in existence.
 
@@ -878,6 +957,9 @@ get =Symbol's function definition is void: f-directory-p=.
  Error (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntax* New
 
 ** Yasnippet
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
  Note: package =yasnippet= doesn't come with the library of snippets but
  =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
  therefore we only need to install this one.
@@ -888,6 +970,9 @@ get =Symbol's function definition is void: f-directory-p=.
  #+end_src
 
 ** RSS
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
 
  From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
 
