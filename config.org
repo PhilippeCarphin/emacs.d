@@ -1059,3 +1059,27 @@ get =Symbol's function definition is void: f-directory-p=.
  (setq-default elfeed-search-title-max-width 100)
  (setq-default elfeed-search-title-min-width 100)
  #+end_src
+
+* Things to do with orgmode
+
+** Write headlines and collapse them                                   :keys:
+   
+| =S-8=   | Insert a star character |
+| =TAB=   | =org-cycle=             |
+| =S-TAB= | =org-global-cycle=      |
+
+The key =S-TAB= is bound to =org-shifttab= which calls =org-global-cycle= if the
+cursor is not in a table.
+
+** Write inline markup                                                 :keys:
+| ~=~ | code      |
+| ~*~ | bold      |
+| ~_~ | Underline |
+| ~/~ | Italic    |
+| =~= | Verbatim  |
+** Write source blocks and maybe execute them =C-c C-,=                :keys:
+** Export your stuff to all the formats =C-c C-e=                      :keys:
+** Move headlines around with refile =C-c C-w=                         :keys:
+** Assign tags to headlines =C-c C-q=                                  :keys:
+** Search by tags =M-x org-tags-view=                                  :keys:
+** Sparse trees =C-c /=                                                :keys:
