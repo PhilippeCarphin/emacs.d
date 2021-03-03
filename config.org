@@ -7,6 +7,10 @@
 
 [[file:unicorn.jpg]]
 
+Keys sparse tree : Evaluate (org-tags-sparse-tree nil "keys") with
+=C-x C-e=.  Pressing =C-c C-c= will get out of the sparse tree view
+created by the expression.
+
 * Basic
 ** Documentation
 *** Tutorial
@@ -1083,3 +1087,10 @@ cursor is not in a table.
 ** Assign tags to headlines =C-c C-q=                                  :keys:
 ** Search by tags =M-x org-tags-view=                                  :keys:
 ** Sparse trees =C-c /=                                                :keys:
+** Tags sparse trees =C-c \=                                           :keys:
+** Column view
+Look at the =#+COLUMNS:= property in this document.
+|=C-c C-x C-c= | =org-columns=
+* Things to do in general
+
+** Evaluate lisp code =C-x C-e=
