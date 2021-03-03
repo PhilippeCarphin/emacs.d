@@ -16,6 +16,15 @@ The key sequence: =C-h t=
 - Good selection of things that are immediately useful
 - Emacs movement
 
+**** Keys                                                              :keys:
+| =C-h k= | =describe-key=         | Describe key                          |
+| =C-h f= | =describe-function=    | Get documentation for elisp functions |
+| =C-h t= | =tutorial=             | Emacs tutorial                        |
+| =C-h o= | =describe-symbol=      | Emacs tutorial                        |
+| =C-x 1= | =delete-other-windows= | Maximizes the current window (pane)   |
+If there is a symbol or function under the cursor, that will be the default
+choice so you can just press =RET=.
+
 ** Minimalistic config
 *** Intro
     #+REVEAL: split
@@ -414,6 +423,9 @@ The key sequence: =C-h t=
   faire cette action.
 
 
+***** Keys                                                             :keys:
+| ~C-|~ | =prefix-key= | A grouping of common basic keys |
+
 **** Help menu
      :PROPERTIES:
      :HEADER-ARGS: :tangle yes
@@ -484,8 +496,18 @@ The key sequence: =C-h t=
  (use-package htmlize :ensure t)
  #+end_src
 
+**** Export keys                                                       :keys:
+
+| =C-c C-e= | =org-export-dispatch= | Bring up the export menu |
+In the export menu
+| =R B= | =org-reveal-export-to-html-and-browse= | Present Right Now      |
+| =h o= | =org-html-export-to-html=              | Straight-pipe HTML     |
+| =r r= | =org-rst-export-to-rst=                | Restructured text      |
+| =w o= | =org-twbs-export-to-html=              | Twitter Bootstrap html |
+Except for =R B= the displayed LISP function does not open the file and the
+dispatcher opens it after that function has run.
 *** Babel
-**** Babel Intro
+**** Babel Intro                                                       :keys:
  Babel allows running of code blocks.  It is what enables this config to be in
  orgmode format.
 
@@ -493,7 +515,7 @@ The key sequence: =C-h t=
  must be activated to be used:
 
  https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
-
+ | =C-c C-c= | =org-babel-execute-src-block= | When cursor is on an SRC block, execute its code |
 **** Babel config
      :PROPERTIES:
      :HEADER-ARGS: :tangle yes
@@ -582,6 +604,9 @@ The key sequence: =C-h t=
  (setq org-outline-path-complete-in-steps nil)
  (setq org-refile-use-outline-path 'file)
  #+end_src
+
+**** Keys                                                              :keys:
+     | =C-c C-w= | =org-refile= | Move headline under cursor to somewhere else |
 *** Capture templates
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -599,6 +624,8 @@ The key sequence: =C-h t=
  (defun org-capture-input () (interactive) (org-capture nil "i"))
  (global-set-key (kbd "C-c c") 'org-capture-input)
  #+end_src
+**** Keys                                                              :keys:
+| =C-c C-w= | =org-capture-input= | (Custom) Org apture with selected template "i". |
 
 
 * Advanced orgmode and GTD
