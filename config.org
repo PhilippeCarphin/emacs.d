@@ -1123,4 +1123,20 @@ using =S-<arrow>= or clicking on the date, press =RET= and go in and insert
 * Things to do in general
 ** Evaluate lisp code =C-x C-e=                                        :keys:
 
-   
+* Terminal stuff
+** Alt key in terminal emulator settings
+On macos but maybe also on linux, my terminal emulator does something with my
+alt key and I have to go into Iterm preferences and change it.
+
+If in the shell you do =M-x= and it doesn't work, look for settings in your
+terminal emulator for Alt key behavior.
+** Tab key and evil mode
+TAB: (setq evil-want-C-i-jump nil).  =C-i= and =TAB= are kind of the same thing
+in the shell.  In evil mode, you need to set this to Nil, otherwise, it will do
+something with =C-i= that will prevent the =TAB= key from working in orgmode files.
+* MacOS stuff
+
+** Preventing a specific only on MacOS and only in terminal emacsclient
+https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
+also Note the need to change Alt in terminal emulator profile settings
+
