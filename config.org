@@ -7,14 +7,14 @@
 
 [[file:unicorn.jpg]]
 
-Keys sparse tree : Evaluate (org-tags-sparse-tree nil "keys") with
+Keys sparse tree : Evaluate (org-tags-sparse-tree nil "command|keys") with
 =C-x C-e=.  Pressing =C-c C-c= will get out of the sparse tree view
 created by the expression.
 
 * Basic
 ** Documentation
 *** Tutorial
-The key sequence: =C-h t= 
+The key sequence: =C-h t=
 #+ATTR_REVEAL: :frag (appear)
 - Very short
 - Good selection of things that are immediately useful
@@ -633,7 +633,7 @@ dispatcher opens it after that function has run.
 
 
 * Advanced orgmode and GTD
-  
+
 ** Inline images
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -854,7 +854,7 @@ dispatcher opens it after that function has run.
     (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
     #+end_src
 
-    
+
 *** Agenda mode map customization
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -947,12 +947,12 @@ dispatcher opens it after that function has run.
  If orgmode is a note taking tool, [[https://www.orgroam.com][org-roam]] is a knowledge management system.
 
  Here is the config from the [[https://github.com/org-roam/org-roam][official org-roam GitHub page]].
- 
+
 *WARNING* This will make emacs hang at startup if the directory doesn't exist.
 See parent commit, I had an IF to check the directory using =f-directory-p=
 which worked when I pressed =C-c C-c= on a source block.  However at startup I
 get =Symbol's function definition is void: f-directory-p=.
- 
+
  #+begin_src emacs-lisp
     (use-package org-roam
     :ensure t
@@ -1066,8 +1066,8 @@ get =Symbol's function definition is void: f-directory-p=.
 
 * Things to do with orgmode
 
-** Write headlines and collapse them                                   :keys:
-   
+** Write headlines and collapse them                            :keys:syntax:
+
 | =S-8=   | Insert a star character |
 | =TAB=   | =org-cycle=             |
 | =S-TAB= | =org-global-cycle=      |
@@ -1075,22 +1075,52 @@ get =Symbol's function definition is void: f-directory-p=.
 The key =S-TAB= is bound to =org-shifttab= which calls =org-global-cycle= if the
 cursor is not in a table.
 
-** Write inline markup                                                 :keys:
+** Write inline markup                                          :keys:syntax:
 | ~=~ | code      |
 | ~*~ | bold      |
 | ~_~ | Underline |
 | ~/~ | Italic    |
 | =~= | Verbatim  |
-** Write source blocks and maybe execute them =C-c C-,=                :keys:
+** Write dates like this <2021-03-02> or <2021-03-02 8:00>           :syntax:
+** Write source blocks and maybe execute them =C-c C-,=         :keys:syntax:
 ** Export your stuff to all the formats =C-c C-e=                      :keys:
 ** Move headlines around with refile =C-c C-w=                         :keys:
+** Move headlines around with arrows                                   :keys:
+    | M-<left/right> | =org-promote-subtree=, =org-demote-subtree= | Change headline level of subtree (and it's children recursively)            |
+    | M-<up/down>    | =org-meta-up=, =org-meta-down=              | With the cursor on a headline, exchange it with it's prececing/next sibling |
 ** Assign tags to headlines =C-c C-q=                                  :keys:
 ** Search by tags =M-x org-tags-view=                                  :keys:
 ** Sparse trees =C-c /=                                                :keys:
 ** Tags sparse trees =C-c \=                                           :keys:
-** Column view
+** Column view                                                         :keys:
 Look at the =#+COLUMNS:= property in this document.
-|=C-c C-x C-c= | =org-columns=
-* Things to do in general
+|=C-c C-x C-c= | =org-columns= | Switch to a really useful view for consulting and editing properties |
+*NOTE* How much of the document will go into column-view depends on where your
+ cursor is.  If you want the whole document, then you have to get your cursor to
+ the top of the file before pressing =C-c C-x C-c=.
+** Agenda view =M-x org-agenda RET=                                 :command:
+   If anything has a date in it, it will show up in the agenda on that day.
+** Use =SCHEDULED:= and =DEADLINE:= for planning
 
-** Evaluate lisp code =C-x C-e=
+Using =SCHEDULED:= makes things appear in green in that day in the agenda.
+
+Items marked with =DEADLINE: <2021-02-26 Fri -4d>= appear in red on the day.
+
+Also, with the =-4d=, this defines an interval [26 - 4, 26].
+
+If /today/ falls in the interval, the item will show in the current day in the
+agenda.  In that case it will be shown in orange.
+
+*** Date commands
+| =C-c C-s=    | =org-schedule= | Add the =SCHEDULED:= keyword                            |
+| =C-s C-d=    | =org-deadline= | Add the =DEADLINE:= keyword                             |
+| =S-<arrows>= | =_=            | Selects the next/previous date in the calendar selector |
+
+I just set the lead time by writing it in manually after having done =C-c C-d=,
+using =S-<arrow>= or clicking on the date, press =RET= and go in and insert
+=-4d= manually.
+
+* Things to do in general
+** Evaluate lisp code =C-x C-e=                                        :keys:
+
+   
