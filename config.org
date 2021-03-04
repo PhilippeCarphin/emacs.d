@@ -1111,7 +1111,7 @@ Also, with the =-4d=, this defines an interval [26 - 4, 26].
 If /today/ falls in the interval, the item will show in the current day in the
 agenda.  In that case it will be shown in orange.
 
-*** Date commands
+*** Date commands                                                      :keys:
 | =C-c C-s=    | =org-schedule= | Add the =SCHEDULED:= keyword                            |
 | =C-s C-d=    | =org-deadline= | Add the =DEADLINE:= keyword                             |
 | =S-<arrows>= | =_=            | Selects the next/previous date in the calendar selector |
@@ -1120,6 +1120,19 @@ I just set the lead time by writing it in manually after having done =C-c C-d=,
 using =S-<arrow>= or clicking on the date, press =RET= and go in and insert
 =-4d= manually.
 
+** Bulk actions in the agenda                                          :keys:
+| =m= | Mark entries for bulk actions |
+| =u= | Unmark entries                |
+| =U= | Unmark all entries            |
+| =*= | Mark all entries current view |
+| =B= | Do bulk actions               |
+In the bulk actions
+| =s=   | Schedule marked items                |
+| =d=   | Deadline marked itmes                |
+| =+,-= | Add,Remove tags to,from marked items |
+| =$=   | Search within marked items           |
+I use it to unschedule all the things I had scheduled for today that did not get
+done.
 * Things to do in general
 ** Evaluate lisp code =C-x C-e=                                        :keys:
 
@@ -1140,3 +1153,30 @@ something with =C-i= that will prevent the =TAB= key from working in orgmode fil
 https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
 also Note the need to change Alt in terminal emulator profile settings
 
+
+* NEW
+
+** Display links as normal text
+
+If you use the hotkeys to work with links the default behavior is OK but if you
+want to just manipulate the text, what orgmode does to hide links is really
+annoying.
+
+You have to delete a bracket to get the real text to show up.
+[[https://google.com][Google]]
+
+#+begin_src emacs-lisp
+(setq org-descriptive-links nil)
+;; Note (org-mode-restart) is required for this to take effect
+#+end_src
+
+*** Org link commands                                               :command:
+| =C-c C-l= | =org-insert-link=         | Insert a link with a menu prompting for URL and description^* |
+|           | =org-store-link=          | Store org link to headline in which the cursor is^*^*         |
+|           | =org-toggle-link-display= | Toggles the way links are displayed                           |
+
+.^* If the cursor is on a link, this will edit the link.
+
+.^*^* After doing that, when inserting a link, you can leave the first field
+blank and the link will point to where you stored.
+#+RESULTS:
