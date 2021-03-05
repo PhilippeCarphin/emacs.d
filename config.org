@@ -4,6 +4,7 @@
 #+REVEAL_HLEVEL: 4
 #+PROPERTY: header-args :tangle yes :results none
 #+COLUMNS: %40ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}] %TAGS
+#+OPTIONS: broken-links:mark
 
 [[file:unicorn.jpg]]
 
