@@ -1275,3 +1275,21 @@ also Note the need to change Alt in terminal emulator profile settings
 - Ephemeral
 - Solarized-dark
 - sourcerer
+
+
+* Visibility
+
+This makes the sparse tree when doing =gtd-next-action-sparse-tree= be all
+collapsed with only the ancestors.
+
+But in the config, when I run the s-expression at the start, it will show the
+content of the results (key tables mostly) and we can =C-c C-e C-v h o= to
+export only what is visible to html.  (Or one could export to .org as a way of
+"extracting" a sparse tree.
+
+#+begin_src emacs-lisp
+(custom-set-variables
+ '(org-show-context-detail
+   '((occur-tree . ancestors)
+     (default . local))))
+#+end_src
