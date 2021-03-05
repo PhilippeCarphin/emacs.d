@@ -3,7 +3,7 @@
 #+REVEAL_MIN_SCALE: 0.1
 #+REVEAL_HLEVEL: 4
 #+PROPERTY: header-args :tangle yes
-#+COLUMNS: %25ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}] %TAGS
+#+COLUMNS: %40ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}] %TAGS
 
 [[file:unicorn.jpg]]
 
@@ -1152,11 +1152,22 @@ In the bulk actions
 | =$=   | Search within marked items           |
 I use it to unschedule all the things I had scheduled for today that did not get
 done.
+
+Example: Unschedule all marked items: Mark items using =m=, then press =C-u= to
+make the following bulk scheduling action unschedule.  Press =B= for the bulk
+action menu and press =s= to select =[s]chd= scheduling options.  There will be
+no date to enter.  All marked entries will be unscheduled.
+
+This is useful for scheduling things to do the next day.  One should always
+unschedule all undone things at the end of the day and not schedule them for the
+next day.  Otherwise your schedule will stop being a schedule and become a
+single growing todo list.
+
 * Things to do in general
 ** Evaluate lisp code =C-x C-e=                                        :keys:
 
 * Terminal stuff
-** Alt key in terminal emulator settings
+** Alt key in terminal emulator settings                           :terminal:
 On macos but maybe also on linux, my terminal emulator does something with my
 alt key and I have to go into Iterm preferences and change it.
 
@@ -1172,30 +1183,3 @@ something with =C-i= that will prevent the =TAB= key from working in orgmode fil
 https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
 also Note the need to change Alt in terminal emulator profile settings
 
-
-* NEW
-
-** Display links as normal text
-
-If you use the hotkeys to work with links the default behavior is OK but if you
-want to just manipulate the text, what orgmode does to hide links is really
-annoying.
-
-You have to delete a bracket to get the real text to show up.
-[[https://google.com][Google]]
-
-#+begin_src emacs-lisp
-(setq org-descriptive-links nil)
-;; Note (org-mode-restart) is required for this to take effect
-#+end_src
-
-*** Org link commands                                               :command:
-| =C-c C-l= | =org-insert-link=         | Insert a link with a menu prompting for URL and description^* |
-|           | =org-store-link=          | Store org link to headline in which the cursor is^*^*         |
-|           | =org-toggle-link-display= | Toggles the way links are displayed                           |
-
-.^* If the cursor is on a link, this will edit the link.
-
-.^*^* After doing that, when inserting a link, you can leave the first field
-blank and the link will point to where you stored.
-#+RESULTS:
