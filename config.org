@@ -464,7 +464,49 @@ choice so you can just press =RET=.
     (define-key emacs-movement (kbd "C-b") 'backward-char)
     (define-key emacs-movement (kbd "C-p") 'previous-line)
 
+*** Changer l'apparence de contenu caché
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+  #+begin_src emacs-lisp
+(set-display-table-slot standard-display-table 
+  'selective-display (string-to-vector " ⤵"))
+  #+end_src
+
+From [[https://emacs.stackexchange.com/a/10988/19972][Référence]].  You can copy
+paste any unicode character in here from a browser
+
+Other options : ▼, ↴, ⬎, ⤵, ⤷, ↯, ⟾, ⋱, ….
+
 ** Basic org configuration
+*** Display links as normal text
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+ If you use the hotkeys to work with links the default behavior is OK but if you
+ want to just manipulate the text, what orgmode does to hide links is really
+ annoying.
+
+ You have to delete a bracket to get the real text to show up.
+ [[https://google.com][Google]]
+
+ #+begin_src emacs-lisp
+ (setq org-descriptive-links nil)
+ ;; Note (org-mode-restart) is required for this to take effect
+ #+end_src
+
+**** Org link commands                                              :command:
+ | =C-c C-l= | =org-insert-link=         | Insert a link with a menu prompting for URL and description^* |
+ |           | =org-store-link=          | Store org link to headline in which the cursor is^*^*         |
+ |           | =org-toggle-link-display= | Toggles the way links are displayed                           |
+
+ .^* If the cursor is on a link, this will edit the link.
+
+ .^*^* After doing that, when inserting a link, you can leave the first field
+ blank and the link will point to where you stored.
+ #+RESULTS:
 *** Bullets
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
