@@ -477,8 +477,10 @@ it is kind of annoying in =misterioso=.
     :END:
 
   #+begin_src emacs-lisp
-(set-display-table-slot standard-display-table 
-  'selective-display (string-to-vector " ⤵"))
+(defun configure-ellipsis () (set-display-table-slot standard-display-table
+  'selective-display (string-to-vector " ⤵")))
+
+(add-hook 'org-mode-hook 'configure-ellipsis)
   #+end_src
 
 From [[https://emacs.stackexchange.com/a/10988/19972][Référence]].  You can copy
