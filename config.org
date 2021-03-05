@@ -1075,10 +1075,10 @@ get =Symbol's function definition is void: f-directory-p=.
    :ensure t
    :custom
    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+   (custom-set-variables '(magit-save-repository-buffers 'dontask))
  #+end_src
 
-
- Error (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntaxError (use-package): ox-twbs/:catch: Symbol’s function definition is void: org-element-update-syntax* New
+ #+RESULTS:
 
 ** Yasnippet
    :PROPERTIES:
