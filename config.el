@@ -149,6 +149,14 @@
      ["org-demote-subtree" org-demote-subtree]
      ["org-agenda-help" org-agenda-help]))
 
+(defun configure-ellipsis () (set-display-table-slot standard-display-table
+  'selective-display (string-to-vector " ⤵")))
+
+(add-hook 'org-mode-hook 'configure-ellipsis)
+
+(setq org-descriptive-links nil)
+;; Note (org-mode-restart) is required for this to take effect
+
 (use-package org-bullets
   :ensure t
   :hook (org-mode . org-bullets-mode))
@@ -165,6 +173,8 @@
       (python . t)))
 
 (setq org-confirm-babel-evaluate nil)
+
+(setq org-export-use-babel nil)
 
 (defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
 (defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
@@ -198,6 +208,8 @@
 
 (defun org-capture-input () (interactive) (org-capture nil "i"))
 (global-set-key (kbd "C-c c") 'org-capture-input)
+
+(setq org-agenda-prefix-format  '((agenda . "%-12t% s")))
 
 (setq org-startup-with-inline-images t)
 (setq org-image-actual-width 100)
@@ -268,11 +280,15 @@
       org-agenda-start-day "-2d")
 
 (setq org-agenda-custom-commands
-      '(("c" "Simple agenda view"
-	  ((tags "PRIORITY=\"A\"")
-	   (stuck "" )
-	   (agenda "")
-	   (todo "GTD-ACTION")))
+      '(("c" "Complete agenda view"
+	 ((tags "PRIORITY=\"A\"")
+	  (stuck "")
+	  (agenda "" )
+	  (todo "GTD-ACTION")))
+	("s" "Split agenda view"
+	 ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+	  (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
+	  (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
 	("g" . "GTD keyword searches searches")
 	("gi" todo "GTD-IN")
 	("gc" todo "GTD-CLARIFY")
@@ -341,6 +357,7 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
   :ensure t
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+  (custom-set-variables '(magit-save-repository-buffers 'dontask))
 
 (use-package yasnippet-snippets
   :ensure t
