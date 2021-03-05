@@ -846,18 +846,19 @@ is there, it will go in the export regardless of this setting.
      :HEADER-ARGS: :tangle no
      :END:
   #+begin_src emacs-lisp
-  (setq org-agenda-custom-commands
-	'(("c" "Simple agenda view"
-	    ((tags "PRIORITY=\"A\"")
-	     (stuck "" )
-	     (agenda "")
-	     (todo "GTD-ACTION")))
-	  ("g" . "GTD keyword searches searches")
-	  ("gi" todo "GTD-IN")
-	  ("gc" todo "GTD-CLARIFY")
-	  ("ga" todo "GTD-ACTION")
-	  ("gn" todo-tree "GTD-NEXT-ACTION")
-	  ("gp" todo "GTD-PROJECT")))
+    (setq org-agenda-custom-commands
+	  '(("c" "Simple agenda view"
+	     ((tags "PRIORITY=\"A\"")
+	      (stuck "")
+	      (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if
+						      'todo '("GTD-DONE" "GTD-REFERENCE")))))
+	      (todo "GTD-ACTION")))
+	    ("g" . "GTD keyword searches searches")
+	    ("gi" todo "GTD-IN")
+	    ("gc" todo "GTD-CLARIFY")
+	    ("ga" todo "GTD-ACTION")
+	    ("gn" todo-tree "GTD-NEXT-ACTION")
+	    ("gp" todo "GTD-PROJECT")))
   #+end_src
 
  Run the agenda with "c" custom command.
