@@ -709,6 +709,14 @@ is there, it will go in the export regardless of this setting.
 **** Keys                                                              :keys:
 | =C-c C-w= | =org-capture-input= | (Custom) Org apture with selected template "i". |
 
+*** Agenda display control
+
+Don't show the file and control spacing so that all entries are aligned.
+
+#+begin_src emacs-lisp
+  (setq org-agenda-prefix-format  '((agenda . "%-12t% s")))
+#+end_src
+
 * Advanced orgmode and GTD
 
 ** Inline images
@@ -851,14 +859,6 @@ is there, it will go in the export regardless of this setting.
  #+end_src
 
    #+REVEAL: split
-
-*** Agenda display control
-
-Don't show the file and control spacing so that all entries are aligned.
-
-#+begin_src emacs-lisp
-  (setq org-agenda-prefix-format  '((agenda . "%-12t% s")))
-#+end_src
 
 *** Agenda custom commands
 **** Definition
