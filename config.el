@@ -392,3 +392,8 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
 (setq-default elfeed-search-filter "@2-days-ago +unread")
 (setq-default elfeed-search-title-max-width 100)
 (setq-default elfeed-search-title-min-width 100)
+
+(custom-set-variables
+ '(org-show-context-detail
+   '((occur-tree . ancestors)
+     (default . local))))
