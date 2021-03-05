@@ -2,7 +2,7 @@
 #+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
 #+REVEAL_HLEVEL: 4
-#+PROPERTY: header-args :tangle yes
+#+PROPERTY: header-args :tangle yes :results none
 #+COLUMNS: %40ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}] %TAGS
 
 [[file:unicorn.jpg]]
@@ -133,9 +133,6 @@ choice so you can just press =RET=.
  #+begin_src emacs-lisp
  (load-theme 'misterioso)
  #+end_src
-
- #+RESULTS:
- : t
 
 ***** Explanation                                           :noexport_reveal:
 
@@ -506,7 +503,6 @@ Other options : ▼, ↴, ⬎, ⤵, ⤷, ↯, ⟾, ⋱, ….
 
  .^*^* After doing that, when inserting a link, you can leave the first field
  blank and the link will point to where you stored.
- #+RESULTS:
 *** Bullets
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -692,7 +688,6 @@ is there, it will go in the export regardless of this setting.
 **** Keys                                                              :keys:
 | =C-c C-w= | =org-capture-input= | (Custom) Org apture with selected template "i". |
 
-
 * Advanced orgmode and GTD
 
 ** Inline images
@@ -720,12 +715,6 @@ is there, it will go in the export regardless of this setting.
    (define-key gtd (kbd "a") 'org-agenda)
    (define-key gtd (kbd "c") 'org-capture)
    #+end_src
-
- #+RESULTS:
- : org-capture
-
-
-   #+REVEAL: split
 
 *** GTD files
 **** Filename symbols
@@ -947,9 +936,6 @@ is there, it will go in the export regardless of this setting.
  It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
  #+end_src
 
- #+RESULTS:
- | lambda | nil | (interactive) | (message  The Shadow: I saved your life, Roy Tam. It now belongs to me. |
-
 ** Remap C-x C-c for deamon usage
    :PROPERTIES:
    :HEADER-ARGS: :tangle no
@@ -1053,7 +1039,6 @@ get =Symbol's function definition is void: f-directory-p=.
  I could have achieved a structure that was more easy to navigate with less
  effort with something like org-roam but the work of creating this very good tree
  structure is something that paid off in other ways.
-
 
 * Other packages
 ** Magit
