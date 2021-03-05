@@ -81,6 +81,15 @@ choice so you can just press =RET=.
  (setq-default scroll-margin 10)
  #+end_src
 
+*** Higlight current line
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
+Highlight the current line.  This looks really good with the theme =leuven= but
+it is kind of annoying in =misterioso=.
+#+begin_src emacs-lisp
+(global-hl-line-mode 1)
+#+end_src
 *** Cursor style
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
