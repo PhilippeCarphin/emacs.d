@@ -486,6 +486,15 @@ paste any unicode character in here from a browser
 
 Other options : ▼, ↴, ⬎, ⤵, ⤷, ↯, ⟾, ⋱, ….
 
+*** Follow symlinks
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
+
+#+begin_src emacs-lisp
+(custom-set-variables '(vc-follow-symlinks nil))
+#+end_src
+
 ** Basic org configuration
 *** Display links as normal text
     :PROPERTIES:
