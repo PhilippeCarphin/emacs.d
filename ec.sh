@@ -3,6 +3,10 @@
 function main(){
     ensure-server-is-running
     ensure-frame-exists
+
+    if [[ "$@" != "" ]] ; then
+	emacsclient --no-wait $@
+    fi
     
     focus-current-frame
 }
