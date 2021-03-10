@@ -284,6 +284,7 @@ it is kind of annoying in =misterioso=.
 	     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 	     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 	     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+	     (global-set-key (kbd "M-u") 'universal-argument)
 	     (setq evil-default-state 'emacs)
 	     (setq evil-insert-state-modes nil)
 	     (setq evil-motion-state-modes nil)
