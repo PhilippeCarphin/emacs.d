@@ -1,6 +1,32 @@
 #!/bin/bash
 
 function main(){
+    # Special actions
+    case "$1" in
+	-k)
+	    emacsclient -c -e '(save-buffers-kill-emacs)'
+	    exit 0
+	    ;;
+	-K)
+	    kill_emacs_by_pid
+	    exit 0
+	    ;;
+	-s)
+	    emacs --daemon
+	    exit 0
+	    ;;
+	-r)
+	    emacsclient -e '(kill-emacs)'
+	    emacs --daemon
+	    exit 0
+	    ;;
+	-rs)
+	    emacsclient -e '(kill-emacs)'
+	    emacs --daemon
+	    shift
+	    ;;
+    esac
+
     ensure-server-is-running
     ensure-frame-exists
 
@@ -40,4 +66,4 @@ function ensure-server-is-running(){
     fi
 }
 
-main
+main $@
