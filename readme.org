@@ -19,18 +19,47 @@ packages if needed.
 
 ** Daemon
 
-Create a link in your =PATH= pointing to =~/.emacs.d/ec.sh= which is a wrapper
-for the emacsclient (and a bit for the daemon).
+You can't have multiple instances of VSCode running at the same time.  You can
+have multiple windows with multiple tabs.
 
-| ec -s | emacs --daemon                                | Start the emacs daemon                |
-| ec -k | emacsclient -c -e '(save-buffers-kill-emacs)' | Prompt to save buffers and kill emacs |
-| ec -K |                                               | Kill emacs by PID                     |
+Emacs' startup time makes it worth taking the steps to make it work like this
+because all you have to do is to start emacs in a shell with the =--daemon=
+option.
+
+Then to edit files in Emacs or open up a new emacs window, we just do
+=emacsclient $my_file= or =emacsclient -c= to create a new frame.
+
+
+We can launch [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Emacs-Server.html][Emacs as a server]]:
+#+begin_src shell :results error
+emacs --daemon 2>&1
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Loading /Users/pcarphin/.emacs.d/config.el (source)...
+[yas] Prepared just-in-time loading of snippets successfully.
+Loading /Users/pcarphin/.emacs.d/config.el (source)...done
+Loaded ~/.emacs.d/config.el
+Turning on magit-auto-revert-mode...
+Turning on magit-auto-revert-mode...done
+Starting Emacs daemon.
+You can use emacsclient to connect to that Emacs process.
+#+end_example
+
+I have a wrapper that pretty much does =emacsclient $@= with the exception that
+the following options bypass this and do something different:
+
+| =ec -s= | =emacs --daemon=                                | Start the emacs daemon                |
+| =ec -k= | =emacsclient -c -e '(save-buffers-kill-emacs)'= | Prompt to save buffers and kill emacs |
+| =ec -K= |                                                 | Kill emacs by PID                     |
 
 Otherwise, launch emacsclient with forwarded arguments:
 
-| ec ~/.emacs.d/config.org | emacsclient ~/.emacs.d/config.org | Open file with emacsclient |
+| =ec ~/.emacs.d/config.org= | =emacsclient ~/.emacs.d/config.org= | Open file with emacsclient |
 
-
+I do =ln -s ~/.emacs.d/ec.sh ~/.local/bin/ec= and =~/.local/bin= is in my
+=$PATH=.
 
 
 ** Functionning
