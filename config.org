@@ -1225,6 +1225,19 @@ also Note the need to change Alt in terminal emulator profile settings
 
 * Visibility
 
+*** Startup
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+#+begin_src emacs-lisp
+(custom-set-variables '(org-startup-folded t))
+#+end_src
+    
+*** Search results
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 This makes the sparse tree when doing =gtd-next-action-sparse-tree= be all
 collapsed with only the ancestors.
 
