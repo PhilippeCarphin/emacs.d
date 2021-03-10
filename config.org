@@ -1253,3 +1253,16 @@ export only what is visible to html.  (Or one could export to .org as a way of
    '((occur-tree . ancestors)
      (default . local))))
 #+end_src
+
+
+* Key frequency data
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle yes
+  :END:
+
+  #+begin_src emacs-lisp
+  (use-package keyfreq :ensure t
+    :config
+    (keyfreq-mode 1)
+    (keyfreq-autosave-mode 1))
+  #+end_src
