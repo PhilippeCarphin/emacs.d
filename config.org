@@ -1266,3 +1266,16 @@ export only what is visible to html.  (Or one could export to .org as a way of
     (keyfreq-mode 1)
     (keyfreq-autosave-mode 1))
   #+end_src
+
+
+* Command log mode
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle yes
+  :END:
+
+#+begin_src emacs-lisp
+(use-package command-log-mode :ensure t)
+#+end_src
+*** Commands                                                        :command:
+| =global-command-log-mode=     | Activate command logging                   |
+| =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
