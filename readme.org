@@ -17,6 +17,22 @@ git clone https://github.com/philippecarphin/emacs.d ~/.emacs.d
 Start emacs.  The config uses =(use-package _ :ensure t)= to download
 packages if needed.
 
+** Daemon
+
+Create a link in your =PATH= pointing to =~/.emacs.d/ec.sh= which is a wrapper
+for the emacsclient (and a bit for the daemon).
+
+| ec -s | emacs --daemon                                | Start the emacs daemon                |
+| ec -k | emacsclient -c -e '(save-buffers-kill-emacs)' | Prompt to save buffers and kill emacs |
+| ec -K |                                               | Kill emacs by PID                     |
+
+Otherwise, launch emacsclient with forwarded arguments:
+
+| ec ~/.emacs.d/config.org | emacsclient ~/.emacs.d/config.org | Open file with emacsclient |
+
+
+
+
 ** Functionning
 
 At startup, emacs reads =~/.emacs.d/init.el= which delegates to
