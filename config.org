@@ -1302,6 +1302,13 @@ export only what is visible to html.  (Or one could export to .org as a way of
   (define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
   (define-key 'org-insert (kbd "s") 'org-insert-subheading)
   (define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
+
+  (define-prefix-command 'org-subtree)
+  (define-key evil-normal-state-map (kbd "SPC s") 'org-subtree)
+  (define-key 'org-subtree (kbd "h") 'org-promote-subtree)
+  (define-key 'org-subtree (kbd "l") 'org-demote-subtree)
+  (define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
+  (define-key 'org-subtree (kbd "j") 'org-move-subtree-down)
 #+end_src
 
 ** Keys                                                               :keys:
