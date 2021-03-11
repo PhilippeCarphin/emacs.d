@@ -1285,7 +1285,6 @@ export only what is visible to html.  (Or one could export to .org as a way of
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
   :END:
-
 #+begin_src emacs-lisp
   (defun org-insert-subheading-respect-content (arg)
     "Insert a new subheading and demote it.
@@ -1317,3 +1316,67 @@ export only what is visible to html.  (Or one could export to .org as a way of
  | =SPC i H= | =org-insert-heading-respect-content= | Inserts after content of current heading |
  | =SPC i s= | =org-insert-heading= | Insert new subheading of the one level deeper than the heading we are in |
  | =SPC i S= | =org-insert-subheading-respect-content= | (Custom) Inserts after content of current heading |
+
+
+
+* Org present
+** Basic use
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+
+   #+begin_src emacs-lisp
+(use-package org-present :ensure t)
+   #+end_src
+
+** System Crafter's config 
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
+
+  From System-crafter's config.  
+    #+begin_src emacs-lisp
+    (defun dw/org-present-prepare-slide ()
+    (org-overview)
+    (org-show-entry)
+    (org-show-children))
+
+  (defun dw/org-present-hook ()
+    (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
+                                       (header-line (:height 4.5) variable-pitch)
+                                       (org-code (:height 1.55) org-code)
+                                       (org-verbatim (:height 1.55) org-verbatim)
+                                       (org-block (:height 1.25) org-block)
+                                       (org-block-begin-line (:height 0.7) org-block)))
+    (setq header-line-format " ")
+    (org-display-inline-images)
+    (dw/org-present-prepare-slide))
+
+  (defun dw/org-present-quit-hook ()
+    (setq-local face-remapping-alist '((default variable-pitch default)))
+    (setq header-line-format nil)
+    (org-present-small)
+    (org-remove-inline-images))
+
+  (defun dw/org-present-prev ()
+    (interactive)
+    (org-present-prev)
+    (dw/org-present-prepare-slide))
+
+  (defun dw/org-present-next ()
+    (interactive)
+    (org-present-next)
+    (dw/org-present-prepare-slide))
+
+  (use-package org-present
+    :bind (:map org-present-mode-keymap
+           ("C-c C-j" . dw/org-present-next)
+           ("C-c C-k" . dw/org-present-prev))
+    :hook ((org-present-mode . dw/org-present-hook)
+           (org-present-mode-quit . dw/org-present-quit-hook)))
+    #+end_src
+
+    #+RESULTS:
+    : dw/org-present-prev
+   
