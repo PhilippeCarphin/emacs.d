@@ -1279,3 +1279,34 @@ export only what is visible to html.  (Or one could export to .org as a way of
 *** Commands                                                        :command:
 | =global-command-log-mode=     | Activate command logging                   |
 | =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
+
+
+* Orgmode custom keymap
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle yes
+  :END:
+
+#+begin_src emacs-lisp
+  (defun org-insert-subheading-respect-content (arg)
+    "Insert a new subheading and demote it.
+  Works for outline headings and for plain lists alike."
+    (interactive "P")
+    (org-insert-heading-respect-content arg)
+    (cond
+     ((org-at-heading-p) (org-do-demote))
+     ((org-at-item-p) (org-indent-item))))
+
+  (define-prefix-command 'org-insert)
+  (define-key evil-normal-state-map (kbd "SPC i") 'org-insert)
+  (define-key 'org-insert (kbd "h") 'org-insert-heading)
+  (define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
+  (define-key 'org-insert (kbd "s") 'org-insert-subheading)
+  (define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
+#+end_src
+
+** Keys                                                               :keys:
+
+ | =SPC i h= | =org-insert-heading= | Insert new heading of the same level as the heading we are in |
+ | =SPC i H= | =org-insert-heading-respect-content= | Inserts after content of current heading |
+ | =SPC i s= | =org-insert-heading= | Insert new subheading of the one level deeper than the heading we are in |
+ | =SPC i S= | =org-insert-subheading-respect-content= | (Custom) Inserts after content of current heading |
