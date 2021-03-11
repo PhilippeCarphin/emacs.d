@@ -25,6 +25,10 @@ function main(){
 	    emacs --daemon
 	    shift
 	    ;;
+  -t)
+      emacsclient -t $@
+      exit $?
+      ;;
     esac
 
     ensure-server-is-running
