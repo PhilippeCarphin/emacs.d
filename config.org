@@ -126,12 +126,20 @@ it is kind of annoying in =misterioso=.
     :HEADER-ARGS: :tangle yes
     :END:
 
- Automattically hard-wrap text on 80 chars.
+Automattically hard-wrap text on 80 chars.
 
  #+begin_src emacs-lisp
  (setq-default auto-fill-function 'do-auto-fill)
  (setq-default fill-column 80)
  #+end_src
+
+This changes how lines are displayed.
+
+ #+begin_src emacs-lisp
+ (visual-line-mode 1)
+ #+end_src
+
+With visual line mode, lines are visually wrapped to stay in the screen.
 
 *** Startup color theme
     :PROPERTIES:
