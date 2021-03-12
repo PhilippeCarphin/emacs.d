@@ -1287,7 +1287,7 @@ much useless.
     #+end_src
 ** Doom themes
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 
  #+begin_src emacs-lisp
