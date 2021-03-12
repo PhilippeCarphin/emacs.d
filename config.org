@@ -1050,32 +1050,7 @@ Don't show the file and control spacing so that all entries are aligned.
  (advice-remove 'org-global-cycle #'org-post-global-cycle)
  #+end_src
 
-** Sane search and visibility controls
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle no
-   :END:
-
-This affects how sparse trees are shown.  This setting makes sparse trees pretty
-much useless.
-
- [[help:org-show-context-detail]]
-
- #+begin_src emacs-lisp
- (custom-set-variables
-  '(org-show-context-detail
-    '((agenda . canonical)
-      (bookmark-jump . canonical)
-      (isearch . canonical)
-      (default . canonical))))
- #+end_src
-
- They changed the default behavior recently.  There must be a good reason for
- that so I want to try and get used to this new default.
-
- This is why I want to leave this with tangle no.
-
 ** Visibility
-
 **** Startup
      :PROPERTIES:
      :HEADER-ARGS: :tangle yes
