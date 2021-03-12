@@ -705,9 +705,13 @@ is there, it will go in the export regardless of this setting.
     :END:
  #+begin_src emacs-lisp
  (setq org-capture-templates
-   '(("i" "GTD Input" entry (file+headline gtd-in-tray-file "GTD Input Tray")
+   '(("i" "GTD Input" entry (file gtd-in-tray-file)
       "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
  #+end_src
+
+ #+RESULTS:
+ | i | GTD Input | entry | (file gtd-in-tray-file) | * GTD-IN %? |
+
 *** Capture hotkey
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
