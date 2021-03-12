@@ -689,7 +689,8 @@ is there, it will go in the export regardless of this setting.
  #+end_src
 
 **** Keys                                                              :keys:
-     | =C-c C-w= | =org-refile= | Move headline under cursor to somewhere else |
+     | =C-c C-w=     | =org-refile= | Move headline under cursor to somewhere else |
+     | =C-u C-c C-w= | =org-refile= | Go to selected target (no real refiling)     |
 *** Capture templates
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -937,7 +938,15 @@ Don't show the file and control spacing so that all entries are aligned.
     #+begin_src emacs-lisp
     (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
     #+end_src
+**** Keys                                                              :keys:
 
+     | =f,b=   | Forward, backward in time              |
+     | =n,p=   | Next, previous line                    |
+     | =d=     | Switch to day view                     |
+     | =w=     | Switch to week view                    |
+     | =m=     | Mark entry                             |
+     | =B=     | Do bulk action to marked entries       |
+     | =C-u B= | Do bulk action with universal argument |
 
 *** Agenda mode map customization
     :PROPERTIES:
@@ -1023,6 +1032,177 @@ much useless.
 
  This is why I want to leave this with tangle no.
 
+** Visibility
+
+**** Startup
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
+
+ #+begin_src emacs-lisp
+ (custom-set-variables '(org-startup-folded t))
+ #+end_src
+    
+**** Search results
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
+ This makes the sparse tree when doing =gtd-next-action-sparse-tree= be all
+ collapsed with only the ancestors.
+
+ But in the config, when I run the s-expression at the start, it will show the
+ content of the results (key tables mostly) and we can =C-c C-e C-v h o= to
+ export only what is visible to html.  (Or one could export to .org as a way of
+ "extracting" a sparse tree.
+
+ #+begin_src emacs-lisp
+ (custom-set-variables
+  '(org-show-context-detail
+    '((occur-tree . ancestors)
+      (default . local))))
+ #+end_src
+
+
+** Org present
+*** Basic use
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+
+    #+begin_src emacs-lisp
+ (use-package org-present :ensure t
+ :config
+ (add-hook 'org-present-mode-hook (lambda () (load-theme 'doom-dark+)))
+ (add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'doom-dark+))) )
+    #+end_src
+
+*** System Crafter's config 
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
+
+   From System-crafter's config.  
+     #+begin_src emacs-lisp
+     (defun dw/org-present-prepare-slide ()
+     (org-overview)
+     (org-show-entry)
+     (org-show-children))
+
+   (defun dw/org-present-hook ()
+     (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
+					(header-line (:height 4.5) variable-pitch)
+					(org-code (:height 1.55) org-code)
+					(org-verbatim (:height 1.55) org-verbatim)
+					(org-block (:height 1.25) org-block)
+					(org-block-begin-line (:height 0.7) org-block)))
+     (setq header-line-format " ")
+     (org-display-inline-images)
+     (dw/org-present-prepare-slide))
+
+   (defun dw/org-present-quit-hook ()
+     (setq-local face-remapping-alist '((default variable-pitch default)))
+     (setq header-line-format nil)
+     (org-present-small)
+     (org-remove-inline-images))
+
+   (defun dw/org-present-prev ()
+     (interactive)
+     (org-present-prev)
+     (dw/org-present-prepare-slide))
+
+   (defun dw/org-present-next ()
+     (interactive)
+     (org-present-next)
+     (dw/org-present-prepare-slide))
+
+   (use-package org-present
+     :bind (:map org-present-mode-keymap
+            ("C-c C-j" . dw/org-present-next)
+            ("C-c C-k" . dw/org-present-prev))
+     :hook ((org-present-mode . dw/org-present-hook)
+            (org-present-mode-quit . dw/org-present-quit-hook)))
+     #+end_src
+
+
+** Orgmode custom keymap
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+ #+begin_src emacs-lisp
+   (defun org-insert-subheading-respect-content (arg)
+     "Insert a new subheading and demote it.
+   Works for outline headings and for plain lists alike."
+     (interactive "P")
+     (org-insert-heading-respect-content arg)
+     (cond
+      ((org-at-heading-p) (org-do-demote))
+      ((org-at-item-p) (org-indent-item))))
+
+   (define-prefix-command 'org-insert)
+   (define-key evil-normal-state-map (kbd "SPC i") 'org-insert)
+   (define-key 'org-insert (kbd "h") 'org-insert-heading)
+   (define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
+   (define-key 'org-insert (kbd "s") 'org-insert-subheading)
+   (define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
+
+   (define-prefix-command 'org-subtree)
+   (define-key evil-normal-state-map (kbd "SPC s") 'org-subtree)
+   (define-key 'org-subtree (kbd "h") 'org-promote-subtree)
+   (define-key 'org-subtree (kbd "l") 'org-demote-subtree)
+   (define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
+   (define-key 'org-subtree (kbd "j") 'org-move-subtree-down)
+ #+end_src
+
+*** Keys                                                               :keys:
+
+  | =SPC i h= | =org-insert-heading= | Insert new heading of the same level as the heading we are in |
+  | =SPC i H= | =org-insert-heading-respect-content= | Inserts after content of current heading |
+  | =SPC i s= | =org-insert-heading= | Insert new subheading of the one level deeper than the heading we are in |
+  | =SPC i S= | =org-insert-subheading-respect-content= | (Custom) Inserts after content of current heading |
+
+
+
+** Export multiple files from toplevel headings
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
+ From [[https://emacs.stackexchange.com/a/2260/19972][Stack Overflow post]].
+ Export each toplevel heading in the current file as individual files in rst,
+ html, latex, or pdf formats.
+
+ The files are named the same as the headline with spaces replaced by underscores.
+   #+begin_src emacs-lisp
+   (defun org-export-all (backend)
+   "Export all subtrees that are *not* tagged with :noexport: to
+ separate files.
+
+ Subtrees that do not have the :EXPORT_FILE_NAME: property set
+ are exported to a filename derived from the headline text."
+   (interactive "sEnter backend: ")
+   (let ((fn (cond ((equal backend "html") 'org-twbs-export-to-html)
+                   ((equal backend "rst") 'org-rst-export-to-rst)
+                   ((equal backend "latex") 'org-latex-export-to-latex)
+                   ((equal backend "pdf") 'org-latex-export-to-pdf)))
+         (modifiedp (buffer-modified-p)))
+     (save-excursion
+       (goto-char (point-max))
+       (org-map-entries
+	(lambda ()
+          (let ((export-file (org-entry-get (point) "EXPORT_FILE_NAME")))
+            (unless export-file
+              (org-set-property
+               "EXPORT_FILE_NAME"
+               (replace-regexp-in-string " " "_" (nth 4 (org-heading-components)))))
+            (funcall fn nil t)
+            (unless export-file (org-delete-property "EXPORT_FILE_NAME"))
+            (set-buffer-modified-p modifiedp)))
+	"-noexport" 'region-start-level))))
+   #+end_src
+
+   #+RESULTS:
+   : org-export-all
+
 * Other packages
 ** Magit
    :PROPERTIES:
@@ -1093,362 +1273,191 @@ much useless.
  (setq-default elfeed-search-title-min-width 100)
  #+end_src
 
-* Things to do with orgmode
+** Ergoemacs
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
 
-** Write headlines and collapse them                            :keys:syntax:
+ [[https://ergoemacs.github.io][ergoemacs-mode website]]
+    #+begin_src emacs-lisp
+    (use-package ergoemacs-mode :ensure t
+      :config (setq ergoemacs-theme nil)
+              (setq ergoemacs-keyboard-layour "us")
+              (ergoemacs-mode 1))
+    #+end_src
+** Doom themes
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
 
-| =S-8=   | Insert a star character |
-| =TAB=   | =org-cycle=             |
-| =S-TAB= | =org-global-cycle=      |
+ #+begin_src emacs-lisp
+ (use-package doom-themes
+   :config
+   ;; Global settings (defaults)
+   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+   (load-theme 'doom-one t)
 
-The key =S-TAB= is bound to =org-shifttab= which calls =org-global-cycle= if the
-cursor is not in a table.
-
-** Write inline markup                                          :keys:syntax:
-| ~=~ | code      |
-| ~*~ | bold      |
-| ~_~ | Underline |
-| ~/~ | Italic    |
-| =~= | Verbatim  |
-** Write dates like this <2021-03-02> or <2021-03-02 8:00>           :syntax:
-** Write source blocks and maybe execute them =C-c C-,=         :keys:syntax:
-** Export your stuff to all the formats =C-c C-e=                      :keys:
-** Move headlines around with refile =C-c C-w=                         :keys:
-** Move headlines around with arrows                                   :keys:
-    | M-<left/right> | =org-promote-subtree=, =org-demote-subtree= | Change headline level of subtree (and it's children recursively)            |
-    | M-<up/down>    | =org-meta-up=, =org-meta-down=              | With the cursor on a headline, exchange it with it's prececing/next sibling |
-** Assign tags to headlines =C-c C-q=                                  :keys:
-** Search by tags =M-x org-tags-view=                                  :keys:
-** Sparse trees =C-c /=                                                :keys:
-** Tags sparse trees =C-c \=                                           :keys:
-** Column view                                                         :keys:
-Look at the =#+COLUMNS:= property in this document.
-|=C-c C-x C-c= | =org-columns= | Switch to a really useful view for consulting and editing properties |
-*NOTE* How much of the document will go into column-view depends on where your
- cursor is.  If you want the whole document, then you have to get your cursor to
- the top of the file before pressing =C-c C-x C-c=.
-** Agenda view =M-x org-agenda RET=                                 :command:
-   If anything has a date in it, it will show up in the agenda on that day.
-** Use =SCHEDULED:= and =DEADLINE:= for planning
-
-Using =SCHEDULED:= makes things appear in green in that day in the agenda.
-
-Items marked with =DEADLINE: <2021-02-26 Fri -4d>= appear in red on the day.
-
-Also, with the =-4d=, this defines an interval [26 - 4, 26].
-
-If /today/ falls in the interval, the item will show in the current day in the
-agenda.  In that case it will be shown in orange.
-
-*** Date commands                                                      :keys:
-| =C-c C-s=    | =org-schedule= | Add the =SCHEDULED:= keyword                            |
-| =C-s C-d=    | =org-deadline= | Add the =DEADLINE:= keyword                             |
-| =S-<arrows>= | =_=            | Selects the next/previous date in the calendar selector |
-
-I just set the lead time by writing it in manually after having done =C-c C-d=,
-using =S-<arrow>= or clicking on the date, press =RET= and go in and insert
-=-4d= manually.
-
-** Bulk actions in the agenda                                          :keys:
-| =m= | Mark entries for bulk actions |
-| =u= | Unmark entries                |
-| =U= | Unmark all entries            |
-| =*= | Mark all entries current view |
-| =B= | Do bulk actions               |
-In the bulk actions
-| =s=   | Schedule marked items                |
-| =d=   | Deadline marked itmes                |
-| =+,-= | Add,Remove tags to,from marked items |
-| =$=   | Search within marked items           |
-I use it to unschedule all the things I had scheduled for today that did not get
-done.
-
-Example: Unschedule all marked items: Mark items using =m=, then press =C-u= to
-make the following bulk scheduling action unschedule.  Press =B= for the bulk
-action menu and press =s= to select =[s]chd= scheduling options.  There will be
-no date to enter.  All marked entries will be unscheduled.
-
-This is useful for scheduling things to do the next day.  One should always
-unschedule all undone things at the end of the day and not schedule them for the
-next day.  Otherwise your schedule will stop being a schedule and become a
-single growing todo list.
-
-* Things to do in general
-** Evaluate lisp code =C-x C-e=                                        :keys:
-
-* Terminal stuff
-** Alt key in terminal emulator settings                           :terminal:
-On macos but maybe also on linux, my terminal emulator does something with my
-alt key and I have to go into Iterm preferences and change it.
-
-If in the shell you do =M-x= and it doesn't work, look for settings in your
-terminal emulator for Alt key behavior.
-** Tab key and evil mode
-TAB: (setq evil-want-C-i-jump nil).  =C-i= and =TAB= are kind of the same thing
-in the shell.  In evil mode, you need to set this to Nil, otherwise, it will do
-something with =C-i= that will prevent the =TAB= key from working in orgmode files.
-* MacOS stuff
-
-** Preventing a specific only on MacOS and only in terminal emacsclient
-https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
-also Note the need to change Alt in terminal emulator profile settings
-
-* Doom themes
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle no
-  :END:
-
-#+begin_src emacs-lisp
-(use-package doom-themes
-  :config
-  ;; Global settings (defaults)
-  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-        doom-themes-enable-italic t) ; if nil, italics is universally disabled
-  (load-theme 'doom-one t)
-
-  ;; Enable flashing mode-line on errors
-  (doom-themes-visual-bell-config)
+   ;; Enable flashing mode-line on errors
+   (doom-themes-visual-bell-config)
   
-  ;; Enable custom neotree theme (all-the-icons must be installed!)
-  (doom-themes-neotree-config)
-  ;; or for treemacs users
-  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-  (doom-themes-treemacs-config)
+   ;; Enable custom neotree theme (all-the-icons must be installed!)
+   (doom-themes-neotree-config)
+   ;; or for treemacs users
+   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+   (doom-themes-treemacs-config)
   
-  ;; Corrects (and improves) org-mode's native fontification.
-  (doom-themes-org-config))
-#+end_src
+   ;; Corrects (and improves) org-mode's native fontification.
+   (doom-themes-org-config))
+ #+end_src
 
-- Ephemeral
-- Solarized-dark
-- sourcerer
-
-
-* Visibility
-
-*** Startup
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-
-#+begin_src emacs-lisp
-(custom-set-variables '(org-startup-folded t))
-#+end_src
-    
-*** Search results
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-This makes the sparse tree when doing =gtd-next-action-sparse-tree= be all
-collapsed with only the ancestors.
-
-But in the config, when I run the s-expression at the start, it will show the
-content of the results (key tables mostly) and we can =C-c C-e C-v h o= to
-export only what is visible to html.  (Or one could export to .org as a way of
-"extracting" a sparse tree.
-
-#+begin_src emacs-lisp
-(custom-set-variables
- '(org-show-context-detail
-   '((occur-tree . ancestors)
-     (default . local))))
-#+end_src
+ - Ephemeral
+ - Solarized-dark
+ - sourcerer
 
 
-* Key frequency data
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
-  :END:
-
-  #+begin_src emacs-lisp
-  (use-package keyfreq :ensure t
-    :config
-    (keyfreq-mode 1)
-    (keyfreq-autosave-mode 1))
-  #+end_src
-
-
-* Command log mode
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
-  :END:
-
-#+begin_src emacs-lisp
-(use-package command-log-mode :ensure t)
-#+end_src
-*** Commands                                                        :command:
-| =global-command-log-mode=     | Activate command logging                   |
-| =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
-
-
-* Orgmode custom keymap
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
-  :END:
-#+begin_src emacs-lisp
-  (defun org-insert-subheading-respect-content (arg)
-    "Insert a new subheading and demote it.
-  Works for outline headings and for plain lists alike."
-    (interactive "P")
-    (org-insert-heading-respect-content arg)
-    (cond
-     ((org-at-heading-p) (org-do-demote))
-     ((org-at-item-p) (org-indent-item))))
-
-  (define-prefix-command 'org-insert)
-  (define-key evil-normal-state-map (kbd "SPC i") 'org-insert)
-  (define-key 'org-insert (kbd "h") 'org-insert-heading)
-  (define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
-  (define-key 'org-insert (kbd "s") 'org-insert-subheading)
-  (define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
-
-  (define-prefix-command 'org-subtree)
-  (define-key evil-normal-state-map (kbd "SPC s") 'org-subtree)
-  (define-key 'org-subtree (kbd "h") 'org-promote-subtree)
-  (define-key 'org-subtree (kbd "l") 'org-demote-subtree)
-  (define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
-  (define-key 'org-subtree (kbd "j") 'org-move-subtree-down)
-#+end_src
-
-** Keys                                                               :keys:
-
- | =SPC i h= | =org-insert-heading= | Insert new heading of the same level as the heading we are in |
- | =SPC i H= | =org-insert-heading-respect-content= | Inserts after content of current heading |
- | =SPC i s= | =org-insert-heading= | Insert new subheading of the one level deeper than the heading we are in |
- | =SPC i S= | =org-insert-subheading-respect-content= | (Custom) Inserts after content of current heading |
-
-
-
-* Org present
-** Basic use
+** keyfreq Key frequency data
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
 
-
    #+begin_src emacs-lisp
-(use-package org-present :ensure t
-:config
-(add-hook 'org-present-mode-hook (lambda () (load-theme 'doom-dark+)))
-(add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'doom-dark+))) )
+   (use-package keyfreq :ensure t
+     :config
+     (keyfreq-mode 1)
+     (keyfreq-autosave-mode 1))
    #+end_src
 
-** System Crafter's config 
+
+** command-log-mode
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 
-  From System-crafter's config.  
-    #+begin_src emacs-lisp
-    (defun dw/org-present-prepare-slide ()
-    (org-overview)
-    (org-show-entry)
-    (org-show-children))
-
-  (defun dw/org-present-hook ()
-    (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
-                                       (header-line (:height 4.5) variable-pitch)
-                                       (org-code (:height 1.55) org-code)
-                                       (org-verbatim (:height 1.55) org-verbatim)
-                                       (org-block (:height 1.25) org-block)
-                                       (org-block-begin-line (:height 0.7) org-block)))
-    (setq header-line-format " ")
-    (org-display-inline-images)
-    (dw/org-present-prepare-slide))
-
-  (defun dw/org-present-quit-hook ()
-    (setq-local face-remapping-alist '((default variable-pitch default)))
-    (setq header-line-format nil)
-    (org-present-small)
-    (org-remove-inline-images))
-
-  (defun dw/org-present-prev ()
-    (interactive)
-    (org-present-prev)
-    (dw/org-present-prepare-slide))
-
-  (defun dw/org-present-next ()
-    (interactive)
-    (org-present-next)
-    (dw/org-present-prepare-slide))
-
-  (use-package org-present
-    :bind (:map org-present-mode-keymap
-           ("C-c C-j" . dw/org-present-next)
-           ("C-c C-k" . dw/org-present-prev))
-    :hook ((org-present-mode . dw/org-present-hook)
-           (org-present-mode-quit . dw/org-present-quit-hook)))
-    #+end_src
+ #+begin_src emacs-lisp
+ (use-package command-log-mode :ensure t)
+ #+end_src
+**** Commands                                                       :command:
+ | =global-command-log-mode=     | Activate command logging                   |
+ | =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
 
 
-* Babel after execute hook for colored command output
-  PROPERTIES:
-  :HEADER-ARGS: :tangle yes
-  :END:
+** babel
+*** Colorize RESULTS
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
-#+begin_src emacs-lisp
-(defun ek/babel-ansi ()
-  (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
-    (save-excursion
-      (goto-char beg)
-      (when (looking-at org-babel-result-regexp)
-        (let ((end (org-babel-result-end))
-              (ansi-color-context-region nil))
-          (ansi-color-apply-on-region beg end))))))
-(add-hook 'org-babel-after-execute-hook 'ek/babel-ansi)
-#+end_src
+ #+begin_src emacs-lisp
+ (defun ek/babel-ansi ()
+   (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
+     (save-excursion
+       (goto-char beg)
+       (when (looking-at org-babel-result-regexp)
+         (let ((end (org-babel-result-end))
+               (ansi-color-context-region nil))
+           (ansi-color-apply-on-region beg end))))))
+ (add-hook 'org-babel-after-execute-hook 'ek/babel-ansi)
+ #+end_src
 
+* Documentation
+** Things to do with orgmode
 
-* Export multiple files from toplevel headings
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle no
-  :END:
-From [[https://emacs.stackexchange.com/a/2260/19972][Stack Overflow post]].
-Export each toplevel heading in the current file as individual files in rst,
-html, latex, or pdf formats.
+*** Write headlines and collapse them                           :keys:syntax:
 
-The files are named the same as the headline with spaces replaced by underscores.
-  #+begin_src emacs-lisp
-  (defun org-export-all (backend)
-  "Export all subtrees that are *not* tagged with :noexport: to
-separate files.
+ | =S-8=   | Insert a star character |
+ | =TAB=   | =org-cycle=             |
+ | =S-TAB= | =org-global-cycle=      |
 
-Subtrees that do not have the :EXPORT_FILE_NAME: property set
-are exported to a filename derived from the headline text."
-  (interactive "sEnter backend: ")
-  (let ((fn (cond ((equal backend "html") 'org-twbs-export-to-html)
-                  ((equal backend "rst") 'org-rst-export-to-rst)
-                  ((equal backend "latex") 'org-latex-export-to-latex)
-                  ((equal backend "pdf") 'org-latex-export-to-pdf)))
-        (modifiedp (buffer-modified-p)))
-    (save-excursion
-      (goto-char (point-max))
-      (org-map-entries
-       (lambda ()
-         (let ((export-file (org-entry-get (point) "EXPORT_FILE_NAME")))
-           (unless export-file
-             (org-set-property
-              "EXPORT_FILE_NAME"
-              (replace-regexp-in-string " " "_" (nth 4 (org-heading-components)))))
-           (funcall fn nil t)
-           (unless export-file (org-delete-property "EXPORT_FILE_NAME"))
-           (set-buffer-modified-p modifiedp)))
-       "-noexport" 'region-start-level))))
-  #+end_src
+ The key =S-TAB= is bound to =org-shifttab= which calls =org-global-cycle= if the
+ cursor is not in a table.
 
-  #+RESULTS:
-  : org-export-all
+*** Write inline markup                                         :keys:syntax:
+ | ~=~ | code      |
+ | ~*~ | bold      |
+ | ~_~ | Underline |
+ | ~/~ | Italic    |
+ | =~= | Verbatim  |
+*** Write dates like this <2021-03-02> or <2021-03-02 8:00>          :syntax:
+*** Write source blocks and maybe execute them =C-c C-,=        :keys:syntax:
+*** Export your stuff to all the formats =C-c C-e=                     :keys:
+*** Move headlines around with refile =C-c C-w=                        :keys:
+*** Move headlines around with arrows                                  :keys:
+     | M-<left/right> | =org-promote-subtree=, =org-demote-subtree= | Change headline level of subtree (and it's children recursively)            |
+     | M-<up/down>    | =org-meta-up=, =org-meta-down=              | With the cursor on a headline, exchange it with it's prececing/next sibling |
+*** Assign tags to headlines =C-c C-q=                                 :keys:
+*** Search by tags =M-x org-tags-view=                                 :keys:
+*** Sparse trees =C-c /=                                               :keys:
+*** Tags sparse trees =C-c \=                                          :keys:
+*** Column view                                                        :keys:
+ Look at the =#+COLUMNS:= property in this document.
+ |=C-c C-x C-c= | =org-columns= | Switch to a really useful view for consulting and editing properties |
+ *NOTE* How much of the document will go into column-view depends on where your
+  cursor is.  If you want the whole document, then you have to get your cursor to
+  the top of the file before pressing =C-c C-x C-c=.
+*** Agenda view =M-x org-agenda RET=                                :command:
+    If anything has a date in it, it will show up in the agenda on that day.
+*** Use =SCHEDULED:= and =DEADLINE:= for planning
 
+ Using =SCHEDULED:= makes things appear in green in that day in the agenda.
 
-* Ergoemacs
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle no
-   :END:
+ Items marked with =DEADLINE: <2021-02-26 Fri -4d>= appear in red on the day.
 
-[[https://ergoemacs.github.io][ergoemacs-mode website]]
-   #+begin_src emacs-lisp
-   (use-package ergoemacs-mode :ensure t
-     :config (setq ergoemacs-theme nil)
-             (setq ergoemacs-keyboard-layour "us")
-             (ergoemacs-mode 1))
-   #+end_src
+ Also, with the =-4d=, this defines an interval [26 - 4, 26].
+
+ If /today/ falls in the interval, the item will show in the current day in the
+ agenda.  In that case it will be shown in orange.
+
+**** Date commands                                                     :keys:
+ | =C-c C-s=    | =org-schedule= | Add the =SCHEDULED:= keyword                            |
+ | =C-s C-d=    | =org-deadline= | Add the =DEADLINE:= keyword                             |
+ | =S-<arrows>= | =_=            | Selects the next/previous date in the calendar selector |
+
+ I just set the lead time by writing it in manually after having done =C-c C-d=,
+ using =S-<arrow>= or clicking on the date, press =RET= and go in and insert
+ =-4d= manually.
+
+*** Bulk actions in the agenda                                         :keys:
+ | =m= | Mark entries for bulk actions |
+ | =u= | Unmark entries                |
+ | =U= | Unmark all entries            |
+ | =*= | Mark all entries current view |
+ | =B= | Do bulk actions               |
+ In the bulk actions
+ | =s=   | Schedule marked items                |
+ | =d=   | Deadline marked itmes                |
+ | =+,-= | Add,Remove tags to,from marked items |
+ | =$=   | Search within marked items           |
+ I use it to unschedule all the things I had scheduled for today that did not get
+ done.
+
+ Example: Unschedule all marked items: Mark items using =m=, then press =C-u= to
+ make the following bulk scheduling action unschedule.  Press =B= for the bulk
+ action menu and press =s= to select =[s]chd= scheduling options.  There will be
+ no date to enter.  All marked entries will be unscheduled.
+
+ This is useful for scheduling things to do the next day.  One should always
+ unschedule all undone things at the end of the day and not schedule them for the
+ next day.  Otherwise your schedule will stop being a schedule and become a
+ single growing todo list.
+
+** Things to do in general
+*** Evaluate lisp code =C-x C-e=                                       :keys:
+
+** Terminal stuff
+*** Alt key in terminal emulator settings                          :terminal:
+ On macos but maybe also on linux, my terminal emulator does something with my
+ alt key and I have to go into Iterm preferences and change it.
+
+ If in the shell you do =M-x= and it doesn't work, look for settings in your
+ terminal emulator for Alt key behavior.
+*** Tab key and evil mode
+ TAB: (setq evil-want-C-i-jump nil).  =C-i= and =TAB= are kind of the same thing
+ in the shell.  In evil mode, you need to set this to Nil, otherwise, it will do
+ something with =C-i= that will prevent the =TAB= key from working in orgmode files.
+** MacOS stuff
+
+*** Preventing a specific only on MacOS and only in terminal emacsclient
+ https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
+ also Note the need to change Alt in terminal emulator profile settings
+
