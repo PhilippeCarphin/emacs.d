@@ -1051,7 +1051,7 @@ Don't show the file and control spacing so that all entries are aligned.
  #+end_src
 
 ** Visibility
-**** Startup
+*** Startup
      :PROPERTIES:
      :HEADER-ARGS: :tangle yes
      :END:
@@ -1060,7 +1060,7 @@ Don't show the file and control spacing so that all entries are aligned.
  (custom-set-variables '(org-startup-folded t))
  #+end_src
     
-**** Search results
+*** Search results
      :PROPERTIES:
      :HEADER-ARGS: :tangle yes
      :END:
