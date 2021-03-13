@@ -23,7 +23,7 @@
 # open them in the currently running emacs daemon using emacsclient.
 ###############################################################################
 
-export PATH=/Applications/Emacs.app/Contents/MacOS/bin/:/Applications/Emacs.app/Contents/MacOS:$PATH
+export PATH=$HOME/.local/bin:$PATH
 
 function main(){
     ensure-server-is-running
