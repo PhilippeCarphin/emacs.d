@@ -752,7 +752,7 @@ then enter the text in that file's own buffer.
        (setq org-capture-templates
 	 '(("i" "GTD Input" entry (file gtd-in-tray-file)
 	    "* GTD-IN %?\n %i\n %a" :kill-buffer t)
-	   ("c" "GTD Input" entry (file emacs-config-file)
+	   ("c" "Emacs config" entry (file emacs-config-file)
 	    "* GTD-IN %?\n %i\n %a" :kill-buffer t)
 	   ))
  #+end_src
