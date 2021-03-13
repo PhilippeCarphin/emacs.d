@@ -69,6 +69,19 @@ choice so you can just press =RET=.
  (eval-when-compile (require 'use-package))
  #+end_src
 
+
+*** Config file
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+    #+begin_src emacs-lisp
+      (setq emacs-config-file "~/.emacs.d/config.org")
+      (defun open-emacs-config-file () (interactive)
+	     (find-file emacs-config-file))
+      (define-key evil-normal-state-map (kbd "SPC f c") 'open-emacs-config-file)
+    #+end_src
+
 *** Scrolling behavior
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
