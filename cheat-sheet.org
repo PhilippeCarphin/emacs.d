@@ -1,0 +1,187 @@
+# Created 2021-03-13 Sat 15:14
+#+OPTIONS: toc:1
+#+OPTIONS: broken-links:mark
+#+TITLE: Emacs config file
+#+AUTHOR: Philippe Carphin
+#+reveal_min_scale: 0.1
+#+reveal_hlevel: 4
+#+property: header-args :tangle yes :results none
+#+columns: %40ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}] %TAGS
+[[file:unicorn.jpg]]
+
+Keys sparse tree : Evaluate (org-tags-sparse-tree nil "command|keys") with
+=C-x C-e=.  Pressing =C-c C-c= will get out of the sparse tree view
+created by the expression.
+
+* Basic
+**** Keys                                                              :keys:
+| =C-h k= | =describe-key=         | Describe key                          |
+| =C-h f= | =describe-function=    | Get documentation for elisp functions |
+| =C-h t= | =tutorial=             | Emacs tutorial                        |
+| =C-h o= | =describe-symbol=      | Emacs tutorial                        |
+| =C-x 1= | =delete-other-windows= | Maximizes the current window (pane)   |
+If there is a symbol or function under the cursor, that will be the default
+choice so you can just press =RET=.
+
+** Minimalistic config
+***** Keys                                                             :keys:
+| ~C- | ~ | =prefix-key= | A grouping of common basic keys |
+
+**** Help menu
+
+**** Org link commands                                              :command:
+| =C-c C-l= | =org-insert-link=         | Insert a link with a menu prompting for URL and description^* |
+|           | =org-store-link=          | Store org link to headline in which the cursor is^*^*         |
+|           | =org-toggle-link-display= | Toggles the way links are displayed                           |
+
+.^* If the cursor is on a link, this will edit the link.
+
+.^*^* After doing that, when inserting a link, you can leave the first field
+blank and the link will point to where you stored.
+*** Bullets
+
+**** Export keys                                                       :keys:
+
+| =C-c C-e= | =org-export-dispatch= | Bring up the export menu |
+In the export menu
+| =R B= | =org-reveal-export-to-html-and-browse= | Present Right Now      |
+| =h o= | =org-html-export-to-html=              | Straight-pipe HTML     |
+| =r r= | =org-rst-export-to-rst=                | Restructured text      |
+| =w o= | =org-twbs-export-to-html=              | Twitter Bootstrap html |
+Except for =R B= the displayed LISP function does not open the file and the
+dispatcher opens it after that function has run.
+*** Babel
+**** Babel Intro                                                       :keys:
+Babel allows running of code blocks.  It is what enables this config to be in
+orgmode format.
+
+The ability to evaluate code in orgmode source blocks is built in with emacs but
+must be activated to be used:
+
+https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
+| =C-c C-c= | =org-babel-execute-src-block= | When cursor is on an SRC block, execute its code |
+**** Babel config
+
+***** Execute all command                                           :command:
+
+| =C-c C-v C-b= | =org-babel-execute-buffer= | Evaluate all source blocks in the buffer (file) |
+
+*** Orgmode scratch buffer
+
+**** Keys                                                              :keys:
+| =C-c C-w=     | =org-refile= | Move headline under cursor to somewhere else |
+| =C-u C-c C-w= | =org-refile= | Go to selected target (no real refiling)     |
+*** Capture templates
+
+**** Keys                                                              :keys:
+| =C-c C-w= | =org-capture-input= | (Custom) Org apture with selected template "i". |
+
+*** Agenda display control
+
+* Advanced orgmode and GTD
+
+**** Keys                                                              :keys:
+
+| =f,b=   | Forward, backward in time              |
+| =n,p=   | Next, previous line                    |
+| =d=     | Switch to day view                     |
+| =w=     | Switch to week view                    |
+| =m=     | Mark entry                             |
+| =B=     | Do bulk action to marked entries       |
+| =C-u B= | Do bulk action with universal argument |
+
+*** Agenda mode map customization
+
+*** Keys                                                               :keys:
+
+| =SPC i h= | =org-insert-heading=                    | Insert new heading of the same level as the heading we are in            |
+| =SPC i H= | =org-insert-heading-respect-content=    | Inserts after content of current heading                                 |
+| =SPC i s= | =org-insert-heading=                    | Insert new subheading of the one level deeper than the heading we are in |
+| =SPC i S= | =org-insert-subheading-respect-content= | (Custom) Inserts after content of current heading                        |
+
+
+
+** Export multiple files from toplevel headings
+
+* Other packages
+**** Commands                                                       :command:
+| =global-command-log-mode=     | Activate command logging                   |
+| =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
+
+
+** babel
+
+* Documentation
+*** Write headlines and collapse them                           :keys:syntax:
+
+| =S-8=   | Insert a star character |
+| =TAB=   | =org-cycle=             |
+| =S-TAB= | =org-global-cycle=      |
+
+The key =S-TAB= is bound to =org-shifttab= which calls =org-global-cycle= if the
+cursor is not in a table.
+
+*** Write inline markup                                         :keys:syntax:
+| ~=~ | code      |
+| ~*~ | bold      |
+| ~_~ | Underline |
+| ~/~ | Italic    |
+| =~= | Verbatim  |
+*** Write dates like this <2021-03-02 Tue> or <2021-03-02 Tue 08:00> :syntax:
+*** Write source blocks and maybe execute them =C-c C-,=        :keys:syntax:
+*** Export your stuff to all the formats =C-c C-e=                     :keys:
+*** Move headlines around with refile =C-c C-w=                        :keys:
+*** Move headlines around with arrows                                  :keys:
+| M-<left/right> | =org-promote-subtree=, =org-demote-subtree= | Change headline level of subtree (and it's children recursively)            |
+| M-<up/down>    | =org-meta-up=, =org-meta-down=              | With the cursor on a headline, exchange it with it's prececing/next sibling |
+*** Assign tags to headlines =C-c C-q=                                 :keys:
+*** Search by tags =M-x org-tags-view=                                 :keys:
+*** Sparse trees =C-c /=                                               :keys:
+*** Tags sparse trees =C-c \=                                          :keys:
+*** Column view                                                        :keys:
+Look at the =#+COLUMNS:= property in this document.
+| =C-c C-x C-c= | =org-columns= | Switch to a really useful view for consulting and editing properties |
+*NOTE* How much of the document will go into column-view depends on where your
+ cursor is.  If you want the whole document, then you have to get your cursor to
+ the top of the file before pressing =C-c C-x C-c=.
+*** Agenda view =M-x org-agenda RET=                                :command:
+If anything has a date in it, it will show up in the agenda on that day.
+*** Use =SCHEDULED:= and =DEADLINE:= for planning
+
+**** Date commands                                                     :keys:
+| =C-c C-s=    | =org-schedule= | Add the =SCHEDULED:= keyword                            |
+| =C-s C-d=    | =org-deadline= | Add the =DEADLINE:= keyword                             |
+| =S-<arrows>= | =_=            | Selects the next/previous date in the calendar selector |
+
+I just set the lead time by writing it in manually after having done =C-c C-d=,
+using =S-<arrow>= or clicking on the date, press =RET= and go in and insert
+=-4d= manually.
+
+*** Bulk actions in the agenda                                         :keys:
+| =m= | Mark entries for bulk actions |
+| =u= | Unmark entries                |
+| =U= | Unmark all entries            |
+| =*= | Mark all entries current view |
+| =B= | Do bulk actions               |
+In the bulk actions
+| =s=   | Schedule marked items                |
+| =d=   | Deadline marked itmes                |
+| =+,-= | Add,Remove tags to,from marked items |
+| =$=   | Search within marked items           |
+I use it to unschedule all the things I had scheduled for today that did not get
+done.
+
+Example: Unschedule all marked items: Mark items using =m=, then press =C-u= to
+make the following bulk scheduling action unschedule.  Press =B= for the bulk
+action menu and press =s= to select =[s]chd= scheduling options.  There will be
+no date to enter.  All marked entries will be unscheduled.
+
+This is useful for scheduling things to do the next day.  One should always
+unschedule all undone things at the end of the day and not schedule them for the
+next day.  Otherwise your schedule will stop being a schedule and become a
+single growing todo list.
+
+** Things to do in general
+*** Evaluate lisp code =C-x C-e=                                       :keys:
+
+** Terminal stuff

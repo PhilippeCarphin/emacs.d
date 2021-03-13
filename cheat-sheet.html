@@ -1,0 +1,1001 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>Emacs config file</title>
+<!-- 2021-03-13 Sat 15:12 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="generator" content="Org-mode">
+<meta name="author" content="Philippe Carphin">
+
+<link  href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<style>
+/* org mode styles on top of twbs */
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    font-size: 18px;
+    margin-bottom: 105px;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 101px;
+    background-color: #f5f5f5;
+}
+
+footer > div {
+    padding: 10px;
+}
+
+footer p {
+    margin: 0 0 5px;
+    text-align: center;
+    font-size: 16px;
+}
+
+#table-of-contents {
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+blockquote p {
+    font-size: 18px;
+}
+
+pre {
+    font-size: 16px;
+}
+
+.footpara {
+    display: inline-block;
+}
+
+figcaption {
+  font-size: 16px;
+  color: #666;
+  font-style: italic;
+  padding-bottom: 15px;
+}
+
+/* from twbs docs */
+
+.bs-docs-sidebar.affix {
+    position: static;
+}
+@media (min-width: 768px) {
+    .bs-docs-sidebar {
+        padding-left: 20px;
+    }
+}
+
+/* All levels of nav */
+.bs-docs-sidebar .nav > li > a {
+    display: block;
+    padding: 4px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #999;
+}
+.bs-docs-sidebar .nav > li > a:hover,
+.bs-docs-sidebar .nav > li > a:focus {
+    padding-left: 19px;
+    color: #A1283B;
+    text-decoration: none;
+    background-color: transparent;
+    border-left: 1px solid #A1283B;
+}
+.bs-docs-sidebar .nav > .active > a,
+.bs-docs-sidebar .nav > .active:hover > a,
+.bs-docs-sidebar .nav > .active:focus > a {
+    padding-left: 18px;
+    font-weight: bold;
+    color: #A1283B;
+    background-color: transparent;
+    border-left: 2px solid #A1283B;
+}
+
+/* Nav: second level (shown on .active) */
+.bs-docs-sidebar .nav .nav {
+    display: none; /* Hide by default, but at >768px, show it */
+    padding-bottom: 10px;
+}
+.bs-docs-sidebar .nav .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 30px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.bs-docs-sidebar .nav .nav > li > a:hover,
+.bs-docs-sidebar .nav .nav > li > a:focus {
+    padding-left: 29px;
+}
+.bs-docs-sidebar .nav .nav > .active > a,
+.bs-docs-sidebar .nav .nav > .active:hover > a,
+.bs-docs-sidebar .nav .nav > .active:focus > a {
+    padding-left: 28px;
+    font-weight: 500;
+}
+
+/* Nav: third level (shown on .active) */
+.bs-docs-sidebar .nav .nav .nav {
+    padding-bottom: 10px;
+}
+.bs-docs-sidebar .nav .nav .nav > li > a {
+    padding-top: 1px;
+    padding-bottom: 1px;
+    padding-left: 40px;
+    font-size: 12px;
+    font-weight: normal;
+}
+.bs-docs-sidebar .nav .nav .nav > li > a:hover,
+.bs-docs-sidebar .nav .nav .nav > li > a:focus {
+    padding-left: 39px;
+}
+.bs-docs-sidebar .nav .nav .nav > .active > a,
+.bs-docs-sidebar .nav .nav .nav > .active:hover > a,
+.bs-docs-sidebar .nav .nav .nav > .active:focus > a {
+    padding-left: 38px;
+    font-weight: 500;
+}
+
+/* Show and affix the side nav when space allows it */
+@media (min-width: 992px) {
+    .bs-docs-sidebar .nav > .active > ul {
+        display: block;
+    }
+    /* Widen the fixed sidebar */
+    .bs-docs-sidebar.affix,
+    .bs-docs-sidebar.affix-bottom {
+        width: 213px;
+    }
+    .bs-docs-sidebar.affix {
+        position: fixed; /* Undo the static from mobile first approach */
+        top: 20px;
+    }
+    .bs-docs-sidebar.affix-bottom {
+        position: absolute; /* Undo the static from mobile first approach */
+    }
+    .bs-docs-sidebar.affix .bs-docs-sidenav,.bs-docs-sidebar.affix-bottom .bs-docs-sidenav {
+        margin-top: 0;
+        margin-bottom: 0
+    }
+}
+@media (min-width: 1200px) {
+    /* Widen the fixed sidebar again */
+    .bs-docs-sidebar.affix-bottom,
+    .bs-docs-sidebar.affix {
+        width: 263px;
+    }
+}
+</style>
+<script>
+$(function() {
+    'use strict';
+
+    $('.bs-docs-sidebar li').first().addClass('active');
+
+    $(document.body).scrollspy({target: '.bs-docs-sidebar'});
+
+    $('.bs-docs-sidebar').affix();
+});
+</script>
+</head>
+<body>
+<div id="content" class="container">
+<div class="row"><div class="col-md-3 col-md-push-9"><nav id="table-of-contents">
+<div id="text-table-of-contents" class="bs-docs-sidebar">
+<ul class="nav">
+<li><a href="#sec-1">1. Basic</a></li>
+<li><a href="#sec-2">2. Advanced orgmode and GTD</a></li>
+<li><a href="#sec-3">3. Other packages</a></li>
+<li><a href="#sec-4">4. Documentation</a></li>
+</ul>
+</div>
+</nav>
+</div><div class="col-md-9 col-md-pull-3"><h1 class="title">Emacs config file</h1>
+
+<figure>
+<p><img src="unicorn.jpg" class="img-responsive" alt="unicorn.jpg">
+</p>
+</figure>
+
+<p>
+Keys sparse tree : Evaluate (org-tags-sparse-tree nil "command|keys") with
+<code>C-x C-e</code>.  Pressing <code>C-c C-c</code> will get out of the sparse tree view
+created by the expression.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Basic</h2>
+<div class="outline-text-2" id="text-1">
+</div><ol class="org-ol"><li><a id="sec-1-0-0-1" name="sec-1-0-0-1"></a>Keys&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span><br ><div class="outline-text-5" id="text-1-0-0-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>C-h k</code></td>
+<td class="text-left"><code>describe-key</code></td>
+<td class="text-left">Describe key</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>C-h f</code></td>
+<td class="text-left"><code>describe-function</code></td>
+<td class="text-left">Get documentation for elisp functions</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>C-h t</code></td>
+<td class="text-left"><code>tutorial</code></td>
+<td class="text-left">Emacs tutorial</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>C-h o</code></td>
+<td class="text-left"><code>describe-symbol</code></td>
+<td class="text-left">Emacs tutorial</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>C-x 1</code></td>
+<td class="text-left"><code>delete-other-windows</code></td>
+<td class="text-left">Maximizes the current window (pane)</td>
+</tr>
+</tbody>
+</table>
+<p>
+If there is a symbol or function under the cursor, that will be the default
+choice so you can just press <code>RET</code>.
+</p>
+</div>
+</li></ol>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1"><span class="section-number-3">1.1</span> Minimalistic config</h3>
+<div class="outline-text-3" id="text-1-1">
+</div><ol class="org-ol"><li><a id="sec-1-1-0-0-1" name="sec-1-1-0-0-1"></a>Keys&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span><br ><div class="outline-text-6" id="text-1-1-0-0-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left">~C-</td>
+<td class="text-left">~</td>
+<td class="text-left"><code>prefix-key</code></td>
+<td class="text-left">A grouping of common basic keys</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li></ol>
+
+<li><a id="sec-1-1-0-1" name="sec-1-1-0-1"></a>Help menu<br ></li></ol>
+</div>
+
+<li><a id="sec-1-1-0-2" name="sec-1-1-0-2"></a>Org link commands&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge command">command</span></span><br ><div class="outline-text-5" id="text-1-1-0-2">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>C-c C-l</code></td>
+<td class="text-left"><code>org-insert-link</code></td>
+<td class="text-left">Insert a link with a menu prompting for URL and description<sup>*</sup></td>
+</tr>
+
+<tr>
+<td class="text-left">&#xa0;</td>
+<td class="text-left"><code>org-store-link</code></td>
+<td class="text-left">Store org link to headline in which the cursor is<sup>*</sup><sup>*</sup></td>
+</tr>
+
+<tr>
+<td class="text-left">&#xa0;</td>
+<td class="text-left"><code>org-toggle-link-display</code></td>
+<td class="text-left">Toggles the way links are displayed</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+.<sup>*</sup> If the cursor is on a link, this will edit the link.
+</p>
+
+<p>
+.<sup>*</sup><sup>*</sup> After doing that, when inserting a link, you can leave the first field
+blank and the link will point to where you stored.
+</p>
+</div>
+</li></ol>
+<div id="outline-container-sec-1-1-1" class="outline-4">
+<h4 id="sec-1-1-1"><span class="section-number-4">1.1.1</span> Bullets</h4>
+</div>
+
+<li><a id="sec-1-1-1-1" name="sec-1-1-1-1"></a>Export keys&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span><br ><div class="outline-text-5" id="text-1-1-1-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>C-c C-e</code></td>
+<td class="text-left"><code>org-export-dispatch</code></td>
+<td class="text-left">Bring up the export menu</td>
+</tr>
+</tbody>
+</table>
+<p>
+In the export menu
+</p>
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>R B</code></td>
+<td class="text-left"><code>org-reveal-export-to-html-and-browse</code></td>
+<td class="text-left">Present Right Now</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>h o</code></td>
+<td class="text-left"><code>org-html-export-to-html</code></td>
+<td class="text-left">Straight-pipe HTML</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>r r</code></td>
+<td class="text-left"><code>org-rst-export-to-rst</code></td>
+<td class="text-left">Restructured text</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>w o</code></td>
+<td class="text-left"><code>org-twbs-export-to-html</code></td>
+<td class="text-left">Twitter Bootstrap html</td>
+</tr>
+</tbody>
+</table>
+<p>
+Except for <code>R B</code> the displayed LISP function does not open the file and the
+dispatcher opens it after that function has run.
+</p>
+</div>
+</li></ol>
+<div id="outline-container-sec-1-1-2" class="outline-4">
+<h4 id="sec-1-1-2"><span class="section-number-4">1.1.2</span> Babel</h4>
+<div class="outline-text-4" id="text-1-1-2">
+</div><ol class="org-ol"><li><a id="sec-1-1-2-1" name="sec-1-1-2-1"></a>Babel Intro&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span><br ><div class="outline-text-5" id="text-1-1-2-1">
+<p>
+Babel allows running of code blocks.  It is what enables this config to be in
+orgmode format.
+</p>
+
+<p>
+The ability to evaluate code in orgmode source blocks is built in with emacs but
+must be activated to be used:
+</p>
+
+<p>
+<a href="https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure">https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure</a>
+</p>
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>C-c C-c</code></td>
+<td class="text-left"><code>org-babel-execute-src-block</code></td>
+<td class="text-left">When cursor is on an SRC block, execute its code</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li>
+<li><a id="sec-1-1-2-2" name="sec-1-1-2-2"></a>Babel config<br ></li>
+
+<li><a id="sec-1-1-2-2-1" name="sec-1-1-2-2-1"></a>Execute all command&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge command">command</span></span><br ><div class="outline-text-6" id="text-1-1-2-2-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>C-c C-v C-b</code></td>
+<td class="text-left"><code>org-babel-execute-buffer</code></td>
+<td class="text-left">Evaluate all source blocks in the buffer (file)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-1-1-3" class="outline-4">
+<h4 id="sec-1-1-3"><span class="section-number-4">1.1.3</span> Orgmode scratch buffer</h4>
+</div>
+
+<li><a id="sec-1-1-3-1" name="sec-1-1-3-1"></a>Keys&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span><br ><div class="outline-text-5" id="text-1-1-3-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>C-c C-w</code></td>
+<td class="text-left"><code>org-refile</code></td>
+<td class="text-left">Move headline under cursor to somewhere else</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>C-u C-c C-w</code></td>
+<td class="text-left"><code>org-refile</code></td>
+<td class="text-left">Go to selected target (no real refiling)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li></ol>
+<div id="outline-container-sec-1-1-4" class="outline-4">
+<h4 id="sec-1-1-4"><span class="section-number-4">1.1.4</span> Capture templates</h4>
+</div>
+
+<li><a id="sec-1-1-4-1" name="sec-1-1-4-1"></a>Keys&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span><br ><div class="outline-text-5" id="text-1-1-4-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>C-c C-w</code></td>
+<td class="text-left"><code>org-capture-input</code></td>
+<td class="text-left">(Custom) Org apture with selected template "i".</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li></ol>
+
+<div id="outline-container-sec-1-1-5" class="outline-4">
+<h4 id="sec-1-1-5"><span class="section-number-4">1.1.5</span> Agenda display control</h4>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> Advanced orgmode and GTD</h2>
+<div class="outline-text-2" id="text-2">
+</div><ol class="org-ol"><li><a id="sec-2-0-0-1" name="sec-2-0-0-1"></a>Keys&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span><br ><div class="outline-text-5" id="text-2-0-0-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>f,b</code></td>
+<td class="text-left">Forward, backward in time</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>n,p</code></td>
+<td class="text-left">Next, previous line</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>d</code></td>
+<td class="text-left">Switch to day view</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>w</code></td>
+<td class="text-left">Switch to week view</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>m</code></td>
+<td class="text-left">Mark entry</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>B</code></td>
+<td class="text-left">Do bulk action to marked entries</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>C-u B</code></td>
+<td class="text-left">Do bulk action with universal argument</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li></ol>
+
+<div id="outline-container-sec-2-0-1" class="outline-4">
+<h4 id="sec-2-0-1"><span class="section-number-4">2.0.1</span> Agenda mode map customization</h4>
+</div>
+
+<div id="outline-container-sec-2-0-2" class="outline-4">
+<h4 id="sec-2-0-2"><span class="section-number-4">2.0.2</span> Keys&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+<div class="outline-text-4" id="text-2-0-2">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>SPC i h</code></td>
+<td class="text-left"><code>org-insert-heading</code></td>
+<td class="text-left">Insert new heading of the same level as the heading we are in</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>SPC i H</code></td>
+<td class="text-left"><code>org-insert-heading-respect-content</code></td>
+<td class="text-left">Inserts after content of current heading</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>SPC i s</code></td>
+<td class="text-left"><code>org-insert-heading</code></td>
+<td class="text-left">Insert new subheading of the one level deeper than the heading we are in</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>SPC i S</code></td>
+<td class="text-left"><code>org-insert-subheading-respect-content</code></td>
+<td class="text-left">(Custom) Inserts after content of current heading</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Export multiple files from toplevel headings</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> Other packages</h2>
+<div class="outline-text-2" id="text-3">
+</div><ol class="org-ol"><li><a id="sec-3-0-0-1" name="sec-3-0-0-1"></a>Commands&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge command">command</span></span><br ><div class="outline-text-5" id="text-3-0-0-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>global-command-log-mode</code></td>
+<td class="text-left">Activate command logging</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>clm/open-command-log-buffer</code></td>
+<td class="text-left">Open command log buffer for demonstrations</td>
+</tr>
+</tbody>
+</table>
+</div>
+</li></ol>
+
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> babel</h3>
+</div>
+</div>
+
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4"><span class="section-number-2">4</span> Documentation</h2>
+<div class="outline-text-2" id="text-4">
+</div><div id="outline-container-sec-4-0-1" class="outline-4">
+<h4 id="sec-4-0-1"><span class="section-number-4">4.0.1</span> Write headlines and collapse them&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span>&#xa0;<span class="badge syntax">syntax</span></span></h4>
+<div class="outline-text-4" id="text-4-0-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>S-8</code></td>
+<td class="text-left">Insert a star character</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>TAB</code></td>
+<td class="text-left"><code>org-cycle</code></td>
+</tr>
+
+<tr>
+<td class="text-left"><code>S-TAB</code></td>
+<td class="text-left"><code>org-global-cycle</code></td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The key <code>S-TAB</code> is bound to <code>org-shifttab</code> which calls <code>org-global-cycle</code> if the
+cursor is not in a table.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-0-2" class="outline-4">
+<h4 id="sec-4-0-2"><span class="section-number-4">4.0.2</span> Write inline markup&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span>&#xa0;<span class="badge syntax">syntax</span></span></h4>
+<div class="outline-text-4" id="text-4-0-2">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>=</code></td>
+<td class="text-left">code</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>*</code></td>
+<td class="text-left">bold</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>_</code></td>
+<td class="text-left">Underline</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>/</code></td>
+<td class="text-left">Italic</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>~</code></td>
+<td class="text-left">Verbatim</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-4-0-3" class="outline-4">
+<h4 id="sec-4-0-3"><span class="section-number-4">4.0.3</span> Write dates like this <span class="timestamp-wrapper"><span class="timestamp">&lt;2021-03-02 Tue&gt; </span></span> or <span class="timestamp-wrapper"><span class="timestamp">&lt;2021-03-02 Tue 08:00&gt;</span></span>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge syntax">syntax</span></span></h4>
+</div>
+<div id="outline-container-sec-4-0-4" class="outline-4">
+<h4 id="sec-4-0-4"><span class="section-number-4">4.0.4</span> Write source blocks and maybe execute them <code>C-c C-,</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span>&#xa0;<span class="badge syntax">syntax</span></span></h4>
+</div>
+<div id="outline-container-sec-4-0-5" class="outline-4">
+<h4 id="sec-4-0-5"><span class="section-number-4">4.0.5</span> Export your stuff to all the formats <code>C-c C-e</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+</div>
+<div id="outline-container-sec-4-0-6" class="outline-4">
+<h4 id="sec-4-0-6"><span class="section-number-4">4.0.6</span> Move headlines around with refile <code>C-c C-w</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+</div>
+<div id="outline-container-sec-4-0-7" class="outline-4">
+<h4 id="sec-4-0-7"><span class="section-number-4">4.0.7</span> Move headlines around with arrows&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+<div class="outline-text-4" id="text-4-0-7">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left">M-&lt;left/right&gt;</td>
+<td class="text-left"><code>org-promote-subtree</code>, <code>org-demote-subtree</code></td>
+<td class="text-left">Change headline level of subtree (and it's children recursively)</td>
+</tr>
+
+<tr>
+<td class="text-left">M-&lt;up/down&gt;</td>
+<td class="text-left"><code>org-meta-up</code>, <code>org-meta-down</code></td>
+<td class="text-left">With the cursor on a headline, exchange it with it's prececing/next sibling</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-4-0-8" class="outline-4">
+<h4 id="sec-4-0-8"><span class="section-number-4">4.0.8</span> Assign tags to headlines <code>C-c C-q</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+</div>
+<div id="outline-container-sec-4-0-9" class="outline-4">
+<h4 id="sec-4-0-9"><span class="section-number-4">4.0.9</span> Search by tags <code>M-x org-tags-view</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+</div>
+<div id="outline-container-sec-4-0-10" class="outline-4">
+<h4 id="sec-4-0-10"><span class="section-number-4">4.0.10</span> Sparse trees <code>C-c /</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+</div>
+<div id="outline-container-sec-4-0-11" class="outline-4">
+<h4 id="sec-4-0-11"><span class="section-number-4">4.0.11</span> Tags sparse trees <code>C-c \</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+</div>
+<div id="outline-container-sec-4-0-12" class="outline-4">
+<h4 id="sec-4-0-12"><span class="section-number-4">4.0.12</span> Column view&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+<div class="outline-text-4" id="text-4-0-12">
+<p>
+Look at the <code>#+COLUMNS:</code> property in this document.
+</p>
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>C-c C-x C-c</code></td>
+<td class="text-left"><code>org-columns</code></td>
+<td class="text-left">Switch to a really useful view for consulting and editing properties</td>
+</tr>
+</tbody>
+</table>
+<p>
+<b>NOTE</b> How much of the document will go into column-view depends on where your
+ cursor is.  If you want the whole document, then you have to get your cursor to
+ the top of the file before pressing <code>C-c C-x C-c</code>.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4-0-13" class="outline-4">
+<h4 id="sec-4-0-13"><span class="section-number-4">4.0.13</span> Agenda view <code>M-x org-agenda RET</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge command">command</span></span></h4>
+<div class="outline-text-4" id="text-4-0-13">
+<p>
+If anything has a date in it, it will show up in the agenda on that day.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-4-0-14" class="outline-4">
+<h4 id="sec-4-0-14"><span class="section-number-4">4.0.14</span> Use <code>SCHEDULED:</code> and <code>DEADLINE:</code> for planning</h4>
+<div class="outline-text-4" id="text-4-0-14">
+</div><ol class="org-ol"><li><a id="sec-4-0-14-1" name="sec-4-0-14-1"></a>Date commands&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span><br ><div class="outline-text-5" id="text-4-0-14-1">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>C-c C-s</code></td>
+<td class="text-left"><code>org-schedule</code></td>
+<td class="text-left">Add the <code>SCHEDULED:</code> keyword</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>C-s C-d</code></td>
+<td class="text-left"><code>org-deadline</code></td>
+<td class="text-left">Add the <code>DEADLINE:</code> keyword</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>S-&lt;arrows&gt;</code></td>
+<td class="text-left"><code>_</code></td>
+<td class="text-left">Selects the next/previous date in the calendar selector</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+I just set the lead time by writing it in manually after having done <code>C-c C-d</code>,
+using <code>S-&lt;arrow&gt;</code> or clicking on the date, press <code>RET</code> and go in and insert
+<code>-4d</code> manually.
+</p>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-4-0-15" class="outline-4">
+<h4 id="sec-4-0-15"><span class="section-number-4">4.0.15</span> Bulk actions in the agenda&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+<div class="outline-text-4" id="text-4-0-15">
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>m</code></td>
+<td class="text-left">Mark entries for bulk actions</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>u</code></td>
+<td class="text-left">Unmark entries</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>U</code></td>
+<td class="text-left">Unmark all entries</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>*</code></td>
+<td class="text-left">Mark all entries current view</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>B</code></td>
+<td class="text-left">Do bulk actions</td>
+</tr>
+</tbody>
+</table>
+<p>
+In the bulk actions
+</p>
+<table class="table table-striped table-bordered table-hover table-condensed">
+
+
+<colgroup>
+<col  class="left">
+
+<col  class="left">
+</colgroup>
+<tbody>
+<tr>
+<td class="text-left"><code>s</code></td>
+<td class="text-left">Schedule marked items</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>d</code></td>
+<td class="text-left">Deadline marked itmes</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>+,-</code></td>
+<td class="text-left">Add,Remove tags to,from marked items</td>
+</tr>
+
+<tr>
+<td class="text-left"><code>$</code></td>
+<td class="text-left">Search within marked items</td>
+</tr>
+</tbody>
+</table>
+<p>
+I use it to unschedule all the things I had scheduled for today that did not get
+done.
+</p>
+
+<p>
+Example: Unschedule all marked items: Mark items using <code>m</code>, then press <code>C-u</code> to
+make the following bulk scheduling action unschedule.  Press <code>B</code> for the bulk
+action menu and press <code>s</code> to select <code>[s]chd</code> scheduling options.  There will be
+no date to enter.  All marked entries will be unscheduled.
+</p>
+
+<p>
+This is useful for scheduling things to do the next day.  One should always
+unschedule all undone things at the end of the day and not schedule them for the
+next day.  Otherwise your schedule will stop being a schedule and become a
+single growing todo list.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-4-1" class="outline-3">
+<h3 id="sec-4-1"><span class="section-number-3">4.1</span> Things to do in general</h3>
+<div class="outline-text-3" id="text-4-1">
+</div><div id="outline-container-sec-4-1-1" class="outline-4">
+<h4 id="sec-4-1-1"><span class="section-number-4">4.1.1</span> Evaluate lisp code <code>C-x C-e</code>&#xa0;&#xa0;&#xa0;<span class="tag"><span class="badge keys">keys</span></span></h4>
+</div>
+</div>
+
+<div id="outline-container-sec-4-2" class="outline-3">
+<h3 id="sec-4-2"><span class="section-number-3">4.2</span> Terminal stuff</h3>
+</div>
+</div>
+</div></div></div>
+<footer id="postamble" class="">
+<div><p class="author">Author: Philippe Carphin</p>
+<p class="date">Created: 2021-03-13 Sat 15:12</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 28.0.50 (<a href="http://orgmode.org">Org-mode</a> 9.4.4)</p>
+</div>
+</footer>
+</body>
+</html>
