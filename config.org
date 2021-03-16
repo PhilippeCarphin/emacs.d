@@ -683,7 +683,7 @@ Don't show the file and control spacing so that all entries are aligned.
 
 ** Evil mode
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 *** Description
  Evil-mode is a by far the best VI emulation out there.  It is very exact.
