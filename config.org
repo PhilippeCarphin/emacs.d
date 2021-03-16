@@ -310,10 +310,6 @@ With visual line mode, lines are visually wrapped to stay in the screen.
      :config (evil-mode 1)
            (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
 	     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-	     (define-key leader-key (kbd "f c") 'open-emacs-config-file)
-	     (define-key leader-key (kbd "f f") 'helm-find-files)
-	     (define-key leader-key (kbd "f r") 'helm-recentf)
-	     (define-key leader-key (kbd "b b") 'helm-buffers-list)
 	     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 	     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 	     (global-set-key (kbd "M-u") 'universal-argument)
@@ -789,6 +785,21 @@ Don't show the file and control spacing so that all entries are aligned.
   (setq org-agenda-prefix-format  '((agenda . "%-12t% s")))
 #+end_src
 
+*** Keymap
+
+#+begin_src emacs-lisp
+  (define-prefix-command 'files)
+  (define-key leader-key (kbd "f") 'files)
+
+  (define-key files (kbd "c") 'open-emacs-config-file)
+  (define-key files (kbd "f") 'helm-find-files)
+  (define-key files (kbd "r") 'helm-recentf)
+
+  (define-key leader-key (kbd "b") 'buffers)
+  (define-key buffers (kbd "b") 'helm-buffers-list)
+  (define-key buffers (kbd "k") 'kill-buffer)
+  (define-key leader-key (kbd "g") 'gtd)
+#+end_src
 * Advanced orgmode and GTD
 
 ** Inline images
@@ -1006,7 +1017,6 @@ Don't show the file and control spacing so that all entries are aligned.
 
      I should put it in the evil mode config but I don't want it to depend on other things
     #+begin_src emacs-lisp
-    (define-key leader-key (kbd "a g") 'gtd)
     #+end_src
 **** Keys                                                              :keys:
 
@@ -1247,6 +1257,7 @@ Don't show the file and control spacing so that all entries are aligned.
 
    #+RESULTS:
    : org-export-all
+
 
 * Other packages
 ** Magit
