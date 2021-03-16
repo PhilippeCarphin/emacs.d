@@ -397,55 +397,79 @@ With visual line mode, lines are visually wrapped to stay in the screen.
    see its implementation!
 
   #+begin_src emacs-lisp
-    (define-key leader-key (kbd "h") 'about-this-keymap)
+      (define-key leader-key (kbd "h") 'about-this-keymap)
 
-    (define-prefix-command 'emacs-movement)
-    (define-key leader-key (kbd "m") 'emacs-movement)
-    (define-key emacs-movement (kbd "C-f") 'forward-char)
-    (define-key emacs-movement (kbd "C-b") 'backward-char)
-    (define-key emacs-movement (kbd "C-p") 'previous-line)
-    (define-key emacs-movement (kbd "C-n") 'next-line)
-    (define-key emacs-movement (kbd "C-v") 'scroll-up-command)
-    (define-key emacs-movement (kbd "M-v") 'scroll-down-command)
-    (define-key emacs-movement (kbd "C-s") 'isearch-forward)
-    (define-key emacs-movement (kbd "C-r") 'isearch-backward)
+      (define-prefix-command 'emacs-movement)
+      (define-key leader-key (kbd "m") 'emacs-movement)
+      (define-key emacs-movement (kbd "C-f") 'forward-char)
+      (define-key emacs-movement (kbd "C-b") 'backward-char)
+      (define-key emacs-movement (kbd "C-p") 'previous-line)
+      (define-key emacs-movement (kbd "C-n") 'next-line)
+      (define-key emacs-movement (kbd "C-v") 'scroll-up-command)
+      (define-key emacs-movement (kbd "M-v") 'scroll-down-command)
+      (define-key emacs-movement (kbd "C-s") 'isearch-forward)
+      (define-key emacs-movement (kbd "C-r") 'isearch-backward)
 
-    (define-prefix-command '__C-x__)
-    (define-key leader-key (kbd "C-x") '__C-x__)
-    (define-key __C-x__ (kbd "C-f") 'helm-find-files)
-    (define-key __C-x__ (kbd "C-r") 'helm-recentf)
-    (define-key __C-x__ (kbd "C-b") 'helm-buffers-list)
-    (define-key __C-x__ (kbd "b") 'switch-to-buffer)
-    (define-key __C-x__ (kbd "C-s") 'save-buffer)
-    (define-key __C-x__ (kbd "C-c") 'save-buffers-kill-emacs)
+    (define-prefix-command 'files)
+    (define-key leader-key (kbd "f") 'files)
 
-    (define-prefix-command '__C-h__)
-    (define-key leader-key (kbd "C-h") '__C-h__)
-    (define-key __C-h__ (kbd "C-i") 'helm-info)
-    (define-key __C-h__ (kbd "o") 'describe-symbol)
-    (define-key __C-h__ (kbd "f") 'describe-function)
-    (define-key __C-h__ (kbd "k") 'describe-key)
-    (define-prefix-command 'orgmode__)
-    (define-prefix-command 'orgmode__C-c__)
-    (define-key orgmode__ (kbd "C-c") 'orgmode__C-c__)
-    (define-key orgmode__C-c__ (kbd "C-,") 'org-insert-structure-template)
-    (define-key orgmode__C-c__ (kbd "C-c") 'org-ctrl-c-ctrl-c)
-    (define-key orgmode__C-c__ (kbd "'") 'org-edit-special)
-    (define-key orgmode__C-c__ (kbd ".") 'org-time-stamp)
-    (define-key orgmode__C-c__ (kbd "C-s") 'org-schedule)
-    (define-key orgmode__C-c__ (kbd "C-d") 'org-deadline)
-    (define-key orgmode__ (kbd "a") 'org-agenda)
-    (define-key orgmode__ (kbd "v") 'org-tags-view)
-    (define-key orgmode__ (kbd "C-c /") 'org-match-sparse-tree)
-    (define-key orgmode__ (kbd "<M-S-left>") 'org-promote-subtree)
-    (define-key orgmode__ (kbd "<M-S-right>") 'org-demote-subtree)
-    (define-key orgmode__ (kbd "n") 'org-narrow-to-subtree)
-    (define-key orgmode__ (kbd "c") 'org-columns)
+    (define-key files (kbd "c") 'open-emacs-config-file)
+    (define-key files (kbd "f") 'helm-find-files)
+    (define-key files (kbd "r") 'helm-recentf)
+    (define-key files (kbd "s") 'save-buffer)
+
+    (define-prefix-command 'buffers)
+    (define-key leader-key (kbd "b") 'buffers)
+    (define-key buffers (kbd "b") 'helm-buffers-list)
+    (define-key buffers (kbd "k") 'kill-buffer)
+    (define-key leader-key (kbd "g") 'gtd)
+
+      (define-key leader-key (kbd "q") 'save-buffers-kill-emacs)
+
+      (define-prefix-command 'help)
+      (define-key leader-key (kbd "h") 'help)
+      (define-key help (kbd "C-i") 'helm-info)
+      (define-key help (kbd "o") 'describe-symbol)
+      (define-key help (kbd "f") 'describe-function)
+      (define-key help (kbd "k") 'describe-key)
+
+      (define-prefix-command 'orgmode)
+      (define-prefix-command '__orgmode__C-c__)
+      (define-key orgmode (kbd "C-c") '__orgmode__C-c__)
+      (define-key __orgmode__C-c__ (kbd "C-,") 'org-insert-structure-template)
+      (define-key __orgmode__C-c__ (kbd "C-c") 'org-ctrl-c-ctrl-c)
+      (define-key __orgmode__C-c__ (kbd "C-w") 'refile)
+      (define-key __orgmode__C-c__ (kbd "C-x C-c") 'org-columns)
+      (define-key __orgmode__C-c__ (kbd "'") 'org-edit-special)
+      (define-key __orgmode__C-c__ (kbd ".") 'org-time-stamp)
+      (define-key __orgmode__C-c__ (kbd "C-s") 'org-schedule)
+      (define-key __orgmode__C-c__ (kbd "C-d") 'org-deadline)
+      (define-key leader-key (kbd "o") 'orgmode)
+      (define-key orgmode (kbd "a") 'org-agenda)
+      (define-key orgmode (kbd "v") 'org-tags-view)
+      (define-key orgmode (kbd "C-c /") 'org-match-sparse-tree)
+      (define-key orgmode (kbd "<M-S-left>") 'org-promote-subtree)
+      (define-key orgmode (kbd "<M-S-right>") 'org-demote-subtree)
+      (define-key orgmode (kbd "<M-up>") 'org-demote-subtree)
+      (define-key orgmode (kbd "n") 'org-narrow-to-subtree)
+      (define-key orgmode (kbd "c") 'org-columns)
+     (define-prefix-command 'org-insert)
+     (define-key orgmode (kbd "i") 'org-insert)
+     (define-key 'org-insert (kbd "h") 'org-insert-heading)
+     (define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
+     (define-key 'org-insert (kbd "s") 'org-insert-subheading)
+     (define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
+
+     (define-prefix-command 'org-subtree)
+     (define-key orgmode (kbd "s") 'org-subtree)
+     (define-key 'org-subtree (kbd "h") 'org-promote-subtree)
+     (define-key 'org-subtree (kbd "l") 'org-demote-subtree)
+     (define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
+     (define-key 'org-subtree (kbd "j") 'org-move-subtree-down)
   #+end_src
 
   #+RESULTS:
   : org-columns
-
 ***** Explanations
 
   La touche =C-|= (=C-S-\=) est une map de touches qui contient des
@@ -799,20 +823,6 @@ Don't show the file and control spacing so that all entries are aligned.
 
 *** Keymap
 
-#+begin_src emacs-lisp
-  (define-prefix-command 'files)
-  (define-key leader-key (kbd "f") 'files)
-
-  (define-key files (kbd "c") 'open-emacs-config-file)
-  (define-key files (kbd "f") 'helm-find-files)
-  (define-key files (kbd "r") 'helm-recentf)
-
-  (define-prefix-command 'buffers)
-  (define-key leader-key (kbd "b") 'buffers)
-  (define-key buffers (kbd "b") 'helm-buffers-list)
-  (define-key buffers (kbd "k") 'kill-buffer)
-  (define-key leader-key (kbd "g") 'gtd)
-#+end_src
 * Advanced orgmode and GTD
 
 ** Inline images
@@ -1206,19 +1216,6 @@ Don't show the file and control spacing so that all entries are aligned.
       ((org-at-heading-p) (org-do-demote))
       ((org-at-item-p) (org-indent-item))))
 
-   (define-prefix-command 'org-insert)
-   (define-key leader-key (kbd "i") 'org-insert)
-   (define-key 'org-insert (kbd "h") 'org-insert-heading)
-   (define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
-   (define-key 'org-insert (kbd "s") 'org-insert-subheading)
-   (define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
-
-   (define-prefix-command 'org-subtree)
-   (define-key leader-key (kbd "s") 'org-subtree)
-   (define-key 'org-subtree (kbd "h") 'org-promote-subtree)
-   (define-key 'org-subtree (kbd "l") 'org-demote-subtree)
-   (define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
-   (define-key 'org-subtree (kbd "j") 'org-move-subtree-down)
  #+end_src
 
 *** Keys                                                               :keys:
