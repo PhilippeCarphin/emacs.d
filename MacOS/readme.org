@@ -1,5 +1,4 @@
 #+TITLE: MacOS Automator app for Emacs Daemon+Client
-* MacOS Daemon+Client App
    The =ec.command= file is meant to be the shell script of a mac automator app.
 The app ends up being 19 mb so I'm not checking it in with git and instead, I
 track =ec.command= and give instructions to make an app from it.
@@ -10,7 +9,7 @@ track =ec.command= and give instructions to make an app from it.
 These steps can be followed to create the app from this script, change its icon
 and define a file association for orgmode files.
 
-** Create App
+* Create App
 Launch Automator, do
 - File \rightarrow New : Application (self running workflow) : Choose
 - Top left : Search bar : "Run Shell Script" : Double Click
@@ -19,14 +18,14 @@ Launch Automator, do
 - File \rightarrow Export : Save in /Applications or ~/Applications
 - If environment not configured in ~/.zshenv see TODO in the file
 
-** Change App icon
+* Change App icon
 In finder, locate the Emacs app and the new Automator app.
 - Right click the app : Get info
 - Right click the Emacs App : Get info
 - Click on the emacs icon in the Emacs App Info window, do CMD-C
 - Click on the icon in the exported app Info window, do CMD-V
 
-** File association
+* File association
 Locate an orgmode file in Finder
 - Right click an orgmode file: Get Info
 - In section "Open With" : Select other, find exported app and select it
