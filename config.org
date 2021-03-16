@@ -27,7 +27,7 @@ the full power of orgmode immediately.
 *** This config file
 
 Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
-** Package stuff
+** Configure =use-pacakge=
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -64,17 +64,6 @@ We therefore want it to exist from the very start
 This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 
 ** Small basic configs
-*** Config file
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-
-    #+begin_src emacs-lisp
-      (setq emacs-config-file "~/.emacs.d/config.org")
-      (defun open-emacs-config-file () (interactive)
-	     (find-file emacs-config-file))
-    #+end_src
-
 *** Scrolling behavior
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -123,23 +112,27 @@ it is kind of annoying in =misterioso=.
  #+end_src
 
 *** Wrapping
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-
+**** Hard wrap as you type
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
 Automattically hard-wrap text on 80 chars as you type.
 
- #+begin_src emacs-lisp
- (setq-default auto-fill-function 'do-auto-fill)
- (setq-default fill-column 80)
- #+end_src
+#+begin_src emacs-lisp
+(setq-default auto-fill-function 'do-auto-fill)
+(setq-default fill-column 80)
+#+end_src
 
+**** Wrap lines visually
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
 Wrap lines visually (lines that are too long are /displayed/ on multiple lines
 with a special char indicating visual wrapping.
 
- #+begin_src emacs-lisp
- (visual-line-mode 1)
- #+end_src
+#+begin_src emacs-lisp
+(global-visual-line-mode 1)
+#+end_src
 
 *** Startup color theme
     :PROPERTIES:
@@ -168,7 +161,7 @@ with a special char indicating visual wrapping.
 
 *** Startup font
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle no
     :END:
 
  To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
@@ -176,7 +169,6 @@ with a special char indicating visual wrapping.
  #+begin_src emacs-lisp
  (custom-set-faces '(default ((t (:height 200)))))
  #+end_src
-
 
 *** Follow symlinks
     :PROPERTIES:
@@ -564,24 +556,25 @@ From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post b
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
-**** =org-agenda-files= variable
+**** Platform dependant =org-agenda-dir= variable
+We use a single directory to hold our agenda files.  We create a symbol holding
+that directory depending on the system we are on.
+ #+begin_src emacs-lisp :results none
+ (cond ((string-equal system-type "windows-nt")
+	(progn (setq org-agenda-dir "c:\\Users\\phil1\\Documents\\gtd")))
+       ((string-equal system-type "darwin")
+        (progn (setq org-agenda-dir "~/Documents/gtd/")))
+       ((string-equal system-type "gnu/linux")
+        (progn (setq org-agenda-dir "~/Documents/gtd/"))))
+ #+end_src
+**** Org agenda files
+This is the variable that org looks at for files containing agenda items.
  #+begin_src emacs-lisp
- (setq org-agenda-dir "~/Documents/gtd")
  (setq org-agenda-files (list org-agenda-dir))
  #+end_src
 **** Filename symbols
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
- #+begin_src emacs-lisp :results none
- (cond
- ((string-equal system-type "windows-nt")
-  (progn (setq org-agenda-dir "c:\\Users\\phil1\\Documents\\gtd")))
- ((string-equal system-type "darwin") ;  macOS
-  (progn (setq org-agenda-dir "~/Documents/gtd/")))
- ((string-equal system-type "gnu/linux")
-  (progn (setq org-agenda-dir "~/Documents/gtd/"))))
- (setq org-agenda-files (list org-agenda-dir))
+Create symbols holding the paths to GTD files
+ #+begin_src emacs-lisp
  (setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
      gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
      gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
@@ -594,14 +587,15 @@ From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post b
      :PROPERTIES:
      :HEADER-ARGS: :tangle yes
      :END:
-
- We use it to create bindings in the =gtd= map to open files
-
+***** Commands
  #+begin_src emacs-lisp
    (defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
    (defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
    (defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
    (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
+ #+end_src
+***** Leader bindings
+ #+begin_src emacs-lisp
    (define-prefix-command 'gtd)
    (define-key leader-key (kbd "g") 'gtd)
    (define-key gtd (kbd "c") 'org-capture)
@@ -611,7 +605,7 @@ From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post b
    (define-key gtd (kbd "n") 'gtd-open-next-actions)
  #+end_src
 
-   #+REVEAL: split
+ #+REVEAL: split
 *** Agenda Key
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -625,21 +619,18 @@ From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post b
 (define-key org-agenda-keys (kbd "a") 'org-agenda)
  #+end_src
 
- #+RESULTS:
- : org-agenda
-
-   #+REVEAL: split
-
-*** Refile targets
+*** Refile targets SUPER COOL!
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
- https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
+Move items around with =org-refile=.  This controls how refile choices are presented.
  #+begin_src emacs-lisp
  (setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
  (setq org-outline-path-complete-in-steps nil)
  (setq org-refile-use-outline-path 'file)
  #+end_src
+
+ Ref : https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
 
 **** Keys                                                              :keys:
      | =C-c C-w=     | =org-refile= | Move headline under cursor to somewhere else |
@@ -648,17 +639,15 @@ From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post b
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
+The function =org-capture= allows for quick capturing of notes with configurable
+templates.
  #+begin_src emacs-lisp
        (setq org-capture-templates
 	 '(("i" "GTD Input" entry (file gtd-in-tray-file)
 	    "* GTD-IN %?\n %i\n %a" :kill-buffer t)
 	   ("c" "Emacs config" entry (file emacs-config-file)
-	    "* GTD-IN %?\n %i\n %a" :kill-buffer t)
-	   ))
+	    "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
  #+end_src
-
- #+RESULTS:
- | i | GTD Input | entry | (file gtd-in-tray-file) | * GTD-IN %? |
 
 *** Capture hotkey
     :PROPERTIES:
@@ -715,7 +704,7 @@ Don't show the file and control spacing so that all entries are aligned.
 	   (setq evil-want-integration t)
 	   (setq evil-want-C-u-scroll t)
      :config (evil-mode 1)
-           (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
+	   (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
 	     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 	     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 	     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
@@ -801,6 +790,7 @@ see its implementation!
 ** Files
 
 #+begin_src emacs-lisp
+(defun open-emacs-config-file () (interactive) (find-file "~/.emacs.d/config.org"))
 (define-prefix-command 'files)
 (define-key leader-key (kbd "f") 'files)
 
@@ -930,195 +920,194 @@ Works for outline headings and for plain lists alike."
 #+end_src
 
 * Advanced orgmode and GTD
-** GTD
+** Todo keywords for GTD
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
 
-*** Todo keywords for GTD
+The first set of keywords is a generic set of keywords that I can give TODO
+keywords to items without having them be part of my GTD.
+
+The GTD-* keywords map to the various things that what David Allen calls "stuff"
+can be.
+
+#+begin_src emacs-lisp
+(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
+			  (sequence
+			     "GTD-IN(i)"
+			     "GTD-CLARIFY(c)"
+			     "GTD-PROJECT(p)"
+			     "GTD-SOMEDAY-MAYBE(s)"
+			     "GTD-ACTION(a)"
+			     "GTD-NEXT-ACTION(n)"
+			     "GTD-WAITING(w)"
+			     "|"
+			     "GTD-REFERENCE(r)"
+			     "GTD-DELEGATED(g)"
+			     "GTD-DONE(d)")))
+
+(setq org-todo-keyword-faces
+   '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
+     ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
+     ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
+     ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
+     ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
+     ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
+     ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
+     ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
+#+end_src
+
+  #+REVEAL: split
+** Definition of stuck projects
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
+This says that a stuck project is a headline where the todo keyword is
+=GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
+
+#+begin_src emacs-lisp
+(setq org-stuck-projects
+      '("TODO=\"GTD-PROJECT\"" ;; Search query
+	("GTD-NEXT-ACTION")    ;; Not stuck if contains
+	()                     ;; Stuck if contains
+	""))                   ;; General regex
+#+end_src
+
+** Date interval for agenda view
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+The default is kind of annoying.  It shows a week starting on a Sunday but what
+is annoying about that is that on Sunday, the agenda won't show what you have
+tomorrow!
+
+The way this is set, it will show 7 days starting 2 days in the past.
+
+#+begin_src emacs-lisp :results none
+(setq org-agenda-span 7
+      org-agenda-start-on-weekday 0
+      org-agenda-start-day "-2d")
+#+end_src
+
+** Agenda custom commands
+   These depend on my todo keywords so they are not part of the basic agenda config.
+*** Definition
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
-
- The first set of keywords is a generic set of keywords that I can give TODO
- keywords to items without having them be part of my GTD.
-
- The GTD-* keywords map to the various things that what David Allen calls "stuff"
- can be.
-
  #+begin_src emacs-lisp
- (setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			   (sequence
-			      "GTD-IN(i)"
-			      "GTD-CLARIFY(c)"
-			      "GTD-PROJECT(p)"
-			      "GTD-SOMEDAY-MAYBE(s)"
-			      "GTD-ACTION(a)"
-			      "GTD-NEXT-ACTION(n)"
-			      "GTD-WAITING(w)"
-			      "|"
-			      "GTD-REFERENCE(r)"
-			      "GTD-DELEGATED(g)"
-			      "GTD-DONE(d)")))
-
- (setq org-todo-keyword-faces
-    '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
-      ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
-      ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
-      ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
-      ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
-      ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
-      ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
-      ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
+   (setq org-agenda-custom-commands
+	 '(("c" "Complete agenda view"
+	    ((tags "PRIORITY=\"A\"")
+	     (stuck "")
+	     (agenda "" )
+	     (todo "GTD-ACTION")))
+	   ("s" "Split agenda view"
+	    ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+	     (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
+	     (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
+	   ("g" . "GTD keyword searches searches")
+	   ("gi" todo "GTD-IN")
+	   ("gc" todo "GTD-CLARIFY")
+	   ("ga" todo "GTD-ACTION")
+	   ("gn" todo-tree "GTD-NEXT-ACTION")
+	   ("gp" todo "GTD-PROJECT")))
  #+end_src
 
-   #+REVEAL: split
-*** Definition of stuck projects
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-
- In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
- This says that a stuck project is a headline where the todo keyword is
- =GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
-
- #+begin_src emacs-lisp
- (setq org-stuck-projects
-       '("TODO=\"GTD-PROJECT\"" ;; Search query
-	 ("GTD-NEXT-ACTION")    ;; Not stuck if contains
-	 ()                     ;; Stuck if contains
-	 ""))                   ;; General regex
- #+end_src
-
-*** Date interval for agenda view
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-
- The default is kind of annoying.  It shows a week starting on a Sunday but what
- is annoying about that is that on Sunday, the agenda won't show what you have
- tomorrow!
-
- The way this is set, it will show 7 days starting 2 days in the past.
-
- #+begin_src emacs-lisp :results none
- (setq org-agenda-span 7
-       org-agenda-start-on-weekday 0
-       org-agenda-start-day "-2d")
- #+end_src
-
-*** Agenda custom commands
-**** Definition
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-  #+begin_src emacs-lisp
-    (setq org-agenda-custom-commands
-	  '(("c" "Complete agenda view"
-	     ((tags "PRIORITY=\"A\"")
-	      (stuck "")
-	      (agenda "" )
-	      (todo "GTD-ACTION")))
-	    ("s" "Split agenda view"
-	     ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-	      (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
-	      (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
-	    ("g" . "GTD keyword searches searches")
-	    ("gi" todo "GTD-IN")
-	    ("gc" todo "GTD-CLARIFY")
-	    ("ga" todo "GTD-ACTION")
-	    ("gn" todo-tree "GTD-NEXT-ACTION")
-	    ("gp" todo "GTD-PROJECT")))
-  #+end_src
-
- Run the agenda with "c" custom command.
+Run the agenda with "c" custom command.
  
-**** Agenda view commands
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
- This is equivalent to launching =org-agenda= and pressing a.
-  #+begin_src emacs-lisp
-  (defun gtd-agenda-view () (interactive)
-    (org-agenda nil "a"))
-  #+end_src
-  #+begin_src emacs-lisp
-  (defun gtd-review-view () (interactive)
-    (org-agenda nil "c"))
-  #+end_src
-
-  #+begin_src emacs-lisp
-  (defun gtd-next-action-sparse-tree () (interactive)
-    (find-file gtd-project-list-file)
-    (org-agenda nil "gn"))
-  #+end_src
-
-**** Agenda view hotkeys
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-      Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
-      non-prefix key.
-
- #+begin_src emacs-lisp
-   (define-key org-agenda-keys (kbd "g") 'gtd-agenda-view)
-   (define-key org-agenda-keys (kbd "c") 'gtd-review-view)
-   (define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
- #+end_src
-
-*** Closing notes
+*** Agenda view commands
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
- #+begin_src emacs-lisp :results none
- (setq org-log-done 'note)
+This is equivalent to launching =org-agenda= and pressing a.
+ #+begin_src emacs-lisp
+ (defun gtd-agenda-view () (interactive)
+   (org-agenda nil "a"))
  #+end_src
-*** Agenda mode map customization
+ #+begin_src emacs-lisp
+ (defun gtd-review-view () (interactive)
+   (org-agenda nil "c"))
+ #+end_src
+
+ #+begin_src emacs-lisp
+ (defun gtd-next-action-sparse-tree () (interactive)
+   (find-file gtd-project-list-file)
+   (org-agenda nil "gn"))
+ #+end_src
+
+*** Agenda view hotkeys
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
+     Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
+     non-prefix key.
 
- I want to learn Emacs keybindings for most things so I don't want to evilify
- every single mode out there.
+#+begin_src emacs-lisp
+  (define-key org-agenda-keys (kbd "g") 'gtd-agenda-view)
+  (define-key org-agenda-keys (kbd "c") 'gtd-review-view)
+  (define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
+#+end_src
 
- However, doing =j= and =k= is a hard habbit to lose.  So I just remap the keys
- to print a message.
- #+begin_src emacs-lisp
- (add-hook 'org-agenda-mode-hook (lambda ()
- (define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
-   (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
- - Tulku: Cranston; Lamont Cranston.
- - Lamont Cranston: You know my real name?
- - Tulku: Yes. I also know that for as long as you can remember,
-	  you struggled against your own black heart and always lost. You
-	  watched your sprit, your very face change as the beast claws its
-	  way out from within you.
- j is deactivated
- It normally does org-agenda-goto-date")))))
- ;; Originally org-agenda-capture : I use C-c c and I can't use k
- (add-hook 'org-agenda-mode-hook (lambda ()
-   (define-key org-agenda-mode-map (kbd "k") (lambda () (interactive)
-     (message " The Shadow: I saved your life, Roy Tam. It now belongs to me.
- - Dr. Tam: It does?
- k is deactivated
- It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
- #+end_src
+** Closing notes
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+#+begin_src emacs-lisp :results none
+(setq org-log-done 'note)
+#+end_src
+** Agenda mode map customization
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
 
-*** Search result visibility
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
- This makes the sparse tree when doing =gtd-next-action-sparse-tree= be all
- collapsed with only the ancestors.
+I want to learn Emacs keybindings for most things so I don't want to evilify
+every single mode out there.
 
- But in the config, when I run the s-expression at the start, it will show the
- content of the results (key tables mostly) and we can =C-c C-e C-v h o= to
- export only what is visible to html.  (Or one could export to .org as a way of
- "extracting" a sparse tree.
+However, doing =j= and =k= is a hard habbit to lose.  So I just remap the keys
+to print a message.
+#+begin_src emacs-lisp
+(add-hook 'org-agenda-mode-hook (lambda ()
+(define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
+  (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
+- Tulku: Cranston; Lamont Cranston.
+- Lamont Cranston: You know my real name?
+- Tulku: Yes. I also know that for as long as you can remember,
+	 you struggled against your own black heart and always lost. You
+	 watched your sprit, your very face change as the beast claws its
+	 way out from within you.
+j is deactivated
+It normally does org-agenda-goto-date")))))
+;; Originally org-agenda-capture : I use C-c c and I can't use k
+(add-hook 'org-agenda-mode-hook (lambda ()
+  (define-key org-agenda-mode-map (kbd "k") (lambda () (interactive)
+    (message " The Shadow: I saved your life, Roy Tam. It now belongs to me.
+- Dr. Tam: It does?
+k is deactivated
+It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
+#+end_src
 
- #+begin_src emacs-lisp
- (custom-set-variables
-  '(org-show-context-detail
-    '((occur-tree . ancestors)
-      (default . local))))
- #+end_src
+** Search result visibility
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+This makes the sparse tree when doing =gtd-next-action-sparse-tree= be all
+collapsed with only the ancestors.
+
+But in the config, when I run the s-expression at the start, it will show the
+content of the results (key tables mostly) and we can =C-c C-e C-v h o= to
+export only what is visible to html.  (Or one could export to .org as a way of
+"extracting" a sparse tree.
+
+#+begin_src emacs-lisp
+(custom-set-variables
+ '(org-show-context-detail
+   '((occur-tree . ancestors)
+     (default . local))))
+#+end_src
 
 ** System Crafter's org-present config 
     :PROPERTIES:
