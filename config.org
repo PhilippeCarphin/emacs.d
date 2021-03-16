@@ -1321,6 +1321,22 @@ export only what is visible to html.  (Or one could export to .org as a way of
  - Solarized-dark
  - sourcerer
 
+** Doom modeline
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+In daemon mode, a hook must be added so that this gets done everytime a frame is created.
+#+begin_src emacs-lisp
+(use-package doom-modeline :ensure t
+:init (doom-modeline-mode 1)
+:config (add-hook 'after-make-frame-functions
+                  (lambda (frame)
+                     (setq doom-modeline-icon t))))
+#+end_src
+
+#+RESULTS:
+: t
+
 ** keyfreq Key frequency data
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
