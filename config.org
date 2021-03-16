@@ -777,7 +777,7 @@ Don't show the file and control spacing so that all entries are aligned.
 Structured keymap inspired by spacemacs. The leader key is =M-m= and =SPC= in
 evil normal mode.
 ** Emacs leader key
-#+begin_src 
+#+begin_src emacs-lisp
 (global-set-key (kbd "M-m") 'leader-key)
 #+end_src
 ** About this keymap
