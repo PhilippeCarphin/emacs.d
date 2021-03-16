@@ -11,7 +11,15 @@
 Keys sparse tree : Evaluate (org-tags-sparse-tree nil "command|keys") with
 =C-x C-e=.  Pressing =C-c C-c= will get out of the sparse tree view
 created by the expression.
+* Emacs or Vim
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle yes
+  :END:
 
+#+begin_src emacs-lisp :results output
+(define-prefix-command 'global-map)
+(global-set-key (kbd "M-m") 'global-map)
+#+end_src
 * Basic
 ** Documentation
 *** Tutorial
@@ -68,7 +76,6 @@ choice so you can just press =RET=.
      (package-install 'use-package))
  (eval-when-compile (require 'use-package))
  #+end_src
-
 
 *** Config file
     :PROPERTIES:
@@ -301,11 +308,12 @@ With visual line mode, lines are visually wrapped to stay in the screen.
 	   (setq evil-want-integration t)
 	   (setq evil-want-C-u-scroll t)
      :config (evil-mode 1)
+           (define-key evil-normal-state-map (kbd "SPC") 'global-map)
 	     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-	     (define-key evil-normal-state-map (kbd "SPC b b") 'helm-buffers-list)
-	     (define-key evil-normal-state-map (kbd "SPC f c") 'open-emacs-config-file)
-	     (define-key evil-normal-state-map (kbd "SPC f f") 'helm-find-files)
-	     (define-key evil-normal-state-map (kbd "SPC f r") 'helm-recentf)
+	     (define-key global-map (kbd "f c") 'open-emacs-config-file)
+	     (define-key global-map (kbd "f f") 'helm-find-files)
+	     (define-key global-map (kbd "f r") 'helm-recentf)
+	     (define-key global-map (kbd "b b") 'helm-buffers-list)
 	     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 	     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
 	     (global-set-key (kbd "M-u") 'universal-argument)
@@ -998,7 +1006,7 @@ Don't show the file and control spacing so that all entries are aligned.
 
      I should put it in the evil mode config but I don't want it to depend on other things
     #+begin_src emacs-lisp
-    (define-key evil-normal-state-map (kbd "SPC a g") 'gtd)
+    (define-key global-map (kbd "a g") 'gtd)
     #+end_src
 **** Keys                                                              :keys:
 
@@ -1177,14 +1185,14 @@ Don't show the file and control spacing so that all entries are aligned.
       ((org-at-item-p) (org-indent-item))))
 
    (define-prefix-command 'org-insert)
-   (define-key evil-normal-state-map (kbd "SPC i") 'org-insert)
+   (define-key global-map (kbd "i") 'org-insert)
    (define-key 'org-insert (kbd "h") 'org-insert-heading)
    (define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
    (define-key 'org-insert (kbd "s") 'org-insert-subheading)
    (define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
 
    (define-prefix-command 'org-subtree)
-   (define-key evil-normal-state-map (kbd "SPC s") 'org-subtree)
+   (define-key global-map (kbd "s") 'org-subtree)
    (define-key 'org-subtree (kbd "h") 'org-promote-subtree)
    (define-key 'org-subtree (kbd "l") 'org-demote-subtree)
    (define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
