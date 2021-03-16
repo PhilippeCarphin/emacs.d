@@ -397,47 +397,54 @@ With visual line mode, lines are visually wrapped to stay in the screen.
    see its implementation!
 
   #+begin_src emacs-lisp
+    (define-key leader-key (kbd "h") 'about-this-keymap)
+
     (define-prefix-command 'emacs-movement)
-    (global-set-key (kbd "C-| m") 'emacs-movement)
-    (global-set-key (kbd "C-| h") 'about-this-keymap)
+    (define-key leader-key (kbd "m") 'emacs-movement)
     (define-key emacs-movement (kbd "C-f") 'forward-char)
     (define-key emacs-movement (kbd "C-b") 'backward-char)
     (define-key emacs-movement (kbd "C-p") 'previous-line)
+    (define-key emacs-movement (kbd "C-n") 'next-line)
     (define-key emacs-movement (kbd "C-v") 'scroll-up-command)
     (define-key emacs-movement (kbd "M-v") 'scroll-down-command)
     (define-key emacs-movement (kbd "C-s") 'isearch-forward)
     (define-key emacs-movement (kbd "C-r") 'isearch-backward)
-    (define-prefix-command 'C-x)
-    (global-set-key (kbd "C-| C-x") 'C-x)
-    (define-key C-x (kbd "C-f") 'helm-find-files)
-    (define-key C-x (kbd "C-r") 'helm-recentf)
-    (define-key C-x (kbd "C-b") 'helm-buffers-list)
-    (define-key C-x (kbd "b") 'switch-to-buffer)
-    (define-key C-x (kbd "C-s") 'save-buffer)
-    (define-key C-x (kbd "C-c") 'save-buffers-kill-emacs)
-    (define-key emacs-movement (kbd "C-n") 'next-line)
-    (define-prefix-command 'C-h)
-    (global-set-key (kbd "C-| C-h") 'C-h)
-    (define-key C-h (kbd "C-i") 'helm-info)
-    (define-key C-h (kbd "o") 'describe-symbol)
-    (define-key C-h (kbd "f") 'describe-function)
-    (define-key C-h (kbd "k") 'describe-key)
-    (define-prefix-command 'orgmode)
-    (global-set-key (kbd "C-| o") 'orgmode)
-    (define-key orgmode (kbd "C-c C-,") 'org-insert-structure-template)
-    (define-key orgmode (kbd "C-c C-c") 'org-ctrl-c-ctrl-c)
-    (define-key orgmode (kbd "C-c '") 'org-edit-special)
-    (define-key orgmode (kbd "C-c .") 'org-time-stamp)
-    (define-key orgmode (kbd "C-c C-s") 'org-schedule)
-    (define-key orgmode (kbd "C-c C-d") 'org-deadline)
-    (define-key orgmode (kbd "a") 'org-agenda)
-    (define-key orgmode (kbd "v") 'org-tags-view)
-    (define-key orgmode (kbd "C-c /") 'org-match-sparse-tree)
-    (define-key orgmode (kbd "<M-S-left>") 'org-promote-subtree)
-    (define-key orgmode (kbd "<M-S-right>") 'org-demote-subtree)
-    (define-key orgmode (kbd "n") 'org-narrow-to-subtree)
-    (define-key orgmode (kbd "c") 'org-columns)
+
+    (define-prefix-command '__C-x__)
+    (define-key leader-key (kbd "C-x") '__C-x__)
+    (define-key __C-x__ (kbd "C-f") 'helm-find-files)
+    (define-key __C-x__ (kbd "C-r") 'helm-recentf)
+    (define-key __C-x__ (kbd "C-b") 'helm-buffers-list)
+    (define-key __C-x__ (kbd "b") 'switch-to-buffer)
+    (define-key __C-x__ (kbd "C-s") 'save-buffer)
+    (define-key __C-x__ (kbd "C-c") 'save-buffers-kill-emacs)
+
+    (define-prefix-command '__C-h__)
+    (define-key leader-key (kbd "C-h") '__C-h__)
+    (define-key __C-h__ (kbd "C-i") 'helm-info)
+    (define-key __C-h__ (kbd "o") 'describe-symbol)
+    (define-key __C-h__ (kbd "f") 'describe-function)
+    (define-key __C-h__ (kbd "k") 'describe-key)
+    (define-prefix-command 'orgmode__)
+    (define-prefix-command 'orgmode__C-c__)
+    (define-key orgmode__ (kbd "C-c") 'orgmode__C-c__)
+    (define-key orgmode__C-c__ (kbd "C-,") 'org-insert-structure-template)
+    (define-key orgmode__C-c__ (kbd "C-c") 'org-ctrl-c-ctrl-c)
+    (define-key orgmode__C-c__ (kbd "'") 'org-edit-special)
+    (define-key orgmode__C-c__ (kbd ".") 'org-time-stamp)
+    (define-key orgmode__C-c__ (kbd "C-s") 'org-schedule)
+    (define-key orgmode__C-c__ (kbd "C-d") 'org-deadline)
+    (define-key orgmode__ (kbd "a") 'org-agenda)
+    (define-key orgmode__ (kbd "v") 'org-tags-view)
+    (define-key orgmode__ (kbd "C-c /") 'org-match-sparse-tree)
+    (define-key orgmode__ (kbd "<M-S-left>") 'org-promote-subtree)
+    (define-key orgmode__ (kbd "<M-S-right>") 'org-demote-subtree)
+    (define-key orgmode__ (kbd "n") 'org-narrow-to-subtree)
+    (define-key orgmode__ (kbd "c") 'org-columns)
   #+end_src
+
+  #+RESULTS:
+  : org-columns
 
 ***** Explanations
 
@@ -725,14 +732,19 @@ then enter the text in that file's own buffer.
  #+end_src
 *** Agenda Key
     :PROPERTIES:
-    :HEADER-ARGS: :tangle no
+    :HEADER-ARGS: :tangle yes
     :END:
  I mapped a key because I like to pop in and out of it. I don't use it myself
  because the I put =org-agenda= on a keymap for my GTD stuff.
 
  #+begin_src emacs-lisp
- (global-set-key (kbd "C-c a") 'org-agenda)
+(define-prefix-command 'org-agenda-keys)
+(define-key leader-key (kbd "a") 'org-agenda-keys)
+(define-key org-agenda-keys (kbd "a") 'org-agenda)
  #+end_src
+
+ #+RESULTS:
+ : org-agenda
 
    #+REVEAL: split
 
@@ -795,6 +807,7 @@ Don't show the file and control spacing so that all entries are aligned.
   (define-key files (kbd "f") 'helm-find-files)
   (define-key files (kbd "r") 'helm-recentf)
 
+  (define-prefix-command 'buffers)
   (define-key leader-key (kbd "b") 'buffers)
   (define-key buffers (kbd "b") 'helm-buffers-list)
   (define-key buffers (kbd "k") 'kill-buffer)
@@ -824,7 +837,6 @@ Don't show the file and control spacing so that all entries are aligned.
 
    #+begin_src emacs-lisp
    ;; (global-set-key (kbd "C-c a g") 'gtd)
-   (define-key gtd (kbd "a") 'org-agenda)
    (define-key gtd (kbd "c") 'org-capture)
    #+end_src
 
@@ -997,9 +1009,9 @@ Don't show the file and control spacing so that all entries are aligned.
       non-prefix key.
 
  #+begin_src emacs-lisp
- (global-set-key (kbd "C-c a a") 'gtd-agenda-view)
- (global-set-key (kbd "C-c a c") 'gtd-review-view)
- (global-set-key (kbd "C-c a n") 'gtd-next-action-sparse-tree)
+   (define-key org-agenda-keys (kbd "g") 'gtd-agenda-view)
+   (define-key org-agenda-keys (kbd "c") 'gtd-review-view)
+   (define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
  #+end_src
 
 *** Closing notes
