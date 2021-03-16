@@ -11,481 +11,280 @@
 Keys sparse tree : Evaluate (org-tags-sparse-tree nil "command|keys") with
 =C-x C-e=.  Pressing =C-c C-c= will get out of the sparse tree view
 created by the expression.
-* Emacs or Vim
+* Basic
+** Intro
+   #+REVEAL: split
+An elementary that can be taken as is to start from oriented towards leveragin
+the full power of orgmode immediately.
+#+ATTR_REVEAL: :frag (appear)
+- Sane miscellaneous defaults
+- A built in color theme that looks good in orgmode exports
+- Evil mode if you know vim but not emacs
+- Basic helper frameworks that are defacto standard
+- Elementary org configuration allowing immediate use of built in package babel.
+- Some extra packages that you can look at.
+
+*** This config file
+
+Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
+** Package stuff
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+   Standard stuff that is at the start of everyone's config file.
+#+begin_src emacs-lisp
+(require 'package)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
+(package-initialize)
+#+end_src
+
+Standard way for installing packages.  This replaces the use of =(require
+a-package)= and adds convenience functions.
+
+#+begin_src emacs-lisp
+(unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+(eval-when-compile (require 'use-package))
+#+end_src
+
+** Define leader keymap
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
   :END:
+In this config file, we will "add" keys to this map.
 
+We therefore want it to exist from the very start
 #+begin_src emacs-lisp :results output
 (define-prefix-command 'leader-key)
-(global-set-key (kbd "M-m") 'leader-key)
 #+end_src
-* Basic
-** Documentation
-*** Tutorial
-The key sequence: =C-h t=
-#+ATTR_REVEAL: :frag (appear)
-- Very short
-- Good selection of things that are immediately useful
-- Emacs movement
+This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 
-**** Keys                                                              :keys:
-| =C-h k= | =describe-key=         | Describe key                          |
-| =C-h f= | =describe-function=    | Get documentation for elisp functions |
-| =C-h t= | =tutorial=             | Emacs tutorial                        |
-| =C-h o= | =describe-symbol=      | Emacs tutorial                        |
-| =C-x 1= | =delete-other-windows= | Maximizes the current window (pane)   |
-If there is a symbol or function under the cursor, that will be the default
-choice so you can just press =RET=.
-
-** Minimalistic config
-*** Intro
-    #+REVEAL: split
- An elementary that can be taken as is to start from oriented towards leveragin
- the full power of orgmode immediately.
- #+ATTR_REVEAL: :frag (appear)
- - Sane miscellaneous defaults
- - A built in color theme that looks good in orgmode exports
- - Evil mode if you know vim but not emacs
- - Basic helper frameworks that are defacto standard
- - Elementary org configuration allowing immediate use of built in package babel.
-
-**** This config file
-
- Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The s
-*** Package stuff
+** Small basic configs
+*** Config file
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
 
-    Standard stuff that is at the start of everyone's config file.
- #+begin_src emacs-lisp
- (require 'package)
- (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
- (add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
- (add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
- (package-initialize)
+    #+begin_src emacs-lisp
+      (setq emacs-config-file "~/.emacs.d/config.org")
+      (defun open-emacs-config-file () (interactive)
+	     (find-file emacs-config-file))
+    #+end_src
+
+*** Scrolling behavior
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+ - =scroll-margin= Distance between cursor and top/bottom before scrolling starts.
+ - =scroll-step= makes the window move one line at a time.
+
+ #+BEGIN_SRC emacs-lisp
+ (setq scroll-step 1)
+ (setq-default scroll-margin 10)
  #+end_src
 
- Standard way for installing packages.  This replaces the use of =(require
- a-package)= and adds convenience functions.
-
- #+begin_src emacs-lisp
- (unless (package-installed-p 'use-package)
-     (package-refresh-contents)
-     (package-install 'use-package))
- (eval-when-compile (require 'use-package))
- #+end_src
-
-*** Small basic configs
-**** Config file
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
-     #+begin_src emacs-lisp
-       (setq emacs-config-file "~/.emacs.d/config.org")
-       (defun open-emacs-config-file () (interactive)
-	      (find-file emacs-config-file))
-     #+end_src
-
-**** Scrolling behavior
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
-  - =scroll-margin= Distance between cursor and top/bottom before scrolling starts.
-  - =scroll-step= makes the window move one line at a time.
-
-  #+BEGIN_SRC emacs-lisp
-  (setq scroll-step 1)
-  (setq-default scroll-margin 10)
-  #+end_src
-
-**** Higlight current line
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle no
-     :END:
- Highlight the current line.  This looks really good with the theme =leuven= but
- it is kind of annoying in =misterioso=.
- #+begin_src emacs-lisp
- (global-hl-line-mode 1)
- #+end_src
-**** Cursor style
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle no
-     :END:
-
-  This will make our cursor a vertical bar instead of a box.
-
-  If evil mode is active, this will cause our insert-mode cursor to be a bar and
-  our normal mode cursor to be a box.
-
-  #+begin_src emacs-lisp
-  (setq-default cursor-type '(bar . 3))
-  (set-cursor-color "light grey")
-  (custom-set-faces '(cursor ((t (:background "SlateGray3")))))
-  #+end_src
-
-  I use vi whenever I want to open files in a shell.  Because I use vi, when I see
-  the box cursor, I feel like I'm in VI, but when I press keys, it just writes
-  text.  So I press ESC, doesn't do anything, ESC again : "ESC ESC is not bound to
-  anything".
-
-**** Cursor blink
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle no
-     :END:
-
-  #+begin_src emacs-lisp
-  (blink-cursor-mode)
-  #+end_src
-
-**** Wrapping
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
- Automattically hard-wrap text on 80 chars.
-
-  #+begin_src emacs-lisp
-  (setq-default auto-fill-function 'do-auto-fill)
-  (setq-default fill-column 80)
-  #+end_src
-
- This changes how lines are displayed.
-
-  #+begin_src emacs-lisp
-  (visual-line-mode 1)
-  #+end_src
-
- With visual line mode, lines are visually wrapped to stay in the screen.
-
-**** Startup color theme
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
-  Dark theme that exports well
-
-  #+begin_src emacs-lisp
-  (load-theme 'misterioso)
-  #+end_src
-
-****** Explanation                                          :noexport_reveal:
-
-      The default emacs theme looks good when exporting to HTML.  But because of
-      =htmlize=, with dark themes, the code can come out looking bad in exports
-      when text colors meant for dark backgrounds appear over the light background
-      of the HTML.
-
-      One of the built-in color themes where code looks good on light backgrounds
-      and which is easy on the eyes is =misterioso=
-
-      Although the default emacs theme exports well, it's not easy on the eyes in
-      emacs itself.  A light theme that exports well and looks good in emacs is
-      =leuven=.
-
-**** Startup font
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
-  To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
-
-  #+begin_src emacs-lisp
-  (custom-set-faces '(default ((t (:height 200)))))
-  #+end_src
-
-
-**** Follow symlinks
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
- #+begin_src emacs-lisp
- (custom-set-variables '(vc-follow-symlinks nil))
- #+end_src
-
-*** Helper frameworks
-
-**** Undo tree
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-     Use =C-x u= to get an undo tree buffer, really strong!
- #+begin_src emacs-lisp
- (use-package undo-tree
-   :ensure t
-   :config (global-undo-tree-mode))
- #+end_src
-**** Helm
-      :PROPERTIES:
-      :HEADER-ARGS: :tangle yes
-      :END:
-
- Improve searching interface all over emacs.
-
- Calling =helm-mode= remaps lots of emacs functions to their =helm=-ized
- equivalents.
-
- We also add a few ourselves.
-
- #+begin_src emacs-lisp :results none
- (use-package helm :ensure t
-   :config
-     (require 'helm-config)
-   :bind (("M-x" . helm-M-x)
-	  ("C-x C-f" . helm-find-files)
-	  ("C-x C-r" . helm-recentf)
-	  ("C-h C-i" . helm-info)
-	  ("C-x C-b" . helm-buffers-list)
-	  ("C-c g" . helm-grep-do-git-grep)))
- #+end_src
-
- #+begin_src emacs-lisp
- (helm-mode)
- #+end_src
-***** Remapped functions
-
-      Notable remapped functions:
- - =M-x= adds helm when writing function
- - Files and buffers
-   - =helm-recentf=
-   - =helm-find-files=
-   - =helm-buffer-list=
- - =helm-mode=
-   - =describe-function=
-   - =describe-symbol=
-
-***** Powerful tools
-
- - =helm-grep-do-git-grep=
-
-**** Which-key
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
- Help discovering available key sequences in all contexts.
-
- Originally developped for spacemacs, now part of the standard emacs packages.
-
- #+begin_src emacs-lisp
- (use-package which-key
-   :ensure t
-   :delight
-   :init
-   (setq which-key-separator " ")
-   (setq which-key-prefix-prefix "+")
-   (setq which-key-idle-delay 0.01)
-   :config
-   (which-key-mode))
- #+end_src
-
-**** Standard autocomplete
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
- #+begin_src emacs-lisp
- (use-package company
-   :ensure t
-   :config (global-company-mode)
-	   (setq company-idle-delay 0))
- #+end_src
-*** Evil mode
-
- Evil-mode is a by far the best VI emulation out there.  It is very exact.
-
- The only thing that is very different is that not all buffers are going to be in
- evil mode.
-
- At the start, this the most confusing thing in the world.  Once you get used to
- it it's not a big deal.  After a while, you still make mistakes in that sense
- but if you thought you were in evil mode and you pressed the wrong key, you know
- how to fix it.  It becomes like pressing backspace when you make a typo,
- something barely noticed.
-
- #+begin_src emacs-lisp :results none
-   (use-package evil
-     :ensure t
-     :init (setq evil-want-C-i-jump nil)
-	   (setq evil-want-integration t)
-	   (setq evil-want-C-u-scroll t)
-     :config (evil-mode 1)
-           (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
-	     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-	     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-	     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-	     (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-	     (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-	     (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-	     (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-	     (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
-	     (global-set-key (kbd "M-u") 'universal-argument)
-	     (setq evil-default-state 'emacs)
-	     (setq evil-insert-state-modes nil)
-	     (setq evil-motion-state-modes nil)
-	     (setq evil-normal-state-modes '(fundamental-mode
-					     conf-mode
-					     prog-mode
-					     text-mode
-					     dired))
-	     (setq evil-insert-state-cursor '((bar . 2) "lime green")
-		 evil-normal-state-cursor '(box "yellow"))
-	     (add-hook 'with-editor-mode-hook 'evil-insert-state))
- #+end_src
-
- The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
- the TAB key doesn't work properly.
-
- Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3 : Keybindings and Evil]] et la config de Sam.
-
-**** Cursor blinking
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
-  Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
-  fois avant d'arrêter).
-
-  #+begin_src emacs-lisp
-  (add-hook 'evil-insert-state-exit-hook (lambda () (blink-cursor-mode 0)))
-  (add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 1)))
-  #+end_src
-
-  This sets the amount of cursor blinks before the flashing stop.
-
-  #+begin_src
-  (setq blink-cursor-blinks 0)
-  #+end_src
-
-  Make sure the cursor starts out not blinking
-
-  #+begin_src emacs-lisp
-  (blink-cursor-mode 0)
-  #+end_src
-*** Leader Keymap
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
-Structured keymap inspired by spacemacs.
-
-The leader key is =M-m= and =SPC= in evil normal mode.
-
+*** Higlight current line
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
+Highlight the current line.  This looks really good with the theme =leuven= but
+it is kind of annoying in =misterioso=.
 #+begin_src emacs-lisp
-(defun about-this-keymap () (interactive)
-(org-open-link-from-string "[[file:~/.emacs.d/config.org::Leader Keymap]]"))
+(global-hl-line-mode 1)
 #+end_src
 
-#+RESULTS:
-: about-this-keymap
+*** Cursor style
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+ Makes the cursor a bar instead of a box.
+
+ #+begin_src emacs-lisp
+ (setq-default cursor-type '(bar . 3))
+ (set-cursor-color "light grey")
+ (custom-set-faces '(cursor ((t (:background "SlateGray3")))))
+ #+end_src
+
+ Helps to not get confused with vim.
+
+*** Cursor blink
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+ #+begin_src emacs-lisp
+ (blink-cursor-mode)
+ #+end_src
+
+*** Wrapping
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+Automattically hard-wrap text on 80 chars as you type.
+
+ #+begin_src emacs-lisp
+ (setq-default auto-fill-function 'do-auto-fill)
+ (setq-default fill-column 80)
+ #+end_src
+
+Wrap lines visually (lines that are too long are /displayed/ on multiple lines
+with a special char indicating visual wrapping.
+
+ #+begin_src emacs-lisp
+ (visual-line-mode 1)
+ #+end_src
+
+*** Startup color theme
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+ Dark theme that exports well
+
+ #+begin_src emacs-lisp
+ (load-theme 'misterioso)
+ #+end_src
+
+***** Explanation                                           :noexport_reveal:
+
+     The default emacs theme looks good when exporting to HTML.  But because of
+     =htmlize=, with dark themes, the code can come out looking bad in exports
+     when text colors meant for dark backgrounds appear over the light background
+     of the HTML.
+
+     One of the built-in color themes where code looks good on light backgrounds
+     and which is easy on the eyes is =misterioso=
+
+     Although the default emacs theme exports well, it's not easy on the eyes in
+     emacs itself.  A light theme that exports well and looks good in emacs is
+     =leuven=.
+
+*** Startup font
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
+
+ #+begin_src emacs-lisp
+ (custom-set-faces '(default ((t (:height 200)))))
+ #+end_src
 
 
-Also, how meta is it that we have a function whose implementation takes us to
-see its implementation!
+*** Follow symlinks
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
 #+begin_src emacs-lisp
-(define-prefix-command 'emacs-movement)
-(define-key leader-key (kbd "m") 'emacs-movement)
-(define-key emacs-movement (kbd "C-f") 'forward-char)
-(define-key emacs-movement (kbd "C-b") 'backward-char)
-(define-key emacs-movement (kbd "C-p") 'previous-line)
-(define-key emacs-movement (kbd "C-n") 'next-line)
-(define-key emacs-movement (kbd "C-v") 'scroll-up-command)
-(define-key emacs-movement (kbd "M-v") 'scroll-down-command)
-(define-key emacs-movement (kbd "C-s") 'isearch-forward)
-(define-key emacs-movement (kbd "C-r") 'isearch-backward)
-
-(define-prefix-command 'files)
-(define-key leader-key (kbd "f") 'files)
-
-(define-key files (kbd "c") 'open-emacs-config-file)
-(define-key files (kbd "f") 'helm-find-files)
-(define-key files (kbd "r") 'helm-recentf)
-(define-key files (kbd "s") 'save-buffer)
-
-(define-prefix-command 'buffers)
-(define-key leader-key (kbd "b") 'buffers)
-(define-key buffers (kbd "b") 'helm-buffers-list)
-(define-key buffers (kbd "k") 'kill-buffer)
-(define-key leader-key (kbd "g") 'gtd)
-
-(define-key leader-key (kbd "q") 'save-buffers-kill-emacs)
-
-(define-prefix-command 'help)
-(define-key leader-key (kbd "h") 'help)
-(define-key help (kbd "a") 'about-this-keymap)
-(define-key help (kbd "C-i") 'helm-info)
-(define-key help (kbd "o") 'describe-symbol)
-(define-key help (kbd "f") 'describe-function)
-(define-key help (kbd "k") 'describe-key)
-
-(define-prefix-command 'orgmode)
-(define-prefix-command '__orgmode__C-c__)
-(define-key orgmode (kbd "C-c") '__orgmode__C-c__)
-(define-key __orgmode__C-c__ (kbd "C-,") 'org-insert-structure-template)
-(define-key __orgmode__C-c__ (kbd "C-c") 'org-ctrl-c-ctrl-c)
-(define-key __orgmode__C-c__ (kbd "C-w") 'refile)
-(define-key __orgmode__C-c__ (kbd "C-x C-c") 'org-columns)
-(define-key __orgmode__C-c__ (kbd "'") 'org-edit-special)
-(define-key __orgmode__C-c__ (kbd ".") 'org-time-stamp)
-(define-key __orgmode__C-c__ (kbd "C-s") 'org-schedule)
-(define-key __orgmode__C-c__ (kbd "C-d") 'org-deadline)
-(define-key leader-key (kbd "o") 'orgmode)
-(define-key orgmode (kbd "a") 'org-agenda)
-(define-key orgmode (kbd "v") 'org-tags-view)
-(define-key orgmode (kbd "C-c /") 'org-match-sparse-tree)
-(define-key orgmode (kbd "<M-S-left>") 'org-promote-subtree)
-(define-key orgmode (kbd "<M-S-right>") 'org-demote-subtree)
-(define-key orgmode (kbd "<M-up>") 'org-demote-subtree)
-(define-key orgmode (kbd "n") 'org-narrow-to-subtree)
-(define-key orgmode (kbd "c") 'org-columns)
-(define-prefix-command 'org-insert)
-(define-key orgmode (kbd "i") 'org-insert)
-(define-key 'org-insert (kbd "h") 'org-insert-heading)
-(define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
-(define-key 'org-insert (kbd "s") 'org-insert-subheading)
-(define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
-
-(define-prefix-command 'org-subtree)
-(define-key orgmode (kbd "s") 'org-subtree)
-(define-key 'org-subtree (kbd "h") 'org-promote-subtree)
-(define-key 'org-subtree (kbd "l") 'org-demote-subtree)
-(define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
-(define-key 'org-subtree (kbd "j") 'org-move-subtree-down)
+(custom-set-variables '(vc-follow-symlinks nil))
 #+end_src
 
-***** Explanations
+*** Remap C-x C-c to save buffers before quitting
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+     I use :q to quit
+  #+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
+  #+end_src
+  
+** Helper frameworks
 
-  La touche =C-|= (=C-S-\=) est une map de touches qui contient des
-  fonctionnalité spécialement sélectionnées.
+*** Undo tree
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+    Use =C-x u= to get an undo tree buffer, really strong!
+#+begin_src emacs-lisp
+(use-package undo-tree
+  :ensure t
+  :config (global-undo-tree-mode))
+#+end_src
+*** Helm
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
-  Le choix de touche de départ est de choisr un binding qui fait chier à faire.
+Improve searching interface all over emacs.
 
-  Le but c'est d'explorer.  Quand on trouve quelque chose qu'on aime, on peut
-  découvrir les bindings standards en faisant =C-h f= et écrire le nom de la
-  fonction exécutée par la touche.  Ou faire =C-h k= et refaire la touche et
-  l'aide nous dira quels sont les autres bindings pour la fonctionnalité.
+Calling =helm-mode= remaps lots of emacs functions to their =helm=-ized
+equivalents.
 
-  Si un binding a le même nom que la fonction comme =C-h=, c'est que ce groupe est
-  une sélection des fonctions disponibles en faisant =C-h= normalement.
+We also add a few ourselves.
 
-  Si le groupe contient le mot mode, c'est qu'il contient des fonctions qui sont
-  seulement disponibles dans un certain mode.
+#+begin_src emacs-lisp :results none
+(use-package helm :ensure t
+  :config
+    (require 'helm-config)
+  :bind (("M-x" . helm-M-x)
+	 ("C-x C-f" . helm-find-files)
+	 ("C-x C-r" . helm-recentf)
+	 ("C-h C-i" . helm-info)
+	 ("C-x C-b" . helm-buffers-list)
+	 ("C-c g" . helm-grep-do-git-grep)))
+#+end_src
 
-  Les touches utilisées sont le plus souvent possible la même touche qu'on ferait
-  normalement. Par exemple, =C-| o C-c C-,= insère un bloc de code source.  Le
-  choix est fait comme ça parce que la touche =C-c C-,= est la touche native pour
-  faire cette action.
+#+begin_src emacs-lisp
+(helm-mode)
+#+end_src
+**** Remapped functions
 
+     Notable remapped functions:
+- =M-x= adds helm when writing function
+- Files and buffers
+  - =helm-recentf=
+  - =helm-find-files=
+  - =helm-buffer-list=
+- =helm-mode=
+  - =describe-function=
+  - =describe-symbol=
 
-***** Keys                                                             :keys:
-| ~C-|~ | =prefix-key= | A grouping of common basic keys |
+**** Powerful tools
 
+- =helm-grep-do-git-grep=
+
+*** Which-key
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+Help discovering available key sequences in all contexts.
+
+Originally developped for spacemacs, now part of the standard emacs packages.
+
+#+begin_src emacs-lisp
+(use-package which-key
+  :ensure t
+  :delight
+  :init
+  (setq which-key-separator " ")
+  (setq which-key-prefix-prefix "+")
+  (setq which-key-idle-delay 0.01)
+  :config
+  (which-key-mode))
+#+end_src
+
+*** Standard autocomplete
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+#+begin_src emacs-lisp
+(use-package company
+  :ensure t
+  :config (global-company-mode)
+	  (setq company-idle-delay 0))
+#+end_src
     
+** Basic org configuration
 *** Changer l'apparence de contenu caché
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -503,7 +302,6 @@ paste any unicode character in here from a browser
 
 Other options : ▼, ↴, ⬎, ⤵, ⤷, ↯, ⟾, ⋱, ….
 
-** Basic org configuration
 *** Display links as normal text
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -691,15 +489,129 @@ then enter the text in that file's own buffer.
 	 ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
    #+end_src
 
+*** Center cursor after shift-tab in orgmode
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+  Places the current line in the center of the screen after a =S-TAB= in orgmode.
+  #+begin_src emacs-lisp
+  (defun org-post-global-cycle () (interactive)
+    (recenter)
+    (org-beginning-of-line))
+  (advice-add 'org-global-cycle
+    :after #'org-post-global-cycle)
+  #+end_src
+  See [[help:advice-add]], basically, we can ask Emacs to add code to be run before
+  and/or after an emacs function is run.
+
+  You can use this to remove the "advice".
+  #+begin_src emacs-lisp :tangle no
+  (advice-remove 'org-global-cycle #'org-post-global-cycle)
+  #+end_src
+
+*** Startup visibility
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
+
+ #+begin_src emacs-lisp
+ (custom-set-variables '(org-startup-folded t))
+ #+end_src
+    
+*** Inline images
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+ #+begin_src emacs-lisp
+ (setq org-startup-with-inline-images t)
+ (setq org-image-actual-width 100)
+ #+end_src
+
+*** Org-present with doom-theme
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+
+    #+begin_src emacs-lisp
+ (use-package org-present :ensure t
+ :config
+ (add-hook 'org-present-mode-hook (lambda () (load-theme 'leuven)))
+ (add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'leuven))) )
+    #+end_src
+   
+
+*** Babel Colorize RESULTS
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post by Erki der Loony]]
+
+ #+begin_src emacs-lisp
+ (defun ek/babel-ansi ()
+   (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
+     (save-excursion
+       (goto-char beg)
+       (when (looking-at org-babel-result-regexp)
+         (let ((end (org-babel-result-end))
+               (ansi-color-context-region nil))
+           (ansi-color-apply-on-region beg end))))))
+ (add-hook 'org-babel-after-execute-hook 'ek/babel-ansi)
+ #+end_src
+ 
 ** Basic org agenda configuration
 *** Agena files
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
+**** =org-agenda-files= variable
  #+begin_src emacs-lisp
  (setq org-agenda-dir "~/Documents/gtd")
  (setq org-agenda-files (list org-agenda-dir))
  #+end_src
+**** Filename symbols
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
+ #+begin_src emacs-lisp :results none
+ (cond
+ ((string-equal system-type "windows-nt")
+  (progn (setq org-agenda-dir "c:\\Users\\phil1\\Documents\\gtd")))
+ ((string-equal system-type "darwin") ;  macOS
+  (progn (setq org-agenda-dir "~/Documents/gtd/")))
+ ((string-equal system-type "gnu/linux")
+  (progn (setq org-agenda-dir "~/Documents/gtd/"))))
+ (setq org-agenda-files (list org-agenda-dir))
+ (setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
+     gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
+     gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
+     gtd-reference-file (concat org-agenda-dir "GTD_Reference.org")
+     gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
+     gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
+     gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
+ #+end_src
+**** Quick access to GTD files
+     :PROPERTIES:
+     :HEADER-ARGS: :tangle yes
+     :END:
+
+ We use it to create bindings in the =gtd= map to open files
+
+ #+begin_src emacs-lisp
+   (defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
+   (defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
+   (defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
+   (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
+   (define-prefix-command 'gtd)
+   (define-key leader-key (kbd "g") 'gtd)
+   (define-key gtd (kbd "c") 'org-capture)
+   (define-key gtd (kbd "i") 'gtd-open-in-tray)
+   (define-key gtd (kbd "p") 'gtd-open-project-list)
+   (define-key gtd (kbd "r") 'gtd-open-reference)
+   (define-key gtd (kbd "n") 'gtd-open-next-actions)
+ #+end_src
+
+   #+REVEAL: split
 *** Agenda Key
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -760,6 +672,9 @@ then enter the text in that file's own buffer.
 | =C-c C-w= | =org-capture-input= | (Custom) Org apture with selected template "i". |
 
 *** Agenda display control
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
 
 Don't show the file and control spacing so that all entries are aligned.
 
@@ -767,76 +682,256 @@ Don't show the file and control spacing so that all entries are aligned.
   (setq org-agenda-prefix-format  '((agenda . "%-12t% s")))
 #+end_src
 
-*** Keymap
+*** Keys                                                               :keys:
 
-* Advanced orgmode and GTD
+     | =f,b=   | Forward, backward in time              |
+     | =n,p=   | Next, previous line                    |
+     | =d=     | Switch to day view                     |
+     | =w=     | Switch to week view                    |
+     | =m=     | Mark entry                             |
+     | =B=     | Do bulk action to marked entries       |
+     | =C-u B= | Do bulk action with universal argument |
 
-** Inline images
+** Evil mode
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
+*** Description
+ Evil-mode is a by far the best VI emulation out there.  It is very exact.
 
+ The only thing that is very different is that not all buffers are going to be in
+ evil mode.
+
+ At the start, this the most confusing thing in the world.  Once you get used to
+ it it's not a big deal.  After a while, you still make mistakes in that sense
+ but if you thought you were in evil mode and you pressed the wrong key, you know
+ how to fix it.  It becomes like pressing backspace when you make a typo,
+ something barely noticed.
+*** Config
+ #+begin_src emacs-lisp :results none
+   (use-package evil
+     :ensure t
+     :init (setq evil-want-C-i-jump nil)
+	   (setq evil-want-integration t)
+	   (setq evil-want-C-u-scroll t)
+     :config (evil-mode 1)
+           (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
+	     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+	     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+	     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+	     (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
+	     (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
+	     (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
+	     (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+	     (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+	     (global-set-key (kbd "M-u") 'universal-argument)
+	     (setq evil-default-state 'emacs)
+	     (setq evil-insert-state-modes nil)
+	     (setq evil-motion-state-modes nil)
+	     (setq evil-normal-state-modes '(fundamental-mode
+					     conf-mode
+					     prog-mode
+					     text-mode
+					     dired))
+	     (setq evil-insert-state-cursor '((bar . 2) "lime green")
+		 evil-normal-state-cursor '(box "yellow"))
+	     (add-hook 'with-editor-mode-hook 'evil-insert-state))
+ #+end_src
+
+ The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
+ the TAB key doesn't work properly.
+
+ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3 : Keybindings and Evil]] et la config de Sam.
+
+*** Cursor blinking
+
+  Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
+  fois avant d'arrêter).
+
+  #+begin_src emacs-lisp
+  (add-hook 'evil-insert-state-exit-hook (lambda () (blink-cursor-mode 0)))
+  (add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 1)))
+  #+end_src
+
+  This sets the amount of cursor blinks before the flashing stop.
+
+  #+begin_src
+  (setq blink-cursor-blinks 0)
+  #+end_src
+
+  Make sure the cursor starts out not blinking
+
+  #+begin_src emacs-lisp
+  (blink-cursor-mode 0)
+  #+end_src
+* Leader Keymap
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle yes
+  :END:
+Structured keymap inspired by spacemacs. The leader key is =M-m= and =SPC= in
+evil normal mode.
+** Emacs leader key
+#+begin_src 
+(global-set-key (kbd "M-m") 'leader-key)
+#+end_src
+** About this keymap
 #+begin_src emacs-lisp
-(setq org-startup-with-inline-images t)
-(setq org-image-actual-width 100)
+(defun about-this-keymap () (interactive)
+(org-open-link-from-string "[[file:~/.emacs.d/config.org::Leader Keymap]]"))
 #+end_src
 
+How meta is it that we have a function whose implementation takes us to
+see its implementation!
+
+** Emacs movement
+
+#+begin_src emacs-lisp
+(define-prefix-command 'emacs-movement)
+(define-key leader-key (kbd "m") 'emacs-movement)
+(define-key emacs-movement (kbd "C-f") 'forward-char)
+(define-key emacs-movement (kbd "C-b") 'backward-char)
+(define-key emacs-movement (kbd "C-p") 'previous-line)
+(define-key emacs-movement (kbd "C-n") 'next-line)
+(define-key emacs-movement (kbd "C-v") 'scroll-up-command)
+(define-key emacs-movement (kbd "M-v") 'scroll-down-command)
+(define-key emacs-movement (kbd "C-s") 'isearch-forward)
+(define-key emacs-movement (kbd "C-r") 'isearch-backward)
+#+end_src
+
+** Files
+
+#+begin_src emacs-lisp
+(define-prefix-command 'files)
+(define-key leader-key (kbd "f") 'files)
+
+(define-key files (kbd "c") 'open-emacs-config-file)
+(define-key files (kbd "f") 'helm-find-files)
+(define-key files (kbd "r") 'helm-recentf)
+(define-key files (kbd "s") 'save-buffer)
+#+end_src
+
+** Buffers
+#+begin_src emacs-lisp
+(define-prefix-command 'buffers)
+(define-key leader-key (kbd "b") 'buffers)
+(define-key buffers (kbd "b") 'helm-buffers-list)
+(define-key buffers (kbd "k") 'kill-buffer)
+#+end_src
+
+** Save and quit
+#+begin_src emacs-lisp
+(define-key leader-key (kbd "q") 'save-buffers-kill-emacs)
+#+end_src
+** Help
+#+begin_src emacs-lisp
+(define-prefix-command 'help)
+(define-key leader-key (kbd "h") 'help)
+(define-key help (kbd "a") 'about-this-keymap)
+(define-key help (kbd "C-i") 'helm-info)
+(define-key help (kbd "o") 'describe-symbol)
+(define-key help (kbd "f") 'describe-function)
+(define-key help (kbd "k") 'describe-key)
+#+end_src
+** Orgmode
+#+begin_src emacs-lisp
+(define-prefix-command 'orgmode)
+#+end_src
+*** Subset of C-c commands
+#+begin_src emacs-lisp
+(define-prefix-command '__orgmode__C-c__)
+(define-key orgmode (kbd "C-c") '__orgmode__C-c__)
+(define-key __orgmode__C-c__ (kbd "C-,") 'org-insert-structure-template)
+(define-key __orgmode__C-c__ (kbd "C-c") 'org-ctrl-c-ctrl-c)
+(define-key __orgmode__C-c__ (kbd "C-w") 'refile)
+(define-key __orgmode__C-c__ (kbd "C-x C-c") 'org-columns)
+(define-key __orgmode__C-c__ (kbd "'") 'org-edit-special)
+(define-key __orgmode__C-c__ (kbd ".") 'org-time-stamp)
+(define-key __orgmode__C-c__ (kbd "C-s") 'org-schedule)
+(define-key __orgmode__C-c__ (kbd "C-d") 'org-deadline)
+#+end_src
+
+*** Orgmode favorites
+#+begin_src emacs-lisp
+(define-key leader-key (kbd "o") 'orgmode)
+(define-key orgmode (kbd "a") 'org-agenda)
+(define-key orgmode (kbd "v") 'org-tags-view)
+(define-key orgmode (kbd "C-c /") 'org-match-sparse-tree)
+(define-key orgmode (kbd "<M-S-left>") 'org-promote-subtree)
+(define-key orgmode (kbd "<M-S-right>") 'org-demote-subtree)
+(define-key orgmode (kbd "<M-up>") 'org-demote-subtree)
+(define-key orgmode (kbd "n") 'org-narrow-to-subtree)
+(define-key orgmode (kbd "c") 'org-columns)
+#+end_src
+*** Item insertion
+#+begin_src emacs-lisp
+(defun org-insert-subheading-respect-content (arg)
+  "Insert a new subheading and demote it.
+Works for outline headings and for plain lists alike."
+  (interactive "P")
+  (org-insert-heading-respect-content arg)
+  (cond ((org-at-heading-p) (org-do-demote))
+        ((org-at-item-p) (org-indent-item))))
+
+(define-prefix-command 'org-insert)
+(define-key orgmode (kbd "i") 'org-insert)
+(define-key 'org-insert (kbd "h") 'org-insert-heading)
+(define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
+(define-key 'org-insert (kbd "s") 'org-insert-subheading)
+(define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
+#+end_src
+
+*** Subtree movement and promotions
+#+begin_src emacs-lisp
+(define-prefix-command 'org-subtree)
+(define-key orgmode (kbd "s") 'org-subtree)
+(define-key 'org-subtree (kbd "h") 'org-promote-subtree)
+(define-key 'org-subtree (kbd "l") 'org-demote-subtree)
+(define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
+(define-key 'org-subtree (kbd "j") 'org-move-subtree-down)
+#+end_src
+
+***** Explanations
+
+  La touche =C-|= (=C-S-\=) est une map de touches qui contient des
+  fonctionnalité spécialement sélectionnées.
+
+  Le choix de touche de départ est de choisr un binding qui fait chier à faire.
+
+  Le but c'est d'explorer.  Quand on trouve quelque chose qu'on aime, on peut
+  découvrir les bindings standards en faisant =C-h f= et écrire le nom de la
+  fonction exécutée par la touche.  Ou faire =C-h k= et refaire la touche et
+  l'aide nous dira quels sont les autres bindings pour la fonctionnalité.
+
+  Si un binding a le même nom que la fonction comme =C-h=, c'est que ce groupe est
+  une sélection des fonctions disponibles en faisant =C-h= normalement.
+
+  Si le groupe contient le mot mode, c'est qu'il contient des fonctions qui sont
+  seulement disponibles dans un certain mode.
+
+  Les touches utilisées sont le plus souvent possible la même touche qu'on ferait
+  normalement. Par exemple, =C-| o C-c C-,= insère un bloc de code source.  Le
+  choix est fait comme ça parce que la touche =C-c C-,= est la touche native pour
+  faire cette action.
+
+
+***** Keys                                                             :keys:
+| ~C-|~ | =prefix-key= | A grouping of common basic keys |
+
+*** Org present
+#+begin_src emacs-lisp
+(define-prefix-command 'org-present-map)
+(define-key leader-key (kbd "p") 'org-present-map)
+(define-key org-present-map (kbd "P") 'org-present)
+(define-key org-present-map (kbd "n") 'org-present-next)
+(define-key org-present-map (kbd "p") 'org-present-prev)
+(define-key org-present-map (kbd "b") 'org-present-big)
+(define-key org-present-map (kbd "s") 'org-present-small)
+(define-key org-present-map (kbd "q") 'org-present-quit)
+#+end_src
+
+* Advanced orgmode and GTD
 ** GTD
-*** Keymap for GTD keybindings
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-      We define a keymap that will be accessed with =SPC a g=
- #+begin_src emacs-lisp
-   (define-prefix-command 'gtd)
- #+end_src
 
-   #+begin_src emacs-lisp
-   ;; (global-set-key (kbd "C-c a g") 'gtd)
-   (define-key gtd (kbd "c") 'org-capture)
-   #+end_src
-
-*** GTD files
-**** Filename symbols
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
- #+begin_src emacs-lisp :results none
- (cond
- ((string-equal system-type "windows-nt")
-  (progn (setq org-agenda-dir "c:\\Users\\phil1\\Documents\\gtd")))
- ((string-equal system-type "darwin") ;  macOS
-  (progn (setq org-agenda-dir "~/Documents/gtd/")))
- ((string-equal system-type "gnu/linux")
-  (progn (setq org-agenda-dir "~/Documents/gtd/"))))
- (setq org-agenda-files (list org-agenda-dir))
- (setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
-     gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
-     gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
-     gtd-reference-file (concat org-agenda-dir "GTD_Reference.org")
-     gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
-     gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
-     gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
- #+end_src
-**** Quick access to GTD files
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
- We use it to create bindings in the =gtd= map to open files
-
- #+begin_src emacs-lisp
-   (defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
-   (defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
-   (defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
-   (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
-   (define-key gtd (kbd "i") 'gtd-open-in-tray)
-   (define-key gtd (kbd "p") 'gtd-open-project-list)
-   (define-key gtd (kbd "r") 'gtd-open-reference)
-   (define-key gtd (kbd "n") 'gtd-open-next-actions)
- #+end_src
-
-   #+REVEAL: split
 *** Todo keywords for GTD
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -901,15 +996,13 @@ Don't show the file and control spacing so that all entries are aligned.
  is annoying about that is that on Sunday, the agenda won't show what you have
  tomorrow!
 
- The way this is set, it will show 10 days starting 3 days in the past.
+ The way this is set, it will show 7 days starting 2 days in the past.
 
  #+begin_src emacs-lisp :results none
  (setq org-agenda-span 7
        org-agenda-start-on-weekday 0
        org-agenda-start-day "-2d")
  #+end_src
-
-   #+REVEAL: split
 
 *** Agenda custom commands
 **** Definition
@@ -936,7 +1029,7 @@ Don't show the file and control spacing so that all entries are aligned.
   #+end_src
 
  Run the agenda with "c" custom command.
-
+ 
 **** Agenda view commands
      :PROPERTIES:
      :HEADER-ARGS: :tangle yes
@@ -977,25 +1070,6 @@ Don't show the file and control spacing so that all entries are aligned.
  #+begin_src emacs-lisp :results none
  (setq org-log-done 'note)
  #+end_src
-*** Evil mode agenda binding (SPC a g)
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-     Only use this if evil mode is activated
-
-     I should put it in the evil mode config but I don't want it to depend on other things
-    #+begin_src emacs-lisp
-    #+end_src
-**** Keys                                                              :keys:
-
-     | =f,b=   | Forward, backward in time              |
-     | =n,p=   | Next, previous line                    |
-     | =d=     | Switch to day view                     |
-     | =w=     | Switch to week view                    |
-     | =m=     | Mark entry                             |
-     | =B=     | Do bulk action to marked entries       |
-     | =C-u B= | Do bulk action with universal argument |
-
 *** Agenda mode map customization
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -1027,46 +1101,7 @@ Don't show the file and control spacing so that all entries are aligned.
  It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
  #+end_src
 
-** Remap C-x C-c for deamon usage
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-    I use :q to quit
- #+begin_src emacs-lisp
- (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
- #+end_src
-
-** Center cursor after shift-tab in orgmode
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
- Places the current line in the center of the screen after a =S-TAB= in orgmode.
- #+begin_src emacs-lisp
- (defun org-post-global-cycle () (interactive)
-   (recenter)
-   (org-beginning-of-line))
- (advice-add 'org-global-cycle
-   :after #'org-post-global-cycle)
- #+end_src
- See [[help:advice-add]], basically, we can ask Emacs to add code to be run before
- and/or after an emacs function is run.
-
- You can use this to remove the "advice".
- #+begin_src emacs-lisp :tangle no
- (advice-remove 'org-global-cycle #'org-post-global-cycle)
- #+end_src
-
-** Visibility
-*** Startup
-     :PROPERTIES:
-     :HEADER-ARGS: :tangle yes
-     :END:
-
- #+begin_src emacs-lisp
- (custom-set-variables '(org-startup-folded t))
- #+end_src
-    
-*** Search results
+*** Search result visibility
      :PROPERTIES:
      :HEADER-ARGS: :tangle yes
      :END:
@@ -1085,22 +1120,7 @@ Don't show the file and control spacing so that all entries are aligned.
       (default . local))))
  #+end_src
 
-
-** Org present
-*** Basic use
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-
-
-    #+begin_src emacs-lisp
- (use-package org-present :ensure t
- :config
- (add-hook 'org-present-mode-hook (lambda () (load-theme 'doom-dark+)))
- (add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'doom-dark+))) )
-    #+end_src
-
-*** System Crafter's config 
+** System Crafter's org-present config 
     :PROPERTIES:
     :HEADER-ARGS: :tangle no
     :END:
@@ -1147,73 +1167,6 @@ Don't show the file and control spacing so that all entries are aligned.
             (org-present-mode-quit . dw/org-present-quit-hook)))
      #+end_src
 
-
-** Orgmode custom keymap
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
- #+begin_src emacs-lisp
-   (defun org-insert-subheading-respect-content (arg)
-     "Insert a new subheading and demote it.
-   Works for outline headings and for plain lists alike."
-     (interactive "P")
-     (org-insert-heading-respect-content arg)
-     (cond
-      ((org-at-heading-p) (org-do-demote))
-      ((org-at-item-p) (org-indent-item))))
-
- #+end_src
-
-*** Keys                                                               :keys:
-
-  | =SPC i h= | =org-insert-heading= | Insert new heading of the same level as the heading we are in |
-  | =SPC i H= | =org-insert-heading-respect-content= | Inserts after content of current heading |
-  | =SPC i s= | =org-insert-heading= | Insert new subheading of the one level deeper than the heading we are in |
-  | =SPC i S= | =org-insert-subheading-respect-content= | (Custom) Inserts after content of current heading |
-
-
-
-** Export multiple files from toplevel headings
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle no
-   :END:
- From [[https://emacs.stackexchange.com/a/2260/19972][Stack Overflow post]].
- Export each toplevel heading in the current file as individual files in rst,
- html, latex, or pdf formats.
-
- The files are named the same as the headline with spaces replaced by underscores.
-   #+begin_src emacs-lisp
-   (defun org-export-all (backend)
-   "Export all subtrees that are *not* tagged with :noexport: to
- separate files.
-
- Subtrees that do not have the :EXPORT_FILE_NAME: property set
- are exported to a filename derived from the headline text."
-   (interactive "sEnter backend: ")
-   (let ((fn (cond ((equal backend "html") 'org-twbs-export-to-html)
-                   ((equal backend "rst") 'org-rst-export-to-rst)
-                   ((equal backend "latex") 'org-latex-export-to-latex)
-                   ((equal backend "pdf") 'org-latex-export-to-pdf)))
-         (modifiedp (buffer-modified-p)))
-     (save-excursion
-       (goto-char (point-max))
-       (org-map-entries
-	(lambda ()
-          (let ((export-file (org-entry-get (point) "EXPORT_FILE_NAME")))
-            (unless export-file
-              (org-set-property
-               "EXPORT_FILE_NAME"
-               (replace-regexp-in-string " " "_" (nth 4 (org-heading-components)))))
-            (funcall fn nil t)
-            (unless export-file (org-delete-property "EXPORT_FILE_NAME"))
-            (set-buffer-modified-p modifiedp)))
-	"-noexport" 'region-start-level))))
-   #+end_src
-
-   #+RESULTS:
-   : org-export-all
-
-
 * Other packages
 ** Magit
    :PROPERTIES:
@@ -1231,10 +1184,10 @@ Don't show the file and control spacing so that all entries are aligned.
  #+end_src
 
  #+RESULTS:
-
+ 
 ** Yasnippet
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
  Note: package =yasnippet= doesn't come with the library of snippets but
  =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
@@ -1283,7 +1236,7 @@ Don't show the file and control spacing so that all entries are aligned.
  (setq-default elfeed-search-title-max-width 100)
  (setq-default elfeed-search-title-min-width 100)
  #+end_src
-
+ 
 ** Ergoemacs
    :PROPERTIES:
    :HEADER-ARGS: :tangle no
@@ -1298,11 +1251,11 @@ Don't show the file and control spacing so that all entries are aligned.
     #+end_src
 ** Doom themes
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
 
  #+begin_src emacs-lisp
- (use-package doom-themes
+ (use-package doom-themes :ensure t
    :config
    ;; Global settings (defaults)
    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
@@ -1326,7 +1279,6 @@ Don't show the file and control spacing so that all entries are aligned.
  - Solarized-dark
  - sourcerer
 
-
 ** keyfreq Key frequency data
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -1339,7 +1291,6 @@ Don't show the file and control spacing so that all entries are aligned.
      (keyfreq-autosave-mode 1))
    #+end_src
 
-
 ** command-log-mode
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -1351,26 +1302,7 @@ Don't show the file and control spacing so that all entries are aligned.
 **** Commands                                                       :command:
  | =global-command-log-mode=     | Activate command logging                   |
  | =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
-
-
-** babel
-*** Colorize RESULTS
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-
- #+begin_src emacs-lisp
- (defun ek/babel-ansi ()
-   (when-let ((beg (org-babel-where-is-src-block-result nil nil)))
-     (save-excursion
-       (goto-char beg)
-       (when (looking-at org-babel-result-regexp)
-         (let ((end (org-babel-result-end))
-               (ansi-color-context-region nil))
-           (ansi-color-apply-on-region beg end))))))
- (add-hook 'org-babel-after-execute-hook 'ek/babel-ansi)
- #+end_src
-
+ 
 * Documentation
 ** Things to do with orgmode
 
