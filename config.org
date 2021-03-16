@@ -617,8 +617,8 @@ then enter the text in that file's own buffer.
    #+begin_src emacs-lisp
 (use-package org-present :ensure t
 :config
-(add-hook 'org-present-mode-hook (lambda () (load-theme 'leuven)))
-(add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'leuven))) )
+(add-hook 'org-present-mode-hook (lambda () (load-theme 'doom-dark+)))
+(add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'doom-dark+))) )
    #+end_src
    
 ** Babel Colorize RESULTS
@@ -1293,7 +1293,7 @@ export only what is visible to html.  (Or one could export to .org as a way of
     #+end_src
 ** Doom themes
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 
  #+begin_src emacs-lisp
