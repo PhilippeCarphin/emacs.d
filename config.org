@@ -780,6 +780,13 @@ evil normal mode.
 #+begin_src emacs-lisp
 (global-set-key (kbd "M-m") 'leader-key)
 #+end_src
+** =M-x=
+Same as Spacemacs.
+#+begin_src emacs-lisp
+(define-key leader-key (kbd "SPC") 'helm-M-x)
+(define-key leader-key (kbd "M-m") 'helm-M-x)
+#+end_src
+
 ** About this keymap
 #+begin_src emacs-lisp
 (defun about-this-keymap () (interactive)
