@@ -856,7 +856,7 @@ see its implementation!
 (define-key orgmode (kbd "C-c") '__orgmode__C-c__)
 (define-key __orgmode__C-c__ (kbd "C-,") 'org-insert-structure-template)
 (define-key __orgmode__C-c__ (kbd "C-c") 'org-ctrl-c-ctrl-c)
-(define-key __orgmode__C-c__ (kbd "C-w") 'refile)
+(define-key __orgmode__C-c__ (kbd "C-w") 'org-refile)
 (define-key __orgmode__C-c__ (kbd "C-x C-c") 'org-columns)
 (define-key __orgmode__C-c__ (kbd "'") 'org-edit-special)
 (define-key __orgmode__C-c__ (kbd ".") 'org-time-stamp)
