@@ -770,6 +770,34 @@ Don't show the file and control spacing so that all entries are aligned.
     | =C-u B= | Do bulk action with universal argument |
 
 
+* Buffer cleanup
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle yes
+  :END:
+
+  #+begin_src emacs-lisp
+;; ref : https://www.emacswiki.org/emacs/KillingBuffers#toc2
+(setq not-to-kill-buffer-list '("#emacs" "irc.freenode.net:6667" "recentf"))
+(defun maybe-kill-buffer (buffer)
+  (let ((bname (buffer-name buffer)))
+    (unless (or (member bname not-to-kill-buffer-list)
+                (get-buffer-window buffer 'visible)
+                (cl-search "*" bname)
+                (cl-search "magit" bname))
+      (kill-buffer-ask buffer))))
+(defun maybe-kill-all-buffers ()
+  (interactive)
+  (mapc 'maybe-kill-buffer (delq (current-buffer) (buffer-list))))
+(defun almost-quit-emacs ()
+  (interactive)
+  (mapc 'maybe-kill-buffer (buffer-list))
+  (delete-frame))
+(defun kill-invisible-buffers ()
+  (interactive)
+  (dolist (buf (buffer-list))
+    (unless (get-buffer-window buf 'visible) (maybe-kill-buffer buf))))
+  #+end_src
+
 * Leader Keymap
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
@@ -830,6 +858,7 @@ see its implementation!
 (define-key leader-key (kbd "b") 'buffers)
 (define-key buffers (kbd "b") 'helm-buffers-list)
 (define-key buffers (kbd "k") 'kill-buffer)
+(define-key buffers (kbd "K") 'maybe-kill-all-buffers)
 #+end_src
 
 ** Save and quit
