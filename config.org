@@ -639,7 +639,26 @@ From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post b
  (add-hook 'org-babel-after-execute-hook 'ek/babel-ansi)
  #+end_src
  
+** Org indentation
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook (lambda () (electric-indent-mode 0) (org-indent-mode 1)))
+#+end_src
+
+Orgmode, please don't mess with me by indenting source blocks.
+#+begin_src emacs-lisp
+(setq org-edit-src-content-indentation 0)
+#+end_src
+
+#+RESULTS:
+: 0
+
+
 * Agenda
+
 ** Agena files
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
