@@ -1524,3 +1524,48 @@ I am not loading the theme because I want to continue with built-in themes for n
   (let ((org-agenda-files (list "/ssh:ppp4:/home/for000/Documents/gtd")))
        (org-agenda-list)))
 #+end_src
+
+* =sg-lisp.el=
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+
+#+begin_src emacs-lisp
+;; Package pour se déplacer uniquement dans du code elisp
+(use-package paredit
+  :ensure t
+  :delight
+  :config
+  (cl-loop for mode-hook in '(lisp-mode-hook
+			      lisp-interaction-mode-hook
+			      eval-expression-minibuffer-setup-hook
+			      emacs-lisp-mode-hook)
+	   do (add-hook mode-hook 'enable-paredit-mode)))
+
+;; Coloration syntaxique pour éditer du elisp
+(use-package highlight-defined
+  :ensure t
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'highlight-defined-mode))
+
+(use-package aggressive-indent
+  :ensure t
+  :delight
+  :config
+  ;; Je ne veux pas que ça soit actif par défaut
+  (global-aggressive-indent-mode -1))
+
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda ()
+	    ;; Le tiret constitue un mot en soit (pour w et b).
+	    (modify-syntax-entry ?- "w")
+	    ;; goto symbol
+	    (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
+	    (aggressive-indent-mode 1)))
+
+(provide 'sg-lisp)
+#+end_src
+
+#+RESULTS:
+: sg-lisp
