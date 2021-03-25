@@ -1241,15 +1241,29 @@ export only what is visible to html.  (Or one could export to .org as a way of
    :END:
 
 #+begin_src emacs-lisp
-(defun update-work-agenda-views () (interactive)
-  (let ((org-agenda-files (list "/ssh:ppp4:/home/phc001/public_org/GTD_ProjectList_MIRROR.org")))
+(defun publish-work-agenda-views () (interactive)
+  (let ((org-agenda-files (list
+                           "~/Documents/gtd/GTD_Work_Reference.org"
+                           "~/Documents/gtd/GTD_Work_ProjectList.org")))
     (org-agenda-list)
     (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/phil-agenda-from-home.html")
-    (org-agenda-write "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")))
+    (org-agenda-write
+  "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
+  (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")))
 #+end_src
 
 #+RESULTS:
 : update-work-agenda-views
+** Work Agenda view
+
+#+begin_src emacs-lisp
+(defun work-agenda-view () (interactive)
+  (let ((org-agenda-files (list
+                           "~/Documents/gtd/GTD_Work_Reference.org"
+                           "~/Documents/gtd/GTD_Work_ProjectList.org")))
+    (org-agenda-list)))
+#+end_src
+
 * Other packages
 ** Magit
    :PROPERTIES:
