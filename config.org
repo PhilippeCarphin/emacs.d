@@ -1488,6 +1488,21 @@ export only what is visible to html.  (Or one could export to .org as a way of
  also Note the need to change Alt in terminal emulator profile settings
 
 
+* Modus themes
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_quote
+Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA) - [[https://protesilaos.com/modus-themes/][Modus Themes]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package modus-themes :ensure t)
+#+end_src
+
+I am not loading the theme because I want to continue with built-in themes for now.
+
 * Other agenda
 
 #+begin_src emacs-lisp
