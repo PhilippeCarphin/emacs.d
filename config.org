@@ -1487,3 +1487,11 @@ export only what is visible to html.  (Or one could export to .org as a way of
  https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
  also Note the need to change Alt in terminal emulator profile settings
 
+
+* Other agenda
+
+#+begin_src emacs-lisp
+(defun franky-agenda () (interactive)
+  (let ((org-agenda-files (list "/ssh:ppp4:/home/for000/Documents/gtd")))
+       (org-agenda-list)))
+#+end_src
