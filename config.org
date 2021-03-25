@@ -677,7 +677,7 @@ that directory depending on the system we are on.
 *** Org agenda files
 This is the variable that org looks at for files containing agenda items.
  #+begin_src emacs-lisp
- (setq org-agenda-files (list org-agenda-dir "/ssh:ppp4:/home/phc001/public_org/GTD_ProjectList_MIRROR.org"))
+ (setq org-agenda-files (list org-agenda-dir))
  #+end_src
 
  #+RESULTS:
