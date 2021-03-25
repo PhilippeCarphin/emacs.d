@@ -687,12 +687,14 @@ This is the variable that org looks at for files containing agenda items.
 Create symbols holding the paths to GTD files
  #+begin_src emacs-lisp
  (setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
-     gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
-     gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
-     gtd-reference-file (concat org-agenda-dir "GTD_Reference.org")
-     gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
-     gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
-     gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
+       gtd-next-actions-file (concat org-agenda-dir "GTD_NextActions.org")
+       gtd-project-list-file (concat org-agenda-dir "GTD_ProjectList.org")
+       gtd-work-project-list-file (concat org-agenda-dir "GTD_Work_ProjectList.org")
+       gtd-reference-file (concat org-agenda-dir "GTD_Reference.org")
+       gtd-work-reference-file (concat org-agenda-dir "GTD_Work_Reference.org")
+       gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
+       gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
+       gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
  #+end_src
 *** Quick access to GTD files
     :PROPERTIES:
@@ -700,20 +702,24 @@ Create symbols holding the paths to GTD files
     :END:
 **** Commands
 #+begin_src emacs-lisp
-  (defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
-  (defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
-  (defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
-  (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
+(defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
+(defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
+(defun gtd-open-work-project-list () (interactive) (find-file gtd-work-project-list-file))
+(defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
+(defun gtd-open-work-reference   () (interactive) (find-file gtd-work-reference-file))
+(defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
 #+end_src
 **** Leader bindings
 #+begin_src emacs-lisp
-  (define-prefix-command 'gtd)
-  (define-key leader-key (kbd "g") 'gtd)
-  (define-key gtd (kbd "c") 'org-capture)
-  (define-key gtd (kbd "i") 'gtd-open-in-tray)
-  (define-key gtd (kbd "p") 'gtd-open-project-list)
-  (define-key gtd (kbd "r") 'gtd-open-reference)
-  (define-key gtd (kbd "n") 'gtd-open-next-actions)
+(define-prefix-command 'gtd)
+(define-key leader-key (kbd "g") 'gtd)
+(define-key gtd (kbd "c") 'org-capture)
+(define-key gtd (kbd "i") 'gtd-open-in-tray)
+(define-key gtd (kbd "p") 'gtd-open-project-list)
+(define-key gtd (kbd "w p") 'gtd-open-work-project-list)
+(define-key gtd (kbd "r") 'gtd-open-reference)
+(define-key gtd (kbd "w r") 'gtd-open-work-project-list)
+(define-key gtd (kbd "n") 'gtd-open-next-actions)
 #+end_src
 
 #+REVEAL: split
