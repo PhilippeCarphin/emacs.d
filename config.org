@@ -1248,18 +1248,20 @@ export only what is visible to html.  (Or one could export to .org as a way of
 
 #+begin_src emacs-lisp
 (defun publish-work-agenda-views () (interactive)
-  (let ((org-agenda-files (list
-                           "~/Documents/gtd/GTD_Work_Reference.org"
-                           "~/Documents/gtd/GTD_Work_ProjectList.org")))
-    (org-agenda-list)
-    (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/phil-agenda-from-home.html")
-    (org-agenda-write
-  "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
-  (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")))
+       (let ((org-agenda-files (list
+				"~/Documents/gtd/GTD_Work_Reference.org"
+				"~/Documents/gtd/GTD_Work_ProjectList.org")))
+	 (org-agenda-list)
+	 (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/phil-agenda-from-home.html")
+	 (org-agenda-write
+	  "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
+	 (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")
+	 (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
 #+end_src
 
 #+RESULTS:
-: update-work-agenda-views
+: publish-work-agenda-views
+
 ** Work Agenda view
 
 #+begin_src emacs-lisp
