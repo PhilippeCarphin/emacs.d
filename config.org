@@ -1555,8 +1555,34 @@ This requires only stock emacs
 *** Preventing a specific only on MacOS and only in terminal emacsclient
  https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
  also Note the need to change Alt in terminal emulator profile settings
+** TRAMP
 
+[[https://www.emacswiki.org/emacs/TrampMode#h5o-9][Emacs Wiki : Tramp Mode]]
 
+If the remote shell is BASH
+#+begin_src shell
+if [[ "$TERM" == "dumb" ]] ; then
+  PS1='$ '
+  return
+fi
+#+end_src
+
+If your shell on the remote machine is zsh:
+#+begin_src shell
+if [[ "$TERM" == "dumb" ]] ; then
+  unsetopt zle
+  unsetopt prompt_cr
+  unsetopt prompt_subst
+  if whence -w precmd >/dev/null; then
+      unfunction precmd
+  fi
+  if whence -w preexec >/dev/null; then
+      unfunction preexec
+  fi
+  PS1='$ '
+  return
+fi
+#+end_src
 * Modus themes
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
