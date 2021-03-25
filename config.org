@@ -1083,24 +1083,24 @@ The way this is set, it will show 7 days starting 2 days in the past.
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
- #+begin_src emacs-lisp
-   (setq org-agenda-custom-commands
-	 '(("c" "Complete agenda view"
-	    ((tags "PRIORITY=\"A\"")
-	     (stuck "")
-	     (agenda "" )
-	     (todo "GTD-ACTION")))
-	   ("s" "Split agenda view"
-	    ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-	     (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
-	     (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
-	   ("g" . "GTD keyword searches searches")
-	   ("gi" todo "GTD-IN")
-	   ("gc" todo "GTD-CLARIFY")
-	   ("ga" todo "GTD-ACTION")
-	   ("gn" todo-tree "GTD-NEXT-ACTION")
-	   ("gp" todo "GTD-PROJECT")))
- #+end_src
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands
+      '(("c" "Complete agenda view"
+         ((tags "PRIORITY=\"A\"")
+          (stuck "")
+          (agenda "" )
+          (todo "GTD-ACTION")))
+        ("s" "Split agenda view"
+         ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+          (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
+          (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
+        ("g" . "GTD keyword searches searches")
+        ("gi" todo "GTD-IN")
+        ("gc" todo "GTD-CLARIFY")
+        ("ga" todo "GTD-ACTION")
+        ("gn" todo-tree "GTD-NEXT-ACTION")
+        ("gp" todo "GTD-PROJECT")))
+#+end_src
 
 Run the agenda with "c" custom command.
  
@@ -1109,32 +1109,32 @@ Run the agenda with "c" custom command.
     :HEADER-ARGS: :tangle yes
     :END:
 This is equivalent to launching =org-agenda= and pressing a.
- #+begin_src emacs-lisp
- (defun gtd-agenda-view () (interactive)
-   (org-agenda nil "a"))
- #+end_src
- #+begin_src emacs-lisp
- (defun gtd-review-view () (interactive)
-   (org-agenda nil "c"))
- #+end_src
+#+begin_src emacs-lisp
+(defun gtd-agenda-view () (interactive)
+  (org-agenda nil "a"))
+#+end_src
+#+begin_src emacs-lisp
+(defun gtd-review-view () (interactive)
+  (org-agenda nil "c"))
+#+end_src
 
- #+begin_src emacs-lisp
- (defun gtd-next-action-sparse-tree () (interactive)
-   (find-file gtd-project-list-file)
-   (org-agenda nil "gn"))
- #+end_src
+#+begin_src emacs-lisp
+(defun gtd-next-action-sparse-tree () (interactive)
+  (find-file gtd-project-list-file)
+  (org-agenda nil "gn"))
+#+end_src
 
 *** Agenda view hotkeys
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
      Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
-     non-prefix key.
+non-prefix key.
 
 #+begin_src emacs-lisp
-  (define-key org-agenda-keys (kbd "g") 'gtd-agenda-view)
-  (define-key org-agenda-keys (kbd "c") 'gtd-review-view)
-  (define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
+(define-key org-agenda-keys (kbd "g") 'gtd-agenda-view)
+(define-key org-agenda-keys (kbd "c") 'gtd-review-view)
+(define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
 #+end_src
 
 ** Closing notes
@@ -1241,7 +1241,23 @@ export only what is visible to html.  (Or one could export to .org as a way of
             (org-present-mode-quit . dw/org-present-quit-hook)))
      #+end_src
 
-** Export and publish my agenda views
+     
+** Specific agenda files
+
+Functions for creating agenda views from a certain set of files.  This is done
+by using =let= to temporarily set =org-agenda-files=.
+
+*** Generic function
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(defun phc-restricted-agenda-list (agenda-files)
+  (let ((org-agenda-files agenda-files))
+    (org-agenda-list)))
+#+end_src
+*** Export and publish my agenda views
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -1250,11 +1266,12 @@ export only what is visible to html.  (Or one could export to .org as a way of
 (defun publish-work-agenda-views () (interactive)
        (let ((org-agenda-files (list
 				"~/Documents/gtd/GTD_Work_Reference.org"
-				"~/Documents/gtd/GTD_Work_ProjectList.org")))
+				"~/Documents/gtd/GTD_Work_ProjectList.org"))
+	     (org-agenda-span 40)
+	     (org-agenda-start-day "-5d"))
 	 (org-agenda-list)
 	 (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/phil-agenda-from-home.html")
-	 (org-agenda-write
-	  "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
+	 (org-agenda-write "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
 	 (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")
 	 (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
 #+end_src
@@ -1262,16 +1279,46 @@ export only what is visible to html.  (Or one could export to .org as a way of
 #+RESULTS:
 : publish-work-agenda-views
 
-** Work Agenda view
+*** Work Agenda view
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
 
 #+begin_src emacs-lisp
 (defun work-agenda-view () (interactive)
-  (let ((org-agenda-files (list
-                           "~/Documents/gtd/GTD_Work_Reference.org"
-                           "~/Documents/gtd/GTD_Work_ProjectList.org")))
-    (org-agenda-list)))
+       (phc-restricted-agenda-list (list "~/Documents/gtd/GTD_Work_Reference.org"
+					 "~/Documents/gtd/GTD_Work_ProjectList.org")))
+(defun for000-agenda-view () (interactive)
+       (phc-restricted-agenda-list (list "/ssh:ppp4:/home/for000/Documents/gtd")))
 #+end_src
 
+*** Keys
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+#+begin_src emacs-lisp
+(define-key org-agenda-keys (kbd "w v") 'work-agenda-view)
+(define-key org-agenda-keys (kbd "w f") 'for000-agenda-view)
+(define-key org-agenda-keys (kbd "w p") 'publish-work-agenda-views)
+#+end_src
+
+| =SPC a w v= | =work-agenda-view= |
+| =SPC a w f= | =for000-agenda-view= |
+| =SPC a w f= | =for000-agenda-view= |
+
+** Open phil's agenda
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+This requires only stock emacs
+
+#+begin_src emacs-lisp
+(defun phc001-agenda-view () (interactive)
+       (let ((org-agenda-files (list "/ssh:ppp4:/home/phc001/public_org/")))
+	 (org-agenda-list)))
+(define-key org-agenda-keys (kbd "w p") 'phc001-agenda-view)
+#+end_src
 * Other packages
 ** Magit
    :PROPERTIES:
@@ -1526,12 +1573,6 @@ Accessible themes for GNU Emacs, conforming with the highest standard for colour
 I am not loading the theme because I want to continue with built-in themes for now.
 
 * Other agenda
-
-#+begin_src emacs-lisp
-(defun franky-agenda () (interactive)
-  (let ((org-agenda-files (list "/ssh:ppp4:/home/for000/Documents/gtd")))
-       (org-agenda-list)))
-#+end_src
 
 * =sg-lisp.el=
 :PROPERTIES:
