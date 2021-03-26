@@ -472,9 +472,9 @@ We simply add languages that we want to become available.  There are many more
 but some of them require installing extra packages.
 
 #+begin_src emacs-lisp
-(org-babel-do-load-languages 'org-babel-load-languages
-    '((shell . t)
-      (python . t)))
+  (org-babel-do-load-languages 'org-babel-load-languages
+			       '((shell . t)
+				 (python . t)))
 #+end_src
 
 *** Disable prompt
