@@ -25,10 +25,15 @@ function main(){
 	    emacs --daemon
 	    shift
 	    ;;
-  -t)
-      emacsclient -t $@
-      exit $?
-      ;;
+        -t)
+            emacsclient -t $@
+            exit $?
+            ;;
+	-h) home=$2
+            shift
+	    shift
+            HOME=$home emacs $@
+            exit $?
     esac
 
     ensure-server-is-running
