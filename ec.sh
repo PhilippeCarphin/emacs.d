@@ -54,6 +54,11 @@ function frame-exists() {
 function ensure-frame-exists() {
     if ! frame-exists ; then
 	emacsclient -c --no-wait
+	emacsclient --no-wait -e '
+	    (when (window-system)
+		(set-frame-height (selected-frame) 60)
+		(set-frame-width (selected-frame) 120)
+		(set-frame-position (selected-frame) 800 300))'
     fi
 }
 
