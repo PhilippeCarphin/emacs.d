@@ -1650,3 +1650,19 @@ I am not loading the theme because I want to continue with built-in themes for n
 
 #+RESULTS:
 : sg-lisp
+
+* Window position
+
+This isn't a configurations but it is used in =ec.sh=.
+
+#+begin_src emacs-lisp
+(when (window-system)
+  (set-frame-height (selected-frame) 60)
+  (set-frame-position (selected-frame) 800 300))
+#+end_src
+
+* Visual line mode markers
+
+#+begin_src emacs-lisp
+(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
+#+end_src
