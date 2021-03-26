@@ -656,6 +656,17 @@ Orgmode, please don't mess with me by indenting source blocks.
 #+RESULTS:
 : 0
 
+** Insert subheadings
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+#+begin_src emacs-lisp
+(define-key org-mode-map (kbd "C-S-<return>") 'org-insert-subheading-respect-content)
+(define-key org-mode-map (kbd "M-S-<return>") 'org-insert-subheading)
+#+end_src
+
+#+RESULTS:
+: org-insert-subheading
 
 * Agenda
 
