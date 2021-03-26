@@ -36,6 +36,11 @@ function main(){
             exit $?
     esac
 
+    if [[ "$SSH_CLIENT" != "" ]] ; then
+        emacsclient -t $@
+        return
+    fi
+
     ensure-server-is-running
     ensure-frame-exists
 
