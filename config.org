@@ -1666,3 +1666,16 @@ This isn't a configurations but it is used in =ec.sh=.
 #+begin_src emacs-lisp
 (setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
 #+end_src
+* Vterm
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+Note that the first time you run =vterm= it will want to compile stuff.
+
+On UNIX systems it should work fine, UNIX running on a mac M1, make sure to have
+a very recent version of CMake.
+
+#+begin_src emacs-lisp
+(use-package vterm :ensure t)
+#+end_src
