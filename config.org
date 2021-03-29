@@ -293,7 +293,7 @@ Originally developped for spacemacs, now part of the standard emacs packages.
     
 ** Evil mode
   :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
+  :HEADER-ARGS: :tangle no
   :END:
 *** Description
 Evil-mode is a by far the best VI emulation out there.  It is very exact.
