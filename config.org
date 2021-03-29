@@ -669,6 +669,16 @@ Orgmode, please don't mess with me by indenting source blocks.
 :HEADER-ARGS: :tangle yes
 :END:
 #+begin_src emacs-lisp
+(defun org-insert-subheading-respect-content (arg)
+  "Insert a new subheading and demote it.
+Works for outline headings and for plain lists alike."
+  (interactive "P")
+  (org-insert-heading-respect-content arg)
+  (cond ((org-at-heading-p) (org-do-demote))
+        ((org-at-item-p) (org-indent-item))))
+#+end_src
+
+#+begin_src emacs-lisp
 (define-key org-mode-map (kbd "C-S-<return>") 'org-insert-subheading-respect-content)
 (define-key org-mode-map (kbd "M-S-<return>") 'org-insert-subheading)
 #+end_src
@@ -737,9 +747,12 @@ Create symbols holding the paths to GTD files
 (define-key gtd (kbd "p") 'gtd-open-project-list)
 (define-key gtd (kbd "w p") 'gtd-open-work-project-list)
 (define-key gtd (kbd "r") 'gtd-open-reference)
-(define-key gtd (kbd "w r") 'gtd-open-work-project-list)
+(define-key gtd (kbd "w r") 'gtd-open-work-reference)
 (define-key gtd (kbd "n") 'gtd-open-next-actions)
 #+end_src
+
+#+RESULTS:
+: gtd-open-next-actions
 
 #+REVEAL: split
 ** Agenda Key
@@ -958,14 +971,6 @@ see its implementation!
 #+end_src
 *** Item insertion
 #+begin_src emacs-lisp
-(defun org-insert-subheading-respect-content (arg)
-  "Insert a new subheading and demote it.
-Works for outline headings and for plain lists alike."
-  (interactive "P")
-  (org-insert-heading-respect-content arg)
-  (cond ((org-at-heading-p) (org-do-demote))
-        ((org-at-item-p) (org-indent-item))))
-
 (define-prefix-command 'org-insert)
 (define-key orgmode (kbd "i") 'org-insert)
 (define-key 'org-insert (kbd "h") 'org-insert-heading)
@@ -1060,6 +1065,16 @@ can be.
      ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
      ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
 #+end_src
+
+#+RESULTS:
+| GTD-IN            | :foreground | #ff8800 | :weight | normal | :underline | t   | :size | small |
+| GTD-PROJECT       | :foreground | #0088ff | :weight | bold   | :underline | t   |       |       |
+| GTD-ACTION        | :foreground | #0088ff | :weight | normal | :underline | nil |       |       |
+| GTD-NEXT-ACTION   | :foreground | #0088ff | :weight | bold   | :underline | nil |       |       |
+| GTD-WAITING       | :foreground | #aaaa00 | :weight | normal | :underline | nil |       |       |
+| GTD-REFERENCE     | :foreground | #00ff00 | :weight | normal | :underline | nil |       |       |
+| GTD-SOMEDAY-MAYBE | :foreground | #7c7c74 | :weight | normal | :underline | nil |       |       |
+| GTD-DONE          | :foreground | #00ff00 | :weight | normal | :underline | nil |       |       |
 
   #+REVEAL: split
 ** Definition of stuck projects
@@ -1336,7 +1351,6 @@ This requires only stock emacs
 (defun phc001-agenda-view () (interactive)
        (let ((org-agenda-files (list "/ssh:ppp4:/home/phc001/public_org/")))
 	 (org-agenda-list)))
-(define-key org-agenda-keys (kbd "w p") 'phc001-agenda-view)
 #+end_src
 * Other packages
 ** Magit
@@ -1624,7 +1638,6 @@ Accessible themes for GNU Emacs, conforming with the highest standard for colour
 
 I am not loading the theme because I want to continue with built-in themes for now.
 
-* Other agenda
 
 * =sg-lisp.el=
 :PROPERTIES:
