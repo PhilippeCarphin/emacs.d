@@ -1554,10 +1554,11 @@ a very recent version of CMake.
 
 #+begin_src emacs-lisp
 (use-package vterm :ensure t
-:hook (global-hl-line-mode -1))
+:config (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1))))
 #+end_src
 
 #+RESULTS:
+: t
 
 * Documentation
 ** Things to do with orgmode
