@@ -1315,6 +1315,15 @@ see its implementation!
 #+end_src
 
 * Other stuff
+** Languages
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(use-package yaml-mode :ensure t)
+(use-package ssh-config-mode :ensure t)
+#+end_src
 ** Buffer cleanup
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
