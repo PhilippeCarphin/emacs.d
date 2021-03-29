@@ -1320,6 +1320,7 @@ see its implementation!
 #+begin_src emacs-lisp
 (use-package yaml-mode :ensure t)
 (use-package ssh-config-mode :ensure t)
+(use-package cmake-mode :ensure t)
 #+end_src
 ** Buffer cleanup
   :PROPERTIES:
