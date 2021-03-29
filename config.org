@@ -12,36 +12,6 @@ Keys sparse tree : Evaluate (org-tags-sparse-tree nil "command|keys") with
 =C-x C-e=.  Pressing =C-c C-c= will get out of the sparse tree view
 created by the expression.
 
-* Intro
-   #+REVEAL: split
-An elementary that can be taken as is to start from oriented towards leveragin
-the full power of orgmode immediately.
-#+ATTR_REVEAL: :frag (appear)
-- Sane miscellaneous defaults
-- A built in color theme that looks good in orgmode exports
-- Evil mode if you know vim but not emacs
-- Basic helper frameworks that are defacto standard
-- Elementary org configuration allowing immediate use of built in package babel.
-- Some extra packages that you can look at.
-
-** This config file
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle no
-   :END:
-
-#+ATTR_REVEAL: :frag (appear)
-Emacs loads one file at startup from =~/.emacs=, =~/.emacs.d/init.el=.  The
-=init.el= file contains the code
-
-#+ATTR_REVEAL: :frag (appear)
-#+begin_src emacs-lisp
-(org-babel-load-file (concat user-emacs-directory "config.org"))
-#+end_src
-
-#+ATTR_REVEAL: :frag (appear)
-which forms =config.el= from the =emacs-lisp= source blocks in this file and
-runs this elisp code.
-
 
 * Bootstrap & =use-package=
    :PROPERTIES:
@@ -79,22 +49,30 @@ We therefore want it to exist from the very start
 #+end_src
 This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 
-* Small basic configs
-** Get rid of toolbar
+* Emacs
+** Small basic configs
+*** Indent with tabs
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+#+begin_src emacs-lisp
+(custom-set-variables '(indent-tabs-mode nil))
+#+end_src
+*** Get rid of toolbar
 :PROPERTIES:
 :header-args: :tangle yes
 :END:
 #+begin_src emacs-lisp
 (tool-bar-mode -1)
 #+end_src
-** Get rid of scroll bars
+*** Get rid of scroll bars
 :PROPERTIES:
 :header-args: :tangle yes
 :END:
 #+begin_src emacs-lisp
 (scroll-bar-mode -1)
 #+end_src
-** Scrolling behavior
+*** Scrolling behavior
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -107,7 +85,7 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 (setq-default scroll-margin 10)
 #+end_src
 
-** Higlight current line
+*** Higlight current line
    :PROPERTIES:
    :HEADER-ARGS: :tangle no
    :END:
@@ -117,7 +95,7 @@ it is kind of annoying in =misterioso=.
 (global-hl-line-mode 1)
 #+end_src
 
-** Cursor style
+*** Cursor style
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -132,7 +110,7 @@ Makes the cursor a bar instead of a box.
 
 Helps to not get confused with vim.
 
-** Cursor blink
+*** Cursor blink
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -141,8 +119,8 @@ Helps to not get confused with vim.
 (blink-cursor-mode)
 #+end_src
 
-** Wrapping
-*** Hard wrap as you type
+*** Wrapping
+**** Hard wrap as you type
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -153,7 +131,7 @@ Automattically hard-wrap text on 80 chars as you type.
 (setq-default fill-column 80)
 #+end_src
 
-*** Wrap lines visually
+**** Wrap lines visually
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -164,7 +142,7 @@ with a special char indicating visual wrapping.
 (global-visual-line-mode 1)
 #+end_src
 
-** Startup color theme
+*** Startup color theme
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -175,7 +153,7 @@ Dark theme that exports well
 (load-theme 'misterioso)
 #+end_src
 
-**** Explanation                                            :noexport_reveal:
+***** Explanation                                       :noexport_reveal:
 
     The default emacs theme looks good when exporting to HTML.  But because of
     =htmlize=, with dark themes, the code can come out looking bad in exports
@@ -189,7 +167,7 @@ Dark theme that exports well
     emacs itself.  A light theme that exports well and looks good in emacs is
     =leuven=.
 
-** Startup font
+*** Startup font
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -200,7 +178,7 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 (custom-set-faces '(default ((t (:height 200)))))
 #+end_src
 
-** Follow symlinks
+*** Follow symlinks
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -209,7 +187,7 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 (custom-set-variables '(vc-follow-symlinks nil))
 #+end_src
 
-** Remap C-x C-c to save buffers before quitting
+*** Remap C-x C-c to save buffers before quitting
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -218,8 +196,16 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
  (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
  #+end_src
   
-* Helper frameworks
-** Undo tree
+*** Visual line mode markers
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(custom-set-variables '(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow)))
+#+end_src
+** Helper frameworks
+*** Undo tree
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -229,7 +215,7 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
   :ensure t
   :config (global-undo-tree-mode))
 #+end_src
-** Helm
+*** Helm
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -256,7 +242,7 @@ We also add a few ourselves.
 #+begin_src emacs-lisp
 (helm-mode)
 #+end_src
-*** Remapped functions
+**** Remapped functions
 
      Notable remapped functions:
 - =M-x= adds helm when writing function
@@ -268,11 +254,11 @@ We also add a few ourselves.
   - =describe-function=
   - =describe-symbol=
 
-*** Powerful tools
+**** Powerful tools
 
 - =helm-grep-do-git-grep=
 
-** Which-key
+*** Which-key
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -293,7 +279,7 @@ Originally developped for spacemacs, now part of the standard emacs packages.
   (which-key-mode))
 #+end_src
 
-** Standard autocomplete
+*** Standard autocomplete
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -305,11 +291,11 @@ Originally developped for spacemacs, now part of the standard emacs packages.
 	  (setq company-idle-delay 0))
 #+end_src
     
-* Evil mode
+** Evil mode
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
   :END:
-** Description
+*** Description
 Evil-mode is a by far the best VI emulation out there.  It is very exact.
 
 The only thing that is very different is that not all buffers are going to be in
@@ -320,7 +306,7 @@ it it's not a big deal.  After a while, you still make mistakes in that sense
 but if you thought you were in evil mode and you pressed the wrong key, you know
 how to fix it.  It becomes like pressing backspace when you make a typo,
 something barely noticed.
-** Config
+*** Config
 #+begin_src emacs-lisp :results none
   (use-package evil
     :ensure t
@@ -356,7 +342,7 @@ the TAB key doesn't work properly.
 
 Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3 : Keybindings and Evil]] et la config de Sam.
 
-** Cursor blinking
+*** Cursor blinking
 
  Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
  fois avant d'arrêter).
@@ -378,9 +364,9 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
  (blink-cursor-mode 0)
  #+end_src
 
-
-* Orgmode
-** Changer l'apparence de contenu caché
+* Orgmode & Agenda
+** Orgmode
+*** Changer l'apparence de contenu caché
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -397,7 +383,7 @@ paste any unicode character in here from a browser
 
 Other options : ▼, ↴, ⬎, ⤵, ⤷, ↯, ⟾, ⋱, ….
 
-** Display links as normal text
+*** Display links as normal text
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -414,7 +400,7 @@ You have to delete a bracket to get the real text to show up.
 ;; Note (org-mode-restart) is required for this to take effect
 #+end_src
 
-*** Org link commands                                               :command:
+**** Org link commands                                           :command:
 | =C-c C-l= | =org-insert-link=         | Insert a link with a menu prompting for URL and description^* |
 |           | =org-store-link=          | Store org link to headline in which the cursor is^*^*         |
 |           | =org-toggle-link-display= | Toggles the way links are displayed                           |
@@ -423,7 +409,7 @@ You have to delete a bracket to get the real text to show up.
 
 .^*^* After doing that, when inserting a link, you can leave the first field
 blank and the link will point to where you stored.
-** Bullets
+*** Bullets
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -438,7 +424,7 @@ Essential for easy tree viewing
   :hook (org-mode . org-bullets-mode))
 #+end_src
 
-** Exporting
+*** Exporting
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -458,7 +444,7 @@ Essential for easy tree viewing
 (use-package htmlize :ensure t)
 #+end_src
 
-*** Export keys                                                        :keys:
+**** Export keys                                                    :keys:
 
 | =C-c C-e= | =org-export-dispatch= | Bring up the export menu |
 In the export menu
@@ -468,8 +454,8 @@ In the export menu
 | =w o= | =org-twbs-export-to-html=              | Twitter Bootstrap html |
 Except for =R B= the displayed LISP function does not open the file and the
 dispatcher opens it after that function has run.
-** Babel
-*** Babel Intro                                                        :keys:
+*** Babel
+**** Babel Intro                                                    :keys:
 Babel allows running of code blocks.  It is what enables this config to be in
 orgmode format.
 
@@ -478,7 +464,7 @@ must be activated to be used:
 
 https://orgmode.org/worg/org-contrib/babel/languages/index.html#configure
 | =C-c C-c= | =org-babel-execute-src-block= | When cursor is on an SRC block, execute its code |
-*** Babel config
+**** Babel config
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -491,7 +477,7 @@ but some of them require installing extra packages.
 				 (python . t)))
 #+end_src
 
-*** Disable prompt
+**** Disable prompt
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -506,7 +492,7 @@ surprised that a command runs when the press enter in a shell.
 (setq org-confirm-babel-evaluate nil)
 #+end_src
 
-*** Disable babel on export
+**** Disable babel on export
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -521,11 +507,11 @@ every block each time we export.
 With this setting, code blocks are not evaluated on export but if their output
 is there, it will go in the export regardless of this setting.
 
-**** Execute all command                                            :command:
+***** Execute all command                                       :command:
 
 | =C-c C-v C-b= | =org-babel-execute-buffer= | Evaluate all source blocks in the buffer (file) |
 
-** Orgmode scratch buffer
+*** Orgmode scratch buffer
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -556,7 +542,7 @@ then enter the text in that file's own buffer.
 : 
 : #+end_src
     
-** Present GUI menu
+*** Present GUI menu
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -584,7 +570,7 @@ then enter the text in that file's own buffer.
 	["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
   #+end_src
 
-** Center cursor after shift-tab in orgmode
+*** Center cursor after shift-tab in orgmode
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -604,7 +590,7 @@ then enter the text in that file's own buffer.
  (advice-remove 'org-global-cycle #'org-post-global-cycle)
  #+end_src
 
-** Startup visibility
+*** Startup visibility
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -613,7 +599,7 @@ then enter the text in that file's own buffer.
 (custom-set-variables '(org-startup-folded t))
 #+end_src
     
-** Inline images
+*** Inline images
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -623,7 +609,7 @@ then enter the text in that file's own buffer.
 (setq org-image-actual-width 100)
 #+end_src
 
-** Org-present with doom-theme
+*** Org-present with doom-theme
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -635,7 +621,7 @@ then enter the text in that file's own buffer.
 (add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'leuven))) )
    #+end_src
    
-** Babel Colorize RESULTS
+*** Babel Colorize RESULTS
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -653,7 +639,7 @@ From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post b
  (add-hook 'org-babel-after-execute-hook 'ek/babel-ansi)
  #+end_src
  
-** Org indentation
+*** Org indentation
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -670,7 +656,7 @@ Orgmode, please don't mess with me by indenting source blocks.
 #+RESULTS:
 : 0
 
-** Insert subheadings
+*** Insert subheadings
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
@@ -692,13 +678,12 @@ Works for outline headings and for plain lists alike."
 #+RESULTS:
 : org-insert-subheading
 
-* Agenda
-
-** Agena files
+** Agenda
+*** Agena files
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
-*** Platform dependant =org-agenda-dir= variable
+**** Platform dependant =org-agenda-dir= variable
 We use a single directory to hold our agenda files.  We create a symbol holding
 that directory depending on the system we are on.
  #+begin_src emacs-lisp :results none
@@ -709,7 +694,7 @@ that directory depending on the system we are on.
        ((string-equal system-type "gnu/linux")
         (progn (setq org-agenda-dir "~/Documents/gtd/"))))
  #+end_src
-*** Org agenda files
+**** Org agenda files
 This is the variable that org looks at for files containing agenda items.
  #+begin_src emacs-lisp
  (setq org-agenda-files (list org-agenda-dir))
@@ -718,7 +703,7 @@ This is the variable that org looks at for files containing agenda items.
  #+RESULTS:
  | ~/Documents/gtd/ | /ssh:ppp4:/home/phc001/public_org/GTD_ProjectList_MIRROR.org |
 
-*** Filename symbols
+**** Filename symbols
 Create symbols holding the paths to GTD files
  #+begin_src emacs-lisp
  (setq gtd-in-tray-file (concat org-agenda-dir "GTD_InTray.org")
@@ -731,11 +716,11 @@ Create symbols holding the paths to GTD files
        gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
        gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
  #+end_src
-*** Quick access to GTD files
+**** Quick access to GTD files
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
-**** Commands
+***** Commands
 #+begin_src emacs-lisp
 (defun gtd-open-in-tray      () (interactive) (find-file gtd-in-tray-file))
 (defun gtd-open-project-list () (interactive) (find-file gtd-project-list-file))
@@ -744,7 +729,7 @@ Create symbols holding the paths to GTD files
 (defun gtd-open-work-reference   () (interactive) (find-file gtd-work-reference-file))
 (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
 #+end_src
-**** Leader bindings
+***** Leader bindings
 #+begin_src emacs-lisp
 (define-prefix-command 'gtd)
 (define-key leader-key (kbd "g") 'gtd)
@@ -761,7 +746,7 @@ Create symbols holding the paths to GTD files
 : gtd-open-next-actions
 
 #+REVEAL: split
-** Agenda Key
+*** Agenda Key
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -774,7 +759,7 @@ Create symbols holding the paths to GTD files
 (define-key org-agenda-keys (kbd "a") 'org-agenda)
  #+end_src
 
-** Refile targets SUPER COOL!
+*** Refile targets SUPER COOL!
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -787,10 +772,10 @@ Move items around with =org-refile=.  This controls how refile choices are prese
 
  Ref : https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
 
-*** Keys                                                               :keys:
+**** Keys                                                           :keys:
     | =C-c C-w=     | =org-refile= | Move headline under cursor to somewhere else |
     | =C-u C-c C-w= | =org-refile= | Go to selected target (no real refiling)     |
-** Capture templates
+*** Capture templates
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -804,7 +789,7 @@ templates.
 	    "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
  #+end_src
 
-** Capture hotkey
+*** Capture hotkey
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -812,10 +797,10 @@ templates.
 (defun org-capture-input () (interactive) (org-capture nil "i"))
 (global-set-key (kbd "C-c c") 'org-capture-input)
 #+end_src
-*** Keys                                                               :keys:
+**** Keys                                                           :keys:
 | =C-c C-w= | =org-capture-input= | (Custom) Org apture with selected template "i". |
 
-** Agenda display control
+*** Agenda display control
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -829,7 +814,7 @@ Don't show the file and control spacing so that all entries are aligned.
 #+RESULTS:
 : ((agenda . %-12t%-12s))
 
-** Keys                                                                :keys:
+*** Keys                                                             :keys:
 
     | =f,b=   | Forward, backward in time              |
     | =n,p=   | Next, previous line                    |
@@ -839,35 +824,330 @@ Don't show the file and control spacing so that all entries are aligned.
     | =B=     | Do bulk action to marked entries       |
     | =C-u B= | Do bulk action with universal argument |
 
+*** Advanced orgmode and GTD
+**** Todo keywords for GTD
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
 
-* Buffer cleanup
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
-  :END:
+The first set of keywords is a generic set of keywords that I can give TODO
+keywords to items without having them be part of my GTD.
 
-  #+begin_src emacs-lisp
-;; ref : https://www.emacswiki.org/emacs/KillingBuffers#toc2
-(setq not-to-kill-buffer-list '("#emacs" "irc.freenode.net:6667" "recentf"))
-(defun maybe-kill-buffer (buffer)
-  (let ((bname (buffer-name buffer)))
-    (unless (or (member bname not-to-kill-buffer-list)
-                (get-buffer-window buffer 'visible)
-                (cl-search "*" bname)
-                (cl-search "magit" bname))
-      (kill-buffer-ask buffer))))
-(defun maybe-kill-all-buffers ()
-  (interactive)
-  (mapc 'maybe-kill-buffer (delq (current-buffer) (buffer-list))))
-(defun almost-quit-emacs ()
-  (interactive)
-  (mapc 'maybe-kill-buffer (buffer-list))
-  (delete-frame))
-(defun kill-invisible-buffers ()
-  (interactive)
-  (dolist (buf (buffer-list))
-    (unless (get-buffer-window buf 'visible) (maybe-kill-buffer buf))))
-  #+end_src
+The GTD-* keywords map to the various things that what David Allen calls "stuff"
+can be.
 
+#+begin_src emacs-lisp
+(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
+			  (sequence
+			     "GTD-IN(i)"
+			     "GTD-CLARIFY(c)"
+			     "GTD-PROJECT(p)"
+			     "GTD-SOMEDAY-MAYBE(s)"
+			     "GTD-ACTION(a)"
+			     "GTD-NEXT-ACTION(n)"
+			     "GTD-WAITING(w)"
+			     "|"
+			     "GTD-REFERENCE(r)"
+			     "GTD-DELEGATED(g)"
+			     "GTD-DONE(d)")))
+
+(setq org-todo-keyword-faces
+   '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
+     ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
+     ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
+     ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
+     ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
+     ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
+     ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
+     ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
+#+end_src
+
+#+RESULTS:
+| GTD-IN            | :foreground | #ff8800 | :weight | normal | :underline | t   | :size | small |
+| GTD-PROJECT       | :foreground | #0088ff | :weight | bold   | :underline | t   |       |       |
+| GTD-ACTION        | :foreground | #0088ff | :weight | normal | :underline | nil |       |       |
+| GTD-NEXT-ACTION   | :foreground | #0088ff | :weight | bold   | :underline | nil |       |       |
+| GTD-WAITING       | :foreground | #aaaa00 | :weight | normal | :underline | nil |       |       |
+| GTD-REFERENCE     | :foreground | #00ff00 | :weight | normal | :underline | nil |       |       |
+| GTD-SOMEDAY-MAYBE | :foreground | #7c7c74 | :weight | normal | :underline | nil |       |       |
+| GTD-DONE          | :foreground | #00ff00 | :weight | normal | :underline | nil |       |       |
+
+  #+REVEAL: split
+**** Definition of stuck projects
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
+This says that a stuck project is a headline where the todo keyword is
+=GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
+
+#+begin_src emacs-lisp
+(setq org-stuck-projects
+      '("TODO=\"GTD-PROJECT\"" ;; Search query
+	("GTD-NEXT-ACTION")    ;; Not stuck if contains
+	()                     ;; Stuck if contains
+	""))                   ;; General regex
+#+end_src
+
+**** Date interval for agenda view
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+The default is kind of annoying.  It shows a week starting on a Sunday but what
+is annoying about that is that on Sunday, the agenda won't show what you have
+tomorrow!
+
+The way this is set, it will show 7 days starting 2 days in the past.
+
+#+begin_src emacs-lisp :results none
+(setq org-agenda-span 7
+      org-agenda-start-on-weekday 0
+      org-agenda-start-day "-2d")
+#+end_src
+
+**** Agenda custom commands
+   These depend on my todo keywords so they are not part of the basic agenda config.
+***** Definition
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+#+begin_src emacs-lisp
+(setq org-agenda-custom-commands
+      '(("c" "Complete agenda view"
+         ((tags "PRIORITY=\"A\"")
+          (stuck "")
+          (agenda "" )
+          (todo "GTD-ACTION")))
+        ("s" "Split agenda view"
+         ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+          (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
+          (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
+        ("g" . "GTD keyword searches searches")
+        ("gi" todo "GTD-IN")
+        ("gc" todo "GTD-CLARIFY")
+        ("ga" todo "GTD-ACTION")
+        ("gn" todo-tree "GTD-NEXT-ACTION")
+        ("gp" todo "GTD-PROJECT")))
+#+end_src
+
+Run the agenda with "c" custom command.
+ 
+***** Agenda view commands
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+This is equivalent to launching =org-agenda= and pressing a.
+#+begin_src emacs-lisp
+(defun gtd-agenda-view () (interactive)
+  (org-agenda nil "a"))
+#+end_src
+#+begin_src emacs-lisp
+(defun gtd-review-view () (interactive)
+  (org-agenda nil "c"))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun gtd-next-action-sparse-tree () (interactive)
+  (find-file gtd-project-list-file)
+  (org-agenda nil "gn"))
+#+end_src
+
+***** Agenda view hotkeys
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle yes
+    :END:
+     Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
+non-prefix key.
+
+#+begin_src emacs-lisp
+(define-key org-agenda-keys (kbd "g") 'gtd-agenda-view)
+(define-key org-agenda-keys (kbd "c") 'gtd-review-view)
+(define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
+#+end_src
+
+**** Closing notes
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+#+begin_src emacs-lisp :results none
+(setq org-log-done 'note)
+#+end_src
+**** Agenda mode map customization
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+I want to learn Emacs keybindings for most things so I don't want to evilify
+every single mode out there.
+
+However, doing =j= and =k= is a hard habbit to lose.  So I just remap the keys
+to print a message.
+#+begin_src emacs-lisp
+(add-hook 'org-agenda-mode-hook (lambda ()
+(define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
+  (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
+- Tulku: Cranston; Lamont Cranston.
+- Lamont Cranston: You know my real name?
+- Tulku: Yes. I also know that for as long as you can remember,
+	 you struggled against your own black heart and always lost. You
+	 watched your sprit, your very face change as the beast claws its
+	 way out from within you.
+j is deactivated
+It normally does org-agenda-goto-date")))))
+;; Originally org-agenda-capture : I use C-c c and I can't use k
+(add-hook 'org-agenda-mode-hook (lambda ()
+  (define-key org-agenda-mode-map (kbd "k") (lambda () (interactive)
+    (message " The Shadow: I saved your life, Roy Tam. It now belongs to me.
+- Dr. Tam: It does?
+k is deactivated
+It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
+#+end_src
+
+**** Search result visibility
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+This makes the sparse tree when doing =gtd-next-action-sparse-tree= be all
+collapsed with only the ancestors.
+
+But in the config, when I run the s-expression at the start, it will show the
+content of the results (key tables mostly) and we can =C-c C-e C-v h o= to
+export only what is visible to html.  (Or one could export to .org as a way of
+"extracting" a sparse tree.
+
+#+begin_src emacs-lisp
+(custom-set-variables
+ '(org-show-context-detail
+   '((occur-tree . ancestors)
+     (default . local))))
+#+end_src
+
+**** System Crafter's org-present config 
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
+
+   From System-crafter's config.  
+     #+begin_src emacs-lisp
+     (defun dw/org-present-prepare-slide ()
+     (org-overview)
+     (org-show-entry)
+     (org-show-children))
+
+   (defun dw/org-present-hook ()
+     (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
+					(header-line (:height 4.5) variable-pitch)
+					(org-code (:height 1.55) org-code)
+					(org-verbatim (:height 1.55) org-verbatim)
+					(org-block (:height 1.25) org-block)
+					(org-block-begin-line (:height 0.7) org-block)))
+     (setq header-line-format " ")
+     (org-display-inline-images)
+     (dw/org-present-prepare-slide))
+
+   (defun dw/org-present-quit-hook ()
+     (setq-local face-remapping-alist '((default variable-pitch default)))
+     (setq header-line-format nil)
+     (org-present-small)
+     (org-remove-inline-images))
+
+   (defun dw/org-present-prev ()
+     (interactive)
+     (org-present-prev)
+     (dw/org-present-prepare-slide))
+
+   (defun dw/org-present-next ()
+     (interactive)
+     (org-present-next)
+     (dw/org-present-prepare-slide))
+
+   (use-package org-present
+     :bind (:map org-present-mode-keymap
+            ("C-c C-j" . dw/org-present-next)
+            ("C-c C-k" . dw/org-present-prev))
+     :hook ((org-present-mode . dw/org-present-hook)
+            (org-present-mode-quit . dw/org-present-quit-hook)))
+     #+end_src
+
+     
+**** Specific agenda files
+
+Functions for creating agenda views from a certain set of files.  This is done
+by using =let= to temporarily set =org-agenda-files=.
+
+***** Generic function
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(defun phc-restricted-agenda-list (agenda-files)
+  (let ((org-agenda-files agenda-files))
+    (org-agenda-list)))
+#+end_src
+***** Export and publish my agenda views
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+#+begin_src emacs-lisp
+(defun publish-work-agenda-views () (interactive)
+       (let ((org-agenda-files (list
+				"~/Documents/gtd/GTD_Work_Reference.org"
+				"~/Documents/gtd/GTD_Work_ProjectList.org"))
+	     (org-agenda-span 40)
+	     (org-agenda-start-day "-5d"))
+	 (org-agenda-list)
+	 (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/phil-agenda-from-home.html")
+	 (org-agenda-write "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
+	 (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")
+	 (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
+#+end_src
+
+#+RESULTS:
+: publish-work-agenda-views
+
+***** Work Agenda view
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(defun work-agenda-view () (interactive)
+       (phc-restricted-agenda-list (list "~/Documents/gtd/GTD_Work_Reference.org"
+					 "~/Documents/gtd/GTD_Work_ProjectList.org")))
+(defun for000-agenda-view () (interactive)
+       (phc-restricted-agenda-list (list "/ssh:ppp4:/home/for000/Documents/gtd")))
+#+end_src
+
+***** Keys
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+#+begin_src emacs-lisp
+(define-key org-agenda-keys (kbd "w v") 'work-agenda-view)
+(define-key org-agenda-keys (kbd "w f") 'for000-agenda-view)
+(define-key org-agenda-keys (kbd "w p") 'publish-work-agenda-views)
+#+end_src
+
+| =SPC a w v= | =work-agenda-view= |
+| =SPC a w f= | =for000-agenda-view= |
+| =SPC a w f= | =for000-agenda-view= |
+
+**** Open phil's agenda
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+This requires only stock emacs
+
+#+begin_src emacs-lisp
+(defun phc001-agenda-view () (interactive)
+       (let ((org-agenda-files (list "/ssh:ppp4:/home/phc001/public_org/")))
+	 (org-agenda-list)))
+#+end_src
 * Leader Keymap
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
@@ -1034,331 +1314,35 @@ see its implementation!
 (define-key org-present-map (kbd "q") 'org-present-quit)
 #+end_src
 
-* Advanced orgmode and GTD
-** Todo keywords for GTD
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
+* Other stuff
+** Buffer cleanup
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle yes
+  :END:
 
-The first set of keywords is a generic set of keywords that I can give TODO
-keywords to items without having them be part of my GTD.
+  #+begin_src emacs-lisp
+;; ref : https://www.emacswiki.org/emacs/KillingBuffers#toc2
+(setq not-to-kill-buffer-list '("#emacs" "irc.freenode.net:6667" "recentf"))
+(defun maybe-kill-buffer (buffer)
+  (let ((bname (buffer-name buffer)))
+    (unless (or (member bname not-to-kill-buffer-list)
+                (get-buffer-window buffer 'visible)
+                (cl-search "*" bname)
+                (cl-search "magit" bname))
+      (kill-buffer-ask buffer))))
+(defun maybe-kill-all-buffers ()
+  (interactive)
+  (mapc 'maybe-kill-buffer (delq (current-buffer) (buffer-list))))
+(defun almost-quit-emacs ()
+  (interactive)
+  (mapc 'maybe-kill-buffer (buffer-list))
+  (delete-frame))
+(defun kill-invisible-buffers ()
+  (interactive)
+  (dolist (buf (buffer-list))
+    (unless (get-buffer-window buf 'visible) (maybe-kill-buffer buf))))
+  #+end_src
 
-The GTD-* keywords map to the various things that what David Allen calls "stuff"
-can be.
-
-#+begin_src emacs-lisp
-(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
-			  (sequence
-			     "GTD-IN(i)"
-			     "GTD-CLARIFY(c)"
-			     "GTD-PROJECT(p)"
-			     "GTD-SOMEDAY-MAYBE(s)"
-			     "GTD-ACTION(a)"
-			     "GTD-NEXT-ACTION(n)"
-			     "GTD-WAITING(w)"
-			     "|"
-			     "GTD-REFERENCE(r)"
-			     "GTD-DELEGATED(g)"
-			     "GTD-DONE(d)")))
-
-(setq org-todo-keyword-faces
-   '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
-     ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
-     ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
-     ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
-     ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
-     ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
-     ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
-     ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
-#+end_src
-
-#+RESULTS:
-| GTD-IN            | :foreground | #ff8800 | :weight | normal | :underline | t   | :size | small |
-| GTD-PROJECT       | :foreground | #0088ff | :weight | bold   | :underline | t   |       |       |
-| GTD-ACTION        | :foreground | #0088ff | :weight | normal | :underline | nil |       |       |
-| GTD-NEXT-ACTION   | :foreground | #0088ff | :weight | bold   | :underline | nil |       |       |
-| GTD-WAITING       | :foreground | #aaaa00 | :weight | normal | :underline | nil |       |       |
-| GTD-REFERENCE     | :foreground | #00ff00 | :weight | normal | :underline | nil |       |       |
-| GTD-SOMEDAY-MAYBE | :foreground | #7c7c74 | :weight | normal | :underline | nil |       |       |
-| GTD-DONE          | :foreground | #00ff00 | :weight | normal | :underline | nil |       |       |
-
-  #+REVEAL: split
-** Definition of stuck projects
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-
-In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
-This says that a stuck project is a headline where the todo keyword is
-=GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
-
-#+begin_src emacs-lisp
-(setq org-stuck-projects
-      '("TODO=\"GTD-PROJECT\"" ;; Search query
-	("GTD-NEXT-ACTION")    ;; Not stuck if contains
-	()                     ;; Stuck if contains
-	""))                   ;; General regex
-#+end_src
-
-** Date interval for agenda view
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-
-The default is kind of annoying.  It shows a week starting on a Sunday but what
-is annoying about that is that on Sunday, the agenda won't show what you have
-tomorrow!
-
-The way this is set, it will show 7 days starting 2 days in the past.
-
-#+begin_src emacs-lisp :results none
-(setq org-agenda-span 7
-      org-agenda-start-on-weekday 0
-      org-agenda-start-day "-2d")
-#+end_src
-
-** Agenda custom commands
-   These depend on my todo keywords so they are not part of the basic agenda config.
-*** Definition
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-#+begin_src emacs-lisp
-(setq org-agenda-custom-commands
-      '(("c" "Complete agenda view"
-         ((tags "PRIORITY=\"A\"")
-          (stuck "")
-          (agenda "" )
-          (todo "GTD-ACTION")))
-        ("s" "Split agenda view"
-         ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-          (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
-          (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
-        ("g" . "GTD keyword searches searches")
-        ("gi" todo "GTD-IN")
-        ("gc" todo "GTD-CLARIFY")
-        ("ga" todo "GTD-ACTION")
-        ("gn" todo-tree "GTD-NEXT-ACTION")
-        ("gp" todo "GTD-PROJECT")))
-#+end_src
-
-Run the agenda with "c" custom command.
- 
-*** Agenda view commands
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-This is equivalent to launching =org-agenda= and pressing a.
-#+begin_src emacs-lisp
-(defun gtd-agenda-view () (interactive)
-  (org-agenda nil "a"))
-#+end_src
-#+begin_src emacs-lisp
-(defun gtd-review-view () (interactive)
-  (org-agenda nil "c"))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun gtd-next-action-sparse-tree () (interactive)
-  (find-file gtd-project-list-file)
-  (org-agenda nil "gn"))
-#+end_src
-
-*** Agenda view hotkeys
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-     Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
-non-prefix key.
-
-#+begin_src emacs-lisp
-(define-key org-agenda-keys (kbd "g") 'gtd-agenda-view)
-(define-key org-agenda-keys (kbd "c") 'gtd-review-view)
-(define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
-#+end_src
-
-** Closing notes
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-#+begin_src emacs-lisp :results none
-(setq org-log-done 'note)
-#+end_src
-** Agenda mode map customization
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-
-I want to learn Emacs keybindings for most things so I don't want to evilify
-every single mode out there.
-
-However, doing =j= and =k= is a hard habbit to lose.  So I just remap the keys
-to print a message.
-#+begin_src emacs-lisp
-(add-hook 'org-agenda-mode-hook (lambda ()
-(define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
-  (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
-- Tulku: Cranston; Lamont Cranston.
-- Lamont Cranston: You know my real name?
-- Tulku: Yes. I also know that for as long as you can remember,
-	 you struggled against your own black heart and always lost. You
-	 watched your sprit, your very face change as the beast claws its
-	 way out from within you.
-j is deactivated
-It normally does org-agenda-goto-date")))))
-;; Originally org-agenda-capture : I use C-c c and I can't use k
-(add-hook 'org-agenda-mode-hook (lambda ()
-  (define-key org-agenda-mode-map (kbd "k") (lambda () (interactive)
-    (message " The Shadow: I saved your life, Roy Tam. It now belongs to me.
-- Dr. Tam: It does?
-k is deactivated
-It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
-#+end_src
-
-** Search result visibility
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-This makes the sparse tree when doing =gtd-next-action-sparse-tree= be all
-collapsed with only the ancestors.
-
-But in the config, when I run the s-expression at the start, it will show the
-content of the results (key tables mostly) and we can =C-c C-e C-v h o= to
-export only what is visible to html.  (Or one could export to .org as a way of
-"extracting" a sparse tree.
-
-#+begin_src emacs-lisp
-(custom-set-variables
- '(org-show-context-detail
-   '((occur-tree . ancestors)
-     (default . local))))
-#+end_src
-
-** System Crafter's org-present config 
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle no
-    :END:
-
-   From System-crafter's config.  
-     #+begin_src emacs-lisp
-     (defun dw/org-present-prepare-slide ()
-     (org-overview)
-     (org-show-entry)
-     (org-show-children))
-
-   (defun dw/org-present-hook ()
-     (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
-					(header-line (:height 4.5) variable-pitch)
-					(org-code (:height 1.55) org-code)
-					(org-verbatim (:height 1.55) org-verbatim)
-					(org-block (:height 1.25) org-block)
-					(org-block-begin-line (:height 0.7) org-block)))
-     (setq header-line-format " ")
-     (org-display-inline-images)
-     (dw/org-present-prepare-slide))
-
-   (defun dw/org-present-quit-hook ()
-     (setq-local face-remapping-alist '((default variable-pitch default)))
-     (setq header-line-format nil)
-     (org-present-small)
-     (org-remove-inline-images))
-
-   (defun dw/org-present-prev ()
-     (interactive)
-     (org-present-prev)
-     (dw/org-present-prepare-slide))
-
-   (defun dw/org-present-next ()
-     (interactive)
-     (org-present-next)
-     (dw/org-present-prepare-slide))
-
-   (use-package org-present
-     :bind (:map org-present-mode-keymap
-            ("C-c C-j" . dw/org-present-next)
-            ("C-c C-k" . dw/org-present-prev))
-     :hook ((org-present-mode . dw/org-present-hook)
-            (org-present-mode-quit . dw/org-present-quit-hook)))
-     #+end_src
-
-     
-** Specific agenda files
-
-Functions for creating agenda views from a certain set of files.  This is done
-by using =let= to temporarily set =org-agenda-files=.
-
-*** Generic function
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-#+begin_src emacs-lisp
-(defun phc-restricted-agenda-list (agenda-files)
-  (let ((org-agenda-files agenda-files))
-    (org-agenda-list)))
-#+end_src
-*** Export and publish my agenda views
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-
-#+begin_src emacs-lisp
-(defun publish-work-agenda-views () (interactive)
-       (let ((org-agenda-files (list
-				"~/Documents/gtd/GTD_Work_Reference.org"
-				"~/Documents/gtd/GTD_Work_ProjectList.org"))
-	     (org-agenda-span 40)
-	     (org-agenda-start-day "-5d"))
-	 (org-agenda-list)
-	 (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/phil-agenda-from-home.html")
-	 (org-agenda-write "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
-	 (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")
-	 (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
-#+end_src
-
-#+RESULTS:
-: publish-work-agenda-views
-
-*** Work Agenda view
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-#+begin_src emacs-lisp
-(defun work-agenda-view () (interactive)
-       (phc-restricted-agenda-list (list "~/Documents/gtd/GTD_Work_Reference.org"
-					 "~/Documents/gtd/GTD_Work_ProjectList.org")))
-(defun for000-agenda-view () (interactive)
-       (phc-restricted-agenda-list (list "/ssh:ppp4:/home/for000/Documents/gtd")))
-#+end_src
-
-*** Keys
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-#+begin_src emacs-lisp
-(define-key org-agenda-keys (kbd "w v") 'work-agenda-view)
-(define-key org-agenda-keys (kbd "w f") 'for000-agenda-view)
-(define-key org-agenda-keys (kbd "w p") 'publish-work-agenda-views)
-#+end_src
-
-| =SPC a w v= | =work-agenda-view= |
-| =SPC a w f= | =for000-agenda-view= |
-| =SPC a w f= | =for000-agenda-view= |
-
-** Open phil's agenda
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-This requires only stock emacs
-
-#+begin_src emacs-lisp
-(defun phc001-agenda-view () (interactive)
-       (let ((org-agenda-files (list "/ssh:ppp4:/home/phc001/public_org/")))
-	 (org-agenda-list)))
-#+end_src
-* Other packages
 ** Magit
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -1494,6 +1478,83 @@ This requires only stock emacs
  | =global-command-log-mode=     | Activate command logging                   |
  | =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
  
+** Modus themes
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_quote
+Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA) - [[https://protesilaos.com/modus-themes/][Modus Themes]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package modus-themes :ensure t)
+(custom-set-variables
+ '(custom-enabled-themes '(modus-vivendi))
+ '(custom-safe-themes
+   '("c7f364aeea0458b6368815558cbf1f54bbdcc1dde8a14b5260eb82b76c0ffc7b" default)))
+#+end_src
+
+I am not loading the theme because I want to continue with built-in themes for now.
+
+** =sg-lisp.el=
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+
+#+begin_src emacs-lisp
+;; Package pour se déplacer uniquement dans du code elisp
+(use-package paredit
+  :ensure t
+  :delight
+  :config
+  (cl-loop for mode-hook in '(lisp-mode-hook
+			      lisp-interaction-mode-hook
+			      eval-expression-minibuffer-setup-hook
+			      emacs-lisp-mode-hook)
+	   do (add-hook mode-hook 'enable-paredit-mode)))
+
+;; Coloration syntaxique pour éditer du elisp
+(use-package highlight-defined
+  :ensure t
+  :config
+  (add-hook 'emacs-lisp-mode-hook 'highlight-defined-mode))
+
+(use-package aggressive-indent
+  :ensure t
+  :delight
+  :config
+  ;; Je ne veux pas que ça soit actif par défaut
+  (global-aggressive-indent-mode -1))
+
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda ()
+	    ;; Le tiret constitue un mot en soit (pour w et b).
+	    (modify-syntax-entry ?- "w")
+	    ;; goto symbol
+	    (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
+	    (aggressive-indent-mode 1)))
+
+(provide 'sg-lisp)
+#+end_src
+
+#+RESULTS:
+: sg-lisp
+
+** Vterm
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+Note that the first time you run =vterm= it will want to compile stuff.
+
+On UNIX systems it should work fine, UNIX running on a mac M1, make sure to have
+a very recent version of CMake.
+
+#+begin_src emacs-lisp
+(use-package vterm :ensure t)
+#+end_src
 * Documentation
 ** Things to do with orgmode
 
@@ -1628,69 +1689,8 @@ if [[ "$TERM" == "dumb" ]] ; then
   return
 fi
 #+end_src
-* Modus themes
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
 
-#+begin_quote
-Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA) - [[https://protesilaos.com/modus-themes/][Modus Themes]]
-#+end_quote
-
-#+begin_src emacs-lisp
-(use-package modus-themes :ensure t)
-(load-theme 'modus-vivendi)
-#+end_src
-
-I am not loading the theme because I want to continue with built-in themes for now.
-
-
-* =sg-lisp.el=
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-
-#+begin_src emacs-lisp
-;; Package pour se déplacer uniquement dans du code elisp
-(use-package paredit
-  :ensure t
-  :delight
-  :config
-  (cl-loop for mode-hook in '(lisp-mode-hook
-			      lisp-interaction-mode-hook
-			      eval-expression-minibuffer-setup-hook
-			      emacs-lisp-mode-hook)
-	   do (add-hook mode-hook 'enable-paredit-mode)))
-
-;; Coloration syntaxique pour éditer du elisp
-(use-package highlight-defined
-  :ensure t
-  :config
-  (add-hook 'emacs-lisp-mode-hook 'highlight-defined-mode))
-
-(use-package aggressive-indent
-  :ensure t
-  :delight
-  :config
-  ;; Je ne veux pas que ça soit actif par défaut
-  (global-aggressive-indent-mode -1))
-
-(add-hook 'emacs-lisp-mode-hook
-	  (lambda ()
-	    ;; Le tiret constitue un mot en soit (pour w et b).
-	    (modify-syntax-entry ?- "w")
-	    ;; goto symbol
-	    (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
-	    (aggressive-indent-mode 1)))
-
-(provide 'sg-lisp)
-#+end_src
-
-#+RESULTS:
-: sg-lisp
-
-* Window position
+** Window position
 
 This isn't a configurations but it is used in =ec.sh=.
 
@@ -1700,21 +1700,3 @@ This isn't a configurations but it is used in =ec.sh=.
   (set-frame-position (selected-frame) 800 300))
 #+end_src
 
-* Visual line mode markers
-
-#+begin_src emacs-lisp
-(setq visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow))
-#+end_src
-* Vterm
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-Note that the first time you run =vterm= it will want to compile stuff.
-
-On UNIX systems it should work fine, UNIX running on a mac M1, make sure to have
-a very recent version of CMake.
-
-#+begin_src emacs-lisp
-(use-package vterm :ensure t)
-#+end_src
