@@ -87,7 +87,7 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 
 *** Higlight current line
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 Highlight the current line.  This looks really good with the theme =leuven= but
 it is kind of annoying in =misterioso=.
@@ -1362,7 +1362,7 @@ see its implementation!
  
 ** Yasnippet
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
  Note: package =yasnippet= doesn't come with the library of snippets but
  =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
@@ -1553,8 +1553,12 @@ On UNIX systems it should work fine, UNIX running on a mac M1, make sure to have
 a very recent version of CMake.
 
 #+begin_src emacs-lisp
-(use-package vterm :ensure t)
+(use-package vterm :ensure t
+:hook (global-hl-line-mode -1))
 #+end_src
+
+#+RESULTS:
+
 * Documentation
 ** Things to do with orgmode
 
