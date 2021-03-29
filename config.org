@@ -1619,6 +1619,7 @@ Accessible themes for GNU Emacs, conforming with the highest standard for colour
 
 #+begin_src emacs-lisp
 (use-package modus-themes :ensure t)
+(load-theme 'modus-vivendi)
 #+end_src
 
 I am not loading the theme because I want to continue with built-in themes for now.
