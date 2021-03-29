@@ -80,12 +80,18 @@ We therefore want it to exist from the very start
 This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 
 * Small basic configs
-** Get rid of menu bars
+** Get rid of toolbar
 :PROPERTIES:
 :header-args: :tangle yes
 :END:
 #+begin_src emacs-lisp
 (tool-bar-mode -1)
+#+end_src
+** Get rid of scroll bars
+:PROPERTIES:
+:header-args: :tangle yes
+:END:
+#+begin_src emacs-lisp
 (scroll-bar-mode -1)
 #+end_src
 ** Scrolling behavior
@@ -185,7 +191,7 @@ Dark theme that exports well
 
 ** Startup font
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 
 To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
