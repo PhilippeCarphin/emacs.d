@@ -494,14 +494,14 @@ surprised that a command runs when the press enter in a shell.
 
 **** Disable babel on export
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle no
     :END:
 
 When tweaking the document and frequently exporting, it can be useful to not run
 every block each time we export.
 
     #+begin_src emacs-lisp
-    (setq org-export-use-babel nil)
+    (setq org-export-use-babel t)
     #+end_src
 
 With this setting, code blocks are not evaluated on export but if their output
