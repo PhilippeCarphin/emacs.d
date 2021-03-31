@@ -1100,7 +1100,7 @@ by using =let= to temporarily set =org-agenda-files=.
 	     (org-agenda-span 40)
 	     (org-agenda-start-day "-5d"))
 	 (org-agenda-list)
-	 (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/phil-agenda-from-home.html")
+	 (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/files/phil-agenda-from-home.html")
 	 (org-agenda-write "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
 	 (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")
 	 (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
