@@ -615,10 +615,7 @@ then enter the text in that file's own buffer.
    :END:
 
    #+begin_src emacs-lisp
-(use-package org-present :ensure t
-:config
-(add-hook 'org-present-mode-hook (lambda () (load-theme 'leuven)))
-(add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'leuven))) )
+(use-package org-present :ensure t)
    #+end_src
    
 *** Babel Colorize RESULTS
@@ -1713,4 +1710,5 @@ This isn't a configurations but it is used in =ec.sh=.
   (set-frame-height (selected-frame) 60)
   (set-frame-position (selected-frame) 800 300))
 #+end_src
+
 
