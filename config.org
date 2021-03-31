@@ -805,11 +805,11 @@ templates.
 Don't show the file and control spacing so that all entries are aligned.
 
 #+begin_src emacs-lisp
-  (setq org-agenda-prefix-format  '((agenda . "%-12t%-12s")))
+  (setq org-agenda-prefix-format  '((agenda . "    %-12t%-12s")))
 #+end_src
 
 #+RESULTS:
-: ((agenda . %-12t%-12s))
+: ((agenda .     %-12t%-12s))
 
 *** Keys                                                             :keys:
 
