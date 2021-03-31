@@ -1647,6 +1647,20 @@ a very recent version of CMake.
  next day.  Otherwise your schedule will stop being a schedule and become a
  single growing todo list.
 
+
+*** Tables
+Pres =C-c C-c= on the cell that has the ~=taylor(...)~ thing.
+|---------------+---+---+-------------------|
+| Func          | n | x | Result            |
+|---------------+---+---+-------------------|
+| exp(x)        | 1 | x | =taylor($1,$3,$2) |
+| exp(x)        | 2 | x |                   |
+| exp(x)        | 3 | x |                   |
+| x^2 + sqrt(x) | 1 | x |                   |
+| x^2 + sqrt(x) | 2 | x |                   |
+|---------------+---+---+-------------------|
+
+A thing appears below the table, put your cursor on that and do =C-c C-c=.
 ** Things to do in general
 *** Evaluate lisp code =C-x C-e=                                       :keys:
 
