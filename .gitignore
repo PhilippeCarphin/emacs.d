@@ -15,3 +15,5 @@ org-roam.db
 config.el
 *.html
 .org-id-locations
+eshell
+keyfreq
