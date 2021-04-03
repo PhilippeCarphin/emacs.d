@@ -1672,6 +1672,8 @@ Pres =C-c C-c= on the cell that has the ~=taylor(...)~ thing.
 |---------------+---+---+-------------------|
 
 A thing appears below the table, put your cursor on that and do =C-c C-c=.
+
+Ref [[https://orgmode.org/worg/org-tutorials/org-spreadsheet-intro.html][Org as a spreadsheet system : An introduction]]
 ** Things to do in general
 *** Evaluate lisp code =C-x C-e=                                       :keys:
 
