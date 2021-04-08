@@ -12,6 +12,16 @@ plus helm and which-key since they are essential to learning emacs.
 git clone https://github.com/philippecarphin/emacs.d ~/.emacs.d
 #+end_src
 
+The script will start emacs in daemon mode so you can watch it install
+packages in your shell.
+#+begin_src shell
+~/.emacs.d/install.sh
+#+end_src
+*You don't need to run this script*.  If you don't, packages will be
+installed the first time you start emacs and you won't get to see the
+progress of installation.  The script will also create a link
+=~/.local/bin/ec -> ./ec.sh=.
+
 ** Usage
 
 Start emacs.  The config uses =(use-package _ :ensure t)= to download
