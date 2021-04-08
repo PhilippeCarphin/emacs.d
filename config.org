@@ -1341,6 +1341,7 @@ see its implementation!
 (use-package ssh-config-mode :ensure t)
 (use-package cmake-mode :ensure t)
 (use-package vimrc-mode :ensure t)
+(use-package markdown-mode+ :ensure t)
 #+end_src
 ** Buffer cleanup
   :PROPERTIES:
