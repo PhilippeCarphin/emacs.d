@@ -1,3 +1,4 @@
+-*- coding: utf-8 -*-
 #+TITLE: Emacs config file
 #+OPTIONS: toc:1
 #+REVEAL_MIN_SCALE: 0.1
@@ -1791,3 +1792,20 @@ From https://github.com/daviwil/emacs-from-scratch/blob/a57d99ba80276926a2b68521
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
+
+
+** UTF-8
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+UTF-8 as default encoding from
+[[http://ergoemacs.org/emacs/emacs_encoding_decoding_faq.html][emacs encoding
+decoding FAQ]] on [[https://ergoemacs.org][ergoemacs.org]]
+#+begin_src emacs-lisp
+(set-language-environment "UTF-8")
+#+end_src
+
+In an export to Reveal.js, "àÀèÈéÉçÇûÛùÙ" should show up correctly when the
+language environment is UTF-8.
+
+
