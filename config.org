@@ -6,6 +6,7 @@
 #+COLUMNS: %40ITEM %header-args[(Header Args)][{Arguments controlling the evaluation of source blocks}] %TAGS
 #+OPTIONS: broken-links:mark
 
+#+ATTR_ORG: :width 100px
 [[file:unicorn.jpg]]
 
 Keys sparse tree : Evaluate (org-tags-sparse-tree nil "command|keys") with
