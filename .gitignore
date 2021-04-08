@@ -17,3 +17,6 @@ config.el
 .org-id-locations
 eshell
 keyfreq
+*.log
+*.man
+
