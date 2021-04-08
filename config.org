@@ -513,6 +513,23 @@ is there, it will go in the export regardless of this setting.
 
 | =C-c C-v C-b= | =org-babel-execute-buffer= | Evaluate all source blocks in the buffer (file) |
 
+**** Set python3 as python interpreter
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(custom-set-variables '(org-babel-python-command "python3"))
+#+end_src
+
+#+begin_src python :results output
+greeting = "Hello"
+print(f'{greeting} world!')
+#+end_src
+
+#+RESULTS:
+: Hello world!
+
 *** Orgmode scratch buffer
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
