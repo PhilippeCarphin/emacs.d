@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "$0 : Starting 'emacs --daemon=install'"
-emacs --daemon=install
+echo 'y' | emacs --daemon=install
 echo "$0 : Killing install daemon \"emacsclient -s install -e '(kill-emacs)'\""
 emacsclient -s install -e '(kill-emacs)'
 
