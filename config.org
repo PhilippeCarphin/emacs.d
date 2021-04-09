@@ -1836,3 +1836,10 @@ For non-server mode
       (width . 100)
       (vertical-scroll-bars))))
 #+end_src
+
+
+** GO mode
+
+#+begin_src emacs-lisp
+(use-package go :ensure t)
+#+end_src
