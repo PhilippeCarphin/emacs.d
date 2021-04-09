@@ -1600,6 +1600,9 @@ a very recent version of CMake.
 : t
 
 * Documentation
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
 ** Things to do with orgmode
 
 *** Write headlines and collapse them                           :keys:syntax:
@@ -1750,18 +1753,6 @@ if [[ "$TERM" == "dumb" ]] ; then
 fi
 #+end_src
 
-** Window position
-
-This isn't a configurations but it is used in =ec.sh=.
-
-#+begin_src emacs-lisp
-(when (window-system)
-  (set-frame-height (selected-frame) 60)
-  (set-frame-position (selected-frame) 800 300))
-#+end_src
-
-
-
 
 * New stuff
 ** System Crafters for auto-save files
@@ -1809,3 +1800,37 @@ In an export to Reveal.js, "àÀèÈéÉçÇûÛùÙ" should show up correctly w
 language environment is UTF-8.
 
 
+
+
+** Initial frame position
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+
+For non-server mode
+#+begin_src emacs-lisp
+(set-frame-position (selected-frame) 800 0)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(custom-set-variables
+ '(server-after-make-frame-hook
+   '((lambda nil
+       (set-frame-position
+        (selected-frame)
+        400 400)))))
+#+end_src
+#+begin_src emacs-lisp
+(add-hook 'after-make-frame-functions
+   (lambda (f) (set-frame-position f 400 10)))
+#+end_src
+
+
+#+begin_src emacs-lisp
+(custom-set-variables
+ '(default-frame-alist
+    '((height . 55)
+      (width . 100)
+      (vertical-scroll-bars))))
+#+end_src
