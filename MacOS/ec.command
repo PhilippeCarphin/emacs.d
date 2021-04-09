@@ -20,7 +20,10 @@ function frame-exists() {
 
 function ensure-frame-exists() {
     if ! frame-exists ; then
-		emacsclient -c --no-wait
+	emacsclient -c --no-wait
+	emacsclient --no-wait -e '
+	    (when (window-system)
+		(set-frame-position (selected-frame) 150 30))'
     fi
 }
 
