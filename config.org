@@ -1521,7 +1521,7 @@ see its implementation!
  
 ** Modus themes
 :PROPERTIES:
-:HEADER-ARGS: :tangle yes
+:HEADER-ARGS: :tangle no
 :END:
 
 #+begin_quote
@@ -1842,4 +1842,20 @@ For non-server mode
 
 #+begin_src emacs-lisp
 (use-package go :ensure t)
+#+end_src
+
+
+** powerline
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(use-package monokai-pro-theme :ensure t :config (load-theme 'monokai-pro-classic))
+(use-package doom-modeline
+  :ensure t
+:config
+(setq doom-modeline-height 8)
+(setq doom-modeline-icon t)
+(doom-modeline-mode 1))
 #+end_src
