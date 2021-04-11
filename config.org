@@ -69,7 +69,7 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 #+end_src
 *** Get rid of scroll bars
 :PROPERTIES:
-:header-args: :tangle yes
+:header-args: :tangle no
 :END:
 #+begin_src emacs-lisp
 (scroll-bar-mode -1)
@@ -1965,7 +1965,7 @@ For non-server mode
 
 ** powerline
 :PROPERTIES:
-:HEADER-ARGS: :tangle yes
+:HEADER-ARGS: :tangle no
 :END:
 
 #+begin_src emacs-lisp
