@@ -1283,6 +1283,7 @@ Same as Spacemacs.
 (define-key evil-window-map (kbd "/") 'split-window-right)
 (define-key evil-window-map (kbd "é") 'split-window-right)
 (define-key evil-window-map (kbd "-") 'split-window-below)
+(define-key evil-window-map (kbd "f") 'find-file-other-window)
 (define-key evil-window-map (kbd "<right>") 'windmove-right)
 (define-key evil-window-map (kbd "<left>") 'windmove-left)
 (define-key evil-window-map (kbd "<up>") 'windmove-up)
@@ -1325,6 +1326,7 @@ see its implementation!
 
 (define-key files (kbd "c") 'open-emacs-config-file)
 (define-key files (kbd "f") 'helm-find-files)
+(define-key files (kbd "w") 'find-file-other-window)
 (define-key files (kbd "r") 'helm-recentf)
 (define-key files (kbd "s") 'save-buffer)
 #+end_src
