@@ -697,13 +697,14 @@ Works for outline headings and for plain lists alike."
 
 *** Org Habits
 :PROPERTIES:
-:HEADER-ARGS: :tangle no
+:HEADER-ARGS: :tangle yes
 :END:
 
 **** Activate ?
 This is the only necessary config to be able to use org habits.
 #+begin_src emacs-lisp
 (add-to-list 'org-modules 'org-habit t)
+;; (cl-pushnew 'org-modules 'org-habit)
 #+end_src
 We can also do =M-x customize RET= and search for =org-modules=.
 **** Customizations from a post
