@@ -695,6 +695,25 @@ Works for outline headings and for plain lists alike."
 #+RESULTS:
 : org-insert-subheading
 
+*** Org Habits
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+
+This is the only necessary config to be able to use org habits.
+#+begin_src emacs-lisp
+(add-to-list 'org-modules 'org-habit t)
+#+end_src
+We can also do =M-x customize RET= and search for =org-modules=.
+
+
+A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintaining-habits-using-orgmode/][this post]]
+#+begin_src emacs-lisp
+;; Log TODO creation
+(setq org-treat-insert-todo-heading-as-state-change t)
+;; log into LOGBOOK drawer
+(setq org-log-into-drawer t)
+#+end_src
 ** Agenda
 *** Agena files
    :PROPERTIES:
@@ -731,7 +750,8 @@ Create symbols holding the paths to GTD files
        gtd-work-reference-file (concat org-agenda-dir "GTD_Work_Reference.org")
        gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
        gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
-       gtd-journal-file (concat org-agenda-dir "GTD_Journal.org"))
+       gtd-journal-file (concat org-agenda-dir "GTD_Journal.org")
+       gtd-habits-file (concat org-agenda-dir "GTD_Habits.org"))
  #+end_src
 **** Quick access to GTD files
     :PROPERTIES:
@@ -745,6 +765,8 @@ Create symbols holding the paths to GTD files
 (defun gtd-open-reference   () (interactive) (find-file gtd-reference-file))
 (defun gtd-open-work-reference   () (interactive) (find-file gtd-work-reference-file))
 (defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
+(defun gtd-open-next-actions () (interactive) (find-file gtd-next-actions-file))
+(defun gtd-open-habits () (interactive) (find-file gtd-habits-file))
 #+end_src
 ***** Leader bindings
 #+begin_src emacs-lisp
@@ -941,6 +963,7 @@ The way this is set, it will show 7 days starting 2 days in the past.
          ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
           (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
           (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
+        ("h" "Habits" tags "STYLE=\"habit\"" ((org-agenda-overriding-header "Habits")))
         ("g" . "GTD keyword searches searches")
         ("gi" todo "GTD-IN")
         ("gc" todo "GTD-CLARIFY")
@@ -959,6 +982,10 @@ This is equivalent to launching =org-agenda= and pressing a.
 #+begin_src emacs-lisp
 (defun gtd-agenda-view () (interactive)
   (org-agenda nil "a"))
+#+end_src
+#+begin_src emacs-lisp
+(defun gtd-habits-view () (interactive)
+  (org-agenda nil "h"))
 #+end_src
 #+begin_src emacs-lisp
 (defun gtd-review-view () (interactive)
@@ -980,9 +1007,53 @@ non-prefix key.
 
 #+begin_src emacs-lisp
 (define-key org-agenda-keys (kbd "g") 'gtd-agenda-view)
+(define-key org-agenda-keys (kbd "h") 'gtd-habits-view)
 (define-key org-agenda-keys (kbd "c") 'gtd-review-view)
 (define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
 #+end_src
+
+***** Always show graph
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+From https://emacs.stackexchange.com/a/17328/19972
+#+begin_src emacs-lisp
+(defvar my/org-habit-show-graphs-everywhere t
+  "If non-nil, show habit graphs in all types of agenda buffers.
+
+Normally, habits display consistency graphs only in
+\"agenda\"-type agenda buffers, not in other types of agenda
+buffers.  Set this variable to any non-nil variable to show
+consistency graphs in all Org mode agendas.")
+
+(defun my/org-agenda-mark-habits ()
+  "Mark all habits in current agenda for graph display.
+
+This function enforces `my/org-habit-show-graphs-everywhere' by
+marking all habits in the current agenda as such.  When run just
+before `org-agenda-finalize' (such as by advice; unfortunately,
+`org-agenda-finalize-hook' is run too late), this has the effect
+of displaying consistency graphs for these habits.
+
+When `my/org-habit-show-graphs-everywhere' is nil, this function
+has no effect."
+  (when (and my/org-habit-show-graphs-everywhere
+         (not (get-text-property (point) 'org-series)))
+    (let ((cursor (point))
+          item data) 
+      (while (setq cursor (next-single-property-change cursor 'org-marker))
+        (setq item (get-text-property cursor 'org-marker))
+        (when (and item (org-is-habit-p item)) 
+          (with-current-buffer (marker-buffer item)
+            (setq data (org-habit-parse-todo item))) 
+          (put-text-property cursor
+                             (next-single-property-change cursor 'org-marker)
+                             'org-habit-p data))))))
+
+(advice-add #'org-agenda-finalize :before #'my/org-agenda-mark-habits)
+#+end_src
+
+See also : https://www.reddit.com/r/orgmode/comments/efrcoe/orghabit_graph_not_aligned_properly/
 
 **** Closing notes
    :PROPERTIES:
@@ -1330,6 +1401,29 @@ see its implementation!
 (define-key org-present-map (kbd "s") 'org-present-small)
 (define-key org-present-map (kbd "q") 'org-present-quit)
 #+end_src
+
+
+*** Org Time Commands
+:LOGBOOK:
+CLOCK: [2021-04-14 Wed 23:57]
+:END:
+#+begin_src emacs-lisp
+(define-prefix-command 'org-time-commands)
+(define-key leader-key (kbd "t") 'org-time-commands)
+(define-key org-time-commands (kbd "s") 'org-schedule)
+(define-key org-time-commands (kbd "d") 'org-deadline)
+
+(define-prefix-command 'org-clocking-commands)
+(define-key org-time-commands (kbd "c") 'org-clocking-commands)
+(define-key org-clocking-commands (kbd "i") 'org-clock-in)
+(define-key org-clocking-commands (kbd "o") 'org-clock-out)
+(define-key org-clocking-commands (kbd "l") 'org-clock-in-last)
+(define-key org-clocking-commands (kbd "g") 'org-clock-goto)
+(define-key org-clocking-commands (kbd "r") 'org-clock-report)
+#+end_src
+
+#+RESULTS:
+: org-clock-in-last
 
 * Other stuff
 ** Languages
@@ -1685,7 +1779,14 @@ a very recent version of CMake.
  next day.  Otherwise your schedule will stop being a schedule and become a
  single growing todo list.
 
+*** Use org clocking functions                                       :keys:
+| C-c C-x C-i | org-clock-in |
+| C-c C-x C-o | org-clock-out |
+*** Habits
+Entries with =:style: habit= in its property drawer and with a scheduled date
+containing a =.+4d= or =.+4d/7d= to specify repetition.
 
+It will show up in the agenda with a little graph displaying how you are doing.
 *** Tables
 Pres =C-c C-c= on the cell that has the ~=taylor(...)~ thing.
 |---------------+---+---+-------------------|
