@@ -1270,6 +1270,28 @@ Same as Spacemacs.
 (define-key leader-key (kbd "M-m") 'helm-M-x)
 #+end_src
 
+** Window keymap
+
+#+begin_src emacs-lisp
+(windmove-default-keybindings)
+(define-prefix-command 'window-commands)
+(define-key leader-key (kbd "w") 'evil-window-map)
+(define-key evil-window-map (kbd "0") 'delete-window)
+(define-key evil-window-map (kbd "1") 'delete-other-windows)
+(define-key evil-window-map (kbd "z") 'delete-other-windows)
+(define-key evil-window-map (kbd "m") 'delete-other-windows)
+(define-key evil-window-map (kbd "/") 'split-window-right)
+(define-key evil-window-map (kbd "é") 'split-window-right)
+(define-key evil-window-map (kbd "-") 'split-window-below)
+(define-key evil-window-map (kbd "<right>") 'windmove-right)
+(define-key evil-window-map (kbd "<left>") 'windmove-left)
+(define-key evil-window-map (kbd "<up>") 'windmove-up)
+(define-key evil-window-map (kbd "<down>") 'windmove-down)
+#+end_src
+
+#+RESULTS:
+: windmove-down
+
 ** About this keymap
 #+begin_src emacs-lisp
 (defun about-this-keymap () (interactive)
