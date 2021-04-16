@@ -1466,6 +1466,16 @@ CLOCK: [2021-04-14 Wed 23:57]
 #+RESULTS:
 : org-clock-in-last
 
+
+** Vterm
+
+#+begin_src emacs-lisp
+(define-key leader-key (kbd "v") 'vterm)
+#+end_src
+
+#+RESULTS:
+: vterm
+
 * Other stuff
 ** Languages
 :PROPERTIES:
@@ -1592,7 +1602,7 @@ CLOCK: [2021-04-14 Wed 23:57]
     #+end_src
 ** Doom themes
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 
  #+begin_src emacs-lisp
@@ -1993,7 +2003,7 @@ For non-server mode
 :END:
 
 #+begin_src emacs-lisp
-(use-package monokai-pro-theme :ensure t :config (load-theme 'monokai-pro-classic))
+;;(use-package monokai-pro-theme :ensure t :config (load-theme 'monokai-pro-classic))
 (use-package doom-modeline
   :ensure t
 :config
