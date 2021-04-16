@@ -13,6 +13,8 @@
  '(org-babel-python-command "python3")
  '(org-show-context-detail '((occur-tree . ancestors) (default . local)))
  '(org-startup-folded t)
+ '(package-selected-packages
+   '(doom-themes yasnippet-snippets yaml-mode which-key vterm vimrc-mode use-package undo-tree ssh-config-mode sage-shell-mode paredit ox-twbs ox-rst ox-reveal ox-gfm org-present org-bullets no-littering monokai-pro-theme modus-themes markdown-mode+ magit lorem-ipsum keyfreq htmlize highlight-defined helm go-mode go evil elfeed doom-modeline company command-log-mode cmake-mode aggressive-indent))
  '(safe-local-variable-values
    '((org-todo-keyword-faces
       ("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)

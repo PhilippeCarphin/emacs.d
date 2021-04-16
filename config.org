@@ -1666,7 +1666,7 @@ CLOCK: [2021-04-14 Wed 23:57]
  
 ** Modus themes
 :PROPERTIES:
-:HEADER-ARGS: :tangle no
+:HEADER-ARGS: :tangle yes
 :END:
 
 #+begin_quote
@@ -1999,15 +1999,23 @@ For non-server mode
 
 ** powerline
 :PROPERTIES:
-:HEADER-ARGS: :tangle no
+:HEADER-ARGS: :tangle yes
 :END:
 
 #+begin_src emacs-lisp
-;;(use-package monokai-pro-theme :ensure t :config (load-theme 'monokai-pro-classic))
 (use-package doom-modeline
   :ensure t
 :config
 (setq doom-modeline-height 8)
 (setq doom-modeline-icon t)
 (doom-modeline-mode 1))
+#+end_src
+
+
+** Monokai themes
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+#+begin_src emacs-lisp
+(use-package monokai-pro-theme :ensure t :config (load-theme 'monokai-pro-classic))
 #+end_src
