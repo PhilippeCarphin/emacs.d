@@ -1788,6 +1788,18 @@ buffer".
 | =M-d=     | =kill-word=        | Cut word                 |
 | =C-k=     | =kill-line=        | Cut line                 |
 
+*** Undo/Redo
+
+| C-/    | undo |
+| C-_    | undo |
+| s-z    | undo |
+| C-/    | undo |
+| C-x u  | undo |
+| <undo> | undo |
+
+There is no undo https://www.youtube.com/watch?v=nY64e1SqrbU
+
+
 ** Things to do with orgmode
 
 *** Write headlines and collapse them                           :keys:syntax:
