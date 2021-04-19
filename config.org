@@ -1750,6 +1750,44 @@ a very recent version of CMake.
 :PROPERTIES:
 :HEADER-ARGS: :tangle no
 :END:
+** Emacs Basic keys
+*** Directional movement
+
+Character/line movements
+#+begin_example
+               previous-line
+                    C-p
+                     ^
+                     |
+backward-char C-b <--+-->C-f forward-cher
+                     |
+                     v
+                    C-n
+                 next-line
+#+end_example
+
+Line Start =C-a= <--> =C-e= Line End
+
+Search backward =C-r= \leftrightarrow =C-s= Search forward
+
+Buffer start =M-<= (=M-S-,=) \leftrightarrow =M->= (=M-S-.=) Buffer end
+
+*** Mark
+
+Setting the mark in Emacs is like starting a visual selection in Vim.
+
+Cutting is called "killing" in emacs (=kill-line=, =kill-region=, ...) and
+pasting is called "yanking".  "You kill text which deletes it and puts it into
+the kill ring.  Then you yank text from the kill-ring and put it into the
+buffer".
+
+| =C-<SPC>= | =set-mark-command= | Start a visual selection |
+| =M-w=     | =kill-ring-save=   | Copy without deleting    |
+| =C-g=     | =keyboard-quit=    | Cancel visual selection  |
+| =C-w=     | =kill-region=      | Copy and delete          |
+| =M-d=     | =kill-word=        | Cut word                 |
+| =C-k=     | =kill-line=        | Cut line                 |
+
 ** Things to do with orgmode
 
 *** Write headlines and collapse them                           :keys:syntax:
