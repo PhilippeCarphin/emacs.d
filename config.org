@@ -2049,7 +2049,7 @@ For non-server mode
 
 ** doom modeline
 :PROPERTIES:
-:HEADER-ARGS: :tangle no
+:HEADER-ARGS: :tangle yes
 :END:
 
 #+begin_src emacs-lisp
@@ -2092,7 +2092,7 @@ I must have it!
 
 ** powerline
 :PROPERTIES:
-:HEADER-ARGS: :tangle yes
+:HEADER-ARGS: :tangle no
 :END:
 
 
