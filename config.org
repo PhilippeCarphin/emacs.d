@@ -171,7 +171,7 @@ Dark theme that exports well
 
 *** Startup font
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
 
 To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
@@ -631,7 +631,7 @@ then enter the text in that file's own buffer.
 
 *** Org-present with doom-theme
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
 
    #+begin_src emacs-lisp
@@ -1602,7 +1602,7 @@ CLOCK: [2021-04-14 Wed 23:57]
     #+end_src
 ** Doom themes
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
 
  #+begin_src emacs-lisp
@@ -1666,7 +1666,7 @@ CLOCK: [2021-04-14 Wed 23:57]
  
 ** Modus themes
 :PROPERTIES:
-:HEADER-ARGS: :tangle yes
+:HEADER-ARGS: :tangle no
 :END:
 
 #+begin_quote
@@ -2089,6 +2089,7 @@ I must have it!
   (sml/setup))
 #+end_src
 
+
 ** powerline
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -2104,5 +2105,5 @@ git clone https://github.com/jonathanchu/emacs-powerline.git
 #+begin_src emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/vendor/emacs-powerline")
 (require 'powerline)
+(setq powerline-arrow-shape 'arrow)   ;; give your mode-line curves
 #+end_src
-
