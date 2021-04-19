@@ -695,41 +695,6 @@ Works for outline headings and for plain lists alike."
 #+RESULTS:
 : org-insert-subheading
 
-*** Org Habits
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-**** Activate ?
-This is the only necessary config to be able to use org habits.
-#+begin_src emacs-lisp
-(add-to-list 'org-modules 'org-habit t)
-;; (cl-pushnew 'org-modules 'org-habit)
-#+end_src
-We can also do =M-x customize RET= and search for =org-modules=.
-**** Customizations from a post
-
-A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintaining-habits-using-orgmode/][this post]]
-#+begin_src emacs-lisp
-;; Log TODO creation
-(setq org-treat-insert-todo-heading-as-state-change t)
-;; log into LOGBOOK drawer
-(setq org-log-into-drawer t)
-#+end_src
-
-**** Trying things out
-Almost required otherwise habits can't be more than like 7 letters long.
-#+begin_src emacs-lisp
-(setq org-habit-graph-column 60)
-#+end_src
-
-**** Show habits on other days
-
-Not sure if I like this, trying it for now.
-#+begin_src 
-(setq org-habit-show-habits-only-for-today nil)
-#+end_src
-
 ** Agenda
 *** Agena files
    :PROPERTIES:
@@ -879,6 +844,15 @@ Don't show the file and control spacing so that all entries are aligned.
     | =B=     | Do bulk action to marked entries       |
     | =C-u B= | Do bulk action with universal argument |
 
+*** Org Habits
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(add-to-list 'org-modules 'org-habit)
+#+end_src
+
 *** Advanced orgmode and GTD
 **** Todo keywords for GTD
    :PROPERTIES:
@@ -957,7 +931,7 @@ tomorrow!
 The way this is set, it will show 7 days starting 2 days in the past.
 
 #+begin_src emacs-lisp :results none
-(setq org-agenda-span 7
+(setq org-agenda-span 9
       org-agenda-start-on-weekday 0
       org-agenda-start-day "-2d")
 #+end_src
@@ -2106,4 +2080,45 @@ git clone https://github.com/jonathanchu/emacs-powerline.git
 (add-to-list 'load-path "~/.emacs.d/vendor/emacs-powerline")
 (require 'powerline)
 (setq powerline-arrow-shape 'arrow)   ;; give your mode-line curves
+#+end_src
+
+
+
+
+
+
+** Org Habits
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+I have to put this =add-to-list= at the end of the file it seems
+
+*** Activate ?
+This is the only necessary config to be able to use org habits.
+#+begin_src emacs-lisp
+(add-to-list 'org-modules 'org-habit t)
+#+end_src
+We can also do =M-x customize RET= and search for =org-modules=.
+*** Customizations from a post
+
+A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintaining-habits-using-orgmode/][this post]]
+#+begin_src emacs-lisp
+;; Log TODO creation
+(setq org-treat-insert-todo-heading-as-state-change t)
+;; log into LOGBOOK drawer
+(setq org-log-into-drawer t)
+#+end_src
+
+*** Trying things out
+Almost required otherwise habits can't be more than like 7 letters long.
+#+begin_src emacs-lisp
+(setq org-habit-graph-column 60)
+#+end_src
+
+*** Show habits on other days
+
+Not sure if I like this, trying it for now.
+#+begin_src 
+(setq org-habit-show-habits-only-for-today nil)
 #+end_src
