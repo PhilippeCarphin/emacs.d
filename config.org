@@ -2047,9 +2047,9 @@ For non-server mode
 #+end_src
 
 
-** powerline
+** doom modeline
 :PROPERTIES:
-:HEADER-ARGS: :tangle yes
+:HEADER-ARGS: :tangle no
 :END:
 
 #+begin_src emacs-lisp
@@ -2069,3 +2069,40 @@ For non-server mode
 #+begin_src emacs-lisp
 (use-package monokai-pro-theme :ensure t :config (load-theme 'monokai-pro-classic))
 #+end_src
+
+
+** Aaron Bieber's modeline
+
+How does he get this powerline: https://youtu.be/JWD1Fpdd4Pc?t=1299
+
+I must have it!
+
+** smart-mode-line (meh at best)
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+
+#+begin_src emacs-lisp
+(use-package smart-mode-line :ensure t
+  :config
+  (setq sml/theme 'powerline)
+  (sml/setup))
+#+end_src
+
+** powerline
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+
+
+#+begin_src shell :results output
+mkdir -p ~/.emacs.d/vendor
+cd ~/.emacs.d/vendor
+git clone https://github.com/jonathanchu/emacs-powerline.git
+#+end_src
+#+begin_src emacs-lisp
+(add-to-list 'load-path "~/.emacs.d/vendor/emacs-powerline")
+(require 'powerline)
+#+end_src
+
