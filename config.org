@@ -854,6 +854,16 @@ Don't show the file and control spacing so that all entries are aligned.
 #+end_src
 
 *** Advanced orgmode and GTD
+**** Customizations from a post
+
+A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintaining-habits-using-orgmode/][this post]]
+#+begin_src emacs-lisp
+;; Log TODO creation
+(setq org-treat-insert-todo-heading-as-state-change t)
+;; log into LOGBOOK drawer
+(setq org-log-into-drawer t)
+#+end_src
+
 **** Todo keywords for GTD
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -2100,16 +2110,6 @@ This is the only necessary config to be able to use org habits.
 (add-to-list 'org-modules 'org-habit t)
 #+end_src
 We can also do =M-x customize RET= and search for =org-modules=.
-*** Customizations from a post
-
-A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintaining-habits-using-orgmode/][this post]]
-#+begin_src emacs-lisp
-;; Log TODO creation
-(setq org-treat-insert-todo-heading-as-state-change t)
-;; log into LOGBOOK drawer
-(setq org-log-into-drawer t)
-#+end_src
-
 *** Trying things out
 Almost required otherwise habits can't be more than like 7 letters long.
 #+begin_src emacs-lisp
