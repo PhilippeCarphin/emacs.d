@@ -171,7 +171,7 @@ Dark theme that exports well
 
 *** Startup font
    :PROPERTIES:
-   :HEADER-ARGS: :tangle no
+   :HEADER-ARGS: :tangle yes
    :END:
 
 To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
@@ -1666,7 +1666,7 @@ CLOCK: [2021-04-14 Wed 23:57]
  
 ** Modus themes
 :PROPERTIES:
-:HEADER-ARGS: :tangle no
+:HEADER-ARGS: :tangle yes
 :END:
 
 #+begin_quote
