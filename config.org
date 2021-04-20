@@ -2135,3 +2135,10 @@ Not sure if I like this, trying it for now.
 #+begin_src 
 (setq org-habit-show-habits-only-for-today nil)
 #+end_src
+
+
+** Org-id
+
+#+begin_src emacs-lisp
+(add-to-list 'org-modules 'org-id t)
+#+end_src
