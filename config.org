@@ -1001,6 +1001,15 @@ This is equivalent to launching =org-agenda= and pressing a.
   (org-agenda nil "gn"))
 #+end_src
 
+#+begin_src emacs-lisp
+(defun gtd-work-next-action-sparse-tree () (interactive)
+  (find-file gtd-work-project-list-file)
+  (org-agenda nil "gn"))
+#+end_src
+
+#+RESULTS:
+: gtd-work-next-action-sparse-tree
+
 ***** Agenda view hotkeys
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -1013,6 +1022,7 @@ non-prefix key.
 (define-key org-agenda-keys (kbd "h") 'gtd-habits-view)
 (define-key org-agenda-keys (kbd "c") 'gtd-review-view)
 (define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
+(define-key org-agenda-keys (kbd "w n") 'gtd-work-next-action-sparse-tree)
 #+end_src
 
 ***** Always show graph
