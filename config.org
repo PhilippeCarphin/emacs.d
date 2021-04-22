@@ -855,6 +855,9 @@ Don't show the file and control spacing so that all entries are aligned.
 
 *** Advanced orgmode and GTD
 **** Customizations from a post
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
 
 A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintaining-habits-using-orgmode/][this post]]
 #+begin_src emacs-lisp
