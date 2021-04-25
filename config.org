@@ -755,6 +755,7 @@ Create symbols holding the paths to GTD files
 (define-key leader-key (kbd "g") 'gtd)
 (define-key gtd (kbd "c") 'org-capture)
 (define-key gtd (kbd "i") 'gtd-open-in-tray)
+(define-key gtd (kbd "h") 'gtd-open-habits)
 (define-key gtd (kbd "p") 'gtd-open-project-list)
 (define-key gtd (kbd "w p") 'gtd-open-work-project-list)
 (define-key gtd (kbd "r") 'gtd-open-reference)
