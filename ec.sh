@@ -7,6 +7,11 @@ function main(){
         emacsclient -c -e '(save-buffers-kill-emacs)'
         exit 0
         ;;
+    -kk)
+        ssh -t apt-imac 'ec -t'
+        ssh -t mini 'ec -t'
+        exit 0
+        ;;
     -K)
         kill_emacs_by_pid
         exit 0
