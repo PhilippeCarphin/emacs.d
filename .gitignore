@@ -21,3 +21,6 @@ keyfreq
 *.man
 
 var
+abbrev_defs
+url
+
