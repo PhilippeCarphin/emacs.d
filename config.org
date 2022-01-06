@@ -309,6 +309,7 @@ but if you thought you were in evil mode and you pressed the wrong key, you know
 how to fix it.  It becomes like pressing backspace when you make a typo,
 something barely noticed.
 *** Config
+**** Package evil
 #+begin_src emacs-lisp :results none
   (use-package evil
     :ensure t
@@ -344,6 +345,21 @@ the TAB key doesn't work properly.
 
 Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3 : Keybindings and Evil]] et la config de Sam.
 
+**** Package evil-escape
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src elisp
+(use-package evil-escape
+  :ensure t
+  :config
+  (evil-escape-mode)
+  (setq-default evil-escape-key-sequence "jk"))
+#+end_src
+
+#+RESULTS:
+: t
 *** Cursor blinking
 
  Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
