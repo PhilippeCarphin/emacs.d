@@ -1501,7 +1501,7 @@ CLOCK: [2021-04-14 Wed 23:57]
 (use-package ssh-config-mode :ensure t)
 (use-package cmake-mode :ensure t)
 (use-package vimrc-mode :ensure t)
-(use-package markdown-mode+ :ensure t)
+(use-package markdown-mode :ensure t)
 (use-package go-mode :ensure t)
 #+end_src
 
