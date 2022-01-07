@@ -1487,12 +1487,7 @@ CLOCK: [2021-04-14 Wed 23:57]
 
 ** Vterm
 
-#+begin_src emacs-lisp
-(define-key leader-key (kbd "v") 'vterm)
-#+end_src
-
-#+RESULTS:
-: vterm
+Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows")(...)))=
 
 * Other stuff
 ** Languages
@@ -1757,8 +1752,11 @@ On UNIX systems it should work fine, UNIX running on a mac M1, make sure to have
 a very recent version of CMake.
 
 #+begin_src emacs-lisp
-(use-package vterm :ensure t
-:config (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1))))
+(cond ((not (string-equal system-type "windows-nt"))
+       (use-package vterm
+         :ensure t
+         :config (progn (define-key leader-key (kbd "v") 'vterm)
+                        (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1)))))))
 #+end_src
 
 #+RESULTS:
