@@ -721,7 +721,7 @@ We use a single directory to hold our agenda files.  We create a symbol holding
 that directory depending on the system we are on.
  #+begin_src emacs-lisp :results none
  (cond ((string-equal system-type "windows-nt")
-	(progn (setq org-agenda-dir "c:\\Users\\phil1\\Documents\\gtd")))
+	(progn (setq org-agenda-dir "~\\Documents\\gtd\\")))
        ((string-equal system-type "darwin")
         (progn (setq org-agenda-dir "~/Documents/gtd/")))
        ((string-equal system-type "gnu/linux")
