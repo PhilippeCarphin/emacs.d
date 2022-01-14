@@ -720,7 +720,12 @@ Works for outline headings and for plain lists alike."
 We use a single directory to hold our agenda files.  We create a symbol holding
 that directory depending on the system we are on.
  #+begin_src emacs-lisp :results none
- (setq org-agenda-dir "~/Documents/gtd/")
+ (cond ((string-equal system-type "windows-nt") (setq org-agenda-dir
+ "/plink:phc001@eccc1-ppp4:/fs/homeu1/eccc/cmd/cmds/phc001/Documents/gtd/"))
+       ((string-equal system-type "darwin") (setq org-agenda-dir
+ "~/Documents/gtd/"))
+       ((string-equal system-type "gnu/linux") (setq org-agenda-dir
+ "~/Documents/gtd/")))
  #+end_src
  
 Note: On Windows, =~= refers to something like
