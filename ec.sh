@@ -41,7 +41,8 @@ function main(){
     esac
 
     if [[ "$SSH_CLIENT" != "" ]] ; then
-        emacsclient -t $@
+        echo "SSH_CLIENT != '', executing ec -t \"\$@\""
+        emacsclient -t "$@"
         return
     fi
 
@@ -49,9 +50,9 @@ function main(){
     ensure-frame-exists
 
     if [[ "$@" != "" ]] ; then
-	emacsclient --no-wait $@
+        emacsclient --no-wait $@
     fi
-    
+
     focus-current-frame
 }
 
