@@ -177,7 +177,7 @@ Dark theme that exports well
 To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-font-size-of-all-the-buffers-including-the-status-line-and-the-characters-shown-in-electricr-tp466906p466932.html][Mailing list post]].
 
 #+begin_src emacs-lisp
-(custom-set-faces '(default ((t (:height 200)))))
+(custom-set-faces '(default ((t (:height 150)))))
 #+end_src
 
 *** Follow symlinks
@@ -721,7 +721,7 @@ We use a single directory to hold our agenda files.  We create a symbol holding
 that directory depending on the system we are on.
  #+begin_src emacs-lisp :results none
  (cond ((string-equal system-type "windows-nt") (setq org-agenda-dir
- "/plink:phc001@eccc1-ppp4:/fs/homeu1/eccc/cmd/cmds/phc001/Documents/gtd/"))
+ "/plink:phc001@hpcr5-in:/fs/homeu2/eccc/cmd/cmds/phc001/Documents/gtd/"))
        ((string-equal system-type "darwin") (setq org-agenda-dir
  "~/Documents/gtd/"))
        ((string-equal system-type "gnu/linux") (setq org-agenda-dir
@@ -733,12 +733,14 @@ Note: On Windows, =~= refers to something like
 **** Org agenda files
 This is the variable that org looks at for files containing agenda items.
  #+begin_src emacs-lisp
- (setq org-agenda-files (list org-agenda-dir))
+ (setq org-agenda-files (list org-agenda-dir
+"/plink:phc001@hpcr5-in:/fs/homeu1/eccc/cmd/cmds/phc001/public_org/PRJ_Coupleur.org"
+))
  #+end_src
 
  #+RESULTS:
- | ~/Documents/gtd/ | /ssh:ppp4:/home/phc001/public_org/GTD_ProjectList_MIRROR.org |
-
+ | /plink:phc001@hpcr5-vis:/fs/homeu1/eccc/cmd/cmds/phc001/Documents/gtd/ | /plink:phc001@hpcr5-vis:/fs/homeu1/eccc/cmd/cmds/phc001/public_org/PRJ_Coupleur.org |
+ 
 **** Filename symbols
 Create symbols holding the paths to GTD files
  #+begin_src emacs-lisp
@@ -781,10 +783,8 @@ Create symbols holding the paths to GTD files
 (define-key gtd (kbd "i") 'gtd-open-in-tray)
 (define-key gtd (kbd "h") 'gtd-open-habits)
 (define-key gtd (kbd "p") 'gtd-open-project-list)
-;; (define-key gtd (kbd "w p") 'gtd-open-work-project-list)
 (define-key gtd (kbd "r") 'gtd-open-reference)
-;; (define-key gtd (kbd "s") 'gtd-open-someday-maybe)
-(define-key gtd (kbd "w r") 'gtd-open-work-reference)
+(define-key gtd (kbd "s") 'gtd-open-someday-maybe)
 (define-key gtd (kbd "n") 'gtd-open-next-actions)
 #+end_src
 
