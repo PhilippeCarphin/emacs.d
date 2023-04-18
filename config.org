@@ -337,6 +337,7 @@ something barely noticed.
 					    dired))
 	    (setq evil-insert-state-cursor '((bar . 2) "lime green")
 		evil-normal-state-cursor '(box "yellow"))
+            (setq evil-move-cursor-back nil)
 	    (add-hook 'with-editor-mode-hook 'evil-insert-state))
 #+end_src
 
