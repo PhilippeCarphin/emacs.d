@@ -382,6 +382,18 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
  #+begin_src emacs-lisp
  (blink-cursor-mode 0)
  #+end_src
+ 
+ 
+* Helper functions
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(defun sci-open () (interactive)
+(helm-find-files-1 "/plink:phc001@hpcr5-in:/fs/homeu2/eccc/cmd/cmds/phc001/"))
+#+end_src
+
 
 * Orgmode & Agenda
 ** Orgmode
