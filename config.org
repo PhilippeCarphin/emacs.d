@@ -748,14 +748,9 @@ Note: On Windows, =~= refers to something like
 **** Org agenda files
 This is the variable that org looks at for files containing agenda items.
  #+begin_src emacs-lisp
- (setq org-agenda-files (list org-agenda-dir
-"/plink:phc001@hpcr5-in:/fs/homeu1/eccc/cmd/cmds/phc001/public_org/PRJ_Coupleur.org"
-))
+ (setq org-agenda-files (list org-agenda-dir))
  #+end_src
 
- #+RESULTS:
- | /plink:phc001@hpcr5-vis:/fs/homeu1/eccc/cmd/cmds/phc001/Documents/gtd/ | /plink:phc001@hpcr5-vis:/fs/homeu1/eccc/cmd/cmds/phc001/public_org/PRJ_Coupleur.org |
- 
 **** Filename symbols
 Create symbols holding the paths to GTD files
  #+begin_src emacs-lisp
