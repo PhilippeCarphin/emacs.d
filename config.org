@@ -335,7 +335,7 @@ something barely noticed.
 					    prog-mode
 					    text-mode
 					    dired))
-	    (setq evil-insert-state-cursor '((bar . 2) "lime green")
+	    (setq evil-insert-state-cursor '((box . 2) "lime green")
 		evil-normal-state-cursor '(box "yellow"))
             (setq evil-move-cursor-back nil)
 	    (add-hook 'with-editor-mode-hook 'evil-insert-state))
@@ -368,7 +368,7 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
 
  #+begin_src emacs-lisp
  (add-hook 'evil-insert-state-exit-hook (lambda () (blink-cursor-mode 0)))
- (add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 1)))
+ (add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 0)))
  #+end_src
 
  This sets the amount of cursor blinks before the flashing stop.
