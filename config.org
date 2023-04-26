@@ -736,7 +736,8 @@ We use a single directory to hold our agenda files.  We create a symbol holding
 that directory depending on the system we are on.
  #+begin_src emacs-lisp :results none
  (cond ((string-equal system-type "windows-nt") (setq org-agenda-dir
- "/plink:phc001@hpcr5-in:/fs/homeu2/eccc/cmd/cmds/phc001/Documents/gtd/"))
+ ; "/plink:phc001@hpcr5-in:/fs/homeu2/eccc/cmd/cmds/phc001/Documents/gtd/"))
+ "~/Documents/gtd/"))
        ((string-equal system-type "darwin") (setq org-agenda-dir
  "~/Documents/gtd/"))
        ((string-equal system-type "gnu/linux") (setq org-agenda-dir
