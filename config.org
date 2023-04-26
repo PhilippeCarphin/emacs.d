@@ -764,7 +764,8 @@ Create symbols holding the paths to GTD files
        gtd-someday-maybe-file (concat org-agenda-dir "GTD_SomedayMaybe.org")
        gtd-tickler-file (concat org-agenda-dir "GTD_Tickler.org")
        gtd-journal-file (concat org-agenda-dir "GTD_Journal.org")
-       gtd-habits-file (concat org-agenda-dir "GTD_Habits.org"))
+       gtd-habits-file (concat org-agenda-dir "GTD_Habits.org")
+       gtd-email-file (concat org-agenda-dir "GTD_Emails.org"))
  #+end_src
 **** Quick access to GTD files
     :PROPERTIES:
@@ -781,6 +782,7 @@ Create symbols holding the paths to GTD files
 (defun gtd-open-next-actions         () (interactive) (find-file gtd-next-actions-file))
 (defun gtd-open-next-actions         () (interactive) (find-file gtd-next-actions-file))
 (defun gtd-open-habits               () (interactive) (find-file gtd-habits-file))
+(defun gtd-open-emails               () (interactive) (find-file gtd-email-file))
 #+end_src
 
 #+RESULTS:
@@ -797,6 +799,7 @@ Create symbols holding the paths to GTD files
 (define-key gtd (kbd "r") 'gtd-open-reference)
 (define-key gtd (kbd "s") 'gtd-open-someday-maybe)
 (define-key gtd (kbd "n") 'gtd-open-next-actions)
+(define-key gtd (kbd "e") 'gtd-open-emails)
 #+end_src
 
 #+RESULTS:
