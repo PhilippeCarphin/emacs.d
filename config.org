@@ -474,6 +474,8 @@ Essential for easy tree viewing
   :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
 (use-package htmlize :ensure t)
 (require 'ox-man)
+(add-to-list 'org-export-backends 'gfm)
+(add-to-list 'org-export-backends 'reveal)
 #+end_src
 
 **** Export keys                                                    :keys:
