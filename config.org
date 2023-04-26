@@ -351,7 +351,7 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
 :HEADER-ARGS: :tangle yes
 :END:
 
-#+begin_src elisp
+#+begin_src emacs-lisp
 (use-package evil-escape
   :ensure t
   :config
