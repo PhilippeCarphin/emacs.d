@@ -2091,6 +2091,7 @@ For non-server mode
 (use-package doom-modeline
   :ensure t
 :config
+(setq doom-modeline-font "all-the-icons")
 (setq doom-modeline-height 8)
 (setq doom-modeline-icon t)
 (doom-modeline-mode 1))
