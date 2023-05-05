@@ -50,7 +50,16 @@ runs this elisp code.
    Standard stuff that is at the start of everyone's config file.
 ** Standard package repositories
 #+begin_src emacs-lisp
+#+end_src
+
+#+begin_src emacs-lisp
 (require 'package)
+
+;; from https://gnu.emacs.bug.narkive.com/GK4dLaQT/bug-36725-26-1-emacs-can-t-connect-to-gnu-elpa
+;; Older emacs may need this line uncommented otherwise connection to GNU
+;; elpa may not work
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
 (add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
@@ -790,6 +799,8 @@ How meta is it that we have a function whose implementation takes us to
 see its implementation!
 
 ** Emacs movement
+   
+This is 
 
 #+begin_src emacs-lisp
 (define-prefix-command 'emacs-movement)
