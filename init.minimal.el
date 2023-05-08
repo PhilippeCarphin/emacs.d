@@ -133,6 +133,8 @@
   (load-theme 'misterioso)
   (load-theme 'almost-mono-gray))
 
+(setq vc-follow-symlinks t)
+
 ;; ;; Install and configure magit.  Seems can't install for the following reason:
 ;; ;; Error (use-package): Failed to install magit: Package 'compat-29.1.3.4' is
 ;; ;; unavailable
