@@ -130,8 +130,7 @@
 ;; Default theme
 (use-package almost-mono-themes :ensure t)
 (if (string= (getenv "__editor_grayscale") nil)
-  (progn (load-theme 'misterioso)
-    (global-hl-line-mode 1))
+  (load-theme 'misterioso)
   (load-theme 'almost-mono-gray))
 
 ;; ;; Install and configure magit.  Seems can't install for the following reason:
@@ -151,7 +150,6 @@
  '(custom-safe-themes
    (quote
     ("d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" default)))
- '(global-font-lock-mode nil)
  '(package-selected-packages
    (quote
     (vimrc-mode almost-mono-themes evil-escape evil use-package))))
