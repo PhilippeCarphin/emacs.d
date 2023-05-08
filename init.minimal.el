@@ -53,7 +53,10 @@
   :config
     (evil-escape-mode)
     (setq-default evil-escape-key-sequence "jk")
-    (setq-default evil-escape-delay 0.3))
+    (setq-default evil-escape-delay 0.3)
+    (add-hook 'evil-visual-state-entry-hook (lambda () (evil-escape-mode -1)))
+    (add-hook 'evil-visual-state-exit-hook (lambda () (evil-escape-mode t)))
+    )
 
 ;; Install and configure various useful export backends
 (use-package ox-gfm :ensure t)
