@@ -15,6 +15,9 @@
 ;; Define 'leader-key': SPC in normal mode
 (define-prefix-command 'leader-key)
 
+;; Remember place like Vim
+(save-place-mode)
+
 ;; Install and configure 'evil-mode'
 ;; There is an error Eager macro-expansion failure: (wrong-number-of-arguments (2 . 2) 4)
 ;; somewhere in here but I don't know where it comes from
