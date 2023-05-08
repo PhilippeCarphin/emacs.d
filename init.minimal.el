@@ -29,13 +29,15 @@
   :config
     (evil-mode 1)
     (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
-    ;; For some reason ESC seems like it isn't mapped to take me out
-    ;; of insert-mode.
     (evil-global-set-key 'motion "j" 'evil-next-visual-line)
     (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+    ;; Because it is a prefix global map, when in normal mode,
+    ;; it does all kinds of weird stuff.  I therefore us
+    (global-unset-key (kbd "ESC"))
+    ;; For some reason ESC seems like it isn't mapped to take me out
+    ;; of insert-mode.
     (define-key evil-insert-state-map (kbd "ESC") 'evil-normal-state)
     (define-key evil-visual-state-map (kbd "ESC") 'evil-normal-state)
-    (define-key evil-normal-state-map (kbd "ESC") nil)
     (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
     (add-hook 'with-editor-mode-hook 'evil-insert-state)
     (setq evil-default-state 'emacs)
