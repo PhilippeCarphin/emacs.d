@@ -1148,6 +1148,12 @@ k is deactivated
 It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
 #+end_src
 
+
+#+begin_src emacs-lisp
+(add-hook 'org-agenda-mode-hook (lambda ()
+  (define-key org-agenda-mode-map (kbd "SPC") 'leader-key)))
+#+end_src
+
 **** Search result visibility
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
