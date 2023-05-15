@@ -1378,11 +1378,20 @@ see its implementation!
 
 ** Buffers
 #+begin_src emacs-lisp
+(defun open-scratch () (interactive)
+       (switch-to-buffer "*scratch*"))
+#+end_src
+
+#+begin_src emacs-lisp
 (define-prefix-command 'buffers)
 (define-key leader-key (kbd "b") 'buffers)
 (define-key buffers (kbd "b") 'helm-buffers-list)
 (define-key buffers (kbd "k") 'kill-buffer)
 (define-key buffers (kbd "K") 'maybe-kill-all-buffers)
+(define-key buffers (kbd "s") (lambda () (interactive) (switch-to-buffer "*scratch*")))
+(define-key buffers (kbd "p") 'switch-to-prev-buffer)
+(define-key buffers (kbd "n") 'switch-to-next-buffer)
+(define-key buffers (kbd "o") 'mode-line-other-buffer)
 #+end_src
 
 ** Save and quit
