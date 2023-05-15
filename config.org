@@ -1507,6 +1507,8 @@ CLOCK: [2021-04-14 Wed 23:57]
 (define-key leader-key (kbd "t") 'org-time-commands)
 (define-key org-time-commands (kbd "s") 'org-schedule)
 (define-key org-time-commands (kbd "d") 'org-deadline)
+(define-key org-time-commands (kbd ".") 'org-time-stamp)
+(define-key org-time-commands (kbd ",") 'org-time-stamp-inactive)
 
 (define-prefix-command 'org-clocking-commands)
 (define-key org-time-commands (kbd "c") 'org-clocking-commands)
