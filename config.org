@@ -1000,6 +1000,7 @@ The way this is set, it will show 7 days starting 2 days in the past.
 (setq org-agenda-custom-commands
       '(("c" "Complete agenda view"
          ((tags "PRIORITY=\"A\"")
+          (tags "PRIORITY=\"C\"")
           (stuck "")
           (agenda "" )
           (todo "GTD-ACTION")))
