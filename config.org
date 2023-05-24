@@ -351,6 +351,8 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
 :HEADER-ARGS: :tangle yes
 :END:
 
+Allow the use of =jk= to do =ESC=.  
+
 #+begin_src emacs-lisp
 (use-package evil-escape
   :ensure t
