@@ -728,6 +728,21 @@ Works for outline headings and for plain lists alike."
 #+RESULTS:
 : org-insert-subheading
 
+*** Org align tags
+
+You can align tags in a buffer by calling =org-set-tags-command= (=C-c C-q=)
+with a prefix argument (=C-u C-c C-q=) but I always forget.
+
+I need to be able to run =M-x "org-align"= to rediscover.
+
+#+begin_src emacs-lisp
+(defun org-align-tags ()
+  (interactive)
+  (let
+      ((current-prefix-arg '(4)))
+    (call-interactively 'org-set-tags-command)))
+#+end_src
+
 ** Agenda
 *** Agena files
    :PROPERTIES:
