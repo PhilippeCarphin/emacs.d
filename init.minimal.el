@@ -135,6 +135,14 @@
 
 (setq vc-follow-symlinks t)
 
+;; Center the screen on the cursor after doing shift-tab
+(defun org-post-global-cycle () (interactive)
+       (recenter)
+       (org-beginning-of-line))
+(advice-add 'org-global-cycle
+	    :after #'org-post-global-cycle)
+
+
 ;; ;; Install and configure magit.  Seems can't install for the following reason:
 ;; ;; Error (use-package): Failed to install magit: Package 'compat-29.1.3.4' is
 ;; ;; unavailable
