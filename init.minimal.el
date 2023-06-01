@@ -167,7 +167,7 @@
     ("d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" default)))
  '(package-selected-packages
    (quote
-    (vimrc-mode almost-mono-themes evil-escape evil use-package))))
+    (company-shell gnu-elpa-keyring-update markdown-mode vimrc-mode almost-mono-themes evil-escape evil use-package))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
