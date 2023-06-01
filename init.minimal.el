@@ -1,6 +1,11 @@
 ;; Package bootstrapping
 (setq debug-on-error t)
 (require 'package)
+;; Run these three 4 sexpressions to update the gnu keyring
+;; (setq package-check-signature nil)
+;; (package-refresh-contents)
+;; (package-install 'gnu-elpa-keyring-update)
+;; (setq package-check-signature t)
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
