@@ -140,12 +140,10 @@
 
 (setq vc-follow-symlinks t)
 
-;; Center the screen on the cursor after doing shift-tab
-(defun org-post-global-cycle () (interactive)
-       (recenter)
-       (org-beginning-of-line))
-(advice-add 'org-global-cycle
-	    :after #'org-post-global-cycle)
+;; Centrer le curseur dans l'écran après avoir fait shift-TAB
+(advice-add 'org-global-cycle :after #'recenter)
+;; Mettre le curseur au début de la ligne après avoir fait shift-TAB
+(advice-add 'org-global-cycle :after #'org-beginning-of-line)
 
 
 ;; ;; Install and configure magit.  Seems can't install for the following reason:
@@ -165,9 +163,11 @@
  '(custom-safe-themes
    (quote
     ("d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" default)))
+ '(evil-undo-system (quote undo-redo))
  '(package-selected-packages
    (quote
-    (company-shell gnu-elpa-keyring-update markdown-mode vimrc-mode almost-mono-themes evil-escape evil use-package))))
+    (company-shell gnu-elpa-keyring-update markdown-mode vimrc-mode almost-mono-themes evil-escape evil use-package)))
+ '(safe-local-variable-values (quote ((org-src-preserve-indentation . t)))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
