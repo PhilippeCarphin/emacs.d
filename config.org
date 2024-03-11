@@ -213,6 +213,22 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
  (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
  #+end_src
   
+** Backup file settings
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+From [[https://stackoverflow.com/a/2680682/5795941][this stack overflow post]]
+
+#+begin_src emacs-lisp
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+  backup-by-copying t    ; Don't delink hardlinks
+  version-control t      ; Use version numbers on backups
+  delete-old-versions t  ; Automatically delete excess backups
+  kept-new-versions 20   ; how many of the newest versions to keep
+  kept-old-versions 5    ; and how many of the old
+  )
+#+end_src
 * Helper frameworks
 ** Undo tree
    :PROPERTIES:
