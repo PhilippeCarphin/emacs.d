@@ -1,21 +1,9 @@
 ;; Package bootstrapping
-(setq debug-on-error t)
-(require 'package)
-;; Run these three 4 sexpressions to update the gnu keyring
-;; (setq package-check-signature nil)
-;; (package-refresh-contents)
-;; (package-install 'gnu-elpa-keyring-update)
-;; (setq package-check-signature t)
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
-(add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
-(add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
-(package-initialize)
-(unless (package-installed-p 'use-package)
-    (package-refresh-contents)
-    (package-install 'use-package))
-(eval-when-compile (require 'use-package))
-(setq inhibit-startup-screen t)
+(if (version< emacs-version "28.0")
+    (progn (message "OLD EMACS")
+	   (setq load-path (cons "/home/phc001/.emacs.d/old-packages/helm"))
+	   (require 'helm))
+  (message "RECENT EMACS"))
 
 ;; Define 'leader-key': SPC in normal mode
 (define-prefix-command 'leader-key)
@@ -77,17 +65,6 @@
   :config (global-company-mode)
     (setq company-idle-delay 0))
 
-;; Install and configure helm
-(use-package helm :ensure t
-  :bind (("M-x" . helm-M-x)
-     ("C-x C-f" . helm-find-files)
-     ("C-x C-r" . helm-recentf)
-     ("C-h C-i" . helm-info)
-     ("C-x C-b" . helm-buffers-list)
-     ("C-c g" . helm-grep-do-git-grep)))
-(helm-mode) ;; In my main config file, this is outside the 'use-package' but I
-            ;; don't remember why.  I wouldn't have done that without a reason
-
 ;; Install and configure which-key.  This is the popup listing available keys
 ;; When the popup is up, use ?n ?p to cycle through the pages.
 ;; unless '?' is bound to something in which case you're out of luck
@@ -98,6 +75,22 @@
     (setq which-key-idle-delay 0.5)
   :config
     (which-key-mode))
+
+;; Powerline
+(use-package powerline :ensure t
+  :config
+  (powerline-default-theme))
+
+;; Install and configure helm
+(use-package helm :ensure t
+  :bind (("M-x" . helm-M-x)
+     ("C-x C-f" . helm-find-files)
+     ("C-x C-r" . helm-recentf)
+     ("C-h C-i" . helm-info)
+     ("C-x C-b" . helm-buffers-list)
+     ("C-c g" . helm-grep-do-git-grep)))
+(helm-mode) ;; In my main config file, this is outside the 'use-package' but I
+            ;; don't remember why.  I wouldn't have done that without a reason
 
 ;; Define leader key mappings
 (define-key leader-key (kbd "SPC") 'helm-M-x)
@@ -122,6 +115,7 @@
 ;; Scrolling behavior
 (setq scroll-step 1) ;; Normal behavior is to jump by half a screen when the
                      ;; cursor reaches the edge which is annoying
+
 (setq-default scroll-margin 10) ;; Same as vim scrolloff setting
 
 ;; Auto hard-wrap at 80 chars.  I only use emacs for orgmode and exporting
@@ -144,16 +138,22 @@
 (advice-add 'org-global-cycle :after #'recenter)
 ;; Mettre le curseur au début de la ligne après avoir fait shift-TAB
 (advice-add 'org-global-cycle :after #'org-beginning-of-line)
+;; In the terminal, there is a problem with 'C-,' where the application seems
+;; to just receive ','.  When doing the default key binding 'C-c C-,', the
+;; application just receives 'C-c ,'.  Since I never use what 'C-c ,' does,
+;; I rebind it to do what 'C-c C-,' normally does.
+(define-key org-mode-map (kbd "C-c ,") 'org-insert-structure-template)
 
 
 ;; ;; Install and configure magit.  Seems can't install for the following reason:
 ;; ;; Error (use-package): Failed to install magit: Package 'compat-29.1.3.4' is
 ;; ;; unavailable
 ;; ;; Error (use-package): Cannot load magit
-;;  (use-package magit
-;;    :ensure t
-;;    :custom
-;;    (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+(setq package-check-signature nil)
+(use-package magit
+  :ensure t
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
    
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -161,13 +161,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(custom-safe-themes
-   (quote
-    ("d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" default)))
- '(evil-undo-system (quote undo-redo))
+   '("d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" default))
+ '(evil-undo-system 'undo-redo)
  '(package-selected-packages
-   (quote
-    (company-shell gnu-elpa-keyring-update markdown-mode vimrc-mode almost-mono-themes evil-escape evil use-package)))
- '(safe-local-variable-values (quote ((org-src-preserve-indentation . t)))))
+   '(clojure-mode magit company-shell gnu-elpa-keyring-update markdown-mode vimrc-mode almost-mono-themes evil-escape evil use-package))
+ '(safe-local-variable-values '((org-src-preserve-indentation . t))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
