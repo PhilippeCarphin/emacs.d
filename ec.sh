@@ -1,46 +1,34 @@
 #!/bin/bash
 set -x
 
+# Yet again, a per-process TMPDIR that contains the PID of the current shell
+# causes a problem.  Lets define this then.
+export TMPDIR=/tmp/$USER
+unset XDG_RUNTIME_DIR
+mkdir -p $TMPDIR
+readlink -f $(which emacsclient)
 function main(){
+
     # Special actions
     case "$1" in
-	-k)
-	    emacsclient -c -e '(save-buffers-kill-emacs)'
-	    exit 0
-	    ;;
-	-K)
-	    kill_emacs_by_pid
-	    exit 0
-	    ;;
-	-s)
-	    emacs --daemon
-	    exit 0
-	    ;;
-	-r)
-	    emacsclient -e '(kill-emacs)'
-	    emacs --daemon
-	    exit 0
-	    ;;
-	-rs)
-	    emacsclient -e '(kill-emacs)'
-	    emacs --daemon
-	    shift
-	    ;;
-  -t)
-      emacsclient -t $@
-      exit $?
-      ;;
+	-k) emacsclient -c -e '(save-buffers-kill-emacs)' ;;
+	-K) kill_emacs_by_pid ;;
+	-s) emacs --daemon ;;
+	-g)  gui_open "$@" ;;
+	-t) : -t ; emacsclient "$@" ;;
+	*)  : no -t ; emacsclient -t "$@" ;;
     esac
+}
 
+function gui_open(){
     ensure-server-is-running
     ensure-frame-exists
-
     if [[ "$@" != "" ]] ; then
-	emacsclient --no-wait $@
+	emacsclient --no-wait "$@"
     fi
-    
     focus-current-frame
 }
+    
 
 # From https://superuser.com/a/862809
 function frame-exists() {

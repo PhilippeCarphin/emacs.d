@@ -5,6 +5,20 @@
 	   (require 'helm))
   (message "RECENT EMACS"))
 
+(setq debug-on-error t)
+(require 'package)
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
+(package-initialize)
+(unless (package-installed-p 'use-package)
+    (setq package-check-signature nil)
+    (package-refresh-contents)
+    (package-install 'use-package))
+    (setq package-check-signature t)
+(eval-when-compile (require 'use-package))
+
 ;; Define 'leader-key': SPC in normal mode
 (define-prefix-command 'leader-key)
 
@@ -52,6 +66,7 @@
     )
 
 ;; Install and configure various useful export backends
+(setq package-check-signature nil)
 (use-package ox-gfm :ensure t)
 (use-package ox-rst :ensure t)
 (use-package ox-twbs :ensure t)
@@ -60,10 +75,16 @@
 (use-package htmlize :ensure t)
 (setq org-export-use-babel nil) ;; disable babel on export
 
+;; Powerline
+(use-package powerline :ensure t
+  :config
+  (powerline-default-theme))
+
 ;; Install and configure company autocomplete
 (use-package company :ensure t
   :config (global-company-mode)
     (setq company-idle-delay 0))
+
 
 ;; Install and configure which-key.  This is the popup listing available keys
 ;; When the popup is up, use ?n ?p to cycle through the pages.
@@ -76,11 +97,6 @@
   :config
     (which-key-mode))
 
-;; Powerline
-(use-package powerline :ensure t
-  :config
-  (powerline-default-theme))
-
 ;; Install and configure helm
 (use-package helm :ensure t
   :bind (("M-x" . helm-M-x)
@@ -88,9 +104,15 @@
      ("C-x C-r" . helm-recentf)
      ("C-h C-i" . helm-info)
      ("C-x C-b" . helm-buffers-list)
-     ("C-c g" . helm-grep-do-git-grep)))
+     ("C-c g" . helm-grep-do-git-grep))
+  :config
+     (setq helm-move-to-line-cycle-in-source nil))
 (helm-mode) ;; In my main config file, this is outside the 'use-package' but I
             ;; don't remember why.  I wouldn't have done that without a reason
+
+(use-package almost-mono-themes :ensure t)
+(setq package-check-signature t)
+(setq inhibit-startup-screen t)
 
 ;; Define leader key mappings
 (define-key leader-key (kbd "SPC") 'helm-M-x)
@@ -127,7 +149,6 @@
                             ;; it doesn't seem do do it.
 
 ;; Default theme
-(use-package almost-mono-themes :ensure t)
 (if (string= (getenv "__editor_grayscale") nil)
   (load-theme 'misterioso)
   (load-theme 'almost-mono-gray))
@@ -155,6 +176,23 @@
   :custom
   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
    
+(add-to-list 'auto-mode-alist '("\\.dot\\'" shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" shell-script-mode))
+(add-to-list 'auto-mode-alist '("bash-fc.*" . with-editor-mode))
+;; ;; . foo-mode))eems can't install for the following reason:
+
+(defun ansi-color-mode (&optional beg end)
+  "Interpret ANSI color esacape sequence by colorifying content.
+Operate on selected region on whole buffer."
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (list (point-min) (point-max))))
+  (ansi-color-apply-on-region beg end))
+
+;; (add-to-list 'auto-mode-alist '(".*.log" . ansi-color-mode))
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -164,8 +202,9 @@
    '("d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" default))
  '(evil-undo-system 'undo-redo)
  '(package-selected-packages
-   '(clojure-mode magit company-shell gnu-elpa-keyring-update markdown-mode vimrc-mode almost-mono-themes evil-escape evil use-package))
- '(safe-local-variable-values '((org-src-preserve-indentation . t))))
+   '(ansi clojure-mode magit company-shell gnu-elpa-keyring-update markdown-mode vimrc-mode almost-mono-themes evil-escape evil use-package))
+ '(safe-local-variable-values '((org-src-preserve-indentation . t)))
+ '(send-mail-function 'mailclient-send-it))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
