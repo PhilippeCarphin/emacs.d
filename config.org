@@ -22,7 +22,16 @@ created by the expression.
    Standard stuff that is at the start of everyone's config file.
 ** Standard package repositories
 #+begin_src emacs-lisp
+#+end_src
+
+#+begin_src emacs-lisp
 (require 'package)
+
+;; from https://gnu.emacs.bug.narkive.com/GK4dLaQT/bug-36725-26-1-emacs-can-t-connect-to-gnu-elpa
+;; Older emacs may need this line uncommented otherwise connection to GNU
+;; elpa may not work
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
 (add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
@@ -66,6 +75,10 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 :END:
 #+begin_src emacs-lisp
 (tool-bar-mode -1)
+#+end_src
+*** Get rid of menu bar (File Edit Options ...)
+#+begin_src emacs-lisp
+(menu-bar-mode -1)
 #+end_src
 *** Get rid of scroll bars
 :PROPERTIES:
@@ -198,6 +211,7 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
  (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
  #+end_src
   
+<<<<<<< HEAD
 *** Visual line mode markers
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -206,8 +220,24 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 #+begin_src emacs-lisp
 (custom-set-variables '(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow)))
 #+end_src
-** Helper frameworks
-*** Undo tree
+** Backup file settings
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+From [[https://stackoverflow.com/a/2680682/5795941][this stack overflow post]]
+
+#+begin_src emacs-lisp
+(setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
+  backup-by-copying t    ; Don't delink hardlinks
+  version-control t      ; Use version numbers on backups
+  delete-old-versions t  ; Automatically delete excess backups
+  kept-new-versions 20   ; how many of the newest versions to keep
+  kept-old-versions 5    ; and how many of the old
+  )
+#+end_src
+* Helper frameworks
+** Undo tree
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -311,34 +341,35 @@ something barely noticed.
 *** Config
 **** Package evil
 #+begin_src emacs-lisp :results none
-  (use-package evil
-    :ensure t
-    :init (setq evil-want-C-i-jump nil)
-	  (setq evil-want-integration t)
-	  (setq evil-want-C-u-scroll t)
-    :config (evil-mode 1)
-	  (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
-	    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-	    (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-	    (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
-	    (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-	    (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-	    (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
-	    (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-	    (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
-	    (global-set-key (kbd "M-u") 'universal-argument)
-	    (setq evil-default-state 'emacs)
-	    (setq evil-insert-state-modes nil)
-	    (setq evil-motion-state-modes nil)
-	    (setq evil-normal-state-modes '(fundamental-mode
-					    conf-mode
-					    prog-mode
-					    text-mode
-					    dired))
-	    (setq evil-insert-state-cursor '((box . 2) "lime green")
-		evil-normal-state-cursor '(box "yellow"))
-            (setq evil-move-cursor-back nil)
-	    (add-hook 'with-editor-mode-hook 'evil-insert-state))
+(use-package evil
+  :ensure t
+  :init (setq evil-want-C-i-jump nil)
+	(setq evil-want-integration t)
+	(setq evil-want-C-u-scroll t)
+  :config (evil-mode 1)
+	(define-key evil-normal-state-map (kbd "SPC") 'leader-key)
+	  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+	  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+	  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+	  (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
+	  (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
+	  (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
+	  (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+	  (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+          ;; TODO Use evil-set-undo-system or something
+	  (global-set-key (kbd "M-u") 'universal-argument)
+	  (setq evil-default-state 'emacs)
+	  (setq evil-insert-state-modes nil)
+	  (setq evil-motion-state-modes nil)
+	  (setq evil-normal-state-modes '(fundamental-mode
+					  conf-mode
+					  prog-mode
+					  text-mode
+					  dired))
+	  (setq evil-insert-state-cursor '((box . 2) "lime green")
+	      evil-normal-state-cursor '(box "yellow"))
+          (setq evil-move-cursor-back nil)
+	  (add-hook 'with-editor-mode-hook 'evil-insert-state))
 #+end_src
 
 The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
@@ -375,7 +406,7 @@ Allow the use of =jk= to do =ESC=.
 
  This sets the amount of cursor blinks before the flashing stop.
 
- #+begin_src
+ #+begin_src emacs-lisp
  (setq blink-cursor-blinks 0)
  #+end_src
 
@@ -467,6 +498,9 @@ Essential for easy tree viewing
 - =ox-rst= to generate Restructured Text for sphinx documentation
 - =ox-gfm= to generate github flavored markdown
 - =htmlize= for colored code in all export formats
+
+I remember having to do these =(add-to-list 'org-export-backends _)= for =gfm=
+and =reveal=.  Not sure if this is still necessary.
 
 #+begin_src emacs-lisp
 (use-package ox-gfm :ensure t)
@@ -585,15 +619,6 @@ then enter the text in that file's own buffer.
 ,#+end_src
 ")
 #+end_src
-
-#+RESULTS:
-: # This buffer is for notes you don't want to save, in orgmode
-: # If you want to create a file, visit that file with C-x C-f,
-: # then enter the text in that file's own buffer.
-: 
-: #+begin_src emacs-lisp
-: 
-: #+end_src
     
 *** Present GUI menu
    :PROPERTIES:
@@ -667,9 +692,12 @@ then enter the text in that file's own buffer.
    :HEADER-ARGS: :tangle no
    :END:
 
-   #+begin_src emacs-lisp
-(use-package org-present :ensure t)
-   #+end_src
+#+begin_src emacs-lisp
+(use-package org-present :ensure t
+  :config
+  (add-hook 'org-present-mode-hook (lambda () (load-theme 'leuven)))
+  (add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'leuven))) )
+#+end_src
    
 *** Babel Colorize RESULTS
    :PROPERTIES:
@@ -1165,11 +1193,15 @@ k is deactivated
 It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
 #+end_src
 
-
 #+begin_src emacs-lisp
 (add-hook 'org-agenda-mode-hook (lambda ()
   (define-key org-agenda-mode-map (kbd "SPC") 'leader-key)))
 #+end_src
+
+NOTE: I would normally just do the =(define-key org-agenda-mode-map (kbd "SPC")
+'leader-key)= so the fact that I didn't probably means that I had to do it that
+way but I don't remember why.  My guess is that the map might not exist at the
+time when the =define-key= gets run.
 
 **** Search result visibility
    :PROPERTIES:
@@ -1325,6 +1357,7 @@ evil normal mode.
 #+begin_src emacs-lisp
 (global-set-key (kbd "M-m") 'leader-key)
 #+end_src
+
 ** =M-x=
 Same as Spacemacs.
 #+begin_src emacs-lisp
@@ -1365,6 +1398,9 @@ How meta is it that we have a function whose implementation takes us to
 see its implementation!
 
 ** Emacs movement
+   
+This is just so that I can use which-key to remind myself of a few emacs
+movement keys.
 
 #+begin_src emacs-lisp
 (define-prefix-command 'emacs-movement)
@@ -1431,8 +1467,8 @@ see its implementation!
 #+end_src
 *** Subset of C-c commands
 #+begin_src emacs-lisp
-(define-prefix-command '__orgmode__C-c__)
-(define-key orgmode (kbd "C-c") '__orgmode__C-c__)
+(define-prefix-command '__orgmode__C-c_favorites_)
+(define-key orgmode (kbd "C-c") '__orgmode__C-c_favorites_)
 (define-key __orgmode__C-c__ (kbd "C-,") 'org-insert-structure-template)
 (define-key __orgmode__C-c__ (kbd "C-c") 'org-ctrl-c-ctrl-c)
 (define-key __orgmode__C-c__ (kbd "C-w") 'org-refile)
@@ -1457,8 +1493,8 @@ see its implementation!
 #+end_src
 *** Item insertion
 #+begin_src emacs-lisp
-(define-prefix-command 'org-insert)
-(define-key orgmode (kbd "i") 'org-insert)
+(define-prefix-command 'org-heading-insertion)
+(define-key orgmode (kbd "i") 'org-heading-insertion)
 (define-key 'org-insert (kbd "h") 'org-insert-heading)
 (define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
 (define-key 'org-insert (kbd "s") 'org-insert-subheading)
@@ -1474,33 +1510,6 @@ see its implementation!
 (define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
 (define-key 'org-subtree (kbd "j") 'org-move-subtree-down)
 #+end_src
-
-***** Explanations
-
-  La touche =C-|= (=C-S-\=) est une map de touches qui contient des
-  fonctionnalité spécialement sélectionnées.
-
-  Le choix de touche de départ est de choisr un binding qui fait chier à faire.
-
-  Le but c'est d'explorer.  Quand on trouve quelque chose qu'on aime, on peut
-  découvrir les bindings standards en faisant =C-h f= et écrire le nom de la
-  fonction exécutée par la touche.  Ou faire =C-h k= et refaire la touche et
-  l'aide nous dira quels sont les autres bindings pour la fonctionnalité.
-
-  Si un binding a le même nom que la fonction comme =C-h=, c'est que ce groupe est
-  une sélection des fonctions disponibles en faisant =C-h= normalement.
-
-  Si le groupe contient le mot mode, c'est qu'il contient des fonctions qui sont
-  seulement disponibles dans un certain mode.
-
-  Les touches utilisées sont le plus souvent possible la même touche qu'on ferait
-  normalement. Par exemple, =C-| o C-c C-,= insère un bloc de code source.  Le
-  choix est fait comme ça parce que la touche =C-c C-,= est la touche native pour
-  faire cette action.
-
-
-***** Keys                                                             :keys:
-| ~C-|~ | =prefix-key= | A grouping of common basic keys |
 
 *** Org present
 #+begin_src emacs-lisp
@@ -1703,6 +1712,14 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
    :HEADER-ARGS: :tangle yes
    :END:
 
+This package keeps track of what keys are pressed most frequently and can show
+its data with =M-x keyfreq-show=.  I never use it but I thought the idea was
+cool so I installed it.
+
+One thing it does is that it normally stores it's data by default in
+=~/.emacs.keyfreq= which is annoying because it prevents me from getting
+=~/.emacs.d= as a tab completion candidate when I do =cd ~/.ema=.
+
    #+begin_src emacs-lisp
    (use-package keyfreq :ensure t
      :config
@@ -1717,7 +1734,6 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
      :custom
      (keyfreq-file "~/.emacs.d/keyfreq")
      )
-
    #+end_src
 
 ** command-log-mode
@@ -1743,10 +1759,6 @@ Accessible themes for GNU Emacs, conforming with the highest standard for colour
 
 #+begin_src emacs-lisp
 (use-package modus-themes :ensure t)
-(custom-set-variables
- '(custom-enabled-themes '(modus-vivendi))
- '(custom-safe-themes
-   '("c7f364aeea0458b6368815558cbf1f54bbdcc1dde8a14b5260eb82b76c0ffc7b" default)))
 #+end_src
 
 I am not loading the theme because I want to continue with built-in themes for now.
@@ -1755,7 +1767,6 @@ I am not loading the theme because I want to continue with built-in themes for n
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
-
 
 #+begin_src emacs-lisp
 ;; Package pour se déplacer uniquement dans du code elisp
@@ -1988,11 +1999,24 @@ Ref [[https://orgmode.org/worg/org-tutorials/org-spreadsheet-intro.html][Org as 
  TAB: (setq evil-want-C-i-jump nil).  =C-i= and =TAB= are kind of the same thing
  in the shell.  In evil mode, you need to set this to Nil, otherwise, it will do
  something with =C-i= that will prevent the =TAB= key from working in orgmode files.
+
+*** Insert structure template
+
+In the terminal, it seems like =C-,= sends =,=.  Since I don't care about
+=org-priority= which is the normal binding for =C-c C-,=, I can do this:
+
+#+begin_src emacs-lisp
+(define-key org-mode-map (kbd "C-c ,") 'org-insert-structure-template)
+#+end_src
+
 ** MacOS stuff
 
 *** Preventing a specific only on MacOS and only in terminal emacsclient
  https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
  also Note the need to change Alt in terminal emulator profile settings
+ 
+On my recent Macs I don't think I've needed to do this.
+
 ** TRAMP
 
 use =C-x C-f= and write =/ssh:ppp4:=, after the second =':'=, give TRAMP time to

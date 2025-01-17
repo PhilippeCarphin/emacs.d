@@ -1,60 +1,34 @@
 #!/bin/bash
+set -x
 
+# Yet again, a per-process TMPDIR that contains the PID of the current shell
+# causes a problem.  Lets define this then.
+export TMPDIR=/tmp/$USER
+unset XDG_RUNTIME_DIR
+mkdir -p $TMPDIR
+readlink -f $(which emacsclient)
 function main(){
+
     # Special actions
     case "$1" in
-    -k)
-        emacsclient -c -e '(save-buffers-kill-emacs)'
-        exit 0
-        ;;
-    -kk)
-        ssh -t apt-imac 'ec -t'
-        ssh -t mini 'ec -t'
-        exit 0
-        ;;
-    -K)
-        kill_emacs_by_pid
-        exit 0
-        ;;
-    -s)
-        emacs --daemon
-        exit 0
-        ;;
-    -r)
-        emacsclient -e '(kill-emacs)'
-        emacs --daemon
-        exit 0
-        ;;
-    -rs)
-        emacsclient -e '(kill-emacs)'
-        emacs --daemon
-        shift
-        ;;
-        -t)
-            emacsclient -t $@
-            exit $?
-            ;;
-    -K)
-        kill_emacs_by_pid
-        exit 0
-        ;;
+	-k) emacsclient -c -e '(save-buffers-kill-emacs)' ;;
+	-K) kill_emacs_by_pid ;;
+	-s) emacs --daemon ;;
+	-g)  gui_open "$@" ;;
+	-t) : -t ; emacsclient "$@" ;;
+	*)  : no -t ; emacsclient -t "$@" ;;
     esac
+}
 
-    if [[ "$SSH_CLIENT" != "" ]] ; then
-        echo "SSH_CLIENT != '', executing ec -t \"\$@\""
-        emacsclient -t "$@"
-        return
-    fi
-
+function gui_open(){
     ensure-server-is-running
     ensure-frame-exists
-
     if [[ "$@" != "" ]] ; then
-        emacsclient --no-wait $@
+	emacsclient --no-wait "$@"
     fi
-
     focus-current-frame
 }
+    
 
 # From https://superuser.com/a/862809
 function frame-exists() {
@@ -64,9 +38,6 @@ function frame-exists() {
 function ensure-frame-exists() {
     if ! frame-exists ; then
 	emacsclient -c --no-wait
-	# emacsclient --no-wait -e '
-	#     (when (window-system)
-	# 	(set-frame-position (selected-frame) 150 30))'
     fi
 }
 
@@ -86,34 +57,6 @@ function ensure-server-is-running(){
 	read
 	emacs --daemon
     fi
-}
-
-function kill_emacs_by_pid(){
-    if [[ $(uname) == Darwin ]] ; then
-        emacs_process=$(ps -aupcarphin| grep Emacs.app | grep -v grep)
-    else
-        emacs_process=$(ps -aux | grep 'emacs --daemon' | grep -v grep)
-    fi
-    emacs_pid=$(awk '{print $2;}' <<< $emacs_process)
-
-    if [[ -z $emacs_process ]] ; then
-        echo "No emacs process found"
-        return 1
-    fi
-
-    echo "emacs_process: $(awk '{print $2 " " $5;}' <<< $emacs_process)"
-    echo -n "Kill this process? (y/n): "; read answer
-
-    if [[ -z $answer ]] ; then
-        return
-    fi
-
-    if [[ -z $answer ]] || ! ([[ $answer == y ]] || [[ $answer == Y ]]) ; then
-        return
-    fi
-
-    echo kill $emacs_pid
-    kill $emacs_pid
 }
 
 main $@

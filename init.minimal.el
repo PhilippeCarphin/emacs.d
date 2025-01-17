@@ -1,0 +1,214 @@
+;; Package bootstrapping
+(if (version< emacs-version "28.0")
+    (progn (message "OLD EMACS")
+	   (setq load-path (cons "/home/phc001/.emacs.d/old-packages/helm"))
+	   (require 'helm))
+  (message "RECENT EMACS"))
+
+(setq debug-on-error t)
+(require 'package)
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
+(add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
+(package-initialize)
+(unless (package-installed-p 'use-package)
+    (setq package-check-signature nil)
+    (package-refresh-contents)
+    (package-install 'use-package))
+    (setq package-check-signature t)
+(eval-when-compile (require 'use-package))
+
+;; Define 'leader-key': SPC in normal mode
+(define-prefix-command 'leader-key)
+
+;; Remember place like Vim
+(save-place-mode)
+
+;; Install and configure 'evil-mode'
+;; There is an error Eager macro-expansion failure: (wrong-number-of-arguments (2 . 2) 4)
+;; somewhere in here but I don't know where it comes from
+(use-package evil :ensure t
+  :init
+    (setq evil-want-C-i-jump nil)
+    (setq evil-want-integration t)
+    (setq evil-want-C-u-scroll t)
+  :config
+    (evil-mode 1)
+    (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
+    (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+    (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+    ;; Because it is a prefix global map, when in normal mode,
+    ;; it does all kinds of weird stuff.  I therefore us
+    (global-unset-key (kbd "ESC"))
+    ;; For some reason ESC seems like it isn't mapped to take me out
+    ;; of insert-mode.
+    (define-key evil-insert-state-map (kbd "ESC") 'evil-normal-state)
+    (define-key evil-visual-state-map (kbd "ESC") 'evil-normal-state)
+    (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+    (add-hook 'with-editor-mode-hook 'evil-insert-state)
+    (setq evil-default-state 'emacs)
+    (setq evil-insert-state-modes nil)
+    (setq evil-motion-state-modes nil)
+    (setq evil-move-cursor-back nil)
+    (setq evil-normal-state-modes '(fundamental-mode
+                                    conf-mode
+                                    prog-mode
+                                    text-mode
+                                    dired-mode)))
+(use-package evil-escape :ensure t
+  :config
+    (evil-escape-mode)
+    (setq-default evil-escape-key-sequence "jk")
+    (setq-default evil-escape-delay 0.3)
+    (add-hook 'evil-visual-state-entry-hook (lambda () (evil-escape-mode -1)))
+    (add-hook 'evil-visual-state-exit-hook (lambda () (evil-escape-mode t)))
+    )
+
+;; Install and configure various useful export backends
+(setq package-check-signature nil)
+(use-package ox-gfm :ensure t)
+(use-package ox-rst :ensure t)
+(use-package ox-twbs :ensure t)
+(use-package ox-reveal :ensure t
+  :config (setq org-reveal-root "https://cdn/jsdelivr.net/npm/reveal.js"))
+(use-package htmlize :ensure t)
+(setq org-export-use-babel nil) ;; disable babel on export
+
+;; Powerline
+(use-package powerline :ensure t
+  :config
+  (powerline-default-theme))
+
+;; Install and configure company autocomplete
+(use-package company :ensure t
+  :config (global-company-mode)
+    (setq company-idle-delay 0))
+
+
+;; Install and configure which-key.  This is the popup listing available keys
+;; When the popup is up, use ?n ?p to cycle through the pages.
+;; unless '?' is bound to something in which case you're out of luck
+(use-package which-key :ensure t :delight
+  :init
+    (setq which-key-separator " ")
+    (setq which-key-prefix-prefix "+")
+    (setq which-key-idle-delay 0.5)
+  :config
+    (which-key-mode))
+
+;; Install and configure helm
+(use-package helm :ensure t
+  :bind (("M-x" . helm-M-x)
+     ("C-x C-f" . helm-find-files)
+     ("C-x C-r" . helm-recentf)
+     ("C-h C-i" . helm-info)
+     ("C-x C-b" . helm-buffers-list)
+     ("C-c g" . helm-grep-do-git-grep))
+  :config
+     (setq helm-move-to-line-cycle-in-source nil))
+(helm-mode) ;; In my main config file, this is outside the 'use-package' but I
+            ;; don't remember why.  I wouldn't have done that without a reason
+
+(use-package almost-mono-themes :ensure t)
+(setq package-check-signature t)
+(setq inhibit-startup-screen t)
+
+;; Define leader key mappings
+(define-key leader-key (kbd "SPC") 'helm-M-x)
+;; Files
+(defun open-emacs-config-file () (interactive) (find-file "~/.emacs.d/init.el"))
+(defun open-master-emacs-config-file () (interactive) (find-file "~/Repositories/github.com/philippecarphin/emacs.d/config.org"))
+(define-prefix-command 'files)
+(define-key leader-key (kbd "f") 'files)
+(define-key files (kbd "c") 'open-emacs-config-file)
+(define-key files (kbd "C") 'open-master-emacs-config-file)
+(define-key files (kbd "f") 'helm-find-files)
+(define-key files (kbd "r") 'helm-recentf)
+(define-key files (kbd "s") 'save-buffer)
+;; Buffers
+(define-prefix-command 'buffers)
+(define-key leader-key (kbd "b") 'buffers)
+(define-key buffers (kbd "b") 'helm-buffers-list)
+(define-key buffers (kbd "k") 'kill-buffer)
+;; Others
+(define-key leader-key (kbd "q") 'save-buffers-kill-emacs)
+
+;; Scrolling behavior
+(setq scroll-step 1) ;; Normal behavior is to jump by half a screen when the
+                     ;; cursor reaches the edge which is annoying
+
+(setq-default scroll-margin 10) ;; Same as vim scrolloff setting
+
+;; Auto hard-wrap at 80 chars.  I only use emacs for orgmode and exporting
+;; so I always want to have autofill on.
+(setq-default auto-fill-function 'do-auto-fill)
+(setq-default fill-column 80)
+
+(global-visual-line-mode 1) ;; This should highlight the current line but
+                            ;; it doesn't seem do do it.
+
+;; Default theme
+(if (string= (getenv "__editor_grayscale") nil)
+  (load-theme 'misterioso)
+  (load-theme 'almost-mono-gray))
+
+(setq vc-follow-symlinks t)
+
+;; Centrer le curseur dans l'écran après avoir fait shift-TAB
+(advice-add 'org-global-cycle :after #'recenter)
+;; Mettre le curseur au début de la ligne après avoir fait shift-TAB
+(advice-add 'org-global-cycle :after #'org-beginning-of-line)
+;; In the terminal, there is a problem with 'C-,' where the application seems
+;; to just receive ','.  When doing the default key binding 'C-c C-,', the
+;; application just receives 'C-c ,'.  Since I never use what 'C-c ,' does,
+;; I rebind it to do what 'C-c C-,' normally does.
+(define-key org-mode-map (kbd "C-c ,") 'org-insert-structure-template)
+
+
+;; ;; Install and configure magit.  Seems can't install for the following reason:
+;; ;; Error (use-package): Failed to install magit: Package 'compat-29.1.3.4' is
+;; ;; unavailable
+;; ;; Error (use-package): Cannot load magit
+(setq package-check-signature nil)
+(use-package magit
+  :ensure t
+  :custom
+  (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+   
+(add-to-list 'auto-mode-alist '("\\.dot\\'" shell-script-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" shell-script-mode))
+(add-to-list 'auto-mode-alist '("bash-fc.*" . with-editor-mode))
+;; ;; . foo-mode))eems can't install for the following reason:
+
+(defun ansi-color-mode (&optional beg end)
+  "Interpret ANSI color esacape sequence by colorifying content.
+Operate on selected region on whole buffer."
+  (interactive
+   (if (use-region-p)
+       (list (region-beginning) (region-end))
+     (list (point-min) (point-max))))
+  (ansi-color-apply-on-region beg end))
+
+;; (add-to-list 'auto-mode-alist '(".*.log" . ansi-color-mode))
+
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+   '("d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" default))
+ '(evil-undo-system 'undo-redo)
+ '(package-selected-packages
+   '(ansi clojure-mode magit company-shell gnu-elpa-keyring-update markdown-mode vimrc-mode almost-mono-themes evil-escape evil use-package))
+ '(safe-local-variable-values '((org-src-preserve-indentation . t)))
+ '(send-mail-function 'mailclient-send-it))
+
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
