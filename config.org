@@ -2230,3 +2230,46 @@ Not sure if I like this, trying it for now.
 #+begin_src emacs-lisp
 (add-to-list 'org-modules 'org-id t)
 #+end_src
+
+** which command
+
+For debugging, it is useful to be able to do a kind of =which= from within Emacs
+to get what the server will run when we ask it to run an external command.
+
+#+begin_src emacs-lisp
+(defun which (cmd) (interactive "s" "command name")
+       (let ((r (executable-find cmd)))
+         (if r
+             (message "%s is %s" cmd r)
+           (message "%s not found in PATH" cmd))))
+#+end_src
+
+Original implementation before I discovered it already existed
+#+begin_src emacs-lisp :tangle no
+(defun which (cmd) (interactive "s" "command name")
+       ;;; (seq-find FUNC SEQUENCE)
+       ;;; Evaluates FUNC on elements of SEQUENCE.  Returns the first element of
+       ;;; SEQUENCE for which FUNC evaluates to non-nil and stops iteration.
+       (let ((r (seq-find
+                 (lambda (x) (member cmd (directory-files x)))
+                 (string-split (getenv "PATH") ":"))))
+         (if r
+             (message "%s is %s/%s" cmd r cmd)
+           (message "%s not found in PATH" cmd))))
+#+end_src
+
+
+#+begin_src emacs-lisp :tangle no
+(call-process "ls" nil nil nil "/home/phc001s")
+(shell-command-to-string "ls")
+(process-lines "ls")
+(call-process-shell-command "(exit 65)" nil nil nil )
+(defun subprocess.run (shell-cmd)
+  (let ((code 0) (output "piss") (tmp-output ""))
+    (setq output (with-output-to-string
+                   (with-current-buffer standard-output
+                     (setq code (shell-command shell-cmd t)))))
+    (list code output)))
+(subprocess.run "ls")
+(nth 1 l)
+#+end_src
