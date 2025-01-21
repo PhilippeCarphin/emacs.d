@@ -349,9 +349,10 @@ something barely noticed.
 	  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
 	  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
 	  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+          ;; Normally insert-mode 'C-w' deletes a word but I hate that
+          ;; because if I forget I'm in insert mode and I do 'C-w', it
+          ;; deletes a word which is very annoying
 	  (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-	  (define-key evil-insert-state-map (kbd "C-w /") 'split-window-right)
-	  (define-key evil-insert-state-map (kbd "C-w -") 'split-window-below)
 	  (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
 	  (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
           ;; TODO Use evil-set-undo-system or something
