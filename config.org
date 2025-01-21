@@ -1470,14 +1470,14 @@ movement keys.
 #+begin_src emacs-lisp
 (define-prefix-command '__orgmode__C-c_favorites_)
 (define-key orgmode (kbd "C-c") '__orgmode__C-c_favorites_)
-(define-key __orgmode__C-c__ (kbd "C-,") 'org-insert-structure-template)
-(define-key __orgmode__C-c__ (kbd "C-c") 'org-ctrl-c-ctrl-c)
-(define-key __orgmode__C-c__ (kbd "C-w") 'org-refile)
-(define-key __orgmode__C-c__ (kbd "C-x C-c") 'org-columns)
-(define-key __orgmode__C-c__ (kbd "'") 'org-edit-special)
-(define-key __orgmode__C-c__ (kbd ".") 'org-time-stamp)
-(define-key __orgmode__C-c__ (kbd "C-s") 'org-schedule)
-(define-key __orgmode__C-c__ (kbd "C-d") 'org-deadline)
+(define-key __orgmode__C-c_favorites_ (kbd "C-,") 'org-insert-structure-template)
+(define-key __orgmode__C-c_favorites_ (kbd "C-c") 'org-ctrl-c-ctrl-c)
+(define-key __orgmode__C-c_favorites_ (kbd "C-w") 'org-refile)
+(define-key __orgmode__C-c_favorites_ (kbd "C-x C-c") 'org-columns)
+(define-key __orgmode__C-c_favorites_ (kbd "'") 'org-edit-special)
+(define-key __orgmode__C-c_favorites_ (kbd ".") 'org-time-stamp)
+(define-key __orgmode__C-c_favorites_ (kbd "C-s") 'org-schedule)
+(define-key __orgmode__C-c_favorites_ (kbd "C-d") 'org-deadline)
 #+end_src
 
 *** Orgmode favorites
@@ -1496,10 +1496,10 @@ movement keys.
 #+begin_src emacs-lisp
 (define-prefix-command 'org-heading-insertion)
 (define-key orgmode (kbd "i") 'org-heading-insertion)
-(define-key 'org-insert (kbd "h") 'org-insert-heading)
-(define-key 'org-insert (kbd "H") 'org-insert-heading-respect-content)
-(define-key 'org-insert (kbd "s") 'org-insert-subheading)
-(define-key 'org-insert (kbd "S") 'org-insert-subheading-respect-content)
+(define-key 'org-heading-insertion (kbd "h") 'org-insert-heading)
+(define-key 'org-heading-insertion (kbd "H") 'org-insert-heading-respect-content)
+(define-key 'org-heading-insertion (kbd "s") 'org-insert-subheading)
+(define-key 'org-heading-insertion (kbd "S") 'org-insert-subheading-respect-content)
 #+end_src
 
 *** Subtree movement and promotions
