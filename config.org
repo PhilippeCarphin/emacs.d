@@ -1217,10 +1217,9 @@ export only what is visible to html.  (Or one could export to .org as a way of
 "extracting" a sparse tree.
 
 #+begin_src emacs-lisp
-(custom-set-variables
- '(org-show-context-detail
-   '((occur-tree . ancestors)
-     (default . local))))
+(setq org-fold-show-context-detail
+      '((occur-tree . ancestors)
+        (default . local)))
 #+end_src
 
 **** System Crafter's org-present config 
