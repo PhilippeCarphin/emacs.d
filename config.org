@@ -936,6 +936,8 @@ Don't show the file and control spacing so that all entries are aligned.
 
 #+begin_src emacs-lisp
 (add-to-list 'org-modules 'org-habit)
+(eval-after-load 'org
+  '(org-load-modules-maybe t))
 #+end_src
 
 *** Advanced orgmode and GTD
@@ -964,9 +966,9 @@ The GTD-* keywords map to the various things that what David Allen calls "stuff"
 can be.
 
 #+begin_src emacs-lisp
-(setq org-todo-keywords '((sequence "TODO" "WAITING" "VERIFY" "|" "DONE")
+(setq org-todo-keywords '((sequence "TODO(!@)" "WAITING" "VERIFY" "|" "DONE(!@)")
 			  (sequence
-			     "GTD-IN(i)"
+			     "GTD-IN(i!)"
 			     "GTD-CLARIFY(c)"
 			     "GTD-PROJECT(p)"
 			     "GTD-SOMEDAY-MAYBE(s)"
@@ -976,7 +978,7 @@ can be.
 			     "|"
 			     "GTD-REFERENCE(r)"
 			     "GTD-DELEGATED(g)"
-			     "GTD-DONE(d)")))
+			     "GTD-DONE(d!)")))
 
 (setq org-todo-keyword-faces
    '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
@@ -2215,12 +2217,6 @@ git clone https://github.com/jonathanchu/emacs-powerline.git
 
 I have to put this =add-to-list= at the end of the file it seems
 
-*** Activate ?
-This is the only necessary config to be able to use org habits.
-#+begin_src emacs-lisp
-(add-to-list 'org-modules 'org-habit t)
-#+end_src
-We can also do =M-x customize RET= and search for =org-modules=.
 *** Trying things out
 Almost required otherwise habits can't be more than like 7 letters long.
 #+begin_src emacs-lisp
