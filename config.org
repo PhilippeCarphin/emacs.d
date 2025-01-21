@@ -2006,7 +2006,7 @@ Ref [[https://orgmode.org/worg/org-tutorials/org-spreadsheet-intro.html][Org as 
 In the terminal, it seems like =C-,= sends =,=.  Since I don't care about
 =org-priority= which is the normal binding for =C-c C-,=, I can do this:
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle yes
 (define-key org-mode-map (kbd "C-c ,") 'org-insert-structure-template)
 #+end_src
 
