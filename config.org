@@ -1448,11 +1448,15 @@ movement keys.
 ** Files
 
 #+begin_src emacs-lisp
+(defun open-emacs-tangled-config-file () (interactive) (find-file "~/.emacs.d/config.el"))
+(defun open-emacs-init-file () (interactive) (find-file "~/.emacs.d/init.el"))
 (defun open-emacs-config-file () (interactive) (find-file "~/.emacs.d/config.org"))
 (define-prefix-command 'files)
 (define-key leader-key (kbd "f") 'files)
 
 (define-key files (kbd "c") 'open-emacs-config-file)
+(define-key files (kbd "C") 'open-emacs-tangled-config-file)
+(define-key files (kbd "i") 'open-emacs-init-file)
 (define-key files (kbd "f") 'helm-find-files)
 (define-key files (kbd "w") 'find-file-other-window)
 (define-key files (kbd "r") 'helm-recentf)
