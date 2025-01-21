@@ -10,9 +10,26 @@
 #+ATTR_ORG: :width 100px
 [[file:unicorn.jpg]]
 
-Keys sparse tree : Evaluate (org-tags-sparse-tree nil "command|keys") with
-=C-x C-e=.  Pressing =C-c C-c= will get out of the sparse tree view
-created by the expression.
+* Notes
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+** Keys sparse tree
+To show a sparse tree of all the sections with the tag =command= or =keys=,
+evaluate =(org-tags-sparse-tree nil "command|keys")= with =C-x C-e=.  Pressing
+=C-c C-c= will get out of the sparse tree view created by the expression.
+
+** Column view
+
+Do =C-c C-x C-c= to activate a column view where you can easily edit the header
+args.
+
+The column view is only activated everywhere after point so it is best to go to
+the top of the file before activating it.
+
+To get out of column view do =C-c C-e=
+
+To edit the value in a column, do =e= while the cursor is on that property.
 
 
 * Bootstrap & =use-package=
@@ -210,8 +227,7 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
  #+begin_src emacs-lisp
  (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
  #+end_src
-  
-<<<<<<< HEAD
+
 *** Visual line mode markers
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -262,11 +278,11 @@ We also add a few ourselves.
 #+begin_src emacs-lisp :results none
 (use-package helm :ensure t
   :bind (("M-x" . helm-M-x)
-	 ("C-x C-f" . helm-find-files)
-	 ("C-x C-r" . helm-recentf)
-	 ("C-h C-i" . helm-info)
-	 ("C-x C-b" . helm-buffers-list)
-	 ("C-c g" . helm-grep-do-git-grep)))
+         ("C-x C-f" . helm-find-files)
+         ("C-x C-r" . helm-recentf)
+         ("C-h C-i" . helm-info)
+         ("C-x b" . helm-buffers-list)
+         ("C-c g" . helm-grep-do-git-grep)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -318,9 +334,9 @@ Originally developped for spacemacs, now part of the standard emacs packages.
 (use-package company
   :ensure t
   :config (global-company-mode)
-	  (setq company-idle-delay 0))
+          (setq company-idle-delay 0))
 #+end_src
-    
+
 ** Evil mode
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
@@ -342,33 +358,33 @@ something barely noticed.
 (use-package evil
   :ensure t
   :init (setq evil-want-C-i-jump nil)
-	(setq evil-want-integration t)
-	(setq evil-want-C-u-scroll t)
+        (setq evil-want-integration t)
+        (setq evil-want-C-u-scroll t)
   :config (evil-mode 1)
-	(define-key evil-normal-state-map (kbd "SPC") 'leader-key)
-	  (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
-	  (evil-global-set-key 'motion "j" 'evil-next-visual-line)
-	  (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
+        (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
+          (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+          (evil-global-set-key 'motion "j" 'evil-next-visual-line)
+          (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
           ;; Normally insert-mode 'C-w' deletes a word but I hate that
           ;; because if I forget I'm in insert mode and I do 'C-w', it
           ;; deletes a word which is very annoying
-	  (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-	  (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-	  (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
+          (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
+          (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
+          (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
           ;; TODO Use evil-set-undo-system or something
-	  (global-set-key (kbd "M-u") 'universal-argument)
-	  (setq evil-default-state 'emacs)
-	  (setq evil-insert-state-modes nil)
-	  (setq evil-motion-state-modes nil)
-	  (setq evil-normal-state-modes '(fundamental-mode
-					  conf-mode
-					  prog-mode
-					  text-mode
-					  dired))
-	  (setq evil-insert-state-cursor '((box . 2) "lime green")
-	      evil-normal-state-cursor '(box "yellow"))
+          (global-set-key (kbd "M-u") 'universal-argument)
+          (setq evil-default-state 'emacs)
+          (setq evil-insert-state-modes nil)
+          (setq evil-motion-state-modes nil)
+          (setq evil-normal-state-modes '(fundamental-mode
+                                          conf-mode
+                                          prog-mode
+                                          text-mode
+                                          dired))
+          (setq evil-insert-state-cursor '((box . 2) "lime green")
+              evil-normal-state-cursor '(box "yellow"))
           (setq evil-move-cursor-back nil)
-	  (add-hook 'with-editor-mode-hook 'evil-insert-state))
+          (add-hook 'with-editor-mode-hook 'evil-insert-state))
 #+end_src
 
 The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
@@ -381,7 +397,7 @@ Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3
 :HEADER-ARGS: :tangle yes
 :END:
 
-Allow the use of =jk= to do =ESC=.  
+Allow the use of =jk= to do =ESC=.
 
 #+begin_src emacs-lisp
 (use-package evil-escape
@@ -414,8 +430,8 @@ Allow the use of =jk= to do =ESC=.
  #+begin_src emacs-lisp
  (blink-cursor-mode 0)
  #+end_src
- 
- 
+
+
 * Helper functions
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -542,8 +558,8 @@ but some of them require installing extra packages.
 
 #+begin_src emacs-lisp
   (org-babel-do-load-languages 'org-babel-load-languages
-			       '((shell . t)
-				 (python . t)))
+                               '((shell . t)
+                                 (python . t)))
 #+end_src
 
 **** Disable prompt
@@ -618,7 +634,7 @@ then enter the text in that file's own buffer.
 ,#+end_src
 ")
 #+end_src
-    
+
 *** Present GUI menu
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -637,14 +653,14 @@ then enter the text in that file's own buffer.
     (easy-menu-define present-menu org-mode-map
       "Menu for word navigation commands."
       '("Present"
-	["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
-	["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
-	["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
-	["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
-	["View RST Right Now (C-c C-e C-s r R)" ox-rst]
-	["View RST All Right Now (C-c C-e r R)" ox-rst-all]
-	["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
-	["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
+        ["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
+        ["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
+        ["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
+        ["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
+        ["View RST Right Now (C-c C-e C-s r R)" ox-rst]
+        ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
+        ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
+        ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
   #+end_src
 
 *** Insert src block for terminal
@@ -689,7 +705,7 @@ The original keybinding is =org-priority
 #+begin_src emacs-lisp
 (custom-set-variables '(org-startup-folded t))
 #+end_src
-    
+
 *** Inline images
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -711,7 +727,7 @@ The original keybinding is =org-priority
   (add-hook 'org-present-mode-hook (lambda () (load-theme 'leuven)))
   (add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'leuven))) )
 #+end_src
-   
+
 *** Babel Colorize RESULTS
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -729,7 +745,7 @@ From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post b
            (ansi-color-apply-on-region beg end))))))
  (add-hook 'org-babel-after-execute-hook 'ek/babel-ansi)
  #+end_src
- 
+
 *** Org indentation
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -802,7 +818,7 @@ that directory depending on the system we are on.
        ((string-equal system-type "gnu/linux") (setq org-agenda-dir
  "~/Documents/gtd")))
  #+end_src
- 
+
 Note: On Windows, =~= refers to something like
 =C:\Users\CarphinP\AppData\Roaming\= rather than =C:\Users\CarphinP\=
 **** Org agenda files
@@ -902,10 +918,10 @@ The function =org-capture= allows for quick capturing of notes with configurable
 templates.
  #+begin_src emacs-lisp
        (setq org-capture-templates
-	 '(("i" "GTD Input" entry (file gtd-in-tray-file)
-	    "* GTD-IN %?\n %i\n %a" :kill-buffer t)
-	   ("c" "Emacs config" entry (file emacs-config-file)
-	    "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
+         '(("i" "GTD Input" entry (file gtd-in-tray-file)
+            "* GTD-IN %?\n %i\n %a" :kill-buffer t)
+           ("c" "Emacs config" entry (file emacs-config-file)
+            "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
  #+end_src
 
 *** Capture hotkey
@@ -981,18 +997,18 @@ can be.
 
 #+begin_src emacs-lisp
 (setq org-todo-keywords '((sequence "TODO(!@)" "WAITING" "VERIFY" "|" "DONE(!@)")
-			  (sequence
-			     "GTD-IN(i!)"
-			     "GTD-CLARIFY(c)"
-			     "GTD-PROJECT(p)"
-			     "GTD-SOMEDAY-MAYBE(s)"
-			     "GTD-ACTION(a)"
-			     "GTD-NEXT-ACTION(n)"
-			     "GTD-WAITING(w)"
-			     "|"
-			     "GTD-REFERENCE(r)"
-			     "GTD-DELEGATED(g)"
-			     "GTD-DONE(d!)")))
+                          (sequence
+                             "GTD-IN(i!)"
+                             "GTD-CLARIFY(c)"
+                             "GTD-PROJECT(p)"
+                             "GTD-SOMEDAY-MAYBE(s)"
+                             "GTD-ACTION(a)"
+                             "GTD-NEXT-ACTION(n)"
+                             "GTD-WAITING(w)"
+                             "|"
+                             "GTD-REFERENCE(r)"
+                             "GTD-DELEGATED(g)"
+                             "GTD-DONE(d!)")))
 
 (setq org-todo-keyword-faces
    '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
@@ -1028,9 +1044,9 @@ This says that a stuck project is a headline where the todo keyword is
 #+begin_src emacs-lisp
 (setq org-stuck-projects
       '("TODO=\"GTD-PROJECT\"" ;; Search query
-	("GTD-NEXT-ACTION")    ;; Not stuck if contains
-	()                     ;; Stuck if contains
-	""))                   ;; General regex
+        ("GTD-NEXT-ACTION")    ;; Not stuck if contains
+        ()                     ;; Stuck if contains
+        ""))                   ;; General regex
 #+end_src
 
 **** Date interval for agenda view
@@ -1078,7 +1094,7 @@ The way this is set, it will show 7 days starting 2 days in the past.
 #+end_src
 
 Run the agenda with "c" custom command.
- 
+
 ***** Agenda view commands
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
@@ -1155,12 +1171,12 @@ has no effect."
   (when (and my/org-habit-show-graphs-everywhere
          (not (get-text-property (point) 'org-series)))
     (let ((cursor (point))
-          item data) 
+          item data)
       (while (setq cursor (next-single-property-change cursor 'org-marker))
         (setq item (get-text-property cursor 'org-marker))
-        (when (and item (org-is-habit-p item)) 
+        (when (and item (org-is-habit-p item))
           (with-current-buffer (marker-buffer item)
-            (setq data (org-habit-parse-todo item))) 
+            (setq data (org-habit-parse-todo item)))
           (put-text-property cursor
                              (next-single-property-change cursor 'org-marker)
                              'org-habit-p data))))))
@@ -1179,7 +1195,7 @@ See also : https://www.reddit.com/r/orgmode/comments/efrcoe/orghabit_graph_not_a
 #+end_src
 **** Agenda mode map customization
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
 
 I want to learn Emacs keybindings for most things so I don't want to evilify
@@ -1194,9 +1210,9 @@ to print a message.
 - Tulku: Cranston; Lamont Cranston.
 - Lamont Cranston: You know my real name?
 - Tulku: Yes. I also know that for as long as you can remember,
-	 you struggled against your own black heart and always lost. You
-	 watched your sprit, your very face change as the beast claws its
-	 way out from within you.
+         you struggled against your own black heart and always lost. You
+         watched your sprit, your very face change as the beast claws its
+         way out from within you.
 j is deactivated
 It normally does org-agenda-goto-date")))))
 ;; Originally org-agenda-capture : I use C-c c and I can't use k
@@ -1236,12 +1252,12 @@ export only what is visible to html.  (Or one could export to .org as a way of
         (default . local)))
 #+end_src
 
-**** System Crafter's org-present config 
+**** System Crafter's org-present config
     :PROPERTIES:
     :HEADER-ARGS: :tangle no
     :END:
 
-   From System-crafter's config.  
+   From System-crafter's config.
      #+begin_src emacs-lisp
      (defun dw/org-present-prepare-slide ()
      (org-overview)
@@ -1250,11 +1266,11 @@ export only what is visible to html.  (Or one could export to .org as a way of
 
    (defun dw/org-present-hook ()
      (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
-					(header-line (:height 4.5) variable-pitch)
-					(org-code (:height 1.55) org-code)
-					(org-verbatim (:height 1.55) org-verbatim)
-					(org-block (:height 1.25) org-block)
-					(org-block-begin-line (:height 0.7) org-block)))
+                                        (header-line (:height 4.5) variable-pitch)
+                                        (org-code (:height 1.55) org-code)
+                                        (org-verbatim (:height 1.55) org-verbatim)
+                                        (org-block (:height 1.25) org-block)
+                                        (org-block-begin-line (:height 0.7) org-block)))
      (setq header-line-format " ")
      (org-display-inline-images)
      (dw/org-present-prepare-slide))
@@ -1283,7 +1299,7 @@ export only what is visible to html.  (Or one could export to .org as a way of
             (org-present-mode-quit . dw/org-present-quit-hook)))
      #+end_src
 
-     
+
 **** Specific agenda files
 
 Functions for creating agenda views from a certain set of files.  This is done
@@ -1307,16 +1323,16 @@ by using =let= to temporarily set =org-agenda-files=.
 #+begin_src emacs-lisp
 (defun publish-work-agenda-views () (interactive)
        (let ((org-agenda-files (list
-				"~/Documents/gtd/GTD_Work_Reference.org"
-				"~/Documents/gtd/GTD_Work_ProjectList.org"
+                                "~/Documents/gtd/GTD_Work_Reference.org"
+                                "~/Documents/gtd/GTD_Work_ProjectList.org"
                                 "~/Documents/gtd/GTD_Work_Habits.org"))
-	     (org-agenda-span 40)
-	     (org-agenda-start-day "-5d"))
-	 (org-agenda-list)
-	 (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/files/phil-agenda-from-home.html")
-	 (org-agenda-write "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
-	 (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")
-	 (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
+             (org-agenda-span 40)
+             (org-agenda-start-day "-5d"))
+         (org-agenda-list)
+         (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/files/phil-agenda-from-home.html")
+         (org-agenda-write "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
+         (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")
+         (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
 #+end_src
 
 #+RESULTS:
@@ -1330,7 +1346,7 @@ by using =let= to temporarily set =org-agenda-files=.
 #+begin_src emacs-lisp
 (defun work-agenda-view () (interactive)
        (phc-restricted-agenda-list (list "~/Documents/gtd/GTD_Work_Reference.org"
-					 "~/Documents/gtd/GTD_Work_ProjectList.org")))
+                                         "~/Documents/gtd/GTD_Work_ProjectList.org")))
 (defun for000-agenda-view () (interactive)
        (phc-restricted-agenda-list (list "/ssh:ppp4:/home/for000/Documents/gtd")))
 #+end_src
@@ -1359,7 +1375,7 @@ This requires only stock emacs
 #+begin_src emacs-lisp
 (defun phc001-agenda-view () (interactive)
        (let ((org-agenda-files (list "/ssh:ppp4:/home/phc001/public_org/")))
-	 (org-agenda-list)))
+         (org-agenda-list)))
 #+end_src
 * Leader Keymap
   :PROPERTIES:
@@ -1412,7 +1428,7 @@ How meta is it that we have a function whose implementation takes us to
 see its implementation!
 
 ** Emacs movement
-   
+
 This is just so that I can use which-key to remind myself of a few emacs
 movement keys.
 
@@ -1626,7 +1642,7 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
  #+end_src
 
  #+RESULTS:
- 
+
 ** Yasnippet
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -1652,33 +1668,33 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
  (use-package elfeed :ensure t)
  (setq elfeed-feeds
        '(
-	 ;; programming
-	 ("https://news.ycombinator.com/rss" hacker)
-	 ("https://www.heise.de/developer/rss/news-atom.xml" heise)
-	 ("https://www.reddit.com/r/programming.rss" programming)
-	 ("https://www.reddit.com/r/emacs.rss" emacs)
+         ;; programming
+         ("https://news.ycombinator.com/rss" hacker)
+         ("https://www.heise.de/developer/rss/news-atom.xml" heise)
+         ("https://www.reddit.com/r/programming.rss" programming)
+         ("https://www.reddit.com/r/emacs.rss" emacs)
 
-	 ;; programming languages
-	 ("https://www.reddit.com/r/golang.rss" golang)
-	 ("https://www.reddit.com/r/java.rss" java)
-	 ("https://www.reddit.com/r/javascript.rss" javascript)
-	 ("https://www.reddit.com/r/typescript.rss" typescript)
-	 ("https://www.reddit.com/r/clojure.rss" clojure)
-	 ("https://www.reddit.com/r/python.rss" python)
+         ;; programming languages
+         ("https://www.reddit.com/r/golang.rss" golang)
+         ("https://www.reddit.com/r/java.rss" java)
+         ("https://www.reddit.com/r/javascript.rss" javascript)
+         ("https://www.reddit.com/r/typescript.rss" typescript)
+         ("https://www.reddit.com/r/clojure.rss" clojure)
+         ("https://www.reddit.com/r/python.rss" python)
 
-	 ;; cloud
-	 ("https://www.reddit.com/r/aws.rss" aws)
-	 ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
-	 ("https://www.reddit.com/r/azure.rss" azure)
-	 ("https://www.reddit.com/r/devops.rss" devops)
-	 ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
+         ;; cloud
+         ("https://www.reddit.com/r/aws.rss" aws)
+         ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
+         ("https://www.reddit.com/r/azure.rss" azure)
+         ("https://www.reddit.com/r/devops.rss" devops)
+         ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
  ))
 
  (setq-default elfeed-search-filter "@2-days-ago +unread")
  (setq-default elfeed-search-title-max-width 100)
  (setq-default elfeed-search-title-min-width 100)
  #+end_src
- 
+
 ** Ergoemacs
    :PROPERTIES:
    :HEADER-ARGS: :tangle no
@@ -1706,13 +1722,13 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
 
    ;; Enable flashing mode-line on errors
    (doom-themes-visual-bell-config)
-  
+
    ;; Enable custom neotree theme (all-the-icons must be installed!)
    (doom-themes-neotree-config)
    ;; or for treemacs users
    (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
    (doom-themes-treemacs-config)
-  
+
    ;; Corrects (and improves) org-mode's native fontification.
    (doom-themes-org-config))
  #+end_src
@@ -1761,7 +1777,7 @@ One thing it does is that it normally stores it's data by default in
 **** Commands                                                       :command:
  | =global-command-log-mode=     | Activate command logging                   |
  | =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
- 
+
 ** Modus themes
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -1789,10 +1805,10 @@ I am not loading the theme because I want to continue with built-in themes for n
   :delight
   :config
   (cl-loop for mode-hook in '(lisp-mode-hook
-			      lisp-interaction-mode-hook
-			      eval-expression-minibuffer-setup-hook
-			      emacs-lisp-mode-hook)
-	   do (add-hook mode-hook 'enable-paredit-mode)))
+                              lisp-interaction-mode-hook
+                              eval-expression-minibuffer-setup-hook
+                              emacs-lisp-mode-hook)
+           do (add-hook mode-hook 'enable-paredit-mode)))
 
 ;; Coloration syntaxique pour éditer du elisp
 (use-package highlight-defined
@@ -1808,12 +1824,12 @@ I am not loading the theme because I want to continue with built-in themes for n
   (global-aggressive-indent-mode -1))
 
 (add-hook 'emacs-lisp-mode-hook
-	  (lambda ()
-	    ;; Le tiret constitue un mot en soit (pour w et b).
-	    (modify-syntax-entry ?- "w")
-	    ;; goto symbol
-	    (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
-	    (aggressive-indent-mode 1)))
+          (lambda ()
+            ;; Le tiret constitue un mot en soit (pour w et b).
+            (modify-syntax-entry ?- "w")
+            ;; goto symbol
+            (define-key evil-normal-state-map (kbd "M-.") 'xref-find-definitions)
+            (aggressive-indent-mode 1)))
 
 (provide 'sg-lisp)
 #+end_src
@@ -2003,26 +2019,30 @@ Ref [[https://orgmode.org/worg/org-tutorials/org-spreadsheet-intro.html][Org as 
 *** Evaluate lisp code =C-x C-e=                                       :keys:
 
 ** Terminal stuff
-*** Alt key in terminal emulator settings                          :terminal:
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+*** Alt key in terminal emulator settings :terminal:notes:
  On macos but maybe also on linux, my terminal emulator does something with my
  alt key and I have to go into Iterm preferences and change it.
 
  If in the shell you do =M-x= and it doesn't work, look for settings in your
  terminal emulator for Alt key behavior.
-*** Tab key and evil mode
+
+In iterm, it's in profile -> keys and change left option key to do Esc+.  The
+'meta' option looks like it would work but it doesn't.
+*** Tab key and evil mode :notes:
  TAB: (setq evil-want-C-i-jump nil).  =C-i= and =TAB= are kind of the same thing
  in the shell.  In evil mode, you need to set this to Nil, otherwise, it will do
  something with =C-i= that will prevent the =TAB= key from working in orgmode files.
 
 ** MacOS stuff
 
-*** Preventing a specific only on MacOS and only in terminal emacsclient
+*** Preventing a specific only on MacOS and only in terminal emacsclient :notes:
  https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
  also Note the need to change Alt in terminal emulator profile settings
- 
-On my recent Macs I don't think I've needed to do this.
 
-** TRAMP
+** TRAMP :notes:
 
 use =C-x C-f= and write =/ssh:ppp4:=, after the second =':'=, give TRAMP time to
 connect and when the connection is established, the helm popup will show the
@@ -2031,7 +2051,7 @@ files on the remote machine.
 It helps if the remote machine skips loading the profile when TRAMP connects by
 adding something like this at the start (Ref : [[https://www.emacswiki.org/emacs/TrampMode#h5o-9][Emacs Wiki : Tramp Mode]])
 #+begin_src shell
-# ~/.profile 
+# ~/.profile
 # Skip loading for applications like TRAMP
 if [[ "$TERM" == "dumb" ]] ; then
   PS1='$ '
@@ -2058,6 +2078,21 @@ fi
 #+end_src
 
 
+* Server-Client stuff
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+#+begin_src emacs-lisp
+(defun close-client () (interactive)
+  (let ((proc (frame-parameter (selected-frame) 'client)))
+    (if proc
+        (with-no-warnings
+          (server-delete-client proc))
+      (dolist (process (process-list))
+        (set-process-query-on-exit-flag process nil))
+      (kill-emacs))))
+;; (global-set-key (kbd "C-x C-c") 'close-client)
+#+end_src
 * New stuff
 ** System Crafters for auto-save files
 :PROPERTIES:
@@ -2084,10 +2119,11 @@ From https://github.com/daviwil/emacs-from-scratch/blob/a57d99ba80276926a2b68521
 ;; This is needed as of Org 9.2
 (require 'org-tempo)
 
+#+begin_src emacs-lisp
 (add-to-list 'org-structure-template-alist '("sh" . "src shell"))
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
-
+#+end_src
 
 ** UTF-8
 :PROPERTIES:
@@ -2140,10 +2176,9 @@ For non-server mode
 #+end_src
 
 
-
 ** doom modeline
 :PROPERTIES:
-:HEADER-ARGS: :tangle yes
+:HEADER-ARGS: :tangle no
 :END:
 
 #+begin_src emacs-lisp
@@ -2182,6 +2217,7 @@ I must have it!
   :config
   (setq sml/theme 'powerline)
   (sml/setup))
+(use-package powerline :ensure t)
 #+end_src
 
 
@@ -2197,9 +2233,8 @@ mkdir -p ~/.emacs.d/vendor
 cd ~/.emacs.d/vendor
 git clone https://github.com/jonathanchu/emacs-powerline.git
 #+end_src
-#+begin_src emacs-lisp
-(add-to-list 'load-path "~/.emacs.d/vendor/emacs-powerline")
-(require 'powerline)
+#+begin_src emacs-lisp :tangle yes
+(use-package powerline :ensure t)
 (setq powerline-arrow-shape 'arrow)   ;; give your mode-line curves
 #+end_src
 
@@ -2224,7 +2259,7 @@ Almost required otherwise habits can't be more than like 7 letters long.
 *** Show habits on other days
 
 Not sure if I like this, trying it for now.
-#+begin_src 
+#+begin_src
 (setq org-habit-show-habits-only-for-today nil)
 #+end_src
 
@@ -2276,4 +2311,79 @@ Original implementation before I discovered it already existed
     (list code output)))
 (subprocess.run "ls")
 (nth 1 l)
+#+end_src
+
+** Server experiment
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+Reading this:
+[[ https://www.gnu.org/software/emacs/manual/html_node/emacs/TCP-Emacs-server.html]]
+I thought I could set something up to have a single emacs server running for
+my whole local home netork.
+
+#+begin_src emacs-lisp
+(setq server-host "0.0.0.0")
+(setq server-port "8888")
+(setq server-tcp-mode t)
+#+end_src
+
+It did create a file =~/.emacs.d/server= but going on another computer, I
+changed the 0.0.0.0 to the IP of the computer where I started the daemon:
+
+#+being_example
+192.168.2.24:8888 913544
+#9~Yn>22Ww7p/zWZ`lD#d>1ybhAsL1uwwDE}lD)sB{Y+a>(>sV\(BjPp%mV!2%=k
+#+end_example
+
+Then on the client computer, I launched =emacsclient --server-file <file>=.
+It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
+
+
+
+** Line numbers
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+Display line numbers except in orgmode.
+
+First I tried to do it in the most obvious way, turn it on globally and turn it
+off when entering =org-mode= but that caused absolutely everything except
+=org-mode= to have line numbers including
+- Help buffers
+- Helm buffers
+- Terminals
+
+  #+begin_src emacs-lisp :tangle no
+  ;; (global-display-line-numbers-mode)
+  ;; (add-hook 'org-mode-hook '(lambda () (display-line-numbers-mode -1)))
+  #+end_src
+
+So what I needed to do was to leave it off globally and turn it on for some
+modes.  =prog-mode= is the right thing except it misses certain things for
+which progmode doesn't get turned on when it should.  For example,
+=/etc/profile= on my Mac since it doesn't have a shebang.
+
+  #+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook '(lambda () (display-line-numbers-mode t)))
+  ;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
+  #+end_src
+
+
+** Window movements
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+I want to use regular emacs bindings everywhere except in text but I have some
+exceptions that include window movement.  Otherwise it's really annoying to do
+=C-w l= to go right and not be able to do =C-w h= to go back.
+
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-w") evil-window-map)
+#+end_src
+
+#+begin_src emacs-lisp
+(define-key help-mode-map (kbd "SPC") 'leader-key)
 #+end_src
