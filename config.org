@@ -647,6 +647,20 @@ then enter the text in that file's own buffer.
 	["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
   #+end_src
 
+*** Insert src block for terminal
+
+In a terminal, =C-,= sends =,= to the terminal so my beloved =C-c C-,=
+doesn't work.
+#+begin_src emacs-lisp
+(define-key org-mode-map (kbd "C-c ,") 'org-insert-structure-template)
+#+end_src
+
+The original keybinding is =org-priority
+
+#+begin_src emacs-lisp
+(define-key org-mode-map (kbd "C-c p") 'org-priority)
+#+end_src
+
 *** Center cursor after shift-tab in orgmode
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -1999,15 +2013,6 @@ Ref [[https://orgmode.org/worg/org-tutorials/org-spreadsheet-intro.html][Org as 
  TAB: (setq evil-want-C-i-jump nil).  =C-i= and =TAB= are kind of the same thing
  in the shell.  In evil mode, you need to set this to Nil, otherwise, it will do
  something with =C-i= that will prevent the =TAB= key from working in orgmode files.
-
-*** Insert structure template
-
-In the terminal, it seems like =C-,= sends =,=.  Since I don't care about
-=org-priority= which is the normal binding for =C-c C-,=, I can do this:
-
-#+begin_src emacs-lisp :tangle yes
-(define-key org-mode-map (kbd "C-c ,") 'org-insert-structure-template)
-#+end_src
 
 ** MacOS stuff
 
