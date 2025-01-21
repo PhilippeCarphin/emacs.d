@@ -2136,12 +2136,6 @@ For non-server mode
 #+end_src
 
 
-** GO mode
-
-#+begin_src emacs-lisp
-(use-package go :ensure t)
-#+end_src
-
 
 ** doom modeline
 :PROPERTIES:
