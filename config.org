@@ -1470,12 +1470,15 @@ movement keys.
 #+end_src
 
 #+begin_src emacs-lisp
+(defun switch-to-scratch-buffer () (interactive) (switch-to-buffer "*scratch*"))
+(defun switch-to-messages-buffer () (interactive) (switch-to-buffer "*Messages*"))
 (define-prefix-command 'buffers)
 (define-key leader-key (kbd "b") 'buffers)
 (define-key buffers (kbd "b") 'helm-buffers-list)
 (define-key buffers (kbd "k") 'kill-buffer)
 (define-key buffers (kbd "K") 'maybe-kill-all-buffers)
-(define-key buffers (kbd "s") (lambda () (interactive) (switch-to-buffer "*scratch*")))
+(define-key buffers (kbd "s") 'switch-to-scratch-buffer)
+(define-key buffers (kbd "m") 'switch-to-messages-buffer)
 (define-key buffers (kbd "p") 'switch-to-prev-buffer)
 (define-key buffers (kbd "n") 'switch-to-next-buffer)
 (define-key buffers (kbd "o") 'mode-line-other-buffer)
