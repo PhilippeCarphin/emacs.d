@@ -236,6 +236,36 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 #+begin_src emacs-lisp
 (custom-set-variables '(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow)))
 #+end_src
+*** Line numbers
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+Display line numbers except in orgmode.
+
+First I tried to do it in the most obvious way, turn it on globally and turn it
+off when entering =org-mode= but that caused absolutely everything except
+=org-mode= to have line numbers including
+- Help buffers
+- Helm buffers
+- Terminals
+
+  #+begin_src emacs-lisp :tangle no
+  ;; (global-display-line-numbers-mode)
+  ;; (add-hook 'org-mode-hook '(lambda () (display-line-numbers-mode -1)))
+  #+end_src
+
+So what I needed to do was to leave it off globally and turn it on for some
+modes.  =prog-mode= is the right thing except it misses certain things for
+which progmode doesn't get turned on when it should.  For example,
+=/etc/profile= on my Mac since it doesn't have a shebang.
+
+  #+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook '(lambda () (display-line-numbers-mode t)))
+  ;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
+  #+end_src
+
+
 *** UTF-8
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -2367,35 +2397,6 @@ Then on the client computer, I launched =emacsclient --server-file <file>=.
 It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
 
 
-
-** Line numbers
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-Display line numbers except in orgmode.
-
-First I tried to do it in the most obvious way, turn it on globally and turn it
-off when entering =org-mode= but that caused absolutely everything except
-=org-mode= to have line numbers including
-- Help buffers
-- Helm buffers
-- Terminals
-
-  #+begin_src emacs-lisp :tangle no
-  ;; (global-display-line-numbers-mode)
-  ;; (add-hook 'org-mode-hook '(lambda () (display-line-numbers-mode -1)))
-  #+end_src
-
-So what I needed to do was to leave it off globally and turn it on for some
-modes.  =prog-mode= is the right thing except it misses certain things for
-which progmode doesn't get turned on when it should.  For example,
-=/etc/profile= on my Mac since it doesn't have a shebang.
-
-  #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook '(lambda () (display-line-numbers-mode t)))
-  ;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
-  #+end_src
 
 
 ** Window movements
