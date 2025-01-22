@@ -409,6 +409,26 @@ Allow the use of =jk= to do =ESC=.
   (add-hook 'evil-visual-state-exit-hook (lambda () (evil-escape-mode 1))))
 #+end_src
 
+**** Making search results stay hightlighted
+
+This suggestion from [[https://stackoverflow.com/a/34252236/5795941][Stack
+Overflow: Emacs + Evil: non incremental search and persistent highlighting?]]
+makes search results stay highlighted but unfortunately in org-mode files it
+doesn't find search results that are not visible.
+
+#+begin_src emacs-lisp :tangle no
+(evil-select-search-module 'evil-search-module 'evil-search)
+#+end_src
+
+However on the same question,
+[[https://stackoverflow.com/a/25902687/5795941][this answer]] gives a less
+simple solution:
+
+#+begin_src emacs-lisp :tangle yes
+(use-package evil-search-highlight-persist :ensure t
+:config (global-evil-search-highlight-persist t))
+#+end_src
+
 *** Cursor blinking
 
  Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
