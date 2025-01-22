@@ -768,11 +768,21 @@ would produce an Emacs LISP SRC block.
  (defun org-post-global-cycle () (interactive)
    (recenter)
    (org-beginning-of-line))
+ ;; This one is the new fuction
+ (advice-add 'org-cycle-global
+   :after #'org-post-global-cycle)
+ ;; This one is the old function which is now aliased to org-cycle-global
  (advice-add 'org-global-cycle
    :after #'org-post-global-cycle)
  #+end_src
- See [[help:advice-add]], basically, we can ask Emacs to add code to be run before
- and/or after an emacs function is run.
+
+See [[help:advice-add]], basically, we can ask Emacs to add code to be run
+before and/or after an emacs function is run.
+
+Note that in more recent org mode, the function that gets called on =S-TAB= is
+=org-cycle-global= and they do =(defalias 'org-global-cycle #'org-cycle-global)=
+for backward compatibility.  However adding advice to =org-global-cycle= does
+not do anything when =org-cycle-globa= is called.
 
  You can use this to remove the "advice".
  #+begin_src emacs-lisp :tangle no
