@@ -361,7 +361,7 @@ something barely noticed.
         (setq evil-want-integration t)
         (setq evil-want-C-u-scroll t)
   :config (evil-mode 1)
-        (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
+          (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
           (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
           (evil-global-set-key 'motion "j" 'evil-next-visual-line)
           (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
