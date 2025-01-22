@@ -741,6 +741,24 @@ The original keybinding is =org-priority
 (define-key org-mode-map (kbd "C-c p") 'org-priority)
 #+end_src
 
+*** Snippets for inserting structure templates
+
+This gives the snippets to do =<s= then TAB to get an SRC block and all the
+other ones from =org-structure-template-alist=.  However, I prefer doing =C-c
+C-,= or =C-c ,=.
+#+begin_src emacs-lisp :tangle no
+(require 'org-tempo)
+#+end_src
+
+*** Additionnal structure templates
+Add a few structure template shortcuts for languages that I often use.  Note
+that this also affects the snippets that =org-tempo= gives so for example, =<el=
+would produce an Emacs LISP SRC block.
+#+begin_src emacs-lisp
+(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
+(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
+(add-to-list 'org-structure-template-alist '("py" . "src python"))
+#+end_src
 *** Center cursor after shift-tab in orgmode
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -2183,21 +2201,6 @@ From https://github.com/daviwil/emacs-from-scratch/blob/a57d99ba80276926a2b68521
 (setq auto-save-file-name-transforms
       `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
 #+end_src
-
-#+RESULTS:
-| .* | /Users/pcarphin/.emacs.d/var/auto-save/ | t |
-
-;; This is needed as of Org 9.2
-(require 'org-tempo)
-
-#+begin_src emacs-lisp
-(add-to-list 'org-structure-template-alist '("sh" . "src shell"))
-(add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
-(add-to-list 'org-structure-template-alist '("py" . "src python"))
-#+end_src
-
-
-
 
 ** Initial frame position
 :PROPERTIES:
