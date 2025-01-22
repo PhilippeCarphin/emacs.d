@@ -2194,10 +2194,25 @@ fi
 #+end_src
 
 
-* Server-Client stuff
+* Key to exit client
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
+
+Depending on how a file was opened, its buffer may get killed when we quit.  For
+example if a file is not already opened and we do
+#+begin_src shell
+emacsclient -t FILE
+#+end_src
+and quit the client with =:q= in (=evil-mode=), then the buffer is also killed.
+This is nice if we're looking for vim-like behavior because we also get prompted
+to save the file.
+
+However, I might want to quit the client without doing that.
+
+Binding this to =C-x C-c= is also useful since =C-x C-c= is easy to do by
+mistake so having it quit the client instead of killing emacs is nice.
+
 #+begin_src emacs-lisp
 (defun close-client () (interactive)
   (let ((proc (frame-parameter (selected-frame) 'client)))
@@ -2207,8 +2222,9 @@ fi
       (dolist (process (process-list))
         (set-process-query-on-exit-flag process nil))
       (kill-emacs))))
-;; (global-set-key (kbd "C-x C-c") 'close-client)
+(global-set-key (kbd "C-x C-c") 'close-client)
 #+end_src
+
 * New stuff
 ** System Crafters for auto-save files
 :PROPERTIES:
