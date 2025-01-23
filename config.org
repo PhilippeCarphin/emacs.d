@@ -879,12 +879,32 @@ Works for outline headings and for plain lists alike."
 
 *** Org align tags
 
+I should probably just remember that I can do =C-c C-q= with a universal
+argument but I'm defining a key for it with a named command so that the which
+key menu can remind me of it.
+
+#+begin_src emacs-lisp
+(defun my/org-align-tags () (interactive)
+       (org-align-tags))
+#+end_src
+
+**** Shame
+
+Here is a reason to define functions with names that can't conflict with names
+of existing functions.
+
+It is entirely possible that previous versions of org-mode did not have this
+function.  I might have checked by doing =C-h f org-align-tags RET=.
+
+Anyway, there is one now and my redefinition of this function screwed up
+functions in org-mode that call it.
+
 You can align tags in a buffer by calling =org-set-tags-command= (=C-c C-q=)
 with a prefix argument (=C-u C-c C-q=) but I always forget.
 
 I need to be able to run =M-x "org-align"= to rediscover.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (defun org-align-tags ()
   (interactive)
   (let
@@ -1638,6 +1658,7 @@ movement keys.
 *** Orgmode favorites
 #+begin_src emacs-lisp
 (define-key leader-key (kbd "o") 'orgmode)
+(define-key orgmode (kbd "t") 'my/org-align-tags)
 (define-key orgmode (kbd "a") 'org-agenda)
 (define-key orgmode (kbd "v") 'org-tags-view)
 (define-key orgmode (kbd "C-c /") 'org-match-sparse-tree)
