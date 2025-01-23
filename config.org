@@ -1537,7 +1537,6 @@ Same as Spacemacs.
 ** Window keymap
 
 #+begin_src emacs-lisp
-(windmove-default-keybindings)
 (define-prefix-command 'window-commands)
 (define-key leader-key (kbd "w") 'evil-window-map)
 (define-key evil-window-map (kbd "0") 'delete-window)
@@ -1553,9 +1552,6 @@ Same as Spacemacs.
 (define-key evil-window-map (kbd "<up>") 'windmove-up)
 (define-key evil-window-map (kbd "<down>") 'windmove-down)
 #+end_src
-
-#+RESULTS:
-: windmove-down
 
 ** About this keymap
 #+begin_src emacs-lisp
