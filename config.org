@@ -185,7 +185,7 @@ Dark theme that exports well
 (load-theme 'misterioso)
 #+end_src
 
-***** Explanation                                       :noexport_reveal:
+***** Explanation                                           :noexport_reveal:
 
     The default emacs theme looks good when exporting to HTML.  But because of
     =htmlize=, with dark themes, the code can come out looking bad in exports
@@ -2139,7 +2139,7 @@ There is no undo https://www.youtube.com/watch?v=nY64e1SqrbU
  next day.  Otherwise your schedule will stop being a schedule and become a
  single growing todo list.
 
-*** Use org clocking functions                                       :keys:
+*** Use org clocking functions                                         :keys:
 | C-c C-x C-i | org-clock-in |
 | C-c C-x C-o | org-clock-out |
 *** Habits
@@ -2169,7 +2169,7 @@ Ref [[https://orgmode.org/worg/org-tutorials/org-spreadsheet-intro.html][Org as 
 :PROPERTIES:
 :HEADER-ARGS: :tangle no
 :END:
-*** Alt key in terminal emulator settings :terminal:notes:
+*** Alt key in terminal emulator settings                    :terminal:notes:
  On macos but maybe also on linux, my terminal emulator does something with my
  alt key and I have to go into Iterm preferences and change it.
 
@@ -2178,7 +2178,7 @@ Ref [[https://orgmode.org/worg/org-tutorials/org-spreadsheet-intro.html][Org as 
 
 In iterm, it's in profile -> keys and change left option key to do Esc+.  The
 'meta' option looks like it would work but it doesn't.
-*** Tab key and evil mode :notes:
+*** Tab key and evil mode                                             :notes:
  TAB: (setq evil-want-C-i-jump nil).  =C-i= and =TAB= are kind of the same thing
  in the shell.  In evil mode, you need to set this to Nil, otherwise, it will do
  something with =C-i= that will prevent the =TAB= key from working in orgmode files.
@@ -2189,7 +2189,7 @@ In iterm, it's in profile -> keys and change left option key to do Esc+.  The
  https://debbugs.gnu.org/cgi/bugreport.cgi?bug=22993#22
  also Note the need to change Alt in terminal emulator profile settings
 
-** TRAMP :notes:
+** TRAMP                                                              :notes:
 
 use =C-x C-f= and write =/ssh:ppp4:=, after the second =':'=, give TRAMP time to
 connect and when the connection is established, the helm popup will show the
