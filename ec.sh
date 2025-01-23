@@ -11,7 +11,7 @@ function main(){
 
     # Special actions
     case "$1" in
-	-k) emacsclient -c -e '(save-buffers-kill-emacs)' ;;
+	-k) emacsclient -t -c -e '(save-buffers-kill-emacs)' ;;
 	-K) kill_emacs_by_pid ;;
 	-s) emacs --daemon ;;
 	-g)  gui_open "$@" ;;
