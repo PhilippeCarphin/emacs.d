@@ -1205,6 +1205,41 @@ The way this is set, it will show 7 days starting 2 days in the past.
       org-agenda-start-day "-2d")
 #+end_src
 
+***** Advancing by 7 days with =f/b= despite the span not being 7
+
+With 9 as the span, pressing =f= which does =org-agenda-later= advances by 9
+days which is annoying.  I want it to move by 7 days.
+
+I couldn't figure out how to make =org-agenda-later= advance by 7 days while my
+=org-agenda-span= has a value of 9.
+
+The following attempt did not work.  It still advances by 9 days even though I
+saw in the code of =org-agenda-later= that it looks like it advances by
+=org-agenda-span= number of days.
+#+begin_src emacs-lisp :tangle no
+(defun my/org-agenda-next-week () (interactive)
+       (setq org-agenda-span 7)
+       (call-interactively 'org-agenda-later 1)
+       (setq org-agenda-span 9))
+#+end_src
+
+What I ended up doing is playing around with the code of =org-agenda-later= and
+ended up with these two functions and as far as I can tell they do the right thing.
+#+begin_src emacs-lisp
+(defun my/org-agenda-previous-week (arg) (interactive "p")
+       (let* ((target-day (- org-starting-day (* 7 arg))))
+         (let ((org-agenda-overriding-arguments (list nil target-day
+                                                      org-agenda-span)))
+           (org-agenda-redo))))
+(defun my/org-agenda-next-week (arg) (interactive "p")
+       (let* ((target-day (+ org-starting-day (* 7 arg))))
+         (let ((org-agenda-overriding-arguments (list nil target-day
+                                                      org-agenda-span)))
+           (org-agenda-redo))))
+(define-key org-agenda-mode-map (kbd "b") 'my/org-agenda-previous-week)
+(define-key org-agenda-mode-map (kbd "f") 'my/org-agenda-next-week)
+#+end_src
+
 **** Agenda custom commands
    These depend on my todo keywords so they are not part of the basic agenda config.
 ***** Definition
