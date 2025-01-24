@@ -1,0 +1,13 @@
+;; Add melpa package repository (mainly for evil)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(package-initialize)
+(evil-mode)
+(which-key-mode)
+(global-set-key (kbd "M-x") 'helm-M-x)
+(global-set-key (kbd "C-x C-f") 'helm-find-files)
+(global-set-key (kbd "C-x b") 'helm-buffers-lit)
+(load-theme 'misterioso)
+
+(define-prefix-command 'leader-key)
+(define-key evil-normal-state-map (kbd "SPC") 'leader-key)
+(define-key leader-key (kbd "b b") 'helm-buffers-list)
