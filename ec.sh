@@ -3,9 +3,11 @@ set -x
 
 # Yet again, a per-process TMPDIR that contains the PID of the current shell
 # causes a problem.  Lets define this then.
-export TMPDIR=/tmp/$USER
-unset XDG_RUNTIME_DIR
-mkdir -p $TMPDIR
+if [[ $(uname) != Darwin ]] ; then
+    export TMPDIR=/tmp/$USER
+    unset XDG_RUNTIME_DIR
+    mkdir -p $TMPDIR
+fi
 readlink -f $(which emacsclient)
 function main(){
 
