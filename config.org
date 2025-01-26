@@ -627,8 +627,6 @@ doesn't help beause I already have the information from the cursor color.
    (custom-set-variables '(magit-save-repository-buffers 'dontask))
  #+end_src
 
- #+RESULTS:
-
 ** Yasnippet
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -879,9 +877,6 @@ git clone https://github.com/jonathanchu/emacs-powerline.git
   (sml/setup))
 #+end_src
 
-#+RESULTS:
-: t
-
 * Helper functions
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -1118,9 +1113,6 @@ greeting = "Hello"
 print(f'{greeting} world!')
 #+end_src
 
-#+RESULTS:
-: Hello world!
-
 ** Orgmode scratch buffer
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -1296,9 +1288,6 @@ Orgmode, please don't mess with me by indenting source blocks.
 (setq org-edit-src-content-indentation 0)
 #+end_src
 
-#+RESULTS:
-: 0
-
 ** Insert subheadings
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -1317,9 +1306,6 @@ Works for outline headings and for plain lists alike."
 (define-key org-mode-map (kbd "C-S-<return>") 'org-insert-subheading-respect-content)
 (define-key org-mode-map (kbd "M-S-<return>") 'org-insert-subheading)
 #+end_src
-
-#+RESULTS:
-: org-insert-subheading
 
 ** Org align tags
 
@@ -1442,9 +1428,6 @@ Create symbols holding the paths to GTD files
 (defun gtd-open-emails               () (interactive) (find-file gtd-email-file))
 #+end_src
 
-#+RESULTS:
-: gtd-open-habits
-
 **** Leader bindings
 #+begin_src emacs-lisp
 (define-prefix-command 'gtd)
@@ -1458,9 +1441,6 @@ Create symbols holding the paths to GTD files
 (define-key gtd (kbd "n") 'gtd-open-next-actions)
 (define-key gtd (kbd "e") 'gtd-open-emails)
 #+end_src
-
-#+RESULTS:
-: gtd-open-next-actions
 
 #+REVEAL: split
 ** Agenda Key
@@ -1527,9 +1507,6 @@ Don't show the file and control spacing so that all entries are aligned.
 #+begin_src emacs-lisp
   (setq org-agenda-prefix-format  '((agenda . "    %-12t%-12s")))
 #+end_src
-
-#+RESULTS:
-: ((agenda .     %-12t%-12s))
 
 ** Keys                                                               :keys:
 
@@ -1603,15 +1580,6 @@ can be.
      ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
 #+end_src
 
-#+RESULTS:
-| GTD-IN            | :foreground | #ff8800 | :weight | normal | :underline | t   | :size | small |
-| GTD-PROJECT       | :foreground | #0088ff | :weight | bold   | :underline | t   |       |       |
-| GTD-ACTION        | :foreground | #0088ff | :weight | normal | :underline | nil |       |       |
-| GTD-NEXT-ACTION   | :foreground | #0088ff | :weight | bold   | :underline | nil |       |       |
-| GTD-WAITING       | :foreground | #aaaa00 | :weight | normal | :underline | nil |       |       |
-| GTD-REFERENCE     | :foreground | #00ff00 | :weight | normal | :underline | nil |       |       |
-| GTD-SOMEDAY-MAYBE | :foreground | #7c7c74 | :weight | normal | :underline | nil |       |       |
-| GTD-DONE          | :foreground | #00ff00 | :weight | normal | :underline | nil |       |       |
 
   #+REVEAL: split
 *** Definition of stuck projects
@@ -1741,9 +1709,6 @@ This is equivalent to launching =org-agenda= and pressing a.
   (find-file gtd-work-project-list-file)
   (org-agenda nil "gn"))
 #+end_src
-
-#+RESULTS:
-: gtd-work-next-action-sparse-tree
 
 **** Agenda view hotkeys
     :PROPERTIES:
@@ -1950,9 +1915,6 @@ by using =let= to temporarily set =org-agenda-files=.
          (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")
          (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
 #+end_src
-
-#+RESULTS:
-: publish-work-agenda-views
 
 **** Work Agenda view
 :PROPERTIES:
@@ -2194,9 +2156,6 @@ CLOCK: [2021-04-14 Wed 23:57]
 (define-key org-clocking-commands (kbd "r") 'org-clock-report)
 #+end_src
 
-#+RESULTS:
-: org-clock-in-last
-
 ** Vterm
 
 Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows")(...)))=
@@ -2242,9 +2201,6 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
 
 (provide 'sg-lisp)
 #+end_src
-
-#+RESULTS:
-: sg-lisp
 
 * Documentation
 :PROPERTIES:
