@@ -31,6 +31,33 @@ To get out of column view do =C-c C-e=
 
 To edit the value in a column, do =e= while the cursor is on that property.
 
+** Custom set variables
+
+Some of the settings are done with =(custom-set-variables '(var value))=.  This
+is not necessarily the best way to do it in the config but two things happen
+when the variable is set this way:
+- The value of the variable is set,
+- A hook is called.
+This means that just setting the variable with =(setq var value)= may not be a
+good replacement because the hook won't be called.
+
+However a better way may still exist.  Take for example =
+#+begin_src emacs-lisp
+(custom-set-variables '(evil-undo-system 'undo-redo))
+#+end_src
+
+If we just do =(setq evil-undo-system 'undo-redo)=, that won't work because the
+customization does more.  We can find out by doing =C-h v evil-undo-system RET=
+and go to the =(defcustom evil-undo-system ...)=.  We see
+ #+begin_src emacs-lisp
+ (defcustom evil-undo-system
+   ;;; ...
+   :set #'(lambda (sym value)
+            (evil-set-undo-system value)
+            (set-default sym value)))
+ #+end_src
+and finally, we can put =(evil-set-undo-system 'undo-redo)= in our config and
+see if that works.
 
 * Bootstrap & =use-package=
    :PROPERTIES:
@@ -54,6 +81,14 @@ To edit the value in a column, do =e= while the cursor is on that property.
 (add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
 (package-initialize)
 #+end_src
+*** TODO extra call to =package-initialize=
+
+I get a warning that there is an extra call to =package-initialize= because
+=package= added it automatically to my init file so get rid of this one
+and make sure that everything still works.
+
+One thing I'm unsure of is I adding the package archives could need to be done
+before doing =package-initialize=.
 
 ** =use-package= macro
 Standard way for installing packages.  This replaces the use of =(require
