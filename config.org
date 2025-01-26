@@ -114,6 +114,12 @@ We therefore want it to exist from the very start
 #+end_src
 This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 
+** Define the config file
+
+#+begin_src emacs-lisp
+(setq my/emacs-config-file (concat user-emacs-directory "config.org"))
+#+end_src
+
 * Small basic configs
 ** Indent with spaces
 :PROPERTIES:
@@ -1481,7 +1487,7 @@ templates.
        (setq org-capture-templates
          '(("i" "GTD Input" entry (file gtd-in-tray-file)
             "* GTD-IN %?\n %i\n %a" :kill-buffer t)
-           ("c" "Emacs config" entry (file emacs-config-file)
+           ("c" "Emacs config" entry (file+headline my/emacs-config-file "New stuff")
             "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
  #+end_src
 
