@@ -299,7 +299,14 @@ which progmode doesn't get turned on when it should.  For example,
   (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode t)))
   ;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
   #+end_src
+** Activate recent files mode
 
+This is needed for Emacs to save recently operated on files which which will
+come up
+
+#+begin_src emacs-lisp
+(recentf-mode 1)
+#+end_src
 
 ** UTF-8
 :PROPERTIES:
