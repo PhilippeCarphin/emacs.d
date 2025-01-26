@@ -2011,7 +2011,7 @@ Same as Spacemacs.
 ** About this keymap
 #+begin_src emacs-lisp
 (defun about-this-keymap () (interactive)
-(org-open-link-from-string "[[file:~/.emacs.d/config.org::Leader Keymap]]"))
+(org-open-link-from-string (concat "[[file:" my/emacs-config-file "::Leader Keymap]]")))
 #+end_src
 
 How meta is it that we have a function whose implementation takes us to
@@ -2040,7 +2040,7 @@ movement keys.
 #+begin_src emacs-lisp
 (defun open-emacs-tangled-config-file () (interactive) (find-file "~/.emacs.d/config.el"))
 (defun open-emacs-init-file () (interactive) (find-file "~/.emacs.d/init.el"))
-(defun open-emacs-config-file () (interactive) (find-file "~/.emacs.d/config.org"))
+(defun open-emacs-config-file () (interactive) (find-file my/emacs-config-file))
 (define-prefix-command 'files)
 (define-key leader-key (kbd "f") 'files)
 
