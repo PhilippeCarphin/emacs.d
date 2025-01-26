@@ -498,11 +498,10 @@ Originally developped for spacemacs, now part of the standard emacs packages.
           ;; because if I forget I'm in insert mode and I do 'C-w', it
           ;; deletes a word which is very annoying
           (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-          (define-key evil-normal-state-map (kbd "C-r") 'undo-tree-redo)
-          (define-key evil-normal-state-map (kbd "u") 'undo-tree-undo)
           ;; TODO Use evil-set-undo-system or something
           (global-set-key (kbd "M-u") 'universal-argument)
           (setq evil-default-state 'emacs)
+	  (define-key evil-emacs-state-map (kbd "ESC ESC") 'evil-normal-state)
           (setq evil-insert-state-modes nil)
           (setq evil-motion-state-modes nil)
           (setq evil-normal-state-modes '(fundamental-mode
@@ -511,7 +510,8 @@ Originally developped for spacemacs, now part of the standard emacs packages.
                                           text-mode
                                           dired))
           (setq evil-insert-state-cursor '((box . 2) "lime green")
-              evil-normal-state-cursor '(box "yellow"))
+              evil-normal-state-cursor '(box "yellow")
+	      evil-emacs-state-cursor '(box "red"))
           (setq evil-move-cursor-back nil)
           (add-hook 'with-editor-mode-hook 'evil-insert-state))
 #+end_src
