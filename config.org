@@ -1394,6 +1394,14 @@ A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintai
 (add-to-list 'org-modules 'org-id t)
 #+end_src
 
+** Turn off autocomplete in org-mode
+
+When you're writing actual text it's super annoying to have autocomplete.
+
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook (lambda () (company-mode -1)))
+#+end_src
+
 ** Configure Refile
 
 #+begin_src emacs-lisp
