@@ -100,6 +100,7 @@ a-package)= and adds convenience functions.
     (package-install 'use-package))
 (eval-when-compile (require 'use-package))
 #+end_src
+
 ** Define leader keymap
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
@@ -112,34 +113,33 @@ We therefore want it to exist from the very start
 #+end_src
 This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 
-* Emacs
-** Small basic configs
-*** Indent with tabs
+* Small basic configs
+** Indent with spaces
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
 #+begin_src emacs-lisp
-(custom-set-variables '(indent-tabs-mode nil))
+(setq indent-tabs-mode nil)
 #+end_src
-*** Get rid of toolbar
+** Get rid of toolbar
 :PROPERTIES:
 :header-args: :tangle yes
 :END:
 #+begin_src emacs-lisp
 (tool-bar-mode -1)
 #+end_src
-*** Get rid of menu bar (File Edit Options ...)
+** Get rid of menu bar (File Edit Options ...)
 #+begin_src emacs-lisp
 (menu-bar-mode -1)
 #+end_src
-*** Get rid of scroll bars
+** Get rid of scroll bars
 :PROPERTIES:
 :header-args: :tangle no
 :END:
 #+begin_src emacs-lisp
 (scroll-bar-mode -1)
 #+end_src
-*** Scrolling behavior
+** Scrolling behavior
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -152,7 +152,7 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 (setq-default scroll-margin 10)
 #+end_src
 
-*** Higlight current line
+** Higlight current line
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -162,7 +162,7 @@ it is kind of annoying in =misterioso=.
 (global-hl-line-mode 1)
 #+end_src
 
-*** Cursor style
+** Cursor style
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -177,7 +177,7 @@ Makes the cursor a bar instead of a box.
 
 Helps to not get confused with vim.
 
-*** Cursor blink
+** Cursor blink
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -186,8 +186,8 @@ Helps to not get confused with vim.
 (blink-cursor-mode)
 #+end_src
 
-*** Wrapping
-**** Hard wrap as you type
+** Wrapping
+*** Hard wrap as you type
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -198,7 +198,7 @@ Automattically hard-wrap text on 80 chars as you type.
 (setq-default fill-column 80)
 #+end_src
 
-**** Wrap lines visually
+*** Wrap lines visually
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -209,7 +209,7 @@ with a special char indicating visual wrapping.
 (global-visual-line-mode 1)
 #+end_src
 
-*** Startup color theme
+** Startup color theme
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -220,7 +220,7 @@ Dark theme that exports well
 (load-theme 'misterioso)
 #+end_src
 
-***** Explanation                                           :noexport_reveal:
+**** Explanation                                          :noexport_reveal:
 
     The default emacs theme looks good when exporting to HTML.  But because of
     =htmlize=, with dark themes, the code can come out looking bad in exports
@@ -234,7 +234,7 @@ Dark theme that exports well
     emacs itself.  A light theme that exports well and looks good in emacs is
     =leuven=.
 
-*** Startup font
+** Startup font
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -245,7 +245,7 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 (custom-set-faces '(default ((t (:height 150)))))
 #+end_src
 
-*** Follow symlinks
+** Follow symlinks
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -254,7 +254,7 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 (setq vc-follow-symlinks t)
 #+end_src
 
-*** Remap C-x C-c to save buffers before quitting
+** Remap C-x C-c to save buffers before quitting
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -263,7 +263,7 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
  (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
  #+end_src
 
-*** Visual line mode markers
+** Visual line mode markers
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
@@ -271,7 +271,7 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 #+begin_src emacs-lisp
 (custom-set-variables '(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow)))
 #+end_src
-*** Line numbers
+** Line numbers
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
@@ -301,7 +301,7 @@ which progmode doesn't get turned on when it should.  For example,
   #+end_src
 
 
-*** UTF-8
+** UTF-8
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
@@ -331,7 +331,61 @@ From [[https://stackoverflow.com/a/2680682/5795941][this stack overflow post]]
   kept-old-versions 5    ; and how many of the old
   )
 #+end_src
-* Helper frameworks
+** System Crafters for auto-save files
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+From https://github.com/daviwil/emacs-from-scratch/blob/a57d99ba80276926a2b68521f9a9d23dc173a628/Emacs.org#keep-folders-clean
+#+begin_src emacs-lisp
+;; NOTE: If you want to move everything out of the ~/.emacs.d folder
+;; reliably, set `user-emacs-directory` before loading no-littering!
+;(setq user-emacs-directory "~/.cache/emacs")
+
+(use-package no-littering :ensure t)
+
+;; no-littering doesn't set this by default so we must place
+;; auto save files in the same path as it uses for sessions
+(setq auto-save-file-name-transforms
+      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+#+end_src
+
+** Initial frame position
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+For non-server mode
+#+begin_src emacs-lisp
+(set-frame-position (selected-frame) 800 0)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(custom-set-variables
+ '(server-after-make-frame-hook
+   '((lambda nil
+       (set-frame-position
+        (selected-frame)
+        400 400)))))
+#+end_src
+
+#+begin_src emacs-lisp
+(add-hook 'after-make-frame-functions
+   (lambda (f) (set-frame-position f 400 10)))
+#+end_src
+
+#+begin_src emacs-lisp
+(custom-set-variables
+ '(default-frame-alist
+    '((height . 55)
+      (width . 100)
+      (vertical-scroll-bars))))
+#+end_src
+
+* Packages
+
+Some packages are installed elsewhere for example org-mode specific packages are
+installed in the org-mode section.
 ** Undo tree
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -342,7 +396,7 @@ From [[https://stackoverflow.com/a/2680682/5795941][this stack overflow post]]
   :ensure t
   :config (global-undo-tree-mode))
 #+end_src
-*** Helm
+** Helm
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -367,7 +421,7 @@ We also add a few ourselves.
 #+begin_src emacs-lisp
 (helm-mode)
 #+end_src
-**** Remapped functions
+*** Remapped functions
 
      Notable remapped functions:
 - =M-x= adds helm when writing function
@@ -379,11 +433,11 @@ We also add a few ourselves.
   - =describe-function=
   - =describe-symbol=
 
-**** Powerful tools
+*** Powerful tools
 
 - =helm-grep-do-git-grep=
 
-*** Which-key
+** Which-key
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -404,7 +458,7 @@ Originally developped for spacemacs, now part of the standard emacs packages.
   (which-key-mode))
 #+end_src
 
-*** Standard autocomplete
+** Standard autocomplete
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -530,17 +584,347 @@ simple solution:
  (blink-cursor-mode 0)
  #+end_src
 
+** Magit
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+ The most amazing vim plugin in existence.
+
+ #+begin_src emacs-lisp
+ (use-package magit
+   :ensure t
+   :custom
+   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
+   (custom-set-variables '(magit-save-repository-buffers 'dontask))
+ #+end_src
+
+ #+RESULTS:
+
+** Yasnippet
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+ Note: package =yasnippet= doesn't come with the library of snippets but
+ =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
+ therefore we only need to install this one.
+ #+begin_src emacs-lisp :results none
+ (use-package yasnippet-snippets
+   :ensure t
+   :config (yas-global-mode 1))
+ #+end_src
+
+** RSS
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+ From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
+
+ #+begin_src emacs-lisp :results none
+ ;; data is stored in ~/.elfeed
+ (use-package elfeed :ensure t)
+ (setq elfeed-feeds
+       '(
+         ;; programming
+         ("https://news.ycombinator.com/rss" hacker)
+         ("https://www.heise.de/developer/rss/news-atom.xml" heise)
+         ("https://www.reddit.com/r/programming.rss" programming)
+         ("https://www.reddit.com/r/emacs.rss" emacs)
+
+         ;; programming languages
+         ("https://www.reddit.com/r/golang.rss" golang)
+         ("https://www.reddit.com/r/java.rss" java)
+         ("https://www.reddit.com/r/javascript.rss" javascript)
+         ("https://www.reddit.com/r/typescript.rss" typescript)
+         ("https://www.reddit.com/r/clojure.rss" clojure)
+         ("https://www.reddit.com/r/python.rss" python)
+
+         ;; cloud
+         ("https://www.reddit.com/r/aws.rss" aws)
+         ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
+         ("https://www.reddit.com/r/azure.rss" azure)
+         ("https://www.reddit.com/r/devops.rss" devops)
+         ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
+ ))
+
+ (setq-default elfeed-search-filter "@2-days-ago +unread")
+ (setq-default elfeed-search-title-max-width 100)
+ (setq-default elfeed-search-title-min-width 100)
+ #+end_src
+
+** Ergoemacs
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
+
+ [[https://ergoemacs.github.io][ergoemacs-mode website]]
+    #+begin_src emacs-lisp
+    (use-package ergoemacs-mode :ensure t
+      :config (setq ergoemacs-theme nil)
+              (setq ergoemacs-keyboard-layour "us")
+              (ergoemacs-mode 1))
+    #+end_src
+** Doom themes
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle no
+   :END:
+
+ #+begin_src emacs-lisp
+ (use-package doom-themes :ensure t
+   :config
+   ;; Global settings (defaults)
+   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+         doom-themes-enable-italic t) ; if nil, italics is universally disabled
+   (load-theme 'doom-one t)
+
+   ;; Enable flashing mode-line on errors
+   (doom-themes-visual-bell-config)
+
+   ;; Enable custom neotree theme (all-the-icons must be installed!)
+   (doom-themes-neotree-config)
+   ;; or for treemacs users
+   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+   (doom-themes-treemacs-config)
+
+   ;; Corrects (and improves) org-mode's native fontification.
+   (doom-themes-org-config))
+ #+end_src
+
+ - Ephemeral
+ - Solarized-dark
+ - sourcerer
+
+** keyfreq Key frequency data
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+This package keeps track of what keys are pressed most frequently and can show
+its data with =M-x keyfreq-show=.  I never use it but I thought the idea was
+cool so I installed it.
+
+One thing it does is that it normally stores it's data by default in
+=~/.emacs.keyfreq= which is annoying because it prevents me from getting
+=~/.emacs.d= as a tab completion candidate when I do =cd ~/.ema=.
+
+   #+begin_src emacs-lisp
+   (use-package keyfreq :ensure t
+     :config
+     (keyfreq-mode 1)
+     (keyfreq-autosave-mode 1)
+     (setq keyfreq-excluded-commands
+           '(self-insert-command
+             forward-char
+             backward-char
+             previous-line
+             next-line))
+     :custom
+     (keyfreq-file "~/.emacs.d/keyfreq")
+     )
+   #+end_src
+
+** Modus themes
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_quote
+Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA) - [[https://protesilaos.com/modus-themes/][Modus Themes]]
+#+end_quote
+
+#+begin_src emacs-lisp
+(use-package modus-themes :ensure t)
+#+end_src
+
+I am not loading the theme because I want to continue with built-in themes for now.
+
+** command-log-mode
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+ #+begin_src emacs-lisp
+ (use-package command-log-mode :ensure t)
+ #+end_src
+**** Commands                                                       :command:
+ | =global-command-log-mode=     | Activate command logging                   |
+ | =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
+
+** Languages
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+#+begin_src emacs-lisp
+(use-package yaml-mode :ensure t)
+(use-package ssh-config-mode :ensure t)
+(use-package cmake-mode :ensure t)
+(use-package vimrc-mode :ensure t)
+(use-package markdown-mode :ensure t)
+(use-package go-mode :ensure t)
+#+end_src
+
+** Vterm
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+Note that the first time you run =vterm= it will want to compile stuff.
+
+On UNIX systems it should work fine, UNIX running on a mac M1, make sure to have
+a very recent version of CMake.
+
+#+begin_src emacs-lisp
+(cond ((not (string-equal system-type "windows-nt"))
+       (use-package vterm
+         :ensure t
+         :config (progn (define-key leader-key (kbd "v") 'vterm)
+                        (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1)))))))
+#+end_src
+
+** Monokai themes
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+#+begin_src emacs-lisp
+(use-package monokai-pro-theme :ensure t :config (load-theme 'monokai-pro-classic))
+#+end_src
+
+** Modeline packages
+
+The default modeline is the best.
+
+*** doom modeline
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+
+The only one that looks good but it's missing a lot of information that maybe I
+would like to see like all the active modes.
+
+#+begin_src emacs-lisp
+(use-package doom-modeline
+  :ensure t
+:config
+;; (setq doom-modeline-font "all-the-icons")
+;; (setq doom-modeline-height 8)
+(setq doom-modeline-icon nil)
+(doom-modeline-mode 1))
+#+end_src
+
+*** powerline
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+
+See [[https://youtu.be/JWD1Fpdd4Pc?t=1299][Aaron Bieber on org mode]]
+
+I can't get this one to work right.  
+#+begin_src shell :results output
+mkdir -p ~/.emacs.d/vendor
+cd ~/.emacs.d/vendor
+git clone https://github.com/jonathanchu/emacs-powerline.git
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(add-to-list 'load-path "~/.emacs.d/vendor/emacs-powerline")
+(setq powerline-arrow-shape 'arrow)   ;; give your mode-line curves
+(require 'powerline)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(use-package powerline :ensure t)
+(powerline-evil-vim-color-theme)
+(setq powerline-arrow-shape 'arrow)   ;; give your mode-line curves
+#+end_src
+
+*** smart-mode-line (meh at best)
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
+
+#+begin_src emacs-lisp
+(use-package smart-mode-line :ensure t
+  :config
+  (setq sml/theme 'powerline)
+  (sml/setup))
+#+end_src
+
+#+RESULTS:
+: t
+
 
 * Helper functions
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
 
+** Remote open
 #+begin_src emacs-lisp
 (defun sci-open () (interactive)
 (helm-find-files-1 "/plink:phc001@hpcr5-in:/fs/homeu2/eccc/cmd/cmds/phc001/"))
 #+end_src
 
+
+** Buffer cleanup
+  :PROPERTIES:
+  :HEADER-ARGS: :tangle yes
+  :END:
+
+  #+begin_src emacs-lisp
+;; ref : https://www.emacswiki.org/emacs/KillingBuffers#toc2
+(setq not-to-kill-buffer-list '("#emacs" "irc.freenode.net:6667" "recentf"))
+(defun maybe-kill-buffer (buffer)
+  (let ((bname (buffer-name buffer)))
+    (unless (or (member bname not-to-kill-buffer-list)
+                (get-buffer-window buffer 'visible)
+                (cl-search "*" bname)
+                (cl-search "magit" bname))
+      (kill-buffer-ask buffer))))
+(defun maybe-kill-all-buffers ()
+  (interactive)
+  (mapc 'maybe-kill-buffer (delq (current-buffer) (buffer-list))))
+(defun almost-quit-emacs ()
+  (interactive)
+  (mapc 'maybe-kill-buffer (buffer-list))
+  (delete-frame))
+(defun kill-invisible-buffers ()
+  (interactive)
+  (dolist (buf (buffer-list))
+    (unless (get-buffer-window buf 'visible) (maybe-kill-buffer buf))))
+  #+end_src
+
+** Key to exit client
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+Depending on how a file was opened, its buffer may get killed when we quit.  For
+example if a file is not already opened and we do
+#+begin_src shell
+emacsclient -t FILE
+#+end_src
+and quit the client with =:q= in (=evil-mode=), then the buffer is also killed.
+This is nice if we're looking for vim-like behavior because we also get prompted
+to save the file.
+
+However, I might want to quit the client without doing that.
+
+Binding this to =C-x C-c= is also useful since =C-x C-c= is easy to do by
+mistake so having it quit the client instead of killing emacs is nice.
+
+#+begin_src emacs-lisp
+(defun close-client () (interactive)
+  (let ((proc (frame-parameter (selected-frame) 'client)))
+    (if proc
+        (with-no-warnings
+          (server-delete-client proc))
+      (dolist (process (process-list))
+        (set-process-query-on-exit-flag process nil))
+      (kill-emacs))))
+(global-set-key (kbd "C-x C-c") 'close-client)
+#+end_src
 
 * Orgmode & Agenda
 ** Orgmode
@@ -1797,215 +2181,6 @@ CLOCK: [2021-04-14 Wed 23:57]
 Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows")(...)))=
 
 * Other stuff
-** Languages
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-#+begin_src emacs-lisp
-(use-package yaml-mode :ensure t)
-(use-package ssh-config-mode :ensure t)
-(use-package cmake-mode :ensure t)
-(use-package vimrc-mode :ensure t)
-(use-package markdown-mode :ensure t)
-(use-package go-mode :ensure t)
-#+end_src
-
-** Buffer cleanup
-  :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
-  :END:
-
-  #+begin_src emacs-lisp
-;; ref : https://www.emacswiki.org/emacs/KillingBuffers#toc2
-(setq not-to-kill-buffer-list '("#emacs" "irc.freenode.net:6667" "recentf"))
-(defun maybe-kill-buffer (buffer)
-  (let ((bname (buffer-name buffer)))
-    (unless (or (member bname not-to-kill-buffer-list)
-                (get-buffer-window buffer 'visible)
-                (cl-search "*" bname)
-                (cl-search "magit" bname))
-      (kill-buffer-ask buffer))))
-(defun maybe-kill-all-buffers ()
-  (interactive)
-  (mapc 'maybe-kill-buffer (delq (current-buffer) (buffer-list))))
-(defun almost-quit-emacs ()
-  (interactive)
-  (mapc 'maybe-kill-buffer (buffer-list))
-  (delete-frame))
-(defun kill-invisible-buffers ()
-  (interactive)
-  (dolist (buf (buffer-list))
-    (unless (get-buffer-window buf 'visible) (maybe-kill-buffer buf))))
-  #+end_src
-
-** Magit
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-
- The most amazing vim plugin in existence.
-
- #+begin_src emacs-lisp
- (use-package magit
-   :ensure t
-   :custom
-   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-   (custom-set-variables '(magit-save-repository-buffers 'dontask))
- #+end_src
-
- #+RESULTS:
-
-** Yasnippet
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
- Note: package =yasnippet= doesn't come with the library of snippets but
- =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
- therefore we only need to install this one.
- #+begin_src emacs-lisp :results none
- (use-package yasnippet-snippets
-   :ensure t
-   :config (yas-global-mode 1))
- #+end_src
-
-** RSS
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-
- From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
-
- #+begin_src emacs-lisp :results none
- ;; data is stored in ~/.elfeed
- (use-package elfeed :ensure t)
- (setq elfeed-feeds
-       '(
-         ;; programming
-         ("https://news.ycombinator.com/rss" hacker)
-         ("https://www.heise.de/developer/rss/news-atom.xml" heise)
-         ("https://www.reddit.com/r/programming.rss" programming)
-         ("https://www.reddit.com/r/emacs.rss" emacs)
-
-         ;; programming languages
-         ("https://www.reddit.com/r/golang.rss" golang)
-         ("https://www.reddit.com/r/java.rss" java)
-         ("https://www.reddit.com/r/javascript.rss" javascript)
-         ("https://www.reddit.com/r/typescript.rss" typescript)
-         ("https://www.reddit.com/r/clojure.rss" clojure)
-         ("https://www.reddit.com/r/python.rss" python)
-
-         ;; cloud
-         ("https://www.reddit.com/r/aws.rss" aws)
-         ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
-         ("https://www.reddit.com/r/azure.rss" azure)
-         ("https://www.reddit.com/r/devops.rss" devops)
-         ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
- ))
-
- (setq-default elfeed-search-filter "@2-days-ago +unread")
- (setq-default elfeed-search-title-max-width 100)
- (setq-default elfeed-search-title-min-width 100)
- #+end_src
-
-** Ergoemacs
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle no
-   :END:
-
- [[https://ergoemacs.github.io][ergoemacs-mode website]]
-    #+begin_src emacs-lisp
-    (use-package ergoemacs-mode :ensure t
-      :config (setq ergoemacs-theme nil)
-              (setq ergoemacs-keyboard-layour "us")
-              (ergoemacs-mode 1))
-    #+end_src
-** Doom themes
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle no
-   :END:
-
- #+begin_src emacs-lisp
- (use-package doom-themes :ensure t
-   :config
-   ;; Global settings (defaults)
-   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-   (load-theme 'doom-one t)
-
-   ;; Enable flashing mode-line on errors
-   (doom-themes-visual-bell-config)
-
-   ;; Enable custom neotree theme (all-the-icons must be installed!)
-   (doom-themes-neotree-config)
-   ;; or for treemacs users
-   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-   (doom-themes-treemacs-config)
-
-   ;; Corrects (and improves) org-mode's native fontification.
-   (doom-themes-org-config))
- #+end_src
-
- - Ephemeral
- - Solarized-dark
- - sourcerer
-
-** keyfreq Key frequency data
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-
-This package keeps track of what keys are pressed most frequently and can show
-its data with =M-x keyfreq-show=.  I never use it but I thought the idea was
-cool so I installed it.
-
-One thing it does is that it normally stores it's data by default in
-=~/.emacs.keyfreq= which is annoying because it prevents me from getting
-=~/.emacs.d= as a tab completion candidate when I do =cd ~/.ema=.
-
-   #+begin_src emacs-lisp
-   (use-package keyfreq :ensure t
-     :config
-     (keyfreq-mode 1)
-     (keyfreq-autosave-mode 1)
-     (setq keyfreq-excluded-commands
-           '(self-insert-command
-             forward-char
-             backward-char
-             previous-line
-             next-line))
-     :custom
-     (keyfreq-file "~/.emacs.d/keyfreq")
-     )
-   #+end_src
-
-** command-log-mode
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-
- #+begin_src emacs-lisp
- (use-package command-log-mode :ensure t)
- #+end_src
-**** Commands                                                       :command:
- | =global-command-log-mode=     | Activate command logging                   |
- | =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
-
-** Modus themes
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-#+begin_quote
-Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA) - [[https://protesilaos.com/modus-themes/][Modus Themes]]
-#+end_quote
-
-#+begin_src emacs-lisp
-(use-package modus-themes :ensure t)
-#+end_src
-
-I am not loading the theme because I want to continue with built-in themes for now.
-
 ** =sg-lisp.el=
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -2049,27 +2224,6 @@ I am not loading the theme because I want to continue with built-in themes for n
 
 #+RESULTS:
 : sg-lisp
-
-** Vterm
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-Note that the first time you run =vterm= it will want to compile stuff.
-
-On UNIX systems it should work fine, UNIX running on a mac M1, make sure to have
-a very recent version of CMake.
-
-#+begin_src emacs-lisp
-(cond ((not (string-equal system-type "windows-nt"))
-       (use-package vterm
-         :ensure t
-         :config (progn (define-key leader-key (kbd "v") 'vterm)
-                        (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1)))))))
-#+end_src
-
-#+RESULTS:
-: t
 
 * Documentation
 :PROPERTIES:
@@ -2291,159 +2445,7 @@ fi
 #+end_src
 
 
-* Key to exit client
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-Depending on how a file was opened, its buffer may get killed when we quit.  For
-example if a file is not already opened and we do
-#+begin_src shell
-emacsclient -t FILE
-#+end_src
-and quit the client with =:q= in (=evil-mode=), then the buffer is also killed.
-This is nice if we're looking for vim-like behavior because we also get prompted
-to save the file.
-
-However, I might want to quit the client without doing that.
-
-Binding this to =C-x C-c= is also useful since =C-x C-c= is easy to do by
-mistake so having it quit the client instead of killing emacs is nice.
-
-#+begin_src emacs-lisp
-(defun close-client () (interactive)
-  (let ((proc (frame-parameter (selected-frame) 'client)))
-    (if proc
-        (with-no-warnings
-          (server-delete-client proc))
-      (dolist (process (process-list))
-        (set-process-query-on-exit-flag process nil))
-      (kill-emacs))))
-(global-set-key (kbd "C-x C-c") 'close-client)
-#+end_src
-
 * New stuff
-** System Crafters for auto-save files
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-From https://github.com/daviwil/emacs-from-scratch/blob/a57d99ba80276926a2b68521f9a9d23dc173a628/Emacs.org#keep-folders-clean
-#+begin_src emacs-lisp
-;; NOTE: If you want to move everything out of the ~/.emacs.d folder
-;; reliably, set `user-emacs-directory` before loading no-littering!
-;(setq user-emacs-directory "~/.cache/emacs")
-
-(use-package no-littering :ensure t)
-
-;; no-littering doesn't set this by default so we must place
-;; auto save files in the same path as it uses for sessions
-(setq auto-save-file-name-transforms
-      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
-#+end_src
-
-** Initial frame position
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-
-For non-server mode
-#+begin_src emacs-lisp
-(set-frame-position (selected-frame) 800 0)
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(custom-set-variables
- '(server-after-make-frame-hook
-   '((lambda nil
-       (set-frame-position
-        (selected-frame)
-        400 400)))))
-#+end_src
-#+begin_src emacs-lisp
-(add-hook 'after-make-frame-functions
-   (lambda (f) (set-frame-position f 400 10)))
-#+end_src
-
-
-#+begin_src emacs-lisp
-(custom-set-variables
- '(default-frame-alist
-    '((height . 55)
-      (width . 100)
-      (vertical-scroll-bars))))
-#+end_src
-
-
-** doom modeline
-:PROPERTIES:
-:HEADER-ARGS: :tangle no
-:END:
-
-#+begin_src emacs-lisp
-(use-package doom-modeline
-  :ensure t
-:config
-(setq doom-modeline-font "all-the-icons")
-(setq doom-modeline-height 8)
-(setq doom-modeline-icon t)
-(doom-modeline-mode 1))
-#+end_src
-
-
-** Monokai themes
-:PROPERTIES:
-:HEADER-ARGS: :tangle no
-:END:
-#+begin_src emacs-lisp
-(use-package monokai-pro-theme :ensure t :config (load-theme 'monokai-pro-classic))
-#+end_src
-
-
-** Aaron Bieber's modeline
-
-How does he get this powerline: https://youtu.be/JWD1Fpdd4Pc?t=1299
-
-I must have it!
-
-** smart-mode-line (meh at best)
-:PROPERTIES:
-:HEADER-ARGS: :tangle no
-:END:
-
-#+begin_src emacs-lisp
-(use-package smart-mode-line :ensure t
-  :config
-  (setq sml/theme 'powerline)
-  (sml/setup))
-(use-package powerline :ensure t)
-#+end_src
-
-
-** powerline
-:PROPERTIES:
-:HEADER-ARGS: :tangle no
-:END:
-
-
-
-#+begin_src shell :results output
-mkdir -p ~/.emacs.d/vendor
-cd ~/.emacs.d/vendor
-git clone https://github.com/jonathanchu/emacs-powerline.git
-#+end_src
-#+begin_src emacs-lisp :tangle yes
-(use-package powerline :ensure t)
-(setq powerline-arrow-shape 'arrow)   ;; give your mode-line curves
-#+end_src
-
-
-
-
-
-
-
 ** which command
 
 For debugging, it is useful to be able to do a kind of =which= from within Emacs
@@ -2471,22 +2473,6 @@ Original implementation before I discovered it already existed
            (message "%s not found in PATH" cmd))))
 #+end_src
 
-
-#+begin_src emacs-lisp :tangle no
-(call-process "ls" nil nil nil "/home/phc001s")
-(shell-command-to-string "ls")
-(process-lines "ls")
-(call-process-shell-command "(exit 65)" nil nil nil )
-(defun subprocess.run (shell-cmd)
-  (let ((code 0) (output "piss") (tmp-output ""))
-    (setq output (with-output-to-string
-                   (with-current-buffer standard-output
-                     (setq code (shell-command shell-cmd t)))))
-    (list code output)))
-(subprocess.run "ls")
-(nth 1 l)
-#+end_src
-
 ** Server experiment
 :PROPERTIES:
 :HEADER-ARGS: :tangle no
@@ -2494,7 +2480,7 @@ Original implementation before I discovered it already existed
 Reading this:
 [[ https://www.gnu.org/software/emacs/manual/html_node/emacs/TCP-Emacs-server.html]]
 I thought I could set something up to have a single emacs server running for
-my whole local home netork.
+my whole local home network.
 
 #+begin_src emacs-lisp
 (setq server-host "0.0.0.0")
@@ -2512,9 +2498,6 @@ changed the 0.0.0.0 to the IP of the computer where I started the daemon:
 
 Then on the client computer, I launched =emacsclient --server-file <file>=.
 It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
-
-
-
 
 ** Window movements
 :PROPERTIES:
