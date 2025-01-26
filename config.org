@@ -482,19 +482,7 @@ Originally developped for spacemacs, now part of the standard emacs packages.
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
   :END:
-*** Description
-Evil-mode is a by far the best VI emulation out there.  It is very exact.
-
-The only thing that is very different is that not all buffers are going to be in
-evil mode.
-
-At the start, this the most confusing thing in the world.  Once you get used to
-it it's not a big deal.  After a while, you still make mistakes in that sense
-but if you thought you were in evil mode and you pressed the wrong key, you know
-how to fix it.  It becomes like pressing backspace when you make a typo,
-something barely noticed.
-*** Config
-**** Package evil
+*** Package evil
 #+begin_src emacs-lisp :results none
 (use-package evil
   :ensure t
@@ -533,7 +521,7 @@ the TAB key doesn't work properly.
 
 Reference : [[https://www.youtube.com/watch?v=xaZMwNELaJY][Emacs From Scratch #3 : Keybindings and Evil]] et la config de Sam.
 
-**** Package evil-escape
+*** Package evil-escape
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
@@ -550,7 +538,25 @@ Allow the use of =jk= to do =ESC=.
   (add-hook 'evil-visual-state-exit-hook (lambda () (evil-escape-mode 1))))
 #+end_src
 
-**** Making search results stay hightlighted
+Note that this package makes "jk" go to =evil-normal-state= even if we are not
+in one of the vi modes.  For example, I have decided that modes other than the
+regualr text one would not be in regular emacs mode.  This is so that I can use
+the regular documented keys in things like the agenda.
+
+Now when I'm in the agenda, =j= and =k= do their non-evil function, but if I
+press them fast, it activates =evil-normal-state-map= and now they move the
+cursor up and down.
+
+This is totally fine because after years of using this package I only discovered
+this today.
+
+Another nice benefit is getting back into =evil-normal-state=.  Sometimes I
+press =C-z= which puts me in =evil-emacs-state= and I try to press escape, which
+doesn't work and I would have to do =M-x evil-normal-state RET= (=SPC SPC ...=
+would just insert two spaces in =evil-emacs-state=) but since =jk= is a global
+binding, then it does take me out of =evil-emacs-state=.
+
+*** Making search results stay hightlighted
 
 This suggestion from [[https://stackoverflow.com/a/34252236/5795941][Stack
 Overflow: Emacs + Evil: non incremental search and persistent highlighting?]]
@@ -570,26 +576,40 @@ simple solution:
 :config (global-evil-search-highlight-persist t))
 #+end_src
 
+*** Add certain keys to all modes
+
+I want to use regular emacs bindings everywhere except in text but I have some
+exceptions that include window movement.  Otherwise it's really annoying to do
+=C-w l= to go right and not be able to do =C-w h= to go back.
+
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-w") evil-window-map)
+#+end_src
+
+#+begin_src emacs-lisp
+(define-key help-mode-map (kbd "SPC") 'leader-key)
+#+end_src
 *** Cursor blinking
 
- Le curseur flash tout le temps (le comporttement par défaut est de flashe 10
- fois avant d'arrêter).
+Make the cursor blink only in insert state.  This is of limited usefulness
+because in the terminal, it seems like the cursor can simply never blink
+and in the GUI, I make the cursor go green in insert mode so the blinking
+doesn't help beause I already have the information from the cursor color.
 
  #+begin_src emacs-lisp
+ (blink-cursor-mode 0)
+ #+end_src
+
+
+ #+begin_src emacs-lisp :tangle no
  (add-hook 'evil-insert-state-exit-hook (lambda () (blink-cursor-mode 0)))
- (add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 0)))
+ (add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 1)))
  #+end_src
 
  This sets the amount of cursor blinks before the flashing stop.
 
  #+begin_src emacs-lisp
  (setq blink-cursor-blinks 0)
- #+end_src
-
- Make sure the cursor starts out not blinking
-
- #+begin_src emacs-lisp
- (blink-cursor-mode 0)
  #+end_src
 
 ** Magit
@@ -2507,19 +2527,3 @@ changed the 0.0.0.0 to the IP of the computer where I started the daemon:
 Then on the client computer, I launched =emacsclient --server-file <file>=.
 It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
 
-** Window movements
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-I want to use regular emacs bindings everywhere except in text but I have some
-exceptions that include window movement.  Otherwise it's really annoying to do
-=C-w l= to go right and not be able to do =C-w h= to go back.
-
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-w") evil-window-map)
-#+end_src
-
-#+begin_src emacs-lisp
-(define-key help-mode-map (kbd "SPC") 'leader-key)
-#+end_src
