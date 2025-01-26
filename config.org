@@ -1373,47 +1373,48 @@ Not sure if I like this, trying it for now.
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
-*** Platform dependant =org-agenda-dir= variable
+
 We use a single directory to hold our agenda files.  We create a symbol holding
 that directory depending on the system we are on.
- #+begin_src emacs-lisp :results none
- (cond ((string-equal system-type "windows-nt") (setq org-agenda-dir
- ; "/plink:phc001@hpcr5-in:/fs/homeu2/eccc/cmd/cmds/phc001/Documents/gtd/"))
-;; "C:\Users\Carphinp\OneDrive\Documents\gtd"))
- "C:/Users/Carphinp/OneDrive/Documents/gtd"))
-       ((string-equal system-type "darwin") (setq org-agenda-dir
- "~/Documents/gtd"))
-       ((string-equal system-type "gnu/linux") (setq org-agenda-dir
- "~/Documents/gtd")))
- #+end_src
+
+#+begin_src emacs-lisp :results none
+(setq my/org-agenda-dir
+      (cond
+       ((string-equal system-type "windows-nt")
+        ;; "/plink:phc001@hpcr5-in:/fs/homeu2/eccc/cmd/cmds/phc001/Documents/gtd/")
+        "C:/Users/Carphinp/OneDrive/Documents/gtd")
+       ((string-equal system-type "darwin")
+        "~/Documents/gtd/")
+       ((string-equal system-type "gnu/linux")
+        "~/Documents/gtd/")))
+#+end_src
 
 Note: On Windows, =~= refers to something like
 =C:\Users\CarphinP\AppData\Roaming\= rather than =C:\Users\CarphinP\=
-*** Org agenda files
 This is the variable that org looks at for files containing agenda items.
  #+begin_src emacs-lisp
- (setq org-agenda-files (list org-agenda-dir))
+ (setq org-agenda-files (list my/org-agenda-dir))
  #+end_src
 
-*** Filename symbols
-Create symbols holding the paths to GTD files
- #+begin_src emacs-lisp
- (setq gtd-in-tray-file (concat org-agenda-dir "/" "GTD_InTray.org")
-       gtd-next-actions-file (concat org-agenda-dir "/" "GTD_NextActions.org")
-       gtd-project-list-file (concat org-agenda-dir "/" "GTD_ProjectList.org")
-       ;; gtd-work-project-list-file (concat org-agenda-dir "GTD_Work_ProjectList.org")
-       gtd-reference-file (concat org-agenda-dir "/" "GTD_Reference.org")
-       ;; gtd-work-reference-file (concat org-agenda-dir "GTD_Work_Reference.org")
-       gtd-someday-maybe-file (concat org-agenda-dir "/" "GTD_SomedayMaybe.org")
-       gtd-tickler-file (concat org-agenda-dir "/" "GTD_Tickler.org")
-       gtd-journal-file (concat org-agenda-dir "/" "GTD_Journal.org")
-       gtd-habits-file (concat org-agenda-dir "/" "GTD_Habits.org")
-       gtd-email-file (concat org-agenda-dir "/" "GTD_Emails.org"))
- #+end_src
 *** Quick access to GTD files
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
+**** Filename symbols
+Create symbols holding the paths to GTD files
+ #+begin_src emacs-lisp
+ (setq gtd-in-tray-file (concat my/org-agenda-dir "/" "GTD_InTray.org")
+       gtd-next-actions-file (concat my/org-agenda-dir "/" "GTD_NextActions.org")
+       gtd-project-list-file (concat my/org-agenda-dir "/" "GTD_ProjectList.org")
+       ;; gtd-work-project-list-file (concat my/org-agenda-dir "GTD_Work_ProjectList.org")
+       gtd-reference-file (concat my/org-agenda-dir "/" "GTD_Reference.org")
+       ;; gtd-work-reference-file (concat my/org-agenda-dir "GTD_Work_Reference.org")
+       gtd-someday-maybe-file (concat my/org-agenda-dir "/" "GTD_SomedayMaybe.org")
+       gtd-tickler-file (concat my/org-agenda-dir "/" "GTD_Tickler.org")
+       gtd-journal-file (concat my/org-agenda-dir "/" "GTD_Journal.org")
+       gtd-habits-file (concat my/org-agenda-dir "/" "GTD_Habits.org")
+       gtd-email-file (concat my/org-agenda-dir "/" "GTD_Emails.org"))
+ #+end_src
 **** Commands
 #+begin_src emacs-lisp
 (defun gtd-open-in-tray              () (interactive) (find-file gtd-in-tray-file))
@@ -1451,20 +1452,18 @@ Create symbols holding the paths to GTD files
  because the I put =org-agenda= on a keymap for my GTD stuff.
 
  #+begin_src emacs-lisp
-(define-prefix-command 'org-agenda-keys)
-(define-key leader-key (kbd "a") 'org-agenda-keys)
-(define-key org-agenda-keys (kbd "a") 'org-agenda)
+(define-prefix-command 'my/org-agenda-keys)
+(define-key leader-key (kbd "a") 'my/org-agenda-keys)
+(define-key my/org-agenda-keys (kbd "a") 'org-agenda)
  #+end_src
 
-** Refile targets SUPER COOL!
+** Add =org-agenda-files= as refile targets
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
 Move items around with =org-refile=.  This controls how refile choices are presented.
  #+begin_src emacs-lisp
  (setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
- (setq org-outline-path-complete-in-steps nil)
- (setq org-refile-use-outline-path 'file)
  #+end_src
 
  Ref : https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
@@ -1718,14 +1717,14 @@ This is equivalent to launching =org-agenda= and pressing a.
 non-prefix key.
 
 #+begin_src emacs-lisp
-(define-key org-agenda-keys (kbd "g") 'gtd-agenda-view)
-(define-key org-agenda-keys (kbd "h") 'gtd-habits-view)
-(define-key org-agenda-keys (kbd "c") 'gtd-review-view)
-(define-key org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
-(define-key org-agenda-keys (kbd "w n") 'gtd-work-next-action-sparse-tree)
+(define-key my/org-agenda-keys (kbd "g") 'gtd-agenda-view)
+(define-key my/org-agenda-keys (kbd "h") 'gtd-habits-view)
+(define-key my/org-agenda-keys (kbd "c") 'gtd-review-view)
+(define-key my/org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
+(define-key my/org-agenda-keys (kbd "w n") 'gtd-work-next-action-sparse-tree)
 #+end_src
 
-**** Always show graph
+*** Always show graph
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
@@ -1929,14 +1928,14 @@ by using =let= to temporarily set =org-agenda-files=.
        (phc-restricted-agenda-list (list "/ssh:ppp4:/home/for000/Documents/gtd")))
 #+end_src
 
-**** Keys
+*** Keys
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
 #+begin_src emacs-lisp
-(define-key org-agenda-keys (kbd "w v") 'work-agenda-view)
-(define-key org-agenda-keys (kbd "w f") 'for000-agenda-view)
-(define-key org-agenda-keys (kbd "w p") 'publish-work-agenda-views)
+(define-key my/org-agenda-keys (kbd "w v") 'work-agenda-view)
+(define-key my/org-agenda-keys (kbd "w f") 'for000-agenda-view)
+(define-key my/org-agenda-keys (kbd "w p") 'publish-work-agenda-views)
 #+end_src
 
 | =SPC a w v= | =work-agenda-view= |
