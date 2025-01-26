@@ -954,6 +954,45 @@ mistake so having it quit the client instead of killing emacs is nice.
 #+end_src
 
 * Orgmode
+** Center cursor after shift-tab in orgmode
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+ Places the current line in the center of the screen after a =S-TAB= in orgmode.
+ #+begin_src emacs-lisp
+ (defun org-post-global-cycle () (interactive)
+   (recenter)
+   (org-beginning-of-line))
+ ;; This one is the new fuction
+ (advice-add 'org-cycle-global
+   :after #'org-post-global-cycle)
+ ;; This one is the old function which is now aliased to org-cycle-global
+ (advice-add 'org-global-cycle
+   :after #'org-post-global-cycle)
+ #+end_src
+
+See [[help:advice-add]], basically, we can ask Emacs to add code to be run
+before and/or after an emacs function is run.
+
+Note that in more recent org mode, the function that gets called on =S-TAB= is
+=org-cycle-global= and they do =(defalias 'org-global-cycle #'org-cycle-global)=
+for backward compatibility.  However adding advice to =org-global-cycle= does
+not do anything when =org-cycle-globa= is called.
+
+ You can use this to remove the "advice".
+ #+begin_src emacs-lisp :tangle no
+ (advice-remove 'org-global-cycle #'org-post-global-cycle)
+ #+end_src
+
+** Startup visibility
+   :PROPERTIES:
+   :HEADER-ARGS: :tangle yes
+   :END:
+
+#+begin_src emacs-lisp
+(custom-set-variables '(org-startup-folded t))
+#+end_src
+
 ** Changer l'apparence de contenu caché
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -1201,45 +1240,6 @@ would produce an Emacs LISP SRC block.
 (add-to-list 'org-structure-template-alist '("el" . "src emacs-lisp"))
 (add-to-list 'org-structure-template-alist '("py" . "src python"))
 #+end_src
-** Center cursor after shift-tab in orgmode
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
- Places the current line in the center of the screen after a =S-TAB= in orgmode.
- #+begin_src emacs-lisp
- (defun org-post-global-cycle () (interactive)
-   (recenter)
-   (org-beginning-of-line))
- ;; This one is the new fuction
- (advice-add 'org-cycle-global
-   :after #'org-post-global-cycle)
- ;; This one is the old function which is now aliased to org-cycle-global
- (advice-add 'org-global-cycle
-   :after #'org-post-global-cycle)
- #+end_src
-
-See [[help:advice-add]], basically, we can ask Emacs to add code to be run
-before and/or after an emacs function is run.
-
-Note that in more recent org mode, the function that gets called on =S-TAB= is
-=org-cycle-global= and they do =(defalias 'org-global-cycle #'org-cycle-global)=
-for backward compatibility.  However adding advice to =org-global-cycle= does
-not do anything when =org-cycle-globa= is called.
-
- You can use this to remove the "advice".
- #+begin_src emacs-lisp :tangle no
- (advice-remove 'org-global-cycle #'org-post-global-cycle)
- #+end_src
-
-** Startup visibility
-   :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
-   :END:
-
-#+begin_src emacs-lisp
-(custom-set-variables '(org-startup-folded t))
-#+end_src
-
 ** Inline images
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -1368,14 +1368,89 @@ Not sure if I like this, trying it for now.
 (setq org-habit-show-habits-only-for-today nil)
 #+end_src
 
+*** Enable the module
+#+begin_src emacs-lisp
+(add-to-list 'org-modules 'org-habit)
+(eval-after-load 'org
+  '(org-load-modules-maybe t))
+#+end_src
+
+*** Customizations from a post
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintaining-habits-using-orgmode/][this post]]
+#+begin_src emacs-lisp
+;; Log TODO creation
+(setq org-treat-insert-todo-heading-as-state-change t)
+;; log into LOGBOOK drawer
+(setq org-log-into-drawer t)
+#+end_src
+
 ** Org-id
 
 #+begin_src emacs-lisp
 (add-to-list 'org-modules 'org-id t)
 #+end_src
 
+** Configure Refile
+
+#+begin_src emacs-lisp
+(setq org-outline-path-complete-in-steps nil)
+(setq org-refile-use-outline-path 'file)
+(setq org-refile-allow-creating-parent-nodes 'confirm)
+#+end_src
+
+** System Crafter's org-present config
+    :PROPERTIES:
+    :HEADER-ARGS: :tangle no
+    :END:
+
+   From System-crafter's config.
+     #+begin_src emacs-lisp
+     (defun dw/org-present-prepare-slide ()
+     (org-overview)
+     (org-show-entry)
+     (org-show-children))
+
+   (defun dw/org-present-hook ()
+     (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
+                                        (header-line (:height 4.5) variable-pitch)
+                                        (org-code (:height 1.55) org-code)
+                                        (org-verbatim (:height 1.55) org-verbatim)
+                                        (org-block (:height 1.25) org-block)
+                                        (org-block-begin-line (:height 0.7) org-block)))
+     (setq header-line-format " ")
+     (org-display-inline-images)
+     (dw/org-present-prepare-slide))
+
+   (defun dw/org-present-quit-hook ()
+     (setq-local face-remapping-alist '((default variable-pitch default)))
+     (setq header-line-format nil)
+     (org-present-small)
+     (org-remove-inline-images))
+
+   (defun dw/org-present-prev ()
+     (interactive)
+     (org-present-prev)
+     (dw/org-present-prepare-slide))
+
+   (defun dw/org-present-next ()
+     (interactive)
+     (org-present-next)
+     (dw/org-present-prepare-slide))
+
+   (use-package org-present
+     :bind (:map org-present-mode-keymap
+            ("C-c C-j" . dw/org-present-next)
+            ("C-c C-k" . dw/org-present-prev))
+     :hook ((org-present-mode . dw/org-present-hook)
+            (org-present-mode-quit . dw/org-present-quit-hook)))
+     #+end_src
+
 * Agenda
-** Agena files
+** Set agenda files
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -1477,7 +1552,7 @@ Move items around with =org-refile=.  This controls how refile choices are prese
 *** Keys                                                              :keys:
     | =C-c C-w=     | =org-refile= | Move headline under cursor to somewhere else |
     | =C-u C-c C-w= | =org-refile= | Go to selected target (no real refiling)     |
-** Capture templates
+** Create capture templates
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -1513,42 +1588,7 @@ Don't show the file and control spacing so that all entries are aligned.
   (setq org-agenda-prefix-format  '((agenda . "    %-12t%-12s")))
 #+end_src
 
-** Keys                                                               :keys:
-
-    | =f,b=   | Forward, backward in time              |
-    | =n,p=   | Next, previous line                    |
-    | =d=     | Switch to day view                     |
-    | =w=     | Switch to week view                    |
-    | =m=     | Mark entry                             |
-    | =B=     | Do bulk action to marked entries       |
-    | =C-u B= | Do bulk action with universal argument |
-
-** Org Habits
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-#+begin_src emacs-lisp
-(add-to-list 'org-modules 'org-habit)
-(eval-after-load 'org
-  '(org-load-modules-maybe t))
-#+end_src
-
-** Advanced orgmode and GTD
-*** Customizations from a post
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintaining-habits-using-orgmode/][this post]]
-#+begin_src emacs-lisp
-;; Log TODO creation
-(setq org-treat-insert-todo-heading-as-state-change t)
-;; log into LOGBOOK drawer
-(setq org-log-into-drawer t)
-#+end_src
-
-*** Todo keywords for GTD
+** Define new todo keywords for GTD
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -1587,7 +1627,7 @@ can be.
 
 
   #+REVEAL: split
-*** Definition of stuck projects
+** Definition of stuck projects
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -1604,7 +1644,7 @@ This says that a stuck project is a headline where the todo keyword is
         ""))                   ;; General regex
 #+end_src
 
-*** Date interval for agenda view
+** Date interval for agenda view
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -1621,7 +1661,7 @@ The way this is set, it will show 7 days starting 2 days in the past.
       org-agenda-start-day "-2d")
 #+end_src
 
-**** Advancing by 7 days with =f/b= despite the span not being 7
+*** Advancing by 7 days with =f/b= despite the span not being 7
 
 With 9 as the span, pressing =f= which does =org-agenda-later= advances by 9
 days which is annoying.  I want it to move by 7 days.
@@ -1656,9 +1696,9 @@ ended up with these two functions and as far as I can tell they do the right thi
 (define-key org-agenda-mode-map (kbd "f") 'my/org-agenda-next-week)
 #+end_src
 
-*** Agenda custom commands
+** Agenda custom commands
    These depend on my todo keywords so they are not part of the basic agenda config.
-**** Definition
+*** Definition
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -1685,7 +1725,7 @@ ended up with these two functions and as far as I can tell they do the right thi
 
 Run the agenda with "c" custom command.
 
-**** Agenda view commands
+*** Agenda view commands
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -1715,7 +1755,7 @@ This is equivalent to launching =org-agenda= and pressing a.
   (org-agenda nil "gn"))
 #+end_src
 
-**** Agenda view hotkeys
+*** Agenda view hotkeys
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
@@ -1773,14 +1813,14 @@ has no effect."
 
 See also : https://www.reddit.com/r/orgmode/comments/efrcoe/orghabit_graph_not_aligned_properly/
 
-*** Closing notes
+** Prompt for closing notes when change from a not-done state to a done state
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
 #+begin_src emacs-lisp :results none
 (setq org-log-done 'note)
 #+end_src
-*** Agenda mode map customization
+** Agenda mode map customization
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -1821,7 +1861,7 @@ NOTE: I would normally just do the =(define-key org-agenda-mode-map (kbd "SPC")
 way but I don't remember why.  My guess is that the map might not exist at the
 time when the =define-key= gets run.
 
-*** Search result visibility
+** Search result visibility
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -1839,59 +1879,12 @@ export only what is visible to html.  (Or one could export to .org as a way of
         (default . local)))
 #+end_src
 
-*** System Crafter's org-present config
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle no
-    :END:
-
-   From System-crafter's config.
-     #+begin_src emacs-lisp
-     (defun dw/org-present-prepare-slide ()
-     (org-overview)
-     (org-show-entry)
-     (org-show-children))
-
-   (defun dw/org-present-hook ()
-     (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
-                                        (header-line (:height 4.5) variable-pitch)
-                                        (org-code (:height 1.55) org-code)
-                                        (org-verbatim (:height 1.55) org-verbatim)
-                                        (org-block (:height 1.25) org-block)
-                                        (org-block-begin-line (:height 0.7) org-block)))
-     (setq header-line-format " ")
-     (org-display-inline-images)
-     (dw/org-present-prepare-slide))
-
-   (defun dw/org-present-quit-hook ()
-     (setq-local face-remapping-alist '((default variable-pitch default)))
-     (setq header-line-format nil)
-     (org-present-small)
-     (org-remove-inline-images))
-
-   (defun dw/org-present-prev ()
-     (interactive)
-     (org-present-prev)
-     (dw/org-present-prepare-slide))
-
-   (defun dw/org-present-next ()
-     (interactive)
-     (org-present-next)
-     (dw/org-present-prepare-slide))
-
-   (use-package org-present
-     :bind (:map org-present-mode-keymap
-            ("C-c C-j" . dw/org-present-next)
-            ("C-c C-k" . dw/org-present-prev))
-     :hook ((org-present-mode . dw/org-present-hook)
-            (org-present-mode-quit . dw/org-present-quit-hook)))
-     #+end_src
-
-*** Specific agenda files
+** Specific agenda files
 
 Functions for creating agenda views from a certain set of files.  This is done
 by using =let= to temporarily set =org-agenda-files=.
 
-**** Generic function
+*** Generic function
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
@@ -1901,7 +1894,7 @@ by using =let= to temporarily set =org-agenda-files=.
   (let ((org-agenda-files agenda-files))
     (org-agenda-list)))
 #+end_src
-**** Export and publish my agenda views
+*** Export and publish my agenda views
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
@@ -1921,7 +1914,7 @@ by using =let= to temporarily set =org-agenda-files=.
          (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
 #+end_src
 
-**** Work Agenda view
+*** Work Agenda view
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
@@ -1948,7 +1941,7 @@ by using =let= to temporarily set =org-agenda-files=.
 | =SPC a w f= | =for000-agenda-view= |
 | =SPC a w f= | =for000-agenda-view= |
 
-*** Open phil's agenda
+** Open phil's agenda
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
@@ -1960,9 +1953,19 @@ This requires only stock emacs
        (let ((org-agenda-files (list "/ssh:ppp4:/home/phc001/public_org/")))
          (org-agenda-list)))
 #+end_src
+** Keys                                                               :keys:
+
+    | =f,b=   | Forward, backward in time              |
+    | =n,p=   | Next, previous line                    |
+    | =d=     | Switch to day view                     |
+    | =w=     | Switch to week view                    |
+    | =m=     | Mark entry                             |
+    | =B=     | Do bulk action to marked entries       |
+    | =C-u B= | Do bulk action with universal argument |
+
 * Leader Keymap
   :PROPERTIES:
-  :HEADER-ARGS: :tangle yes
+  :HEADER-ARGS: :tangle yes :results none
   :END:
 Structured keymap inspired by spacemacs. The leader key is =M-m= and =SPC= in
 evil normal mode.
