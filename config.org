@@ -633,6 +633,10 @@ doesn't help beause I already have the information from the cursor color.
    (custom-set-variables '(magit-save-repository-buffers 'dontask))
  #+end_src
 
+#+begin_src emacs-lisp
+(add-hook 'with-editor-mode-hook #'(lambda () (company-mode -1)))
+#+end_src
+
 ** Yasnippet
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
