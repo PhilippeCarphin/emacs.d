@@ -146,7 +146,7 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 #+end_src
 ** Get rid of scroll bars
 :PROPERTIES:
-:header-args: :tangle yes
+:header-args: :tangle no
 :END:
 
 The scrollbar is messed up for org mode files it seems.
@@ -629,9 +629,9 @@ doesn't help beause I already have the information from the cursor color.
 
  #+begin_src emacs-lisp :tangle no
  (add-hook 'evil-insert-state-exit-hook 
-           (lambda () (blink-cursor-mode 0)))
+           (lambda () (setq visible-cursor nil)))
  (add-hook 'evil-insert-state-entry-hook
-           (lambda () (blink-cursor-mode 1)))
+           (lambda () (setq visible-cursor t)))
  #+end_src
 
  This sets the amount of cursor blinks before the flashing stop.
@@ -639,6 +639,27 @@ doesn't help beause I already have the information from the cursor color.
  #+begin_src emacs-lisp
  (setq blink-cursor-blinks 0)
  #+end_src
+
+*** Set cursor blink off in terminal
+
+According to the documentation, =cursor-blink-mode= has no effect on the
+terminal.
+
+However this
+[[https://stackoverflow.com/questions/14270758/blink-cursor-mode-with-nicer-blinking][Stack Overflow post]]
+showed that setting =visible-cursor= to =nil= stops the blinking in the terminal
+which is indeed true.
+
+#+begin_src emacs-lisp
+(setq visible-cursor nil)
+#+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(add-hook 'evil-insert-state-exit-hook 
+        (lambda () (setq visible-cursor nil)))
+(add-hook 'evil-insert-state-entry-hook
+        (lambda () (setq visible-cursor t)))
+#+end_src
 
 ** Magit
    :PROPERTIES:
