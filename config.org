@@ -857,7 +857,9 @@ a very recent version of CMake.
        (use-package vterm
          :ensure t
          :config (progn (define-key leader-key (kbd "v") 'vterm)
-                        (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1)))))))
+                        (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1)))
+                        ;; Somewhat inelegane because I don't need this at home
+                        (setq vterm-shell "ssh localhost")))))
 #+end_src
 
 ** Monokai themes
