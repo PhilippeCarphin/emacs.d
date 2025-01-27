@@ -16,11 +16,18 @@ function main(){
 	-k) emacsclient -t -c -e '(save-buffers-kill-emacs)' ;;
 	-K) kill_emacs_by_pid ;;
 	-s) emacs --daemon ;;
-	-g)  gui_open "$@" ;;
-	-t) : -t ; emacsclient "$@" ;;
-	*)  : no -t ; emacsclient -t "$@" ;;
+	-g) gui_open "$@" ;;
+	-t) shift ; _emacsclient_t "$@" ;;
+	*)  : no -t ; _emacsclient_t "$@" ;;
     esac
 }
+_emacsclient_t(){
+    if [[ $(uname) == Linux ]] && ! [[ -S $TMPDIR/emacs66553/server ]] ; then
+        exec $HOME/fs1/bin/vim -p "$@"
+    fi
+    emacsclient -t "$@"
+}
+
 
 function gui_open(){
     ensure-server-is-running
