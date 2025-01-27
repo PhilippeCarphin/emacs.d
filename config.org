@@ -1784,6 +1784,7 @@ ended up with these two functions and as far as I can tell they do the right thi
           (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
         ("h" "Habits" tags "STYLE=\"habit\"" ((org-agenda-overriding-header "Habits")))
         ("g" . "GTD keyword searches searches")
+        ("gt" todo "TODO")
         ("gi" todo "GTD-IN")
         ("gc" todo "GTD-CLARIFY")
         ("ga" todo "GTD-ACTION")
@@ -2570,4 +2571,21 @@ It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
                ;; (message "Repo dir is %s" repo-dir)
                (helm-find-files-1 (replace-regexp-in-string "\n" "/" repo-dir)))))
 (define-key files (kbd "g") 'repos-find-files)
+#+end_src
+
+** Org Context tags                                                  :@work:
+
+#+begin_src emacs-lisp
+(setq org-tag-alist '(("@work" . ?W)))
+#+end_src
+
+
+#+begin_src emacs-lisp
+(defun my/org-local-tags-view () (interactive)
+       (let ((org-agenda-files (list (buffer-file-name))))
+         (call-interactively 'org-tags-view)))
+
+(defun my/org-local-todos () (interactive)
+       (let ((org-agenda-files (list (buffer-file-name))))
+         (org-agenda nil "gt")))
 #+end_src
