@@ -2556,3 +2556,18 @@ changed the 0.0.0.0 to the IP of the computer where I started the daemon:
 Then on the client computer, I launched =emacsclient --server-file <file>=.
 It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
 
+** Open file from repo
+
+#+begin_src emacs-lisp
+(defun repos-get-names () (interactive)
+       (string-split (shell-command-to-string "repos -list-names") "\n"))
+(defun repos-find-files () (interactive)
+       (let ((repo (completing-read
+                    "Select a repos: "
+                    (sort (repos-get-names) 'string<))))
+         ;; (message "You selected %s" repo)
+         (let ((repo-dir (shell-command-to-string (concat "repos -get-dir " repo))))
+               ;; (message "Repo dir is %s" repo-dir)
+               (helm-find-files-1 (replace-regexp-in-string "\n" "/" repo-dir)))))
+(define-key files (kbd "g") 'repos-find-files)
+#+end_src
