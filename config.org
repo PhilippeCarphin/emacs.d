@@ -131,6 +131,7 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 :END:
 #+begin_src emacs-lisp
 (setq indent-tabs-mode nil)
+(setq-default indent-tabs-mode nil)
 #+end_src
 ** Get rid of toolbar
 :PROPERTIES:
