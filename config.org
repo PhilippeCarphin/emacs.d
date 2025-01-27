@@ -28,11 +28,14 @@ args.
 The column view is only activated everywhere after point so it is best to go to
 the top of the file before activating it.
 
-To get out of column view do =C-c C-e=
+To get out of column view do =C-c C-c=
 
 To edit the value in a column, do =e= while the cursor is on that property.
 
 ** Custom set variables
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
 
 Some of the settings are done with =(custom-set-variables '(var value))=.  This
 is not necessarily the best way to do it in the config but two things happen
@@ -117,7 +120,8 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 ** Define the config file
 
 #+begin_src emacs-lisp
-(setq my/emacs-config-file (concat user-emacs-directory "config.org"))
+(setq my/emacs-config-file
+      (concat user-emacs-directory "config.org"))
 #+end_src
 
 * Small basic configs
@@ -141,8 +145,11 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 #+end_src
 ** Get rid of scroll bars
 :PROPERTIES:
-:header-args: :tangle no
+:header-args: :tangle yes
 :END:
+
+The scrollbar is messed up for org mode files it seems.
+
 #+begin_src emacs-lisp
 (scroll-bar-mode -1)
 #+end_src
@@ -166,7 +173,7 @@ This will be bound to =M-m= and in evil-normal-state-map to =SPC=.
 Highlight the current line.  This looks really good with the theme =leuven= but
 it is kind of annoying in =misterioso=.
 #+begin_src emacs-lisp
-(global-hl-line-mode 1)
+(add-hook 'prog-mode-hook 'hl-line-mode)
 #+end_src
 
 ** Cursor style
@@ -267,7 +274,8 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
    :END:
     I use :q to quit
  #+begin_src emacs-lisp
- (global-set-key (kbd "C-x C-c") 'save-buffers-kill-emacs)
+ (global-set-key (kbd "C-x C-c")
+                 'save-buffers-kill-emacs)
  #+end_src
 
 ** Visual line mode markers
@@ -276,7 +284,9 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 :END:
 
 #+begin_src emacs-lisp
-(custom-set-variables '(visual-line-fringe-indicators '(left-curly-arrow right-curly-arrow)))
+(custom-set-variables
+ '(visual-line-fringe-indicators
+   '(left-curly-arrow right-curly-arrow)))
 #+end_src
 ** Line numbers
 :PROPERTIES:
@@ -284,6 +294,13 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 :END:
 
 Display line numbers except in orgmode.
+  #+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook
+            #'(lambda () (display-line-numbers-mode t)))
+  ;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
+  #+end_src
+  
+*** Failed attempt
 
 First I tried to do it in the most obvious way, turn it on globally and turn it
 off when entering =org-mode= but that caused absolutely everything except
@@ -292,20 +309,17 @@ off when entering =org-mode= but that caused absolutely everything except
 - Helm buffers
 - Terminals
 
-  #+begin_src emacs-lisp :tangle no
-  ;; (global-display-line-numbers-mode)
-  ;; (add-hook 'org-mode-hook '(lambda () (display-line-numbers-mode -1)))
-  #+end_src
+#+begin_src emacs-lisp :tangle no
+(global-display-line-numbers-mode)
+(add-hook 'org-mode-hook
+          '(lambda () (display-line-numbers-mode -1)))
+#+end_src
 
 So what I needed to do was to leave it off globally and turn it on for some
 modes.  =prog-mode= is the right thing except it misses certain things for
 which progmode doesn't get turned on when it should.  For example,
 =/etc/profile= on my Mac since it doesn't have a shebang.
 
-  #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook #'(lambda () (display-line-numbers-mode t)))
-  ;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
-  #+end_src
 ** Activate recent files mode
 
 This is needed for Emacs to save recently operated on files which which will
@@ -338,30 +352,34 @@ From [[https://stackoverflow.com/a/2680682/5795941][this stack overflow post]]
 
 #+begin_src emacs-lisp
 (setq backup-directory-alist '(("." . "~/.emacs.d/backup"))
-  backup-by-copying t    ; Don't delink hardlinks
-  version-control t      ; Use version numbers on backups
-  delete-old-versions t  ; Automatically delete excess backups
-  kept-new-versions 20   ; how many of the newest versions to keep
-  kept-old-versions 5    ; and how many of the old
-  )
+      backup-by-copying t    ; Don't delink hardlinks
+      version-control t      ; Use version numbers on backups
+      delete-old-versions t  ; Automatically delete excess backups
+      kept-new-versions 20   ; how many of the newest versions to keep
+      kept-old-versions 5)   ; and how many of the old
 #+end_src
+
 ** System Crafters for auto-save files
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
 
-From https://github.com/daviwil/emacs-from-scratch/blob/a57d99ba80276926a2b68521f9a9d23dc173a628/Emacs.org#keep-folders-clean
+From
+[[https://github.com/daviwil/emacs-from-scratch/blob/a57d99ba80276926a2b68521f9a9d23dc173a628/Emacs.org#keep-folders-clean]]
+NOTE: If you want to move everything out of the ~/.emacs.d folder
+reliably, set `user-emacs-directory` before loading no-littering!
+=(setq user-emacs-directory "~/.cache/emacs")=
 #+begin_src emacs-lisp
-;; NOTE: If you want to move everything out of the ~/.emacs.d folder
-;; reliably, set `user-emacs-directory` before loading no-littering!
-;(setq user-emacs-directory "~/.cache/emacs")
-
 (use-package no-littering :ensure t)
+#+end_src
 
-;; no-littering doesn't set this by default so we must place
-;; auto save files in the same path as it uses for sessions
+The =no-littering= doesn't set this by default so we must place auto save files
+in the same path as it uses for sessions
+#+begin_src emacs-lisp
 (setq auto-save-file-name-transforms
-      `((".*" ,(no-littering-expand-var-file-name "auto-save/") t)))
+      `((".*" ,
+         (no-littering-expand-var-file-name "auto-save/")
+         t)))
 #+end_src
 
 ** Initial frame position
@@ -385,7 +403,8 @@ For non-server mode
 
 #+begin_src emacs-lisp
 (add-hook 'after-make-frame-functions
-   (lambda (f) (set-frame-position f 400 10)))
+          (lambda (f)
+            (set-frame-position f 400 10)))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -435,9 +454,10 @@ We also add a few ourselves.
 #+begin_src emacs-lisp
 (helm-mode)
 #+end_src
+
 *** Remapped functions
 
-     Notable remapped functions:
+Notable remapped functions:
 - =M-x= adds helm when writing function
 - Files and buffers
   - =helm-recentf=
@@ -464,12 +484,10 @@ Originally developped for spacemacs, now part of the standard emacs packages.
 (use-package which-key
   :ensure t
   :delight
-  :init
-  (setq which-key-separator " ")
-  (setq which-key-prefix-prefix "+")
-  (setq which-key-idle-delay 0.01)
-  :config
-  (which-key-mode))
+  :init (setq which-key-separator " ")
+        (setq which-key-prefix-prefix "+")
+        (setq which-key-idle-delay 0.01)
+  :config (which-key-mode))
 #+end_src
 
 ** Standard autocomplete
@@ -504,10 +522,10 @@ Originally developped for spacemacs, now part of the standard emacs packages.
           ;; because if I forget I'm in insert mode and I do 'C-w', it
           ;; deletes a word which is very annoying
           (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
-          ;; TODO Use evil-set-undo-system or something
+	        (evil-set-undo-system 'undo-redo)
           (global-set-key (kbd "M-u") 'universal-argument)
           (setq evil-default-state 'emacs)
-	  (define-key evil-emacs-state-map (kbd "ESC ESC") 'evil-normal-state)
+	        (define-key evil-emacs-state-map (kbd "ESC ESC") 'evil-normal-state)
           (setq evil-insert-state-modes nil)
           (setq evil-motion-state-modes nil)
           (setq evil-normal-state-modes '(fundamental-mode
@@ -515,9 +533,9 @@ Originally developped for spacemacs, now part of the standard emacs packages.
                                           prog-mode
                                           text-mode
                                           dired))
-          (setq evil-insert-state-cursor '((box . 2) "lime green")
-              evil-normal-state-cursor '(box "yellow")
-	      evil-emacs-state-cursor '(box "red"))
+          (setq evil-insert-state-cursor '((box . 2) "lime green"))
+          (setq evil-normal-state-cursor '(box "yellow"))
+	  (setq evil-emacs-state-cursor '(box "red"))
           (setq evil-move-cursor-back nil)
           (add-hook 'with-editor-mode-hook 'evil-insert-state))
 #+end_src
@@ -537,11 +555,12 @@ Allow the use of =jk= to do =ESC=.
 #+begin_src emacs-lisp
 (use-package evil-escape
   :ensure t
-  :config
-  (evil-escape-mode)
-  (setq-default evil-escape-key-sequence "jk")
-  (add-hook 'evil-visual-state-entry-hook (lambda () (evil-escape-mode -1)))
-  (add-hook 'evil-visual-state-exit-hook (lambda () (evil-escape-mode 1))))
+  :config (evil-escape-mode)
+          (setq-default evil-escape-key-sequence "jk")
+          (add-hook 'evil-visual-state-entry-hook
+                    (lambda () (evil-escape-mode -1)))
+          (add-hook 'evil-visual-state-exit-hook
+                    (lambda () (evil-escape-mode 1))))
 #+end_src
 
 Note that this package makes "jk" go to =evil-normal-state= even if we are not
@@ -579,7 +598,7 @@ simple solution:
 
 #+begin_src emacs-lisp :tangle yes
 (use-package evil-search-highlight-persist :ensure t
-:config (global-evil-search-highlight-persist t))
+  :config (global-evil-search-highlight-persist t))
 #+end_src
 
 *** Add certain keys to all modes
@@ -608,8 +627,10 @@ doesn't help beause I already have the information from the cursor color.
 
 
  #+begin_src emacs-lisp :tangle no
- (add-hook 'evil-insert-state-exit-hook (lambda () (blink-cursor-mode 0)))
- (add-hook 'evil-insert-state-entry-hook (lambda () (blink-cursor-mode 1)))
+ (add-hook 'evil-insert-state-exit-hook 
+           (lambda () (blink-cursor-mode 0)))
+ (add-hook 'evil-insert-state-entry-hook
+           (lambda () (blink-cursor-mode 1)))
  #+end_src
 
  This sets the amount of cursor blinks before the flashing stop.
@@ -628,9 +649,9 @@ doesn't help beause I already have the information from the cursor color.
  #+begin_src emacs-lisp
  (use-package magit
    :ensure t
-   :custom
-   (magit-display-buffer-function #'magit-display-buffer-same-window-except-diff-v1))
-   (custom-set-variables '(magit-save-repository-buffers 'dontask))
+   :custom (magit-display-buffer-function
+            #'magit-display-buffer-same-window-except-diff-v1))
+ (custom-set-variables '(magit-save-repository-buffers 'dontask))
  #+end_src
 
 #+begin_src emacs-lisp
@@ -639,93 +660,93 @@ doesn't help beause I already have the information from the cursor color.
 
 ** Yasnippet
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
- Note: package =yasnippet= doesn't come with the library of snippets but
- =yasnippet-snippets= comes with them and has =yasnippet= as a dependency
- therefore we only need to install this one.
- #+begin_src emacs-lisp :results none
- (use-package yasnippet-snippets
-   :ensure t
-   :config (yas-global-mode 1))
- #+end_src
+Note: package =yasnippet= doesn't come with the library of snippets but
+=yasnippet-snippets= comes with them and has =yasnippet= as a dependency
+therefore we only need to install this one.
+#+begin_src emacs-lisp :results none
+(use-package yasnippet-snippets
+  :ensure t
+  :config (yas-global-mode 1))
+#+end_src
 
 ** RSS
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
 
- From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
+From [[https://gerlacdt.github.io/posts/emacs-elfeed/][Emacs as an RSS reader]]
 
- #+begin_src emacs-lisp :results none
- ;; data is stored in ~/.elfeed
- (use-package elfeed :ensure t)
- (setq elfeed-feeds
-       '(
-         ;; programming
-         ("https://news.ycombinator.com/rss" hacker)
-         ("https://www.heise.de/developer/rss/news-atom.xml" heise)
-         ("https://www.reddit.com/r/programming.rss" programming)
-         ("https://www.reddit.com/r/emacs.rss" emacs)
+#+begin_src emacs-lisp :results none
+;; data is stored in ~/.elfeed
+(use-package elfeed :ensure t)
+(setq elfeed-feeds
+      '(
+        ;; programming
+        ("https://news.ycombinator.com/rss" hacker)
+        ("https://www.heise.de/developer/rss/news-atom.xml" heise)
+        ("https://www.reddit.com/r/programming.rss" programming)
+        ("https://www.reddit.com/r/emacs.rss" emacs)
 
-         ;; programming languages
-         ("https://www.reddit.com/r/golang.rss" golang)
-         ("https://www.reddit.com/r/java.rss" java)
-         ("https://www.reddit.com/r/javascript.rss" javascript)
-         ("https://www.reddit.com/r/typescript.rss" typescript)
-         ("https://www.reddit.com/r/clojure.rss" clojure)
-         ("https://www.reddit.com/r/python.rss" python)
+        ;; programming languages
+        ("https://www.reddit.com/r/golang.rss" golang)
+        ("https://www.reddit.com/r/java.rss" java)
+        ("https://www.reddit.com/r/javascript.rss" javascript)
+        ("https://www.reddit.com/r/typescript.rss" typescript)
+        ("https://www.reddit.com/r/clojure.rss" clojure)
+        ("https://www.reddit.com/r/python.rss" python)
 
-         ;; cloud
-         ("https://www.reddit.com/r/aws.rss" aws)
-         ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
-         ("https://www.reddit.com/r/azure.rss" azure)
-         ("https://www.reddit.com/r/devops.rss" devops)
-         ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
- ))
+        ;; cloud
+        ("https://www.reddit.com/r/aws.rss" aws)
+        ("https://www.reddit.com/r/googlecloud.rss" googlecloud)
+        ("https://www.reddit.com/r/azure.rss" azure)
+        ("https://www.reddit.com/r/devops.rss" devops)
+        ("https://www.reddit.com/r/kubernetes.rss" kubernetes)
+))
 
- (setq-default elfeed-search-filter "@2-days-ago +unread")
- (setq-default elfeed-search-title-max-width 100)
- (setq-default elfeed-search-title-min-width 100)
- #+end_src
+(setq-default elfeed-search-filter "@2-days-ago +unread")
+(setq-default elfeed-search-title-max-width 100)
+(setq-default elfeed-search-title-min-width 100)
+#+end_src
 
 ** Ergoemacs
    :PROPERTIES:
    :HEADER-ARGS: :tangle no
    :END:
 
- [[https://ergoemacs.github.io][ergoemacs-mode website]]
-    #+begin_src emacs-lisp
-    (use-package ergoemacs-mode :ensure t
-      :config (setq ergoemacs-theme nil)
-              (setq ergoemacs-keyboard-layour "us")
-              (ergoemacs-mode 1))
-    #+end_src
+[[https://ergoemacs.github.io][ergoemacs-mode website]]
+#+begin_src emacs-lisp
+(use-package ergoemacs-mode :ensure t
+  :config (setq ergoemacs-theme nil)
+          (setq ergoemacs-keyboard-layour "us")
+          (ergoemacs-mode 1))
+#+end_src
 ** Doom themes
    :PROPERTIES:
    :HEADER-ARGS: :tangle no
    :END:
 
- #+begin_src emacs-lisp
- (use-package doom-themes :ensure t
-   :config
-   ;; Global settings (defaults)
-   (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-         doom-themes-enable-italic t) ; if nil, italics is universally disabled
-   (load-theme 'doom-one t)
+#+begin_src emacs-lisp
+(use-package doom-themes :ensure t
+  :config
+  ;; Global settings (defaults)
+  (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+        doom-themes-enable-italic t) ; if nil, italics is universally disabled
+  (load-theme 'doom-one t)
 
-   ;; Enable flashing mode-line on errors
-   (doom-themes-visual-bell-config)
+  ;; Enable flashing mode-line on errors
+  (doom-themes-visual-bell-config)
 
-   ;; Enable custom neotree theme (all-the-icons must be installed!)
-   (doom-themes-neotree-config)
-   ;; or for treemacs users
-   (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
-   (doom-themes-treemacs-config)
+  ;; Enable custom neotree theme (all-the-icons must be installed!)
+  (doom-themes-neotree-config)
+  ;; or for treemacs users
+  (setq doom-themes-treemacs-theme "doom-colors") ; use the colorful treemacs theme
+  (doom-themes-treemacs-config)
 
-   ;; Corrects (and improves) org-mode's native fontification.
-   (doom-themes-org-config))
- #+end_src
+  ;; Corrects (and improves) org-mode's native fontification.
+  (doom-themes-org-config))
+#+end_src
 
  - Ephemeral
  - Solarized-dark
@@ -744,21 +765,19 @@ One thing it does is that it normally stores it's data by default in
 =~/.emacs.keyfreq= which is annoying because it prevents me from getting
 =~/.emacs.d= as a tab completion candidate when I do =cd ~/.ema=.
 
-   #+begin_src emacs-lisp
-   (use-package keyfreq :ensure t
-     :config
-     (keyfreq-mode 1)
-     (keyfreq-autosave-mode 1)
-     (setq keyfreq-excluded-commands
-           '(self-insert-command
-             forward-char
-             backward-char
-             previous-line
-             next-line))
-     :custom
-     (keyfreq-file "~/.emacs.d/keyfreq")
-     )
-   #+end_src
+#+begin_src emacs-lisp
+(use-package keyfreq :ensure t
+  :config
+  (keyfreq-mode 1)
+  (keyfreq-autosave-mode 1)
+  (setq keyfreq-excluded-commands
+        '(self-insert-command
+          forward-char
+          backward-char
+          previous-line
+          next-line))
+  :custom (keyfreq-file "~/.emacs.d/keyfreq"))
+#+end_src
 
 ** Modus themes
 :PROPERTIES:
@@ -780,12 +799,12 @@ I am not loading the theme because I want to continue with built-in themes for n
    :HEADER-ARGS: :tangle yes
    :END:
 
- #+begin_src emacs-lisp
- (use-package command-log-mode :ensure t)
- #+end_src
+#+begin_src emacs-lisp
+(use-package command-log-mode :ensure t)
+#+end_src
 **** Commands                                                       :command:
- | =global-command-log-mode=     | Activate command logging                   |
- | =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
+| =global-command-log-mode=     | Activate command logging                   |
+| =clm/open-command-log-buffer= | Open command log buffer for demonstrations |
 
 ** Languages
 :PROPERTIES:
@@ -882,9 +901,8 @@ git clone https://github.com/jonathanchu/emacs-powerline.git
 
 #+begin_src emacs-lisp
 (use-package smart-mode-line :ensure t
-  :config
-  (setq sml/theme 'powerline)
-  (sml/setup))
+  :config (setq sml/theme 'dark)
+          (sml/setup))
 #+end_src
 
 * Helper functions
@@ -895,7 +913,8 @@ git clone https://github.com/jonathanchu/emacs-powerline.git
 ** Remote open
 #+begin_src emacs-lisp
 (defun sci-open () (interactive)
-(helm-find-files-1 "/plink:phc001@hpcr5-in:/fs/homeu2/eccc/cmd/cmds/phc001/"))
+       (helm-find-files-1
+        "/plink:phc001@hpcr5-in:/fs/homeu2/eccc/cmd/cmds/phc001/"))
 #+end_src
 
 ** Buffer cleanup
@@ -903,9 +922,11 @@ git clone https://github.com/jonathanchu/emacs-powerline.git
   :HEADER-ARGS: :tangle yes
   :END:
 
-  #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 ;; ref : https://www.emacswiki.org/emacs/KillingBuffers#toc2
-(setq not-to-kill-buffer-list '("#emacs" "irc.freenode.net:6667" "recentf"))
+(setq not-to-kill-buffer-list
+      '("#emacs" "irc.freenode.net:6667" "recentf"))
+
 (defun maybe-kill-buffer (buffer)
   (let ((bname (buffer-name buffer)))
     (unless (or (member bname not-to-kill-buffer-list)
@@ -913,18 +934,24 @@ git clone https://github.com/jonathanchu/emacs-powerline.git
                 (cl-search "*" bname)
                 (cl-search "magit" bname))
       (kill-buffer-ask buffer))))
+
 (defun maybe-kill-all-buffers ()
   (interactive)
-  (mapc 'maybe-kill-buffer (delq (current-buffer) (buffer-list))))
+  (mapc 'maybe-kill-buffer
+        (delq (current-buffer) (buffer-list))))
+
 (defun almost-quit-emacs ()
   (interactive)
   (mapc 'maybe-kill-buffer (buffer-list))
   (delete-frame))
+
 (defun kill-invisible-buffers ()
   (interactive)
   (dolist (buf (buffer-list))
-    (unless (get-buffer-window buf 'visible) (maybe-kill-buffer buf))))
-  #+end_src
+    (unless
+        (get-buffer-window buf 'visible)
+      (maybe-kill-buffer buf))))
+#+end_src
 
 ** Key to exit client
 :PROPERTIES:
@@ -947,13 +974,13 @@ mistake so having it quit the client instead of killing emacs is nice.
 
 #+begin_src emacs-lisp
 (defun close-client () (interactive)
-  (let ((proc (frame-parameter (selected-frame) 'client)))
-    (if proc
-        (with-no-warnings
-          (server-delete-client proc))
-      (dolist (process (process-list))
-        (set-process-query-on-exit-flag process nil))
-      (kill-emacs))))
+       (let ((proc (frame-parameter (selected-frame) 'client)))
+         (if proc
+             (with-no-warnings
+               (server-delete-client proc))
+           (dolist (process (process-list))
+             (set-process-query-on-exit-flag process nil))
+           (kill-emacs))))
 (global-set-key (kbd "C-x C-c") 'close-client)
 #+end_src
 
@@ -965,14 +992,14 @@ mistake so having it quit the client instead of killing emacs is nice.
  Places the current line in the center of the screen after a =S-TAB= in orgmode.
  #+begin_src emacs-lisp
  (defun org-post-global-cycle () (interactive)
-   (recenter)
-   (org-beginning-of-line))
+        (recenter)
+        (org-beginning-of-line))
  ;; This one is the new fuction
  (advice-add 'org-cycle-global
-   :after #'org-post-global-cycle)
+             :after #'org-post-global-cycle)
  ;; This one is the old function which is now aliased to org-cycle-global
  (advice-add 'org-global-cycle
-   :after #'org-post-global-cycle)
+             :after #'org-post-global-cycle)
  #+end_src
 
 See [[help:advice-add]], basically, we can ask Emacs to add code to be run
@@ -983,10 +1010,10 @@ Note that in more recent org mode, the function that gets called on =S-TAB= is
 for backward compatibility.  However adding advice to =org-global-cycle= does
 not do anything when =org-cycle-globa= is called.
 
- You can use this to remove the "advice".
- #+begin_src emacs-lisp :tangle no
- (advice-remove 'org-global-cycle #'org-post-global-cycle)
- #+end_src
+You can use this to remove the "advice".
+#+begin_src emacs-lisp :tangle no
+(advice-remove 'org-global-cycle #'org-post-global-cycle)
+#+end_src
 
 ** Startup visibility
    :PROPERTIES:
@@ -1002,12 +1029,12 @@ not do anything when =org-cycle-globa= is called.
    :HEADER-ARGS: :tangle yes
    :END:
 
-  #+begin_src emacs-lisp
-(defun configure-ellipsis () (set-display-table-slot standard-display-table
-  'selective-display (string-to-vector " ⤵")))
-
+#+begin_src emacs-lisp
+(defun configure-ellipsis ()
+  (set-display-table-slot standard-display-table
+                          'selective-display (string-to-vector " ⤵")))
 (add-hook 'org-mode-hook 'configure-ellipsis)
-  #+end_src
+#+end_src
 
 From [[https://emacs.stackexchange.com/a/10988/19972][Référence]].  You can copy
 paste any unicode character in here from a browser
@@ -1074,7 +1101,8 @@ and =reveal=.  Not sure if this is still necessary.
 (use-package ox-rst :ensure t)
 (use-package ox-twbs :ensure t)
 (use-package ox-reveal :ensure t
-  :config (setq org-reveal-root "https://cdn.jsdelivr.net/npm/reveal.js"))
+  :config (setq org-reveal-root
+                "https://cdn.jsdelivr.net/npm/reveal.js"))
 (use-package htmlize :ensure t)
 (require 'ox-man)
 (add-to-list 'org-export-backends 'gfm)
@@ -1109,9 +1137,9 @@ We simply add languages that we want to become available.  There are many more
 but some of them require installing extra packages.
 
 #+begin_src emacs-lisp
-  (org-babel-do-load-languages 'org-babel-load-languages
-                               '((shell . t)
-                                 (python . t)))
+(org-babel-do-load-languages 'org-babel-load-languages
+                             '((shell . t)
+                               (python . t)))
 #+end_src
 
 *** Disable prompt
@@ -1137,9 +1165,9 @@ surprised that a command runs when the press enter in a shell.
 When tweaking the document and frequently exporting, it can be useful to not run
 every block each time we export.
 
-    #+begin_src emacs-lisp
-    (setq org-export-use-babel t)
-    #+end_src
+#+begin_src emacs-lisp
+(setq org-export-use-babel t)
+#+end_src
 
 With this setting, code blocks are not evaluated on export but if their output
 is there, it will go in the export regardless of this setting.
@@ -1167,9 +1195,9 @@ print(f'{greeting} world!')
    :HEADER-ARGS: :tangle yes
    :END:
 
-    #+begin_src emacs-lisp
-    (setq initial-major-mode 'org-mode)
-    #+end_src
+#+begin_src emacs-lisp
+(setq initial-major-mode 'org-mode)
+#+end_src
 
 #+begin_src emacs-lisp
 (setq initial-scratch-message "\
@@ -1191,26 +1219,28 @@ then enter the text in that file's own buffer.
 
   This adds the "Present" menu at the top with menu item "Present Now".
 
-  #+begin_src emacs-lisp :results none
-    (defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
-    (defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
-    (defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
-    (defun ox-html () (interactive) (browse-url (org-html-export-to-html nil t)))
-    (defun ox-html-all () (interactive) (browse-url (org-html-export-to-html nil nil)))
-    (defun ox-rst () (interactive) (org-open-file (org-rst-export-to-rst nil t)))
-    (defun ox-rst-all () (interactive) (org-open-file (org-rst-export-to-rst nil nil)))
-    (easy-menu-define present-menu org-mode-map
-      "Menu for word navigation commands."
-      '("Present"
-        ["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
-        ["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
-        ["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
-        ["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
-        ["View RST Right Now (C-c C-e C-s r R)" ox-rst]
-        ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
-        ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
-        ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
-  #+end_src
+#+begin_src emacs-lisp :results none
+(defun ox-reveal () (interactive) (org-reveal-export-to-html-and-browse nil t))
+(defun ox-twbs () (interactive) (browse-url (org-twbs-export-to-html nil t)))
+(defun ox-twbs-all () (interactive) (browse-url (org-twbs-export-to-html nil nil)))
+(defun ox-html () (interactive) (browse-url (org-html-export-to-html nil t)))
+(defun ox-html-all () (interactive) (browse-url (org-html-export-to-html nil nil)))
+(defun ox-rst () (interactive) (org-open-file (org-rst-export-to-rst nil t)))
+(defun ox-rst-all () (interactive) (org-open-file (org-rst-export-to-rst nil nil)))
+(easy-menu-define present-menu org-mode-map
+  "Menu for word navigation commands."
+  '("Present"
+    ["Present Right Now (C-c C-e R B)" org-reveal-export-to-html-and-browse]
+    ["Present Subtree Right Now (C-c C-e C-s R B)" ox-reveal]
+    ["View Twitter Bootstrap HTML Right now (C-c C-e C-s w o)" ox-twbs]
+    ["View Twitter Bootstrap HTML all Right now (C-c C-e w o)" ox-twbs-all]
+    ["View RST Right Now (C-c C-e C-s r R)" ox-rst]
+    ["View RST All Right Now (C-c C-e r R)" ox-rst-all]
+    ["View straight-pipe HTML Right Now (C-c C-e C-s h o)" ox-html]
+    ["View straight-pipe HTML All Right Now (C-c C-e h o)" ox-html-all]))
+#+end_src
+
+*** TODO Probably rename those functions
 
 ** Insert src block for terminal
 
@@ -1261,9 +1291,10 @@ would produce an Emacs LISP SRC block.
 
 #+begin_src emacs-lisp
 (use-package org-present :ensure t
-  :config
-  (add-hook 'org-present-mode-hook (lambda () (load-theme 'leuven)))
-  (add-hook 'org-present-mode-quit-hook (lambda () (disable-theme 'leuven))) )
+  :config (add-hook 'org-present-mode-hook
+                    (lambda () (load-theme 'leuven)))
+          (add-hook 'org-present-mode-quit-hook 
+                    (lambda () (disable-theme 'leuven))) )
 #+end_src
 
 ** Babel Colorize RESULTS
@@ -1290,7 +1321,10 @@ From [[https://emacs.stackexchange.com/a/63562/19972][this Stack Overflow post b
    :END:
 
 #+begin_src emacs-lisp
-(add-hook 'org-mode-hook (lambda () (electric-indent-mode 0) (org-indent-mode 1)))
+(add-hook 'org-mode-hook
+          (lambda ()
+            (electric-indent-mode 0)
+            (org-indent-mode 1)))
 #+end_src
 
 Orgmode, please don't mess with me by indenting source blocks.
@@ -1309,7 +1343,7 @@ Works for outline headings and for plain lists alike."
   (interactive "P")
   (org-insert-heading-respect-content arg)
   (cond ((org-at-heading-p) (org-do-demote))
-        ((org-at-item-p) (org-indent-item))))
+	((org-at-item-p) (org-indent-item))))
 #+end_src
 
 #+begin_src emacs-lisp
@@ -1843,8 +1877,10 @@ every single mode out there.
 However, doing =j= and =k= is a hard habbit to lose.  So I just remap the keys
 to print a message.
 #+begin_src emacs-lisp
+(add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode -1)))
 (add-hook 'org-agenda-mode-hook (lambda ()
 (define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
+					    (hl-line-mode -1)
   (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
 - Tulku: Cranston; Lamont Cranston.
 - Lamont Cranston: You know my real name?
@@ -2442,6 +2478,9 @@ fi
 
 * New stuff
 ** which command
+:PROPERTIES:
+:HEADER-ARGS: :tangle no
+:END:
 
 For debugging, it is useful to be able to do a kind of =which= from within Emacs
 to get what the server will run when we ask it to run an external command.
