@@ -1972,16 +1972,17 @@ by using =let= to temporarily set =org-agenda-files=.
 #+begin_src emacs-lisp
 (defun publish-work-agenda-views () (interactive)
        (let ((org-agenda-files (list
-                                "~/Documents/gtd/GTD_Work_Reference.org"
-                                "~/Documents/gtd/GTD_Work_ProjectList.org"
-                                "~/Documents/gtd/GTD_Work_Habits.org"))
+                                gtd-in-tray-file
+				gtd-project-list-file
+                                gtd-habits-file
+                                gtd-next-actions-file))
              (org-agenda-span 40)
              (org-agenda-start-day "-5d"))
-         (org-agenda-list)
-         (org-agenda-write "/ssh:ppp4:/home/phc001/public_html/files/phil-agenda-from-home.html")
-         (org-agenda-write "/ssh:apt-imac:/Users/pcarphin/Documents/GitHub/phil-website/server/resources/public/phil-work-agenda.html")
-         (shell-command "scp ~/Documents/gtd/GTD_Work_ProjectList.org ppp4:~/public_org/GTD_Work_ProjectList.org")
-         (shell-command "scp ~/Documents/gtd/GTD_Work_Reference.org ppp4:~/public_org/GTD_Work_Reference.org")))
+         (org-agenda nil "c")
+         (org-agenda-write "/home/phc001/public_html/files/phil-agenda-from-home.html")
+         (org-agenda nil "h")
+         (org-agenda-write "/home/phc001/public_html/files/phil-agenda-habits.html")
+))
 #+end_src
 
 *** Work Agenda view
