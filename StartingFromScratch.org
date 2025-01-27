@@ -1,0 +1,77 @@
+#+TITLE: StartingFromScratch
+
+This is for Vim users who are starting with no prior knowledge of Emacs by doing
+everything from scratch.
+
+We're going to install the package =evil= and turn on =evil-mode= so our editor
+becomes usable.
+
+Follow along with me and learn some useful Emacs knowledge along the way.
+
+The Emacs config file is =~/.emacs.d/init.el= so open that file
+#+begin_src shell
+mkdir -p ~/.emacs.d/
+emacs ~/.emacs.d/init.el
+#+end_src
+
+The equivalent of =:= in Vim to enter command mode is =M-x= (Alt-x, or Option-X
+on a Mac).  We want to do =M-x package-install RET=.  We enter =evil= and
+nothing.
+
+Evil comes from =melpa=, a package repository so we need to add that. 
+#+begin_src emacs-lisp
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+#+end_src
+
+Now the first cool thing I want to teach you: we're not going to save this and
+restart Emacs for it to take effect.  Instead position your cursor at the very
+end of the line and do =C-x C-e= which is =eval-last-sexp=.
+
+Now we can run =M-x package-refresh-contents RET= which will fetch the list of
+available packages from the new repository.
+
+Now we can run =M-x package-install RET evil RET= and see the package =evil= get
+installed.  It goes into =~/.emacs.d/elpa=.
+
+This gives us the function =evil-mode= which we can run with =M-x evil-mode
+RET=.
+
+And we're done (almost).
+
+If we save and quit and restart Emacs, when we press 'j', it just inserts a 'j'
+in our file (gross!).
+
+We can open up our config file with =C-x C-f ~/.emacs.d/init.el RET= and add the
+call to the function =evil-mode= in that file.
+
+#+begin_src emacs-lisp
+(evil-mode)
+#+end_src
+
+And you can turn on evil mode by doing =C-x C-e= with your cursor at the end of
+that line.
+
+This is a very useful tip when you're working on your config because you don't
+have to constantly be reloading the whole file.
+
+Now =:wq= to save and quit and restart and press j/k and it should move your
+cursor showing that your Emacs starts up in evil mode.
+
+* Appendix
+
+** Other startup files
+
+Make sure none of the other files =~/.emacs=, =~/.emacs.el=,
+=~/.config/emacs/init.el= don't exist).  It can be any of those files but I made
+this choice because Emacs will put a bunch of stuff in =~/.emacs.d= anyway so I
+like everything being in that directory.
+
+** The =(custom-set-variables ...)=
+
+You may notice that Emacs puts stuff in your config file with a comment that
+basically says not to mess with it.
+
+Just leave it there and don't mess with it.
+
+Emacs has an interface that allows you to configure stuff and have it remember
+things and that's where those things go.

@@ -1,0 +1,192 @@
+#+TITLE: Timestamps, todo items and the agenda
+#+STARTUP: fold
+
+* Timestamps
+
+| =C-c .=   | =org-time-stamp=          | Insert a timestamp           |
+| =C-c C-s= | =org-schedule=            | Scedule an item              |
+| =C-c C-d= | =org-deadline=            | Set a deadline               |
+|           | =org-time-stamp-inactive= | Insert an inactive timestamp |
+
+[[info:org#Timestamps][org#Timestamps]] 
+
+Timestamps can be written by hand
+#+begin_example
+- <2025-01-26 Sun>,
+- <2025-01-26>,
+- <2025-01-26 Sun 10:00>
+#+end_example
+but the keys above bring up a little date chooser.
+
+It starts out with the current date selected which we can change with
+
+| Move by day | Move by day | Move by month | Move by year |
+|-------------+-------------+---------------+--------------|
+| =S-<left>=  | =S-<up>=    | =M-S-<left>=  | =M-S-<up>=   |
+| =S-<right>= | =S-<down>=  | =M-S-<right>= | =M-S-<down>= |
+
+and you can type a time.
+
+* Agenda
+
+Using the agenda requires setting =org-agenda-files= but you can =C-c C-c= the
+following SRC block to define the command =try-agenda= which displays the agenda
+with =org-agenda-files= temporarily set to this file.
+
+#+begin_src emacs-lisp :results none
+(defun try-agenda () (interactive)
+  (let ((org-agenda-files (list (buffer-file-name))))
+    (org-agenda-list)))
+#+end_src
+
+Try scheduling, setting a deadline, and inserting a plain timestamp, then run
+then do =M-x try-agenda RET=.
+
+In the agenda, press =q= to leave the agenda and come back here.
+
+** Scheduled item
+SCHEDULED: <2025-01-27 Mon>
+
+Schedule this headline by doing =C-c C-s= with your cursor on the headline or
+its content.
+
+** Deadline item
+DEADLINE: <2025-01-27 Mon>
+
+Set a deadline on this headline by doing =C-c C-d= with your cursor on the headline or
+its content.
+
+** Item containing a plain timestamp
+
+Insert a plain timestamp inside this section with =C-c .=
+<2025-01-26 Sun>
+
+
+** Times in timestamps (today)
+
+Try adding a timestamp with today's date and add a time with =C-c .= and type a time
+<2025-01-26 Sun 23:00>
+
+** Times in timestamps (not today)
+
+Try adding a timestamp with a time but with a different date than today =C-c .=,
+use =S-<right>= to select a date in the future, type a time and press Enter.
+
+<2025-01-27 Mon 09:00>
+
+** Notes
+
+- Deadlines and scheduled timestamps can also have times.
+
+* TODO items
+
+A headline can be marked as =TODO= or =DONE=.  If a headline title starts with
+the word =TODO= or =DONE=, it is called a "todo item".  The words =TODO= and
+=DONE= are called "todo keywords".  We can customize the list of "todo keywords".
+
+For now, consider it just a nice way of marking items as "todo" and "done" with
+a key =C-c C-t= to cycle between the states.
+    
+However it's worth marking things as TODO and DONE knowing that it's useful in
+and of itself and that we will be able to do all kinds of 
+
+It's more advanced but we can do all kinds of stuff with these words.
+- Exclude =DONE= items from appearing in the agenda
+- Query all todo items with a certain 
+- Create custom agenda views that will show, for example,
+  - all items with a certain keyword that are scheduled
+  - All todo items that are not scheduled
+  - All items that have a certain keyword and contain a certain regex. 
+  - Exclude all items that have a certain keyword and are not scheduled except
+    if they have a certain tag.
+
+* Repeated timestamps
+
+For the agenda it can be useful to have tasks repeat.
+
+When a repeating task is marked as done, it stays marked as todo but the
+scheduled is advanced by a certain amount of time according to what type of
+repetition is desired.
+
+** TODO Weekly task
+SCHEDULED: <2025-01-26 Sun +1w>
+:PROPERTIES:
+:LAST_REPEAT: [2025-01-26 Sun 22:45]
+:END:
+:LOGBOOK:
+- State "GTD-DONE"   from "TODO"       [2025-01-26 Sun 22:45]
+:END:
+
+Schedule this task for today with a one week repeater: =C-c C-s=, hit Enter,
+then manually add =+1w= at the end of the timestamp.
+
+Pay attention to the timestamp while you mark the item as tond =C-c C-t=, notice
+that the headline stays as TODO but the scheduled date is now one week later.
+
+** TODO Lead time
+DEADLINE: <2025-02-02 Sun -1d>
+
+Set a deadline on this item one week or more into the future and try the agenda.
+
+Notice that it is shown today with "in 7d: ...".
+
+It can be cumbersome to have every single deadline shown today no matter how
+long in the future it is.  For example "Prepare Christmas Dinner with a deadline of
+December 25th" showing up in your agenda for the entire year.
+
+We can put a lead time to decide when the deadline should start showing up in
+the agenda.
+
+Manually add =-2d= in the deadline for this item and check the agenda again.
+
+Notice that we don't see the deadline anymore.
+
+** More repeaters
+
+The documentation is clear enough but consider this example.  Suppose you have a
+task "Call Dad" that you want to do every Sunday.  If you forget to call him for
+three weeks, you won't call him three times this Sunday, you'll just call him
+once.
+
+- =+1w= When the task is done, schedule the next repeat one week after the
+  current scheduled date (even if that is still in the past).
+- =++1w= When the task is marked done, advance the scheduled date by as many
+  weeks as it takes to reach a date that is in the future.
+- =.+1w= When the task is marked done, schedule it to one week after today.
+
+Note that the difference between =++1w= and =.+1w= that with =.+= the next
+scheduled date only depends on the current day.
+
+If =.+1w= task is scheduled for Sunday but you do it on Monday, the next repeat
+will be scheduled on a Monday.
+
+If a =++1w= task is scheduled for Sunday, the next repeat will always be on a Sunday.
+
+Examples:
+- Change smoke detector battery: =.+= is appropriate.
+- Thursday go club: =++= is appropriate
+
+[[info:org#Repeated tasks][org#Repeated tasks]]
+
+** Habits
+
+A special kind of repeating task that has the property =:STYLE: habit=.
+
+It is displayed in a different way in the agenda.
+
+*** TODO Not a habit
+
+Schedule this item for today with a =.+1d= repeater.
+
+Notice that it clutters up the agenda with an item every day.
+
+
+*** TODO A habit
+SCHEDULED: <2025-01-26 Sun .+1d>
+:PROPERTIES:
+:STYLE:    habit
+:END:
+
+Schedule this item for today  with a =.+1d= repeater.
+
+Nodice how it shows up in the agenda
