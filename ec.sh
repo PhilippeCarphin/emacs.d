@@ -68,4 +68,4 @@ function ensure-server-is-running(){
     fi
 }
 
-main $@
+main "$@"
