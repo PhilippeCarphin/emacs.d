@@ -2640,3 +2640,25 @@ that stuff in a separate file.
 (setq custom-file (concat user-emacs-directory "custom-file.el"))
 (load custom-file)
 #+end_src
+
+** Helm actions?
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes :results none
+:END:
+
+#+begin_src emacs-lisp
+
+(unless helm-source-buffers-list
+(setq helm-source-buffers-list
+        (helm-make-source "Buffers" 'helm-source-buffers)))
+(helm-add-action-to-source "Kill buffer" #'kill-buffer helm-source-buffers-list 1)
+(define-key helm-map (kbd "C-k") #'(lambda () (interactive) (helm-select-nth-action 1)))
+#+end_src
+
+#+begin_src emacs-lisp
+(defun kb () (interactive)
+       (let ((buf (helm-buffers-list)))
+         (message "buf = %s" (buffer-name buf))
+         ;; (kill-buffer-ask buf)
+))
+#+end_src
