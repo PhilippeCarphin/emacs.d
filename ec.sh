@@ -18,9 +18,20 @@ function main(){
 	-s) emacs --daemon ;;
 	-g) shift ; gui_open "$@" ;;
 	-t) shift ; _emacsclient_t "$@" ;;
+        -x) shift ; exec emacsclient "$@" ;;
+        -y) shift ; _open_in_current_frame "$@" ;;
 	*)  : no -t ; _emacsclient_t "$@" ;;
     esac
 }
+
+_open_in_current_frame(){
+    ensure-server-is-running
+    ensure-frame-exists
+    for f in "$@"; do
+        emacsclient --eval "(find-file \"$f\")" >/dev/null
+    done
+}
+
 _emacsclient_t(){
     if [[ $(uname) == Linux ]] && ! [[ -S $TMPDIR/emacs66553/server ]] ; then
         exec $HOME/fs1/bin/vim -p "$@"
