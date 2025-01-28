@@ -1,5 +1,5 @@
 #!/bin/bash
-set -x
+# set -x
 
 # Yet again, a per-process TMPDIR that contains the PID of the current shell
 # causes a problem.  Lets define this then.
@@ -8,7 +8,7 @@ if [[ $(uname) != Darwin ]] ; then
     unset XDG_RUNTIME_DIR
     mkdir -p $TMPDIR
 fi
-readlink -f $(which emacsclient)
+# readlink -f $(which emacsclient)
 function main(){
 
     # Special actions
