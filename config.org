@@ -1459,7 +1459,8 @@ A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintai
 When you're writing actual text it's super annoying to have autocomplete.
 
 #+begin_src emacs-lisp
-(add-hook 'org-mode-hook (lambda () (company-mode -1)))
+(add-hook 'org-mode-hook
+          (lambda () (company-mode -1)))
 #+end_src
 
 ** Configure Refile
@@ -1475,47 +1476,47 @@ When you're writing actual text it's super annoying to have autocomplete.
     :HEADER-ARGS: :tangle no
     :END:
 
-   From System-crafter's config.
-     #+begin_src emacs-lisp
-     (defun dw/org-present-prepare-slide ()
-     (org-overview)
-     (org-show-entry)
-     (org-show-children))
+From System-crafter's config.
+#+begin_src emacs-lisp
+(defun dw/org-present-prepare-slide ()
+  (org-overview)
+  (org-show-entry)
+  (org-show-children))
 
-   (defun dw/org-present-hook ()
-     (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
-                                        (header-line (:height 4.5) variable-pitch)
-                                        (org-code (:height 1.55) org-code)
-                                        (org-verbatim (:height 1.55) org-verbatim)
-                                        (org-block (:height 1.25) org-block)
-                                        (org-block-begin-line (:height 0.7) org-block)))
-     (setq header-line-format " ")
-     (org-display-inline-images)
-     (dw/org-present-prepare-slide))
+(defun dw/org-present-hook ()
+  (setq-local face-remapping-alist '((default (:height 1.5) variable-pitch)
+                                     (header-line (:height 4.5) variable-pitch)
+                                     (org-code (:height 1.55) org-code)
+                                     (org-verbatim (:height 1.55) org-verbatim)
+                                     (org-block (:height 1.25) org-block)
+                                     (org-block-begin-line (:height 0.7) org-block)))
+  (setq header-line-format " ")
+  (org-display-inline-images)
+  (dw/org-present-prepare-slide))
 
-   (defun dw/org-present-quit-hook ()
-     (setq-local face-remapping-alist '((default variable-pitch default)))
-     (setq header-line-format nil)
-     (org-present-small)
-     (org-remove-inline-images))
+(defun dw/org-present-quit-hook ()
+  (setq-local face-remapping-alist '((default variable-pitch default)))
+  (setq header-line-format nil)
+  (org-present-small)
+  (org-remove-inline-images))
 
-   (defun dw/org-present-prev ()
-     (interactive)
-     (org-present-prev)
-     (dw/org-present-prepare-slide))
+(defun dw/org-present-prev ()
+  (interactive)
+  (org-present-prev)
+  (dw/org-present-prepare-slide))
 
-   (defun dw/org-present-next ()
-     (interactive)
-     (org-present-next)
-     (dw/org-present-prepare-slide))
+(defun dw/org-present-next ()
+  (interactive)
+  (org-present-next)
+  (dw/org-present-prepare-slide))
 
-   (use-package org-present
-     :bind (:map org-present-mode-keymap
-            ("C-c C-j" . dw/org-present-next)
-            ("C-c C-k" . dw/org-present-prev))
-     :hook ((org-present-mode . dw/org-present-hook)
-            (org-present-mode-quit . dw/org-present-quit-hook)))
-     #+end_src
+(use-package org-present
+  :bind (:map org-present-mode-keymap
+              ("C-c C-j" . dw/org-present-next)
+              ("C-c C-k" . dw/org-present-prev))
+  :hook ((org-present-mode . dw/org-present-hook)
+         (org-present-mode-quit . dw/org-present-quit-hook)))
+#+end_src
 
 * Agenda
 ** Set agenda files
@@ -1541,9 +1542,9 @@ that directory depending on the system we are on.
 Note: On Windows, =~= refers to something like
 =C:\Users\CarphinP\AppData\Roaming\= rather than =C:\Users\CarphinP\=
 This is the variable that org looks at for files containing agenda items.
- #+begin_src emacs-lisp
- (setq org-agenda-files (list my/org-agenda-dir))
- #+end_src
+#+begin_src emacs-lisp
+(setq org-agenda-files (list my/org-agenda-dir))
+#+end_src
 
 *** Quick access to GTD files
     :PROPERTIES:
@@ -1551,19 +1552,19 @@ This is the variable that org looks at for files containing agenda items.
     :END:
 **** Filename symbols
 Create symbols holding the paths to GTD files
- #+begin_src emacs-lisp
- (setq gtd-in-tray-file (concat my/org-agenda-dir "/" "GTD_InTray.org")
-       gtd-next-actions-file (concat my/org-agenda-dir "/" "GTD_NextActions.org")
-       gtd-project-list-file (concat my/org-agenda-dir "/" "GTD_ProjectList.org")
-       ;; gtd-work-project-list-file (concat my/org-agenda-dir "GTD_Work_ProjectList.org")
-       gtd-reference-file (concat my/org-agenda-dir "/" "GTD_Reference.org")
-       ;; gtd-work-reference-file (concat my/org-agenda-dir "GTD_Work_Reference.org")
-       gtd-someday-maybe-file (concat my/org-agenda-dir "/" "GTD_SomedayMaybe.org")
-       gtd-tickler-file (concat my/org-agenda-dir "/" "GTD_Tickler.org")
-       gtd-journal-file (concat my/org-agenda-dir "/" "GTD_Journal.org")
-       gtd-habits-file (concat my/org-agenda-dir "/" "GTD_Habits.org")
-       gtd-email-file (concat my/org-agenda-dir "/" "GTD_Emails.org"))
- #+end_src
+#+begin_src emacs-lisp
+(setq gtd-in-tray-file (concat my/org-agenda-dir "/" "GTD_InTray.org")
+      gtd-next-actions-file (concat my/org-agenda-dir "/" "GTD_NextActions.org")
+      gtd-project-list-file (concat my/org-agenda-dir "/" "GTD_ProjectList.org")
+      ;; gtd-work-project-list-file (concat my/org-agenda-dir "GTD_Work_ProjectList.org")
+      gtd-reference-file (concat my/org-agenda-dir "/" "GTD_Reference.org")
+      ;; gtd-work-reference-file (concat my/org-agenda-dir "GTD_Work_Reference.org")
+      gtd-someday-maybe-file (concat my/org-agenda-dir "/" "GTD_SomedayMaybe.org")
+      gtd-tickler-file (concat my/org-agenda-dir "/" "GTD_Tickler.org")
+      gtd-journal-file (concat my/org-agenda-dir "/" "GTD_Journal.org")
+      gtd-habits-file (concat my/org-agenda-dir "/" "GTD_Habits.org")
+      gtd-email-file (concat my/org-agenda-dir "/" "GTD_Emails.org"))
+#+end_src
 **** Commands
 #+begin_src emacs-lisp
 (defun gtd-open-in-tray              () (interactive) (find-file gtd-in-tray-file))
@@ -1572,7 +1573,6 @@ Create symbols holding the paths to GTD files
 (defun gtd-open-reference            () (interactive) (find-file gtd-reference-file))
 (defun gtd-open-someday-maybe        () (interactive) (find-file gtd-someday-maybe-file))
 ;; (defun gtd-open-work-reference    () (interactive) (find-file gtd-work-reference-file))
-(defun gtd-open-next-actions         () (interactive) (find-file gtd-next-actions-file))
 (defun gtd-open-next-actions         () (interactive) (find-file gtd-next-actions-file))
 (defun gtd-open-habits               () (interactive) (find-file gtd-habits-file))
 (defun gtd-open-emails               () (interactive) (find-file gtd-email-file))
@@ -1600,39 +1600,41 @@ Create symbols holding the paths to GTD files
  I mapped a key because I like to pop in and out of it. I don't use it myself
  because the I put =org-agenda= on a keymap for my GTD stuff.
 
- #+begin_src emacs-lisp
+#+begin_src emacs-lisp
 (define-prefix-command 'my/org-agenda-keys)
 (define-key leader-key (kbd "a") 'my/org-agenda-keys)
 (define-key my/org-agenda-keys (kbd "a") 'org-agenda)
- #+end_src
+#+end_src
 
 ** Add =org-agenda-files= as refile targets
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
 Move items around with =org-refile=.  This controls how refile choices are presented.
- #+begin_src emacs-lisp
- (setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
- #+end_src
+#+begin_src emacs-lisp
+(setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
+#+end_src
 
  Ref : https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
 
 *** Keys                                                              :keys:
-    | =C-c C-w=     | =org-refile= | Move headline under cursor to somewhere else |
-    | =C-u C-c C-w= | =org-refile= | Go to selected target (no real refiling)     |
+| =C-c C-w=     | =org-refile= | Move headline under cursor to somewhere else |
+| =C-u C-c C-w= | =org-refile= | Go to selected target (no real refiling)     |
 ** Create capture templates
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
 The function =org-capture= allows for quick capturing of notes with configurable
 templates.
- #+begin_src emacs-lisp
-       (setq org-capture-templates
-         '(("i" "GTD Input" entry (file gtd-in-tray-file)
-            "* GTD-IN %?\n %i\n %a" :kill-buffer t)
-           ("c" "Emacs config" entry (file+headline my/emacs-config-file "New stuff")
-            "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
- #+end_src
+#+begin_src emacs-lisp
+(setq org-capture-templates
+      '(("i" "GTD Input" entry
+         (file gtd-in-tray-file)
+         "* GTD-IN %?\n %i\n %a" :kill-buffer t)
+        ("c" "Emacs config" entry
+         (file+headline my/emacs-config-file "New stuff")
+         "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
+#+end_src
 
 ** Capture hotkey
    :PROPERTIES:
@@ -1653,7 +1655,7 @@ templates.
 Don't show the file and control spacing so that all entries are aligned.
 
 #+begin_src emacs-lisp
-  (setq org-agenda-prefix-format  '((agenda . "    %-12t%-12s")))
+(setq org-agenda-prefix-format  '((agenda . "    %-12t%-12s")))
 #+end_src
 
 ** Define new todo keywords for GTD
@@ -1668,29 +1670,32 @@ The GTD-* keywords map to the various things that what David Allen calls "stuff"
 can be.
 
 #+begin_src emacs-lisp
-(setq org-todo-keywords '((sequence "TODO(!@)" "WAITING" "VERIFY" "|" "DONE(!@)")
-                          (sequence
-                             "GTD-IN(i!)"
-                             "GTD-CLARIFY(c)"
-                             "GTD-PROJECT(p)"
-                             "GTD-SOMEDAY-MAYBE(s)"
-                             "GTD-ACTION(a)"
-                             "GTD-NEXT-ACTION(n)"
-                             "GTD-WAITING(w)"
-                             "|"
-                             "GTD-REFERENCE(r)"
-                             "GTD-DELEGATED(g)"
-                             "GTD-DONE(d!)")))
+(setq org-todo-keywords '((sequence "TODO(!@)"
+                                    "WAITING"
+                                    "VERIFY"
+                                    "|"
+                                    "DONE(!@)")
+                          (sequence "GTD-IN(i!)"
+                                    "GTD-CLARIFY(c)"
+                                    "GTD-PROJECT(p)"
+                                    "GTD-SOMEDAY-MAYBE(s)"
+                                    "GTD-ACTION(a)"
+                                    "GTD-NEXT-ACTION(n)"
+                                    "GTD-WAITING(w)"
+                                    "|"
+                                    "GTD-REFERENCE(r)"
+                                    "GTD-DELEGATED(g)"
+                                    "GTD-DONE(d!)")))
 
 (setq org-todo-keyword-faces
-   '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
-     ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
-     ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
-     ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
-     ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
-     ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
-     ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
-     ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
+      '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
+        ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
+        ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
+        ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
+        ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
+        ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
+        ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
+        ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
 #+end_src
 
 
@@ -1776,7 +1781,7 @@ ended up with these two functions and as far as I can tell they do the right thi
          ((tags "PRIORITY=\"A\"")
           (tags "PRIORITY=\"C\"")
           (stuck "")
-          (agenda "" )
+          (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
           (todo "GTD-ACTION")))
         ("s" "Split agenda view"
          ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
@@ -1800,28 +1805,15 @@ Run the agenda with "c" custom command.
     :END:
 This is equivalent to launching =org-agenda= and pressing a.
 #+begin_src emacs-lisp
-(defun gtd-agenda-view () (interactive)
-  (org-agenda nil "a"))
-#+end_src
-#+begin_src emacs-lisp
-(defun gtd-habits-view () (interactive)
-  (org-agenda nil "h"))
-#+end_src
-#+begin_src emacs-lisp
-(defun gtd-review-view () (interactive)
-  (org-agenda nil "c"))
-#+end_src
-
-#+begin_src emacs-lisp
+(defun gtd-agenda-view () (interactive) (org-agenda nil "a"))
+(defun gtd-habits-view () (interactive) (org-agenda nil "h"))
+(defun gtd-review-view () (interactive) (org-agenda nil "c"))
 (defun gtd-next-action-sparse-tree () (interactive)
-  (find-file gtd-project-list-file)
-  (org-agenda nil "gn"))
-#+end_src
-
-#+begin_src emacs-lisp
+       (find-file gtd-project-list-file)
+       (org-agenda nil "gn"))
 (defun gtd-work-next-action-sparse-tree () (interactive)
-  (find-file gtd-work-project-list-file)
-  (org-agenda nil "gn"))
+       (find-file gtd-work-project-list-file)
+       (org-agenda nil "gn"))
 #+end_src
 
 *** Agenda view hotkeys
@@ -1865,7 +1857,7 @@ of displaying consistency graphs for these habits.
 When `my/org-habit-show-graphs-everywhere' is nil, this function
 has no effect."
   (when (and my/org-habit-show-graphs-everywhere
-         (not (get-text-property (point) 'org-series)))
+             (not (get-text-property (point) 'org-series)))
     (let ((cursor (point))
           item data)
       (while (setq cursor (next-single-property-change cursor 'org-marker))
@@ -1900,11 +1892,8 @@ every single mode out there.
 However, doing =j= and =k= is a hard habbit to lose.  So I just remap the keys
 to print a message.
 #+begin_src emacs-lisp
-(add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode -1)))
-(add-hook 'org-agenda-mode-hook (lambda ()
-(define-key org-agenda-mode-map (kbd "j") (lambda () (interactive)
-					    (hl-line-mode -1)
-  (message "- Lamont Cranston: Do you have any idea who you just kidnapped?
+(setq the-shadow-quote-1
+      "- Lamont Cranston: Do you have any idea who you just kidnapped?
 - Tulku: Cranston; Lamont Cranston.
 - Lamont Cranston: You know my real name?
 - Tulku: Yes. I also know that for as long as you can remember,
@@ -1912,19 +1901,31 @@ to print a message.
          watched your sprit, your very face change as the beast claws its
          way out from within you.
 j is deactivated
-It normally does org-agenda-goto-date")))))
-;; Originally org-agenda-capture : I use C-c c and I can't use k
-(add-hook 'org-agenda-mode-hook (lambda ()
-  (define-key org-agenda-mode-map (kbd "k") (lambda () (interactive)
-    (message " The Shadow: I saved your life, Roy Tam. It now belongs to me.
+It normally does org-agenda-goto-date")
+(setq the-shadow-quote-2
+      " The Shadow: I saved your life, Roy Tam. It now belongs to me.
 - Dr. Tam: It does?
 k is deactivated
-It normally does org-agenda-capture (do C-h f to find out what key it is)")))))
+It normally does org-agenda-capture (do C-h f to find out what key it is)")
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+            (define-key org-agenda-mode-map (kbd "j")
+                        (lambda () (interactive)
+                          (message the-shadow-quote-1)))))
+;; Originally org-agenda-capture : I use C-c c and I can't use k
+(add-hook 'org-agenda-mode-hook
+          (lambda ()
+            (define-key org-agenda-mode-map (kbd "k")
+                        (lambda () (interactive)
+                          (message the-shadow-quote-2)))))
+(add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode -1)))
 #+end_src
 
 #+begin_src emacs-lisp
-(add-hook 'org-agenda-mode-hook (lambda ()
-  (define-key org-agenda-mode-map (kbd "SPC") 'leader-key)))
+(add-hook 'org-agenda-mode-hook 
+          (lambda ()
+            (define-key org-agenda-mode-map
+                        (kbd "SPC") 'leader-key)))
 #+end_src
 
 NOTE: I would normally just do the =(define-key org-agenda-mode-map (kbd "SPC")
@@ -1971,24 +1972,29 @@ by using =let= to temporarily set =org-agenda-files=.
    :END:
 
 #+begin_src emacs-lisp
-(defun publish-work-agenda-views () (interactive)
+(defcustom my/agenda-publish-dir 
+"~/Documents/gtd-html" "Directory where the function `publish-agenda-views' will
+put HTML agenda view files")
+(defun publish-agenda-views () (interactive)
+       "Create HTML renders of agenda view and habit view"
        (let ((org-agenda-files (list
                                 gtd-in-tray-file
-				gtd-project-list-file
+                                gtd-project-list-file
                                 gtd-habits-file
                                 gtd-next-actions-file))
              (org-agenda-span 40)
-             (org-agenda-start-day "-5d"))
+             (org-agenda-start-day "-5d")
+             (c-target (concat my/agenda-publish-dir "agenda-complete-view.html"))
+             (h-target (concat my/agenda-publish-dir "agenda-habits-view.html")))
          (org-agenda nil "c")
          (org-agenda-write "/home/phc001/public_html/files/phil-agenda-from-home.html")
          (org-agenda nil "h")
-         (org-agenda-write "/home/phc001/public_html/files/phil-agenda-habits.html")
-))
+         (org-agenda-write "/home/phc001/public_html/files/phil-agenda-habits.html")))
 #+end_src
 
 *** Work Agenda view
 :PROPERTIES:
-:HEADER-ARGS: :tangle yes
+:HEADER-ARGS: :tangle no
 :END:
 
 #+begin_src emacs-lisp
