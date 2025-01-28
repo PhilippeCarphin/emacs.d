@@ -1367,21 +1367,34 @@ Orgmode, please don't mess with me by indenting source blocks.
 
 ** Insert subheadings
 :PROPERTIES:
-:HEADER-ARGS: :tangle yes
+:HEADER-ARGS: :tangle yes :results none
 :END:
 #+begin_src emacs-lisp
-(defun org-insert-subheading-respect-content (arg)
+(defun my/org-insert-subheading-respect-content (arg)
   "Insert a new subheading and demote it.
 Works for outline headings and for plain lists alike."
   (interactive "P")
   (org-insert-heading-respect-content arg)
   (cond ((org-at-heading-p) (org-do-demote))
-	((org-at-item-p) (org-indent-item))))
+        ((org-at-item-p) (org-indent-item)))
+  (when (commandp #'evil-insert-state) (evil-insert-state)))
+(defun my/org-insert-subheading () (interactive)
+       "Insert subheading and go into insert mode"
+       (call-interactively 'org-insert-subheading)
+       (when (commandp #'evil-insert-state) (evil-insert-state)))
+(defun my/org-insert-heading () (interactive)
+       "Insert heading and enter insert mode"
+       (call-interactively 'org-insert-heading)
+       (when (commandp #'evil-insert-state) (evil-insert-state)))
+(defun my/org-insert-heading-respect-content () (interactive)
+       "Insert heading after content of current heading and enter insert mode"
+       (call-interactively 'org-insert-heading-respect-content)
+       (when (commandp #'evil-insert-state) (evil-insert-state)))
 #+end_src
 
 #+begin_src emacs-lisp
-(define-key org-mode-map (kbd "C-S-<return>") 'org-insert-subheading-respect-content)
-(define-key org-mode-map (kbd "M-S-<return>") 'org-insert-subheading)
+(define-key org-mode-map (kbd "C-S-<return>") 'my/org-insert-subheading-respect-content)
+(define-key org-mode-map (kbd "M-S-<return>") 'my/org-insert-subheading)
 #+end_src
 
 ** Org align tags
@@ -2204,10 +2217,10 @@ movement keys.
 #+begin_src emacs-lisp
 (define-prefix-command 'org-heading-insertion)
 (define-key orgmode (kbd "i") 'org-heading-insertion)
-(define-key 'org-heading-insertion (kbd "h") 'org-insert-heading)
-(define-key 'org-heading-insertion (kbd "H") 'org-insert-heading-respect-content)
-(define-key 'org-heading-insertion (kbd "s") 'org-insert-subheading)
-(define-key 'org-heading-insertion (kbd "S") 'org-insert-subheading-respect-content)
+(define-key 'org-heading-insertion (kbd "h") 'my/org-insert-heading)
+(define-key 'org-heading-insertion (kbd "H") 'my/org-insert-heading-respect-content)
+(define-key 'org-heading-insertion (kbd "s") 'my/org-insert-subheading)
+(define-key 'org-heading-insertion (kbd "S") 'my/org-insert-subheading-respect-content)
 #+end_src
 
 *** Subtree movement and promotions
