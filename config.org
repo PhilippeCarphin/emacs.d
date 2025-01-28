@@ -2072,11 +2072,14 @@ This requires only stock emacs
 Structured keymap inspired by spacemacs. The leader key is =M-m= and =SPC= in
 evil normal mode.
 ** Emacs leader key
+
+To access leader keymap when in =evil-emacs-state=
 #+begin_src emacs-lisp
 (global-set-key (kbd "M-m") 'leader-key)
 #+end_src
 
 ** =M-x=
+
 Same as Spacemacs.
 #+begin_src emacs-lisp
 (define-key leader-key (kbd "SPC") 'helm-M-x)
