@@ -1067,30 +1067,41 @@ Other options : ▼, ↴, ⬎, ⤵, ⤷, ↯, ⟾, ⋱, ….
 
 ** Display links as normal text
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
-
-If you use the hotkeys to work with links the default behavior is OK but if you
-want to just manipulate the text, what orgmode does to hide links is really
-annoying.
-
-You have to delete a bracket to get the real text to show up.
-[[https://google.com][Google]]
+   
+Setting this value to nil will make links not be presented nicely (for example
+=[[long-url][title]]= will show up as blue underlined =title=.
 
 #+begin_src emacs-lisp
 (setq org-descriptive-links nil)
-;; Note (org-mode-restart) is required for this to take effect
 #+end_src
+
+This value is read at =org-mode= startup so =org-mode-restart= is necessary if
+you were to just evaluate this in an already started org file.
+
+The tradeoffs when links aren't nicely displayed, it's easy to work with them
+but it doesn't look as nice especially for really long URLs.
+
+I've decided to go back to nicely displayed links and edit them using =C-c C-l=
+or the leader key binding that I've set later =LEADER l i= (i for insert but
+doing insert with cursor on a link 
 
 *** Org link commands                                              :command:
 | =C-c C-l= | =org-insert-link=         | Insert a link with a menu prompting for URL and description^* |
 |           | =org-store-link=          | Store org link to headline in which the cursor is^*^*         |
 |           | =org-toggle-link-display= | Toggles the way links are displayed                           |
+|           | =org-open-at-point=       | Visit a link (if possible)                                    |
 
-.^* If the cursor is on a link, this will edit the link.
+Note visiting a link is not always possible for web URLs if Emacs is unable to
+launch a web browser.  This only happens when I'm in terminal Emacs.  In that
+case, I either toggle link display so the link URL becomes visible, then I can
+=C-click= on it and my terminal emulator will launch a browser.
 
-.^*^* After doing that, when inserting a link, you can leave the first field
-blank and the link will point to where you stored.
+Or I do =org-insert-link= to display the link, and =C-click= the URL in the
+minibuffer.
+
+
 ** Bullets
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -2246,6 +2257,17 @@ CLOCK: [2021-04-14 Wed 23:57]
 
 Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows")(...)))=
 
+** Bindings for links
+
+#+begin_src emacs-lisp
+(define-prefix-command 'my/org-links)
+(define-key leader-key (kbd "l") 'my/org-links)
+(define-key my/org-links (kbd "g") 'org-open-at-point)
+(define-key my/org-links (kbd "s") 'org-store-link)
+(define-key my/org-links (kbd "i") 'org-insert-link)
+(define-key my/org-links (kbd "i") 'org-insert-link)
+(define-key my/org-links (kbd "t") 'org-toggle-link-display)
+#+end_src
 * Other stuff
 ** =sg-lisp.el=
 :PROPERTIES:
