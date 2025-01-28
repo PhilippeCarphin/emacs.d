@@ -2595,3 +2595,13 @@ It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
        (let ((org-agenda-files (list (buffer-file-name))))
          (org-agenda nil "gt")))
 #+end_src
+
+** Set location of custom file
+
+Rather than adding =custom-set-variables= stuff to =init.el=, emacs will add
+that stuff in a separate file.
+
+#+begin_src emacs-lisp
+(setq custom-file (concat user-emacs-directory "custom-file.el"))
+(load custom-file)
+#+end_src
