@@ -16,7 +16,7 @@ function main(){
 	-k) emacsclient -t -c -e '(save-buffers-kill-emacs)' ;;
 	-K) kill_emacs_by_pid ;;
 	-s) emacs --daemon ;;
-	-g) gui_open "$@" ;;
+	-g) shift ; gui_open "$@" ;;
 	-t) shift ; _emacsclient_t "$@" ;;
 	*)  : no -t ; _emacsclient_t "$@" ;;
     esac
