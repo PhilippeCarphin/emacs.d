@@ -18,7 +18,8 @@ The equivalent of =:= in Vim to enter command mode is =M-x= (Alt-x, or Option-X
 on a Mac).  We want to do =M-x package-install RET=.  We enter =evil= and
 nothing.
 
-Evil comes from =melpa=, a package repository so we need to add that. 
+Evil comes from =melpa=, a package repository so we need to add that.  Put the
+following in your config file:
 #+begin_src emacs-lisp
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 #+end_src
@@ -56,6 +57,13 @@ have to constantly be reloading the whole file.
 
 Now =:wq= to save and quit and restart and press j/k and it should move your
 cursor showing that your Emacs starts up in evil mode.
+
+At the end our config file should be
+#+begin_src emacs-lisp
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(evil-mode)
+#+end_src
+plus some stuff that may have been added there by Emacs.
 
 * Appendix
 
