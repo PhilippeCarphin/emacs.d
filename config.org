@@ -1543,6 +1543,20 @@ From System-crafter's config.
          (org-present-mode-quit . dw/org-present-quit-hook)))
 #+end_src
 
+** Add key for inserting inactive timestamps
+
+I want to know about overriding default emacs bindings or standard bindings from
+packages in general so this could be a function like =(my/bind-and-warnd MAP KEY
+FUNCTION)= to bind a key in a certain map and warn if it is already bound.
+
+#+begin_src emacs-lisp
+(if (keymap-lookup (current-global-map) "C-c i")
+    (warn "'C-c i' is mapped in current global map")
+  (if (keymap-lookup org-mode-map "C-c i")
+      (warn "'C-c i' is mapped in org-mode-map")))
+(define-key org-mode-map (kbd "C-c i") 'org-time-stamp-inactive)
+#+end_src
+
 * Agenda
 ** Set agenda files
    :PROPERTIES:
