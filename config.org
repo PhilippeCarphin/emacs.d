@@ -1710,11 +1710,9 @@ can be.
 
 #+begin_src emacs-lisp
 (setq org-todo-keywords '((sequence "TODO(!@)"
-                                    "WAITING"
-                                    "VERIFY"
                                     "|"
                                     "DONE(!@)")
-                          (sequence "GTD-IN(i!)"
+                          (sequence "GTD-IN(i)"
                                     "GTD-CLARIFY(c)"
                                     "GTD-PROJECT(p)"
                                     "GTD-SOMEDAY-MAYBE(s)"
@@ -1722,9 +1720,12 @@ can be.
                                     "GTD-NEXT-ACTION(n)"
                                     "GTD-WAITING(w)"
                                     "|"
-                                    "GTD-REFERENCE(r)"
+                                    "GTD-REFERENCE(r!)"
                                     "GTD-DELEGATED(g)"
-                                    "GTD-DONE(d!)")))
+                                    "GTD-DONE(d)")
+                          (sequence "HABIT(h)" "|" "done-habit(x!)")
+                          (sequence "APPOINTMENT(p)"
+                                    "MEETING(m)" "|" )))
 
 (setq org-todo-keyword-faces
       '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
@@ -1734,11 +1735,26 @@ can be.
         ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
         ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
         ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
-        ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)))
+        ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)
+
+        ("HABIT" :foreground "#7c7c74" :weight bold :underline nil)
+        ("MEETING" :foreground "#5faf00" :weight bold :underline nil)
+        ("APPOINTMENT" :foreground "#5faf00" :weight bold :underline nil)))
 #+end_src
 
 
-  #+REVEAL: split
+Consider a habit with initial not-done state =X= that is part of the set of
+states =S=.  When the habit is marked as done it will revert back to the first
+not-done state of the set =S=.  This is why the =HABIT= todo keyword is needs to
+be the first of its group.  If it was the last state
+
+*** TODO Check what those =!= and =@= mean in the todo keywords
+
+I added them when figuring out why my habits weren't working but it turned out
+to be something else and I don't remember what they do.
+
+- Looks like =!= inhibits requesint a closing note
+
 ** Definition of stuck projects
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -1812,13 +1828,13 @@ ended up with these two functions and as far as I can tell they do the right thi
    These depend on my todo keywords so they are not part of the basic agenda config.
 *** Definition
     :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
+    :HEADER-ARGS: :tangle yes :results none
     :END:
 #+begin_src emacs-lisp
 (setq org-agenda-custom-commands
       '(("c" "Complete agenda view"
-         ((tags "PRIORITY=\"A\"")
-          (tags "PRIORITY=\"C\"")
+         ((tags "PRIORITY=\"A\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
+          (tags "PRIORITY=\"C\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
           (stuck "")
           (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
           (todo "GTD-ACTION")))
