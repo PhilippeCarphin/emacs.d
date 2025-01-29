@@ -1668,10 +1668,10 @@ templates.
 (setq org-capture-templates
       '(("i" "GTD Input" entry
          (file gtd-in-tray-file)
-         "* GTD-IN %?\n %i\n %a" :kill-buffer t)
+         "* GTD-IN %?\n %i\n %a" :kill-buffer t :hook evil-insert-state)
         ("c" "Emacs config" entry
          (file+headline my/emacs-config-file "New stuff")
-         "* GTD-IN %?\n %i\n %a" :kill-buffer t)))
+         "* TODO %?\n %i\n" :kill-buffer t :hook evil-insert-state)))
 #+end_src
 
 ** Capture hotkey
