@@ -530,6 +530,7 @@ Originally developped for spacemacs, now part of the standard emacs packages.
           (setq evil-insert-state-modes nil)
           (setq evil-motion-state-modes nil)
           (setq evil-normal-state-modes '(fundamental-mode
+                                          ssh-config-mode
                                           conf-mode
                                           prog-mode
                                           text-mode
