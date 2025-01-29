@@ -1102,7 +1102,6 @@ case, I either toggle link display so the link URL becomes visible, then I can
 Or I do =org-insert-link= to display the link, and =C-click= the URL in the
 minibuffer.
 
-
 ** Bullets
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
