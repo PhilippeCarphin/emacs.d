@@ -8,7 +8,6 @@ if [[ $(uname) != Darwin ]] ; then
     unset XDG_RUNTIME_DIR
     mkdir -p $TMPDIR
 fi
-# readlink -f $(which emacsclient)
 function main(){
 
     # Special actions
@@ -18,8 +17,12 @@ function main(){
 	-s) emacs --daemon ;;
 	-g) shift ; gui_open "$@" ;;
 	-t) shift ; _emacsclient_t "$@" ;;
-        -x) shift ; exec emacsclient "$@" ;;
-        -y) shift ; _open_in_current_frame "$@" ;;
+	-x) shift ; exec emacsclient "$@" ;;
+	-y) shift ; _open_in_current_frame "$@" ;;
+	-i) shift
+	    readlink -f $(which emacsclient)
+	    readlink -f $(which emacs)
+	    ;;
 	*)  : no -t ; _emacsclient_t "$@" ;;
     esac
 }
