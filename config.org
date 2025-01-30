@@ -330,6 +330,9 @@ come up
 (recentf-mode 1)
 #+end_src
 
+It still seems like it is not working because files that I open don't seem to
+make it to the recent file list.
+
 ** UTF-8
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -365,8 +368,7 @@ From [[https://stackoverflow.com/a/2680682/5795941][this stack overflow post]]
 :HEADER-ARGS: :tangle yes
 :END:
 
-From
-[[https://github.com/daviwil/emacs-from-scratch/blob/a57d99ba80276926a2b68521f9a9d23dc173a628/Emacs.org#keep-folders-clean]]
+From [[https://github.com/daviwil/emacs-from-scratch/blob/a57d99ba80276926a2b68521f9a9d23dc173a628/Emacs.org#keep-folders-clean][github:daviwil/emacs-from-scratch]]
 NOTE: If you want to move everything out of the ~/.emacs.d folder
 reliably, set `user-emacs-directory` before loading no-littering!
 =(setq user-emacs-directory "~/.cache/emacs")=
@@ -1439,19 +1441,6 @@ I need to be able to run =M-x "org-align"= to rediscover.
 
 I have to put this =add-to-list= at the end of the file it seems
 
-*** Trying things out
-Almost required otherwise habits can't be more than like 7 letters long.
-#+begin_src emacs-lisp
-(setq org-habit-graph-column 60)
-#+end_src
-
-*** Show habits on other days
-
-Not sure if I like this, trying it for now.
-#+begin_src
-(setq org-habit-show-habits-only-for-today nil)
-#+end_src
-
 *** Enable the module
 #+begin_src emacs-lisp
 (add-to-list 'org-modules 'org-habit)
@@ -1459,17 +1448,39 @@ Not sure if I like this, trying it for now.
   '(org-load-modules-maybe t))
 #+end_src
 
-*** Customizations from a post
+*** Move consistency graph to the right
+Almost required otherwise habits can't be more than like 7 letters long.
+
+Move habit consistency graph to the right.  In the agenda, the headline title is
+already moved a lot to the right so that leaves 12 characters for the todo
+keyword and the headline title.
+
+This setting puts the graph more to the right so it doesn't truncate the
+headline title.
+
+#+begin_src emacs-lisp
+(setq org-habit-graph-column 60)
+#+end_src
+
+*** Show habits on other days
 :PROPERTIES:
-:HEADER-ARGS: :tangle yes
+:HEADER-ARGS: :tangle no :resutls none
 :END:
 
-A small customization from  [[https://cpbotha.net/2019/11/02/forming-and-maintaining-habits-using-orgmode/][this post]]
 #+begin_src emacs-lisp
-;; Log TODO creation
-(setq org-treat-insert-todo-heading-as-state-change t)
-;; log into LOGBOOK drawer
+(setq org-habit-show-habits-only-for-today t)
+#+end_src
+
+*** Log into =LOGBOOK= drawer
+
+#+begin_src emacs-lisp
 (setq org-log-into-drawer t)
+#+end_src
+
+*** Log insertion of todo heaing
+
+#+begin_src emacs-lisp
+(setq org-treat-insert-todo-heading-as-state-change t)
 #+end_src
 
 ** Org-id
@@ -1653,7 +1664,7 @@ Move items around with =org-refile=.  This controls how refile choices are prese
 (setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
 #+end_src
 
- Ref : https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html
+Ref : [[https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html][Aaron Bieber's blog: Organizing notes with refile]]
 
 *** Keys                                                              :keys:
 | =C-c C-w=     | =org-refile= | Move headline under cursor to somewhere else |
@@ -1752,7 +1763,7 @@ be the first of its group.  If it was the last state
 I added them when figuring out why my habits weren't working but it turned out
 to be something else and I don't remember what they do.
 
-- Looks like =!= inhibits requesint a closing note
+*** TODO Explain calendar entries with respect to GTD
 
 ** Definition of stuck projects
    :PROPERTIES:
