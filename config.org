@@ -295,11 +295,11 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
 :END:
 
 Display line numbers except in orgmode.
-  #+begin_src emacs-lisp
-  (add-hook 'prog-mode-hook
-            #'(lambda () (display-line-numbers-mode t)))
-  ;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
-  #+end_src
+#+begin_src emacs-lisp
+(add-hook 'prog-mode-hook
+          #'(lambda () (display-line-numbers-mode t)))
+;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
+#+end_src
   
 *** Failed attempt
 
