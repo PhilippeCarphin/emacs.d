@@ -2253,9 +2253,6 @@ movement keys.
 #+end_src
 
 *** Org Time Commands
-:LOGBOOK:
-CLOCK: [2021-04-14 Wed 23:57]
-:END:
 #+begin_src emacs-lisp
 (define-prefix-command 'org-time-commands)
 (define-key leader-key (kbd "t") 'org-time-commands)
