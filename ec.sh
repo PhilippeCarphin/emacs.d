@@ -23,8 +23,40 @@ function main(){
 	    readlink -f $(which emacsclient)
 	    readlink -f $(which emacs)
 	    ;;
+    -f) shift ; _find_emacs_daemons ;;
 	*)  : no -t ; _emacsclient_t "$@" ;;
     esac
+}
+
+_find_emacs_daemons(){
+    local j h cmd
+    source ~/.philconfig/shell_lib/functions.sh
+    python3 -c "
+import yaml
+import os
+with(open(os.path.expanduser('~/.config/tmux-finder.yml'))) as f:
+    y = yaml.safe_load(f)
+print('\n'.join(y['hosts-to-check']))" \
+    | while read jh ; do
+        printf "\033[1;37m==> Doing host $h\033[0m\n"
+        local -a cmd=(ssh)
+        if [[ $jh == *:* ]] ; then
+            j=${jh%%:*}
+            h=${jh##*:}
+            cmd+=(-J $j)
+        else
+            h=$jh
+        fi
+        # pgrep -u $USER 'emacs' -P 1
+        # would find only daemons (parent PID of 1) but I actually want to know
+        # if I have any non-daemon processes running like clients and straight
+        # non-server emacs command
+        cmd+=($h "pgrep -u $USER emacs | xargs --no-run-if-empty ps -f")
+        printf "\033[1;32m==>\033[0m ${cmd[*]}\n"
+        # Make sure the SSH command does not consume STDIN which is supposed
+        # to be consumed by the read.
+        </dev/null "${cmd[@]}"
+    done
 }
 
 _open_in_current_frame(){
