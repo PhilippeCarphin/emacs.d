@@ -2062,6 +2062,52 @@ has no effect."
 
 See also : https://www.reddit.com/r/orgmode/comments/efrcoe/orghabit_graph_not_aligned_properly/
 
+** Requesting a value for the WAITING property when setting task to GTD-WAITING
+
+We set a hook on =org-after-todo-state-change= to ensure that tasks in
+=GTD-WAITING= state have a =WAITING_ON= property.  It is not strictly enforced.
+
+Eventually I want to create some kind of agenda view that shows waiting tasks
+and their =WAITING_ON= value.
+
+#+begin_src emacs-lisp
+(defun my/org-set-waiting-property (waiting-for)
+  "Set a WAITING_ON property on the current headline"
+  (interactive "sWaiting for what (value for :WAITING_ON: property): ")
+  (org-set-property "WAITING_ON" waiting-for))
+(defun my/org-maybe-clear-waiting-property ()
+  "Offer to remove a WAITING_ON property on the current headline if there is one"
+  (interactive)
+  (let ((waiting-on (org-entry-get (point) "WAITING_ON")))
+    (when waiting-on
+      (when (y-or-n-p (concat "Remove property WAITING_ON: " waiting-on))
+        (org-entry-delete (point) "WAITING_ON")))))
+#+end_src
+
+When the todo state changes *to* =GTD-WAITING=, we prompt the user for a value
+for the =WAITING_ON= property and when changing to any other state, if there is
+a =WAITING_ON= property, we offer to remove.
+
+#+begin_src emacs-lisp
+(defun my/org-handle-todo-state-change ()
+  (if (string-equal org-state "GTD-WAITING")
+      (call-interactively 'my/org-set-waiting-property)
+    (call-interactively 'my/org-maybe-clear-waiting-property)))
+#+end_src
+
+There is only a hook that is run *after* the state has already been changed:
+
+#+begin_src emacs-lisp
+(add-hook 'org-after-todo-state-change-hook 'my/org-handle-todo-state-change)
+#+end_src
+
+This has two relevant consequences:
+- It seems like we can't know the original state of the headline
+- In the hook, the state change has already happened.  We can't cancel it.
+  If we do press =C-g= in the prompt asking for a value for =WAITING_ON=, the
+  task will still be in =GTD-WAITING= state but will not have a =WAITING_ON=
+  property.
+
 ** Keys                                                               :keys:
 
     | =f,b=   | Forward, backward in time              |
