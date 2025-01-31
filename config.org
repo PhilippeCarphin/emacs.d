@@ -1600,7 +1600,8 @@ Create symbols holding the paths to GTD files
    :END:
 Move items around with =org-refile=.  This controls how refile choices are presented.
 #+begin_src emacs-lisp
-(setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)))
+(setq org-refile-targets '((nil :maxlevel . 3) (org-agenda-files :maxlevel . 3)
+(my/emacs-config-file :maxlevel . 3)))
 #+end_src
 
 Ref : [[https://blog.aaronbieber.com/2017/03/19/organizing-notes-with-refile.html][Aaron Bieber's blog: Organizing notes with refile]]
