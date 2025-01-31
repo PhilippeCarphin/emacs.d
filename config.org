@@ -418,6 +418,16 @@ For non-server mode
       (vertical-scroll-bars))))
 #+end_src
 
+** Set location of custom file
+
+Rather than adding =custom-set-variables= stuff to =init.el=, emacs will add
+that stuff in a separate file.
+
+#+begin_src emacs-lisp
+(setq custom-file (concat user-emacs-directory "custom-file.el"))
+(load custom-file)
+#+end_src
+
 * Packages
 
 Some packages are installed elsewhere for example org-mode specific packages are
@@ -474,6 +484,25 @@ Notable remapped functions:
 
 - =helm-grep-do-git-grep=
 
+*** Make =C-k= kill buffer in =helm-buffers-list=
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes :results none
+:END:
+
+The =helm-buffers-list= shows more information about buffers than what the
+helmized =kill-buffer= shows.  So when cleaning up buffers with =kill-buffer=,
+we're missing some useful info.
+
+With this, we can use =C-k= in the more informative =helm-buffers-list= to
+cleanup buffers.
+
+#+begin_src emacs-lisp
+(unless helm-source-buffers-list
+  (setq helm-source-buffers-list
+        (helm-make-source "Buffers" 'helm-source-buffers)))
+(helm-add-action-to-source "Kill buffer" #'kill-buffer helm-source-buffers-list 1)
+(define-key helm-map (kbd "C-k") #'(lambda () (interactive) (helm-select-nth-action 1)))
+#+end_src
 ** Which-key
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -2724,36 +2753,4 @@ It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
 (defun my/org-local-todos () (interactive)
        (let ((org-agenda-files (list (buffer-file-name))))
          (org-agenda nil "gt")))
-#+end_src
-
-** Set location of custom file
-
-Rather than adding =custom-set-variables= stuff to =init.el=, emacs will add
-that stuff in a separate file.
-
-#+begin_src emacs-lisp
-(setq custom-file (concat user-emacs-directory "custom-file.el"))
-(load custom-file)
-#+end_src
-
-** Helm actions?
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes :results none
-:END:
-
-#+begin_src emacs-lisp
-
-(unless helm-source-buffers-list
-(setq helm-source-buffers-list
-        (helm-make-source "Buffers" 'helm-source-buffers)))
-(helm-add-action-to-source "Kill buffer" #'kill-buffer helm-source-buffers-list 1)
-(define-key helm-map (kbd "C-k") #'(lambda () (interactive) (helm-select-nth-action 1)))
-#+end_src
-
-#+begin_src emacs-lisp
-(defun kb () (interactive)
-       (let ((buf (helm-buffers-list)))
-         (message "buf = %s" (buffer-name buf))
-         ;; (kill-buffer-ask buf)
-))
 #+end_src
