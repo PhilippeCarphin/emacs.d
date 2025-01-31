@@ -2755,3 +2755,13 @@ It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
        (let ((org-agenda-files (list (buffer-file-name))))
          (org-agenda nil "gt")))
 #+end_src
+
+** TODO Modify the waiting sections in agenda views so they only show stuff that is scheduled.
+
+I want to be able to set a date before which I don't see the waiting item.
+
+When I reach the date, the thing starts showing up so I can check on the thing
+I'm waiting on.  And if the thing I'm waiting for has not happened, then I
+schedule it to a later date so I don't see it until then.
+
+** TODO Add context tags as shown in System Crafters
