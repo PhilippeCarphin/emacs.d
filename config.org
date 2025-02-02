@@ -218,7 +218,7 @@ Automattically hard-wrap text on 80 chars as you type.
     :HEADER-ARGS: :tangle yes
     :END:
 Wrap lines visually (lines that are too long are /displayed/ on multiple lines
-with a special char indicating visual wrapping.
+with a special char indicating visual wrapping).
 
 #+begin_src emacs-lisp
 (global-visual-line-mode 1)
@@ -2732,8 +2732,8 @@ It did create a file =~/.emacs.d/server= but going on another computer, I
 changed the 0.0.0.0 to the IP of the computer where I started the daemon:
 
 #+being_example
-192.168.2.24:8888 913544
-#9~Yn>22Ww7p/zWZ`lD#d>1ybhAsL1uwwDE}lD)sB{Y+a>(>sV\(BjPp%mV!2%=k
+"192.168.2.24:8888 913544"
+"#9~Yn>22Ww7p/zWZ`lD#d>1ybhAsL1uwwDE}lD)sB{Y+a>(>sV\(BjPp%mV!2%=k"
 #+end_example
 
 Then on the client computer, I launched =emacsclient --server-file <file>=.
