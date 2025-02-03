@@ -1045,7 +1045,7 @@ mistake so having it quit the client instead of killing emacs is nice.
 
 I'm made this while learning how to do processes in Elisp and Emacs
 so until I create a proper package, I'll just load it this way.
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 ;; Function is redefined in the file but I need it here to find the repo to load
 ;; the file
 (defun repos-get-dir (repo-name)
@@ -1055,6 +1055,10 @@ so until I create a proper package, I'll just load it this way.
   ;; an error if the command exits non-zero.
   (car (process-lines "repos" "-get-dir" repo-name)))
 (org-babel-load-file (concat (repos-get-dir "tests") "/Elisp_tests/processes.org"))
+#+end_src
+#+begin_src emacs-lisp
+(add-to-list 'load-path user-emacs-directory)
+(require 'repos)
 #+end_src
 
 * Orgmode
