@@ -886,13 +886,16 @@ On UNIX systems it should work fine, UNIX running on a mac M1, make sure to have
 a very recent version of CMake.
 
 #+begin_src emacs-lisp
-(cond ((not (string-equal system-type "windows-nt"))
-       (use-package vterm
-         :ensure t
-         :config (progn (define-key leader-key (kbd "v") 'vterm)
-                        (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1)))
-                        ;; Somewhat inelegane because I don't need this at home
-                        (setq vterm-shell "ssh localhost")))))
+(when (not (string-equal system-type "windows-nt"))
+  (use-package vterm
+    :ensure t
+    :config (define-key leader-key (kbd "v") 'vterm)
+            (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1)))
+            ;; Somewhat inelegane because I don't need this at home
+            (setq vterm-shell
+                  (cond 
+                   ((string-equal system-type "gnu/linux") (expand-file-name "~/.philconfig/tmux_home/launch-with-vars"))
+                   ((string-equal system-type "darwin") "ssh localhost")))))
 #+end_src
 
 ** Monokai themes
@@ -2772,3 +2775,4 @@ schedule it to a later date so I don't see it until then.
 ** TODO Add context tags as shown in System Crafters
 
 ** TODO Check out evil-collection
+** TODO Do something better than ssh localhost as my vterm shell at home
