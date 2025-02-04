@@ -8,6 +8,9 @@ if [[ $(uname) != Darwin ]] ; then
     unset XDG_RUNTIME_DIR
     mkdir -p $TMPDIR
 fi
+if [[ -n ${INSIDE_EMACS} ]] ; then
+    exec emacsclient --no-wait "$@"
+fi
 function main(){
 
     # Special actions
