@@ -554,6 +554,11 @@ Originally developped for spacemacs, now part of the standard emacs packages.
           ;; because if I forget I'm in insert mode and I do 'C-w', it
           ;; deletes a word which is very annoying
           (define-key evil-insert-state-map (kbd "C-w") evil-window-map)
+          ;; In Vi, C-n and C-p move up and down.  Since I have some buffers
+          ;; that are in evil-emacs-state and some in evil-normal-state
+          ;; I don't want this evil-paste-pop and evil-paste-pop-next or whatever
+          (define-key evil-normal-state-map (kbd "C-n") 'evil-next-line)
+          (define-key evil-normal-state-map (kbd "C-p") 'evil-previous-line)
 	        (evil-set-undo-system 'undo-redo)
           (global-set-key (kbd "M-u") 'universal-argument)
           (setq evil-default-state 'emacs)
