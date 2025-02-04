@@ -897,11 +897,11 @@ a very recent version of CMake.
     :ensure t
     :config (define-key leader-key (kbd "v") 'vterm)
             (add-hook 'vterm-mode-hook (lambda () (global-hl-line-mode -1)))
-            ;; Somewhat inelegane because I don't need this at home
             (setq vterm-shell
                   (cond 
                    ((string-equal system-type "gnu/linux") (expand-file-name "~/.philconfig/tmux_home/launch-with-vars"))
-                   ((string-equal system-type "darwin") "ssh localhost")))))
+                   ;; ((string-equal system-type "darwin") "/bin/zsh")
+                   ))))
 #+end_src
 
 ** Monokai themes
