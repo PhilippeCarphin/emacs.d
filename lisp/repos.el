@@ -61,6 +61,56 @@ the repo.  If there is a buffer with this name, simply switch to it."
 
 (defvar repos-buffer nil "The buffer of the repos overview")
 (defvar repos-errors nil "The buffer for the STDERR of the repos command")
+(defvar repos-command "repos")
+(defvar repos-remote-host nil "Host to run repos on")
+(defvar repos-remote-command-fmt "/bin/bash -c '%s'" "The command to create a remote command.")
+(defvar repos-overview-n-jobs 8 "Number of parallel jobs for the repos process.
+Since most of the time is spent in git fetch commands, this number can be high
+without taking much processing power.")
+(defvar repos-overview-fetch t "Run git fetch for each repo.  If this is on, a
+high value of `repos-over-view-n-jobs' like 8 or more is worth it.")
+(defvar repos-overview-all t "Show all repos.  Normally repos filters out repos
+that
+- Are up-to-date with the remote (not ahead or behind)
+- No unstaged changes
+- No staged changes
+- No untracked files
+")
+(defvar repos-overview-ignore t "Repos that are marked to be ignored are not
+show if the only thing that is not 'clean' about them is that we are behind the
+remote.
+
+This is so that open-source repos that we don't work on don't needlessly show up
+in the overview.
+
+If we do want to see repos that are marked as ignored anyway we can set this to `nil'")
+
+(defun repos--create-base-command ()
+  ;; Add-to-list adds to the front
+  ;; Also some guy who looks like he gets LISP says add-to-list isn't good
+  ;; for building a list the way I want.
+  (let ((l (list)))
+    (when repos-overview-all (add-to-list 'l "-all"))
+    (when repos-overview-n-jobs
+      (add-to-list 'l (number-to-string repos-overview-n-jobs))
+      (add-to-list 'l "-j"))
+    (unless repos-overview-fetch
+      (add-to-list 'l "-no-fetch"))
+    (add-to-list 'l repos-command)
+    l))
+
+(defun repos--create-command ()
+  (if repos-remote-host
+      (repos--create-command-remote-command)
+    (repos--create-base-command)))
+(defun repos--create-command-remote-command ()
+  (list "ssh"
+        repos-remote-host
+        (format repos-remote-command-fmt
+                (mapconcat
+                 'shell-quote-argument
+                 (repos--create-base-command)
+                 " "))))
 
 (defun create-repos-buffer ()
   "Create the repos buffers and update them"
@@ -88,17 +138,17 @@ the repo.  If there is a buffer with this name, simply switch to it."
   (let ((proc (make-process
                :name "REPOS"
                :buffer target-buffer ;; Output goes in here
-               :command (list "ssh" "hpcr5-in" "TERM=xterm bash -lc \"repos -j 20\"")
+               :command (repos--create-command)
                :sentinel 'repos-process-sentinel
                :stderr errors-buffer)))
     (message "Constructing repos-buffer")))
 
-(defun repos-overview ()
-  (interactive)
-  (if (not (buffer-live-p repos-buffer))
-      (create-repos-buffer)
-    (view-buffer repos-buffer)
-    (message "Repos buffer already exists (run repos-update to update it)")))
+  (defun repos-overview ()
+    (interactive)
+    (if (not (buffer-live-p repos-buffer))
+        (create-repos-buffer)
+      (view-buffer repos-buffer)
+      (message "Repos buffer already exists (run repos-update to update it)")))
 
 (defun repos-process-sentinel
     (x y) ;; Process sentinel requires two arguments
