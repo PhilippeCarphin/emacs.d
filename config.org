@@ -1985,12 +1985,12 @@ put HTML agenda view files")
                                 gtd-project-list-file
                                 gtd-habits-file
                                 gtd-next-actions-file))
-             (org-agenda-span 40)
-             (org-agenda-start-day "-5d")
+             (org-agenda-span 7)
+             (org-agenda-start-day "1")
              (c-target (concat my/agenda-publish-dir "agenda-complete-view.html"))
              (h-target (concat my/agenda-publish-dir "agenda-habits-view.html")))
          (org-agenda nil "c")
-         (org-agenda-write "/home/phc001/public_html/files/phil-agenda-from-home.html")
+         (org-agenda-write "/home/phc001/public_html/files/phil-agenda.html")
          (org-agenda nil "h")
          (org-agenda-write "/home/phc001/public_html/files/phil-agenda-habits.html")))
 #+end_src
