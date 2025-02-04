@@ -28,9 +28,9 @@
 (defun repos--shell-in-directory (dir name)
   (let ((default-directory dir)
         (cmd (concat "cd " dir (kbd "RET")))
-        (vterm-buf (vterm name)))
-    ;; (message "default-directory: %s" default-directory)
-    (with-current-buffer vterm-buf
+        )
+    (message "default-directory: %s" default-directory)
+    (with-current-buffer (vterm name)
       (vterm-send-string cmd))))
 
 (defun repos-shell-in-repo (repo-name)
@@ -88,7 +88,7 @@ the repo.  If there is a buffer with this name, simply switch to it."
   (let ((proc (make-process
                :name "REPOS"
                :buffer target-buffer ;; Output goes in here
-               :command (list "repos" "-j" "8" "-all")
+               :command (list "ssh" "hpcr5-in" "TERM=xterm bash -lc \"repos -j 20\"")
                :sentinel 'repos-process-sentinel
                :stderr errors-buffer)))
     (message "Constructing repos-buffer")))
@@ -164,7 +164,7 @@ repos-overview buffer"
     (save-excursion
       (beginning-of-line)
       (let ((repo-name (thing-at-point 'filename)))
-        ;; (message "You have clicked repo: '%s'" repo-name)
+        (message "You have clicked repo: '%s'" repo-name)
         (repos-shell-in-repo repo-name)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -183,7 +183,7 @@ repos-overview buffer"
   :parent nil
   "RET" #'repos-magit-repo-at-point
   "g" #'repos-magit-repo-at-point
-  "d" #'repos-open-at-point
+  "d" #'repos-dired-repo-at-point
   "f" #'repos-find-files-at-point
   "s" #'repos-shell-at-point
   "q" #'quit-window)
@@ -193,7 +193,7 @@ repos-overview buffer"
   (kbd "f") 'repos-find-files-at-point)
 (evil-define-key 'normal repos-mode-map
   (kbd "g") 'repos-magit-repo-at-point
-  (kbd "d") 'repos-open-at-point
+  (kbd "d") 'repos-dired-repo-at-point
   (kbd "s") 'repos-shell-at-point
   (kbd "q") 'quit-window)
 ;; Magit does this, not sure what it does
