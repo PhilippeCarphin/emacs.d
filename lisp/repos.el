@@ -143,12 +143,12 @@ If we do want to see repos that are marked as ignored anyway we can set this to 
                :stderr errors-buffer)))
     (message "Constructing repos-buffer")))
 
-  (defun repos-overview ()
-    (interactive)
-    (if (not (buffer-live-p repos-buffer))
-        (create-repos-buffer)
-      (view-buffer repos-buffer)
-      (message "Repos buffer already exists (run repos-update to update it)")))
+(defun repos-overview ()
+  (interactive)
+  (if (not (buffer-live-p repos-buffer))
+      (create-repos-buffer)
+    (view-buffer repos-buffer)
+    (message "Repos buffer already exists (run repos-update to update it)")))
 
 (defun repos-process-sentinel
     (x y) ;; Process sentinel requires two arguments
