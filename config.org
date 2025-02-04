@@ -638,6 +638,7 @@ simple solution:
 #+begin_src emacs-lisp :tangle yes
 (use-package evil-search-highlight-persist :ensure t
   :config (global-evil-search-highlight-persist t))
+(define-key leader-key (kbd "c") 'evil-search-highlight-persist-remove-all)
 #+end_src
 
 *** Add certain keys to all modes
