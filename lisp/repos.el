@@ -1,5 +1,8 @@
 ;;; This package is gives emacs functions for interacting with the repos
 ;;; command.
+;;; TODO I have a few (let ((rfc repos-config-file)) (erase-buffer) (setq repos-config-file))
+;;;      to keep the local value of repos-config-file so I think I should
+;;;      probably rethink how all that works so that I don't have to do that.
 
 ;;; It provides two sets of things.
 ;;; 1. Functions to find files from repos
