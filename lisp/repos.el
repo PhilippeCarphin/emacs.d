@@ -13,6 +13,8 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defvar repos-buffer nil "The buffer of the repos overview")
 (defvar repos-errors nil "The buffer for the STDERR of the repos command")
+(defvar repos-buffer-other nil "The buffer of the repos overview other")
+(defvar repos-errors-other nil "The buffer for the STDERR of the repos command other")
 (defvar repos-command "repos")
 
 (defvar repos-remote-host nil "Host to run repos on.  In contexts with a shared
@@ -185,8 +187,18 @@ See `repos-shell-in-repo'"
     (setq repos-errors repos-err-buf)
     (repos--update-buffers repos-buffer repos-errors)))
 
+(defun create-repos-buffer-other ()
+  "Create the repos buffers and update them"
+  (let ((repos-out-buf (generate-new-buffer "repos-out-buf-other"))
+        (repos-err-buf (generate-new-buffer "repos-err-buf-other"))
+        (cur (current-buffer)))
+    (setq repos-buffer-other repos-out-buf)
+    (setq repos-errors-other repos-err-buf)
+    (repos--update-buffers repos-buffer-other repos-errors-other)))
+
 ;; TODO What if this function is called and the buffers
 ;; have not been created yet?
+;; Maybe get rid of this function and just kill all the buffers and restart
 (defun repos-update ()
   "Update the repos buffer by re-running the repos command"
   (interactive)
@@ -217,14 +229,17 @@ See `repos-shell-in-repo'"
   (if (not (buffer-live-p repos-buffer))
       (create-repos-buffer)
     (view-buffer repos-buffer)
-    (message "Repos buffer already exists (run repos-update to update it)")))
+    (message "Repos buffer already exists (run repos-update to update it)"))
+  )
 
 (defun repos-overview-other () (interactive)
        (let ((other-config-file (read-file-name
                                  "Select a repos config-file "
                                  (expand-file-name "~/.config/repos/")))
              (repos-overview-fetch nil))
-         (repos-overview)))
+         (if (not (buffer-live-p repos-buffer-other))
+             (create-repos-buffer-other)
+           (view-buffer repos-buffer))))
 
 (defun repos-process-sentinel (proc event-string)
   (interactive) ;; Only interactive for testing
