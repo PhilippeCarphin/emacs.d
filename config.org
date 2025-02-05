@@ -1060,6 +1060,7 @@ mistake so having it quit the client instead of killing emacs is nice.
         repos-overview-ignore nil
         repos-overview-n-jobs 80
         repos-overview-all nil))
+(define-key leader-key (kbd "r") 'repos)
 #+end_src
 
 * Orgmode

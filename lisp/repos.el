@@ -358,5 +358,49 @@ repos-overview buffer"
 ;; Magit does this, not sure what it does
 (add-hook 'repos-mode-hook 'evil-normalize-keymaps)
 
+(defun repos-switch-to-buffer () (interactive)
+       (switch-to-buffer repos-buffer))
+(defun repos-switch-to-errors () (interactive)
+       (switch-to-buffer repos-errors))
+
+(defun repos-switch-to-buffer-other () (interactive)
+       (switch-to-buffer repos-buffer-other))
+(defun repos-switch-to-errors-other () (interactive)
+       (view-buffer repos-errors-other))
+
+(defun repos-kill-buffers () (interactive)
+       (when repos-buffer
+         (kill-buffer repos-buffer))
+       (when repos-errors
+         (kill-buffer repos-errors))
+       (message "Killed other repos buffer and error buffer"))
+(defun repos-kill-buffers-other () (interactive)
+       (when repos-buffer-other
+         (kill-buffer repos-buffer-other))
+       (when repos-errors-other
+         (kill-buffer repos-errors-other))
+       (message "Killed repos buffer and error buffer"))
+
+(define-prefix-command 'repos)
+(define-key repos (kbd "r") 'repos-overview)
+(define-key repos (kbd "R") 'repos-overview-other)
+(define-key repos (kbd "o") 'repos-switch-to-buffer)
+(define-key repos (kbd "e") 'repos-switch-to-errors)
+(define-key repos (kbd "O") 'repos-switch-to-buffer-other)
+(define-key repos (kbd "E") 'repos-switch-to-errors-other)
+(define-key repos (kbd "k") 'repos-kill-buffers)
+(define-key repos (kbd "K") 'repos-kill-buffers-other)
+;;; TODO Global keybindings
+;;; - Run repos-overview
+;;; - switch to repos buffer
+;;; - switch to repos error buffer
+;;; - kill both repos buffers (probably just for debug)
+;;; - Run repos-overview-other
+;;; - Switch to other repos buffer
+;;; - switch to other repos error buffer
+;;; - Kill both other repos buffers
+;;; TODO Local keybindings
+;;; - update repos buffer (like pressing g in agenda)
+
 (provide 'repos)
 
