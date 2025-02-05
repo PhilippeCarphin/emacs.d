@@ -226,23 +226,26 @@ See `repos-shell-in-repo'"
              (repos-overview-fetch nil))
          (repos-overview)))
 
-(defun repos-process-sentinel
-    (x y) ;; Process sentinel requires two arguments
+(defun repos-process-sentinel (proc event-string)
   (interactive) ;; Only interactive for testing
-  (message "SENTINEL: x:%s, y:%s" x y)
-  (with-current-buffer repos-buffer
-    (let ((rcf repos-config-file))
-      (read-only-mode -1)
-      (ansi-color-apply-on-region (point-min) (point-max))
-      (read-only-mode)
-      (beginning-of-buffer)
-      (message "SENTINEL: repos-config-file: %s" repos-config-file)
-      ;; Activating repos-mode seems to undo the local buffer value
-      (repos-mode)
-      (message "SENTINEL: repos-config-file: %s" repos-config-file)
-      (setq repos-config-file rcf)
-      ))
-  (message "Repos buffer ready!"))
+  (message "Repos process ended: %s" event-string)
+  ;; I should also check (process-status proc) because this function
+  ;; can get called for other things than process ending but in this
+  ;; particular case it's the only event that can trigger this function.
+  (let ((code (process-exit-status proc)))
+    (when (equal code 0)
+      (with-current-buffer repos-buffer
+        ;; Activating repos-mode seems to undo the local buffer value
+        ;; so I do this let to store the value, then set it after
+        ;; enabling repos-mode
+        (let ((rcf repos-config-file))
+          (read-only-mode -1)
+          (ansi-color-apply-on-region (point-min) (point-max))
+          (read-only-mode)
+          (beginning-of-buffer)
+          (repos-mode)
+          (setq repos-config-file rcf))
+        (message "Repos buffer ready!")))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repos overview major mode functions
