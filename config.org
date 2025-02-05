@@ -428,6 +428,18 @@ that stuff in a separate file.
 (load custom-file)
 #+end_src
 
+** Remember position in files (like Vim)
+
+#+begin_src emacs-lisp
+(save-place-mode 1)
+#+end_src
+
+** Highlight trailing whitespace
+
+#+begin_src emacs-lisp
+(setq whitespace-style (list 'trailing 'face 'spaces 'tabs))
+(global-whitespace-mode 1)
+#+end_src
 * Packages
 
 Some packages are installed elsewhere for example org-mode specific packages are
