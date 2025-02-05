@@ -6,15 +6,80 @@
 ;;; 2. A repos-overview: a buffer for the output.
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; 1. Generic commands and functions
+;;; Configuration variables
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defvar repos-buffer nil "The buffer of the repos overview")
+(defvar repos-errors nil "The buffer for the STDERR of the repos command")
+(defvar repos-command "repos")
+
+(defvar repos-remote-host nil "Host to run repos on.  In contexts with a shared
+filesystem where only some nodes have outside internet access, this should be
+set to the hostname of such a node.
+
+When this is non-nil, the repos command constructing the repos overview buffer
+will be (list \"ssh\" repos-remote-host (format repos-remote-command-fmt ...))
+
+See `repos-remote-command-fmt', `repos-shell-in-repo', and
+`repos-local-shell-in-repo'")
+
+(defvar repos-remote-command-fmt "/bin/bash -c '%s'" "When `repos-remote-host'
+is not nil, this format string is used to create the command to run on the
+remote host.  The value must constain exactly one format specifier which is
+where the repos command will be put.")
+
+(defvar repos-overview-n-jobs 8 "Number of parallel jobs for the repos process.
+Since most of the time is spent in git fetch commands, this number can be high
+without taking much processing power.")
+
+(defvar repos-overview-fetch t "Run git fetch for each repo.  If this is on, a
+high value of `repos-over-view-n-jobs' like 8 or more is worth it.")
+
+(defvar repos-overview-all t "Show all repos.  Normally repos filters out repos
+that
+- Are up-to-date with the remote (not ahead or behind)
+- No unstaged changes
+- No staged changes
+- No untracked files ")
+
+(defvar repos-overview-ignore t "Repos that are marked to be ignored are not
+show if the only thing that is not 'clean' about them is that we are behind the
+remote.
+
+This is so that open-source repos that we don't work on don't needlessly show up
+in the overview.
+
+If we do want to see repos that are marked as ignored anyway we can set this to `nil'")
+
+(defvar repos-shell-send-cd-command nil "Use `vterm-send-string' to send keys to
+`cd' to the directory of the repo when creating shells.
+
+The directory is normally set by locally setting `default-directory' before
+launching `vterm' but depending on the value ov `vterm-shell' this may not go to
+the no have any effect.  For example, if `vterm-shell' has the value `ssh localhost'
+
+If `repos-remote-host' is set to `t', the commands `repos-shell-in-repo*' will
+allways send the `cd' command to the shell regardless of the value
+`repos-shell-send-cd-command' because doing so is necessary. ")
+
+(defvar-local repos-config-file (expand-file-name "~/.config/repos.yml")
+  "The location of the YAML config file for repos")
+
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Base functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun repos-list-names ()
-  (process-lines "repos" "-list-names"))
+  "Return a list of repo names"
+  (process-lines "repos" "-F" repos-config-file "-list-names"))
 
 (defun repos-get-dir (repo-name)
   "Get the directory of a repo"
-  (car (process-lines "repos" "-get-dir" repo-name)))
+  (message "running 'repos -f %s -get-dir %s'" repos-config-file repo-name)
+  (car (process-lines "repos" "-F" repos-config-file "-get-dir" repo-name)))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Find files in repos
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun repos-find-files ()
   "Find files from repos using helm."
   (interactive)
@@ -25,25 +90,41 @@
     (let ((repo-dir (repos-get-dir repo-name)))
       (helm-find-files-1 (concat repo-dir "/")))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Launching vterm shells in repos
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun repos--shell-in-directory (dir name)
-  (let ((default-directory dir)
-        (cmd (concat "cd " dir (kbd "RET")))
-        )
-    (message "default-directory: %s" default-directory)
-    (with-current-buffer (vterm name)
-      (vterm-send-string cmd))))
+  (let ((buf (get-buffer vterm-buffer-name)))
+    (if buf
+        (switch-to-buffer buf)
+      (let ((default-directory dir))
+        (message "default-directory: %s" default-directory)
+        (if (or repos-remote-host repos-shell-send-cd-command)
+            (let ((vterm-shell (concat "ssh " repos-remote-host)))
+              (with-current-buffer (vterm name)
+                (vterm-send-string
+                 (concat "cd " (shell-quote-argument dir) (kbd "RET")))))
+          (vterm name))))))
 
 (defun repos-shell-in-repo (repo-name)
   "Open Vterm shell in repo named `repo-name'.
 
-The Vterm buffer gets the name `Vterm:repo: NAME' where `NAME' is the name of
-the repo.  If there is a buffer with this name, simply switch to it."
-  (let ((buf (get-buffer (concat "Vterm:repo: " repo-name))))
-    (if buf
-        (switch-to-buffer buf)
-      (let ((repo-dir (repos-get-dir repo-name)))
-        ;; (message "repo-directory: %s" (repos-get-dir repo-name))
-        (repos--shell-in-directory repo-dir (concat "Vterm:repo: " repo-name))))))
+If `repos-remote-host' is a string, then this will be done `vterm-shell' locally
+set to \"ssh <repos-remote-host>\" and in that case, `cd <repo-dir>' will be
+sent to the shell via `vterm-send-string'.
+"
+  (let ((vterm-buffer-name (concat "Vterm:repo: " repo-name)))
+    (repos--shell-in-directory (repos-get-dir repo-name) vterm-buffer-name)))
+
+
+(defun repos-local-shell-in-repo (repo-name)
+  "Open a local vterm shell in repo regardless of `repos-remote-host'
+
+See `repos-shell-in-repo'"
+  (let ((repos-remote-host nil)
+        (vterm-buffer-name (concat "Vterm:repo: " repo-name "<local>")))
+    (repos--shell-in-directory (repos-get-dir repo-name) vterm-buffer-name)))
+
 
 (defun repos-shell () 
   "Open a shell inside a repo selected with `helm-comp-read'."
@@ -56,35 +137,9 @@ the repo.  If there is a buffer with this name, simply switch to it."
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Repos Overview
+;;; Creating the repos-overview buffer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
-(defvar repos-buffer nil "The buffer of the repos overview")
-(defvar repos-errors nil "The buffer for the STDERR of the repos command")
-(defvar repos-command "repos")
-(defvar repos-remote-host nil "Host to run repos on")
-(defvar repos-remote-command-fmt "/bin/bash -c '%s'" "The command to create a remote command.")
-(defvar repos-overview-n-jobs 8 "Number of parallel jobs for the repos process.
-Since most of the time is spent in git fetch commands, this number can be high
-without taking much processing power.")
-(defvar repos-overview-fetch t "Run git fetch for each repo.  If this is on, a
-high value of `repos-over-view-n-jobs' like 8 or more is worth it.")
-(defvar repos-overview-all t "Show all repos.  Normally repos filters out repos
-that
-- Are up-to-date with the remote (not ahead or behind)
-- No unstaged changes
-- No staged changes
-- No untracked files
-")
-(defvar repos-overview-ignore t "Repos that are marked to be ignored are not
-show if the only thing that is not 'clean' about them is that we are behind the
-remote.
-
-This is so that open-source repos that we don't work on don't needlessly show up
-in the overview.
-
-If we do want to see repos that are marked as ignored anyway we can set this to `nil'")
-
+;;; Creating the command argument list
 (defun repos--create-base-command ()
   ;; Add-to-list adds to the front
   ;; Also some guy who looks like he gets LISP says add-to-list isn't good
@@ -96,10 +151,15 @@ If we do want to see repos that are marked as ignored anyway we can set this to 
       (add-to-list 'l "-j"))
     (unless repos-overview-fetch
       (add-to-list 'l "-no-fetch"))
+    (if (boundp 'other-config-file)
+        (add-to-list 'l other-config-file)
+      (add-to-list 'l repos-config-file))
+    (add-to-list 'l "-F")
     (add-to-list 'l repos-command)
     l))
 
 (defun repos--create-command ()
+  "Create command "
   (if repos-remote-host
       (repos--create-command-remote-command)
     (repos--create-base-command)))
@@ -112,6 +172,7 @@ If we do want to see repos that are marked as ignored anyway we can set this to 
                  (repos--create-base-command)
                  " "))))
 
+;;; Creating and updating the buffer
 (defun create-repos-buffer ()
   "Create the repos buffers and update them"
   (let ((repos-out-buf (generate-new-buffer "repos-out-buf"))
@@ -132,7 +193,10 @@ If we do want to see repos that are marked as ignored anyway we can set this to 
   "Internal function to update the buffers"
   (with-current-buffer target-buffer
     (read-only-mode -1)
-    (erase-buffer))
+    (erase-buffer)
+    (when (boundp 'other-config-file)
+      (message "Setting repos-config-file to %s" other-config-file)
+      (setq repos-config-file other-config-file)))
   (with-current-buffer errors-buffer
     (erase-buffer))
   (let ((proc (make-process
@@ -150,15 +214,29 @@ If we do want to see repos that are marked as ignored anyway we can set this to 
     (view-buffer repos-buffer)
     (message "Repos buffer already exists (run repos-update to update it)")))
 
+(defun repos-overview-other () (interactive)
+       (let ((other-config-file (read-file-name
+                                 "Select a repos config-file "
+                                 (expand-file-name "~/.config/repos/")))
+             (repos-overview-fetch nil))
+         (repos-overview)))
+
 (defun repos-process-sentinel
     (x y) ;; Process sentinel requires two arguments
   (interactive) ;; Only interactive for testing
+  (message "SENTINEL: x:%s, y:%s" x y)
   (with-current-buffer repos-buffer
-    (read-only-mode -1)
-    (ansi-color-apply-on-region (point-min) (point-max))
-    (read-only-mode)
-    (beginning-of-buffer)
-    (repos-mode))
+    (let ((rcf repos-config-file))
+      (read-only-mode -1)
+      (ansi-color-apply-on-region (point-min) (point-max))
+      (read-only-mode)
+      (beginning-of-buffer)
+      (message "SENTINEL: repos-config-file: %s" repos-config-file)
+      ;; Activating repos-mode seems to undo the local buffer value
+      (repos-mode)
+      (message "SENTINEL: repos-config-file: %s" repos-config-file)
+      (setq repos-config-file rcf)
+      ))
   (message "Repos buffer ready!"))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -167,6 +245,10 @@ If we do want to see repos that are marked as ignored anyway we can set this to 
 (defmacro repos-make-buffer-function (n func &rest body)
   "Make a function that operates on the repo on the line containing the cursor"
   `(defun ,n ()
+     ,(format "Run `%s' in repo on the current line in the `repos-overview'
+     buffer.
+
+See `%s'" (symbol-name func) (symbol-name func))
      (interactive)
      (unless (= (line-number-at-pos) 1)
        (save-excursion
@@ -176,26 +258,17 @@ If we do want to see repos that are marked as ignored anyway we can set this to 
            (,func (repos-get-dir repo-name))))))
   )
 
-(repos-make-buffer-function repos-magit-repo-at-point magit-status)
-(repos-make-buffer-function repos-dired-repo-at-point dired)
+(repos-make-buffer-function repos-magit-in-repo-at-point magit-status)
+(repos-make-buffer-function repos-dired-in-repo-at-point dired)
 
-;; (defun repos-magit-repo-at-point ()
-;;   (interactive)
-;;   (unless (= (line-number-at-pos) 1)
-;;     (save-excursion
-;;       (beginning-of-line)
-;;       (let ((repo-name (thing-at-point 'filename)))
-;;         (message "You have clicked repo: '%s'" repo-name)
-;;         (magit-status (concat (repos-get-dir repo-name)))))))
-
-;; (defun repos-open-at-point ()
-;;   (interactive)
-;;   (unless (= (line-number-at-pos) 1)
-;;     (save-excursion
-;;       (beginning-of-line)
-;;       (let ((repo-name (thing-at-point 'filename)))
-;;         (message "You have clicked repo: '%s'" repo-name)
-;;         (dired (repos-get-dir repo-name))))))
+(defun repos-find-files-in-repo-at-point ()
+  (interactive)
+  (unless (= (line-number-at-pos) 1)
+    (save-excursion
+      (beginning-of-line)
+      (let ((repo-name (thing-at-point 'filename)))
+        (message "You have clicked repo: '%s'" repo-name)
+        (helm-find-files-1 (concat (repos-get-dir repo-name) "/"))))))
 
 (defun repos-find-files-at-point ()
   (interactive)
@@ -206,7 +279,7 @@ If we do want to see repos that are marked as ignored anyway we can set this to 
         (message "You have clicked repo: '%s'" repo-name)
         (helm-find-files-1 (concat (repos-get-dir repo-name) "/"))))))
 
-(defun repos-shell-at-point ()
+(defun repos-shell-in-repo-at-point ()
   "Open Vterm shell in the directory of the repo of the current line in the
 repos-overview buffer"
   (interactive)
@@ -216,6 +289,17 @@ repos-overview buffer"
       (let ((repo-name (thing-at-point 'filename)))
         (message "You have clicked repo: '%s'" repo-name)
         (repos-shell-in-repo repo-name)))))
+
+(defun repos-local-shell-in-repo-at-point ()
+  "Open Vterm shell in the directory of the repo of the current line in the
+repos-overview buffer"
+  (interactive)
+  (unless (= (line-number-at-pos) 1)
+    (save-excursion
+      (beginning-of-line)
+      (let ((repo-name (thing-at-point 'filename)))
+        (message "You have clicked repo: '%s'" repo-name)
+        (repos-local-shell-in-repo repo-name)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repos overview major mode and keymap
@@ -231,23 +315,25 @@ repos-overview buffer"
 (defvar-keymap repos-mode-map
   :doc "Keymap for `repos-mode'."
   :parent nil
-  "RET" #'repos-magit-repo-at-point
-  "g" #'repos-magit-repo-at-point
-  "d" #'repos-dired-repo-at-point
-  "f" #'repos-find-files-at-point
-  "s" #'repos-shell-at-point
+  "RET" #'repos-magit-in-repo-at-point
+  "g" #'repos-magit-in-repo-at-point
+  "d" #'repos-dired-in-repo-at-point
+  "f" #'repos-find-files-in-repo-at-point
+  "s" #'repos-shell-in-repo-at-point
+  "l" #'repos-local-shell-in-repo-at-point
   "q" #'quit-window)
 
 (evil-define-key 'motion repos-mode-map
-  (kbd "RET") 'repos-magit-repo-at-point
-  (kbd "f") 'repos-find-files-at-point)
+  (kbd "RET") 'repos-magit-in-repo-at-point
+  (kbd "f") 'repos-find-files-in-repo-at-point)
 (evil-define-key 'normal repos-mode-map
-  (kbd "g") 'repos-magit-repo-at-point
-  (kbd "d") 'repos-dired-repo-at-point
-  (kbd "s") 'repos-shell-at-point
+  (kbd "g") 'repos-magit-in-repo-at-point
+  (kbd "d") 'repos-dired-in-repo-at-point
+  (kbd "s") 'repos-shell-in-repo-at-point
+  (kbd "l") 'repos-local-shell-in-repo-at-point
   (kbd "q") 'quit-window)
 ;; Magit does this, not sure what it does
 (add-hook 'repos-mode-hook 'evil-normalize-keymaps)
 
-
 (provide 'repos)
+
