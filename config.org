@@ -1056,8 +1056,11 @@ mistake so having it quit the client instead of killing emacs is nice.
 (add-to-list 'load-path (concat user-emacs-directory "lisp"))
 (require 'repos)
 (when (string-equal system-type "gnu/linux")
-  (setq repos-remote-host "hpcr5-in")
-  (setq repos-remote-command-fmt "TERM=xterm /bin/bash -lc '%s'"))
+  (setq repos-remote-host "hpcr5-in"
+        repos-remote-command-fmt "TERM=xterm /bin/bash -lc '%s'"
+        repos-overview-ignore nil
+        repos-overview-n-jobs 80
+        repos-overview-all nil))
 #+end_src
 
 * Orgmode
