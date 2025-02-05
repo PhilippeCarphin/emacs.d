@@ -300,7 +300,7 @@ Display line numbers except in orgmode.
           #'(lambda () (display-line-numbers-mode t)))
 ;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
 #+end_src
-  
+
 *** Failed attempt
 
 First I tried to do it in the most obvious way, turn it on globally and turn it
@@ -559,10 +559,10 @@ Originally developped for spacemacs, now part of the standard emacs packages.
           ;; I don't want this evil-paste-pop and evil-paste-pop-next or whatever
           (define-key evil-normal-state-map (kbd "C-n") 'evil-next-line)
           (define-key evil-normal-state-map (kbd "C-p") 'evil-previous-line)
-	        (evil-set-undo-system 'undo-redo)
+                (evil-set-undo-system 'undo-redo)
           (global-set-key (kbd "M-u") 'universal-argument)
           (setq evil-default-state 'emacs)
-	        (define-key evil-emacs-state-map (kbd "ESC ESC") 'evil-normal-state)
+                (define-key evil-emacs-state-map (kbd "ESC ESC") 'evil-normal-state)
           (setq evil-insert-state-modes nil)
           (setq evil-motion-state-modes nil)
           (setq evil-normal-state-modes '(fundamental-mode
@@ -574,7 +574,7 @@ Originally developped for spacemacs, now part of the standard emacs packages.
                                           dired))
           (setq evil-insert-state-cursor '((box . 2) "lime green"))
           (setq evil-normal-state-cursor '(box "yellow"))
-	  (setq evil-emacs-state-cursor '(box "red"))
+          (setq evil-emacs-state-cursor '(box "red"))
           (setq evil-move-cursor-back nil)
           (add-hook 'with-editor-mode-hook 'evil-insert-state))
 #+end_src
@@ -667,7 +667,7 @@ doesn't help beause I already have the information from the cursor color.
 
 
  #+begin_src emacs-lisp :tangle no
- (add-hook 'evil-insert-state-exit-hook 
+ (add-hook 'evil-insert-state-exit-hook
            (lambda () (setq visible-cursor nil)))
  (add-hook 'evil-insert-state-entry-hook
            (lambda () (setq visible-cursor t)))
@@ -694,7 +694,7 @@ which is indeed true.
 #+end_src
 
 #+begin_src emacs-lisp :tangle yes
-(add-hook 'evil-insert-state-exit-hook 
+(add-hook 'evil-insert-state-exit-hook
         (lambda () (setq visible-cursor nil)))
 (add-hook 'evil-insert-state-entry-hook
         (lambda () (setq visible-cursor t)))
@@ -940,7 +940,7 @@ would like to see like all the active modes.
 
 See [[https://youtu.be/JWD1Fpdd4Pc?t=1299][Aaron Bieber on org mode]]
 
-I can't get this one to work right.  
+I can't get this one to work right.
 #+begin_src shell :results output
 mkdir -p ~/.emacs.d/vendor
 cd ~/.emacs.d/vendor
@@ -1124,7 +1124,7 @@ Other options : ▼, ↴, ⬎, ⤵, ⤷, ↯, ⟾, ⋱, ….
    :PROPERTIES:
    :HEADER-ARGS: :tangle no
    :END:
-   
+
 Setting this value to nil will make links not be presented nicely (for example
 =[[long-url][title]]= will show up as blue underlined =title=.
 
@@ -1140,7 +1140,7 @@ but it doesn't look as nice especially for really long URLs.
 
 I've decided to go back to nicely displayed links and edit them using =C-c C-l=
 or the leader key binding that I've set later =LEADER l i= (i for insert but
-doing insert with cursor on a link 
+doing insert with cursor on a link
 
 *** Org link commands                                              :command:
 | =C-c C-l= | =org-insert-link=         | Insert a link with a menu prompting for URL and description^* |
@@ -1381,7 +1381,7 @@ would produce an Emacs LISP SRC block.
 (use-package org-present :ensure t
   :config (add-hook 'org-present-mode-hook
                     (lambda () (load-theme 'leuven)))
-          (add-hook 'org-present-mode-quit-hook 
+          (add-hook 'org-present-mode-quit-hook
                     (lambda () (disable-theme 'leuven))) )
 #+end_src
 
@@ -1928,7 +1928,7 @@ It normally does org-agenda-capture (do C-h f to find out what key it is)")
 #+end_src
 
 #+begin_src emacs-lisp
-(add-hook 'org-agenda-mode-hook 
+(add-hook 'org-agenda-mode-hook
           (lambda ()
             (define-key org-agenda-mode-map
                         (kbd "SPC") 'leader-key)))
@@ -1978,7 +1978,7 @@ by using =let= to temporarily set =org-agenda-files=.
    :END:
 
 #+begin_src emacs-lisp
-(defcustom my/agenda-publish-dir 
+(defcustom my/agenda-publish-dir
 "~/Documents/gtd-html" "Directory where the function `publish-agenda-views' will
 put HTML agenda view files")
 (defun publish-agenda-views () (interactive)
