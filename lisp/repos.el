@@ -220,7 +220,7 @@ See `repos-shell-in-repo'"
                :name "REPOS"
                :buffer target-buffer ;; Output goes in here
                :command (repos--create-command)
-               :sentinel 'repos-process-sentinel
+               :sentinel `(lambda (proc event) (repos-process-sentinel proc event ,target-buffer ,errors-buffer))
                :stderr errors-buffer)))
     (message "Constructing repos-buffer")))
 
@@ -239,9 +239,9 @@ See `repos-shell-in-repo'"
              (repos-overview-fetch nil))
          (if (not (buffer-live-p repos-buffer-other))
              (create-repos-buffer-other)
-           (view-buffer repos-buffer))))
+           (view-buffer repos-buffer-other))))
 
-(defun repos-process-sentinel (proc event-string)
+(defun repos-process-sentinel (proc event-string out err)
   (interactive) ;; Only interactive for testing
   (message "Repos process ended: %s" event-string)
   ;; I should also check (process-status proc) because this function
@@ -249,7 +249,7 @@ See `repos-shell-in-repo'"
   ;; particular case it's the only event that can trigger this function.
   (let ((code (process-exit-status proc)))
     (when (equal code 0)
-      (with-current-buffer repos-buffer
+      (with-current-buffer out
         ;; Activating repos-mode seems to undo the local buffer value
         ;; so I do this let to store the value, then set it after
         ;; enabling repos-mode
@@ -324,6 +324,14 @@ repos-overview buffer"
         (message "You have clicked repo: '%s'" repo-name)
         (repos-local-shell-in-repo repo-name)))))
 
+(defun repos-update-current-buffer ()
+  (interactive)
+  (let ((buf-name (buffer-name (current-buffer))))
+    (cond
+     ((string-equal buf-name "repos-out-buf")
+      (repos--update-buffers repos-buffer repos-errors))
+     ((string-equal buf-name "repos-out-buf-other")
+      (repos--update-buffers repos-buffer-other repos-errors-other)))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repos overview major mode and keymap
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -344,12 +352,14 @@ repos-overview buffer"
   "f" #'repos-find-files-in-repo-at-point
   "s" #'repos-shell-in-repo-at-point
   "l" #'repos-local-shell-in-repo-at-point
+  "u" #'repos-update-current-buffer
   "q" #'quit-window)
 
 (evil-define-key 'motion repos-mode-map
   (kbd "RET") 'repos-magit-in-repo-at-point
   (kbd "f") 'repos-find-files-in-repo-at-point)
 (evil-define-key 'normal repos-mode-map
+  (kbd "u") 'repos-update-current-buffer
   (kbd "g") 'repos-magit-in-repo-at-point
   (kbd "d") 'repos-dired-in-repo-at-point
   (kbd "s") 'repos-shell-in-repo-at-point
@@ -381,6 +391,11 @@ repos-overview buffer"
          (kill-buffer repos-errors-other))
        (message "Killed repos buffer and error buffer"))
 
+(defun repos-toggle-overview-all () (interactive)
+       (setq repos-overview-all (not repos-overview-all)))
+(defun repos-toggle-overview-ignore () (interactive)
+       (setq repos-overview-ignore (not repos-overview-ignore)))
+
 (define-prefix-command 'repos)
 (define-key repos (kbd "r") 'repos-overview)
 (define-key repos (kbd "R") 'repos-overview-other)
@@ -390,6 +405,8 @@ repos-overview buffer"
 (define-key repos (kbd "E") 'repos-switch-to-errors-other)
 (define-key repos (kbd "k") 'repos-kill-buffers)
 (define-key repos (kbd "K") 'repos-kill-buffers-other)
+(define-key repos (kbd "a") 'repos-toggle-overview-all)
+(define-key repos (kbd "i") 'repos-toggle-overview-ignore)
 ;;; TODO Global keybindings
 ;;; - Run repos-overview
 ;;; - switch to repos buffer
