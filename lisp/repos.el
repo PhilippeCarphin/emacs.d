@@ -154,6 +154,8 @@ See `repos-shell-in-repo'"
     (when repos-overview-n-jobs
       (add-to-list 'l (number-to-string repos-overview-n-jobs))
       (add-to-list 'l "-j"))
+    (when (not repos-overview-ignore)
+      (add-to-list 'l "-noignore"))
     (unless repos-overview-fetch
       (add-to-list 'l "-no-fetch"))
     (if (boundp 'other-config-file)
