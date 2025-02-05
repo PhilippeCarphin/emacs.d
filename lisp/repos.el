@@ -193,7 +193,9 @@ See `repos-shell-in-repo'"
   "Internal function to update the buffers"
   (with-current-buffer target-buffer
     (read-only-mode -1)
-    (erase-buffer)
+    (let ((rfc repos-config-file))
+      (erase-buffer)
+      (setq repos-config-file rfc))
     (when (boundp 'other-config-file)
       (message "Setting repos-config-file to %s" other-config-file)
       (setq repos-config-file other-config-file)))
