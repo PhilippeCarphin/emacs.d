@@ -440,6 +440,15 @@ that stuff in a separate file.
 (setq whitespace-style (list 'trailing 'face 'spaces 'tabs))
 (global-whitespace-mode 1)
 #+end_src
+
+** Enable mouse support in the terminal
+
+In previous versions of Emacs, this was on by default (or maybe just not
+configurable).
+
+#+begin_src emacs-lisp
+(xterm-mouse-mode 1)
+#+end_src
 * Packages
 
 Some packages are installed elsewhere for example org-mode specific packages are
@@ -2440,6 +2449,14 @@ non-prefix key.
 (define-key my/org-agenda-keys (kbd "c") 'gtd-review-view)
 (define-key my/org-agenda-keys (kbd "n") 'gtd-next-action-sparse-tree)
 (define-key my/org-agenda-keys (kbd "w n") 'gtd-work-next-action-sparse-tree)
+#+end_src
+
+** Misc
+
+#+begin_src emacs-lisp
+(define-prefix-command 'misc)
+(define-key leader-key (kbd "m") 'misc)
+(define-key misc (kbd "m") 'xterm-mouse-mode)
 #+end_src
 
 * Other stuff
