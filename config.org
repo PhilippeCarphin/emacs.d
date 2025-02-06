@@ -439,8 +439,9 @@ that stuff in a separate file.
 ** Highlight trailing whitespace
 
 #+begin_src emacs-lisp
-(setq whitespace-style (list 'trailing 'face 'spaces 'tabs))
-(global-whitespace-mode 1)
+(setq whitespace-style (list 'trailing 'face))
+(add-hook 'prog-mode-hook 'whitespace-mode)
+(add-hook 'org-mode-hook 'whitespace-mode)
 #+end_src
 
 ** Enable mouse support in the terminal
