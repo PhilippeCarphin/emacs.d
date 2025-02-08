@@ -2794,7 +2794,14 @@ It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
 ** Org Context tags                                                  :@work:
 
 #+begin_src emacs-lisp
-(setq org-tag-alist '(("@work" . ?W)))
+(setq my/org-common-tag-alist '(("@x" . ?x)))
+(if (string-equal system-type "darwin")
+    (setq org-tag-alist `(,@my/org-common-tag-alist
+                          ("@computer" . ?c)))
+  (setq org-tag-alist `(,@my/org-common-tag-alist
+                        ("@work" . ?w)
+                        ("@si_meeting" . ?m)
+                        ("#jp" . ?j))))
 #+end_src
 
 
