@@ -1791,13 +1791,25 @@ In GTD projects are called "stuck" if they do not contain a =GTD-NEXT-ACTION=.
 This says that a stuck project is a headline where the todo keyword is
 =GTD-PROJECT= that do not contain a heading matching =GTD-NEXT-ACTION=.
 
+For me, stuck means "I need to figure out a next action for this project".  In
+my agenda view for stuck projects, I want the project to appear there if it
+needs my attention to find a next action for it.
+
+Therefore, if there is a =GTD-WAITING= task we /could/ say the project is stuck
+but it will only need me to find it a next action once whatever I'm waiting on
+happens.
+
 #+begin_src emacs-lisp
 (setq org-stuck-projects
       '("TODO=\"GTD-PROJECT\"" ;; Search query
-        ("GTD-NEXT-ACTION")    ;; Not stuck if contains
+        ("GTD-NEXT-ACTION" "GTD-WAITING")    ;; Not stuck if contains
         ()                     ;; Stuck if contains
         ""))                   ;; General regex
 #+end_src
+
+In the complete agenda view, I have a section for waiting items which I can
+review.  And I could add something to show how long it's been waiting if I
+figure out how to do that.
 
 ** Date interval for agenda view
    :PROPERTIES:
