@@ -79,24 +79,16 @@ allways send the `cd' command to the shell regardless of the value
 
 (defun repos-get-dir (repo-name)
   "Get the directory of a repo"
-  (message "running 'repos -f %s -get-dir %s'" repos-config-file repo-name)
+  (message "running 'repos -F %s -get-dir %s'" repos-config-file repo-name)
   (car (process-lines "repos" "-F" repos-config-file "-get-dir" repo-name)))
 
+(defun repos-select-repo ()
+  (helm-comp-read
+   "Select a repos (fuzzy): "
+   (sort (repos-list-names) 'string<)
+   :fuzzy t))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Find files in repos
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defun repos-find-files ()
-  "Find files from repos using helm."
-  (interactive)
-  (let ((repo-name (helm-comp-read
-                    "Select a repos (fuzzy): "
-                    (sort (repos-list-names) 'string<)
-                    :fuzzy t)))
-    (let ((repo-dir (repos-get-dir repo-name)))
-      (helm-find-files-1 (concat repo-dir "/")))))
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; Launching vterm shells in repos
+;;; Shells in repos
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (defun repos--shell-in-directory (dir name)
   (let ((buf (get-buffer vterm-buffer-name)))
@@ -111,13 +103,33 @@ allways send the `cd' command to the shell regardless of the value
                  (concat "cd " (shell-quote-argument dir) (kbd "RET")))))
           (vterm name))))))
 
+(defun repos-find-files ()
+  "Find files from repos using helm."
+  (interactive)
+  (let ((repo-name (repos-select-repo)))
+    (let ((repo-dir (repos-get-dir repo-name)))
+      (helm-find-files-1 (concat repo-dir "/")))))
+
+(defun repos-shell-in-repo-select ()
+  "Open a shell in a repo selected from the list of repos
+
+See `repos-shell-in-repo'"
+  (interactive)
+  (repos-shell-in-repo (repos-select-repo)))
+
+(defun repos-local-shell-in-repo-select ()
+  "Open a local shell in a repo selected from the list of repos
+
+See `repos-local-shell-in-repo'"
+  (interactive)
+  (repos-shell-in-repo (repos-select-repo)))
+
 (defun repos-shell-in-repo (repo-name)
   "Open Vterm shell in repo named `repo-name'.
 
 If `repos-remote-host' is a string, then this will be done `vterm-shell' locally
 set to \"ssh <repos-remote-host>\" and in that case, `cd <repo-dir>' will be
-sent to the shell via `vterm-send-string'.
-"
+sent to the shell via `vterm-send-string'."
   (let ((vterm-buffer-name (concat "Vterm:repo: " repo-name)))
     (repos--shell-in-directory (repos-get-dir repo-name) vterm-buffer-name)))
 
@@ -129,17 +141,6 @@ See `repos-shell-in-repo'"
   (let ((repos-remote-host nil)
         (vterm-buffer-name (concat "Vterm:repo: " repo-name "<local>")))
     (repos--shell-in-directory (repos-get-dir repo-name) vterm-buffer-name)))
-
-
-(defun repos-shell () 
-  "Open a shell inside a repo selected with `helm-comp-read'."
-  (interactive)
-  (let ((repo-name (helm-comp-read
-                    "Select a repos (fuzzy): "
-                    (sort (repos-list-names) 'string<)
-                    :fuzzy t)))
-    (repos-shell-in-repo repo-name)))
-
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Creating the repos-overview buffer
@@ -267,8 +268,10 @@ See `repos-shell-in-repo'"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repos overview major mode functions
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(defmacro repos-make-buffer-function (n func &rest body)
-  "Make a function that operates on the repo on the line containing the cursor"
+(defmacro repos-make-buffer-function (n func name-or-dir &rest body)
+  "Create a function that operates on the repo on current line in the
+`repos-overview' buffer.  Set `name-or-dir' to `:dir' if the function should
+receive the repo's directory or `:name' if it should receive the repo name."
   `(defun ,n ()
      ,(format "Run `%s' in repo on the current line in the `repos-overview'
      buffer.
@@ -280,53 +283,21 @@ See `%s'" (symbol-name func) (symbol-name func))
          (beginning-of-line)
          (let ((repo-name (thing-at-point 'filename)))
            (message "You have clicked repo: '%s'" repo-name)
-           (,func (repos-get-dir repo-name))))))
+           ,(if (equal name-or-dir :dir)
+                ;; We ensure a '/' after the directory for helm-find-files-1
+                ;; and it doesn't make a difference for other functions.
+                `(,func (concat (repos-get-dir repo-name) "/"))
+              `(,func repo-name))))))
   )
 
-(repos-make-buffer-function repos-magit-in-repo-at-point magit-status)
-(repos-make-buffer-function repos-dired-in-repo-at-point dired)
-
-(defun repos-find-files-in-repo-at-point ()
-  (interactive)
-  (unless (= (line-number-at-pos) 1)
-    (save-excursion
-      (beginning-of-line)
-      (let ((repo-name (thing-at-point 'filename)))
-        (message "You have clicked repo: '%s'" repo-name)
-        (helm-find-files-1 (concat (repos-get-dir repo-name) "/"))))))
-
-(defun repos-find-files-at-point ()
-  (interactive)
-  (unless (= (line-number-at-pos) 1)
-    (save-excursion
-      (beginning-of-line)
-      (let ((repo-name (thing-at-point 'filename)))
-        (message "You have clicked repo: '%s'" repo-name)
-        (helm-find-files-1 (concat (repos-get-dir repo-name) "/"))))))
-
-(defun repos-shell-in-repo-at-point ()
-  "Open Vterm shell in the directory of the repo of the current line in the
-repos-overview buffer"
-  (interactive)
-  (unless (= (line-number-at-pos) 1)
-    (save-excursion
-      (beginning-of-line)
-      (let ((repo-name (thing-at-point 'filename)))
-        (message "You have clicked repo: '%s'" repo-name)
-        (repos-shell-in-repo repo-name)))))
-
-(defun repos-local-shell-in-repo-at-point ()
-  "Open Vterm shell in the directory of the repo of the current line in the
-repos-overview buffer"
-  (interactive)
-  (unless (= (line-number-at-pos) 1)
-    (save-excursion
-      (beginning-of-line)
-      (let ((repo-name (thing-at-point 'filename)))
-        (message "You have clicked repo: '%s'" repo-name)
-        (repos-local-shell-in-repo repo-name)))))
+(repos-make-buffer-function repos-magit-in-repo-at-point magit-status :dir)
+(repos-make-buffer-function repos-dired-in-repo-at-point dired :dir)
+(repos-make-buffer-function repos-shell-in-repo-at-point repos-shell-in-repo :name)
+(repos-make-buffer-function repos-local-shell-in-repo-at-point repos-local-shell-in-repo :name)
+(repos-make-buffer-function repos-find-files-in-repo-at-point helm-find-files-1 :dir)
 
 (defun repos-update-current-buffer ()
+  ;; TODO Should definitely setup a buffer-local update function
   (interactive)
   (let ((buf-name (buffer-name (current-buffer))))
     (cond
@@ -334,10 +305,51 @@ repos-overview buffer"
       (repos--update-buffers repos-buffer repos-errors))
      ((string-equal buf-name "repos-out-buf-other")
       (repos--update-buffers repos-buffer-other repos-errors-other)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; Functions that exist just for the keymap
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(defun repos-switch-to-buffer () (interactive)
+       (switch-to-buffer repos-buffer))
+
+(defun repos-switch-to-errors () (interactive)
+       (switch-to-buffer repos-errors))
+
+(defun repos-switch-to-buffer-other () (interactive)
+       (switch-to-buffer repos-buffer-other))
+
+(defun repos-switch-to-errors-other () (interactive)
+       (view-buffer repos-errors-other))
+
+(defun repos-kill-buffers () (interactive)
+       (when repos-buffer
+         (kill-buffer repos-buffer))
+       (when repos-errors
+         (kill-buffer repos-errors))
+       (message "Killed other repos buffer and error buffer"))
+
+(defun repos-kill-buffers-other () (interactive)
+       (when repos-buffer-other
+         (kill-buffer repos-buffer-other))
+       (when repos-errors-other
+         (kill-buffer repos-errors-other))
+       (message "Killed repos buffer and error buffer"))
+
+(defun repos-toggle-overview-all () (interactive)
+       (setq repos-overview-all (not repos-overview-all)))
+
+(defun repos-toggle-overview-ignore () (interactive)
+       (setq repos-overview-ignore (not repos-overview-ignore)))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; Repos overview major mode and keymap
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define-derived-mode repos-mode special-mode "Repos"
+  ;; TODO Setup buffer-local variables.  The documentation
+  ;; [[info:elisp#Major Mode Conventions][elisp#Major Mode Conventions]]
+  ;; says that major modes should clear buffer-local variables
+  ;; and that define-derived-mode makes the created mode do this.
+  ;; This is why I have to do my silly thing with the buffer local
+  ;; variables.  For sure there is a better way.
   "This is my major mode"
   :interactive t
   :group 'repos)
@@ -370,34 +382,6 @@ repos-overview buffer"
 ;; Magit does this, not sure what it does
 (add-hook 'repos-mode-hook 'evil-normalize-keymaps)
 
-(defun repos-switch-to-buffer () (interactive)
-       (switch-to-buffer repos-buffer))
-(defun repos-switch-to-errors () (interactive)
-       (switch-to-buffer repos-errors))
-
-(defun repos-switch-to-buffer-other () (interactive)
-       (switch-to-buffer repos-buffer-other))
-(defun repos-switch-to-errors-other () (interactive)
-       (view-buffer repos-errors-other))
-
-(defun repos-kill-buffers () (interactive)
-       (when repos-buffer
-         (kill-buffer repos-buffer))
-       (when repos-errors
-         (kill-buffer repos-errors))
-       (message "Killed other repos buffer and error buffer"))
-(defun repos-kill-buffers-other () (interactive)
-       (when repos-buffer-other
-         (kill-buffer repos-buffer-other))
-       (when repos-errors-other
-         (kill-buffer repos-errors-other))
-       (message "Killed repos buffer and error buffer"))
-
-(defun repos-toggle-overview-all () (interactive)
-       (setq repos-overview-all (not repos-overview-all)))
-(defun repos-toggle-overview-ignore () (interactive)
-       (setq repos-overview-ignore (not repos-overview-ignore)))
-
 (define-prefix-command 'repos)
 (define-key repos (kbd "r") 'repos-overview)
 (define-key repos (kbd "R") 'repos-overview-other)
@@ -409,17 +393,9 @@ repos-overview buffer"
 (define-key repos (kbd "K") 'repos-kill-buffers-other)
 (define-key repos (kbd "a") 'repos-toggle-overview-all)
 (define-key repos (kbd "i") 'repos-toggle-overview-ignore)
-;;; TODO Global keybindings
-;;; - Run repos-overview
-;;; - switch to repos buffer
-;;; - switch to repos error buffer
-;;; - kill both repos buffers (probably just for debug)
-;;; - Run repos-overview-other
-;;; - Switch to other repos buffer
-;;; - switch to other repos error buffer
-;;; - Kill both other repos buffers
-;;; TODO Local keybindings
-;;; - update repos buffer (like pressing g in agenda)
+(define-key repos (kbd "f") 'repos-find-files)
+(define-key repos (kbd "s") 'repos-shell-in-repo-select)
+(define-key repos (kbd "l") 'repos-local-shell-in-repo-select)
 
 (provide 'repos)
 
