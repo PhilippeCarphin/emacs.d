@@ -2428,8 +2428,6 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
    :END:
- I mapped a key because I like to pop in and out of it. I don't use it myself
- because the I put =org-agenda= on a keymap for my GTD stuff.
 
 #+begin_src emacs-lisp
 (define-prefix-command 'my/org-agenda-keys)
@@ -2455,8 +2453,6 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
-     Warning: This overrides the binding [[*Agenda Key][Agenda Key]] and makes the key =C-c a= a
-non-prefix key.
 
 #+begin_src emacs-lisp
 (define-key my/org-agenda-keys (kbd "g") 'gtd-agenda-view)
