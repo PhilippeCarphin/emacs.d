@@ -2831,6 +2831,6 @@ schedule it to a later date so I don't see it until then.
 #+begin_src emacs-lisp
 (use-package projectile :ensure t
   :config
-  (projectile-mode +1))
-(define-key leader-key (kbd "p") 'projectile-command-map)
+  (projectile-mode +1)
+  (define-key leader-key (kbd "p") 'projectile-command-map))
 #+end_src
