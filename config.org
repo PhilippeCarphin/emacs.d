@@ -1878,8 +1878,8 @@ ended up with these two functions and as far as I can tell they do the right thi
           (tags "PRIORITY=\"C\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
           (stuck "")
           (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
-          (todo "GTD-ACTION")
-          (todo "GTD-WAITING")))
+          (todo "GTD-ACTION" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
+          (todo "GTD-WAITING" ((org-agenda-prefix-format '((todo . "vvvvvvvvvvv [WAITING_ON:%(org-entry-get (point) \"WAITING_ON\")]\n")))))))
         ("s" "Split agenda view"
          ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
           (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
