@@ -724,6 +724,17 @@ which is indeed true.
         (lambda () (setq visible-cursor t)))
 #+end_src
 
+*** Evil describe command
+
+#+begin_src emacs-lisp
+(defun my/evil-ex-describe-command ()
+  "Find and describe the elisp function associated with an ex command"
+  (interactive)
+  (let ((cmd (helm-comp-read "Select an evil-command"
+                             evil-ex-commands :fuzzy t)))
+    (describe-function cmd)))
+#+end_src
+
 ** Magit
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
