@@ -2083,15 +2083,33 @@ This requires only stock emacs
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
-
-I have to put this =add-to-list= at the end of the file it seems
-
+The =org-habits= module is a cool module that allows tracking of habits by
+showing a "consistency graph".
 *** Enable the module
+
 #+begin_src emacs-lisp
 (add-to-list 'org-modules 'org-habit)
 (eval-after-load 'org
   '(org-load-modules-maybe t))
 #+end_src
+
+Because we use =org-babel-load-file= to load this file, the =org= package is
+already loaded when the following code runs.  However, the list =org-modules= is
+only created when the =org= module loads.
+
+This means that this code by itself in an =init.el= file would produce an error
+=void-variable-p org-modules=.  See =init.good-minimal.el= which solves this by
+by doing adding to =org-modules= and calling =org-load-modules-maybe= inside the
+=:config= section of =(use-package org)=.
+
+Although =use-package= is the more elegant solution, it is worth knowing that
+#+begin_src emacs-lisp :tangle no
+(eval-after-load 'org
+  (progn (add-to-list 'org-modules 'org-habit)
+         '(org-load-modules-maybe t)))
+#+end_src
+would also work in an =init.el= file because the =add-to-list= will only be done
+after =org= has been loaded.
 
 *** Move consistency graph to the right
 Almost required otherwise habits can't be more than like 7 letters long.
@@ -2112,15 +2130,27 @@ headline title.
 :HEADER-ARGS: :tangle no :resutls none
 :END:
 
+It's value is =t= by default so we don't need this setting.  I'm leaving it here
+for information purposes.
+
 #+begin_src emacs-lisp
 (setq org-habit-show-habits-only-for-today t)
 #+end_src
 
 *** Log into =LOGBOOK= drawer
 
+Habits work by logging every time a habit has been done.  This is normally right
+in the body of the todo item which clutters it up.  With this setting, logging
+is done inside a drawer which is folded by default.
+
 #+begin_src emacs-lisp
 (setq org-log-into-drawer t)
 #+end_src
+
+I don't put any text in the body of my habit items because they only exist for
+tracking consistency but I still prefer the logging to be tucked away in a drawer.
+
+This also affects closing notes which I like.
 
 *** Log insertion of todo heaing
 
@@ -2132,7 +2162,16 @@ headline title.
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
-From https://emacs.stackexchange.com/a/17328/19972
+
+Habits only show up in the agenda if they need to be done and I don't want to
+change that.
+
+However, I do have an agenda view that shows me all my habits.  The problem is
+that everywhere except the agenda, the habit consistency graph does not appear.
+
+This code from https://emacs.stackexchange.com/a/17328/19972 solves makes
+consistency graphs show up in all agenda views.
+
 #+begin_src emacs-lisp
 (defvar my/org-habit-show-graphs-everywhere t
   "If non-nil, show habit graphs in all types of agenda buffers.
