@@ -542,7 +542,7 @@ Originally developped for spacemacs, now part of the standard emacs packages.
   :delight
   :init (setq which-key-separator " ")
         (setq which-key-prefix-prefix "+")
-        (setq which-key-idle-delay 0.01)
+        (setq which-key-idle-delay 0.5)
   :config (which-key-mode))
 #+end_src
 
