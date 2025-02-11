@@ -1651,6 +1651,20 @@ FUNCTION)= to bind a key in a certain map and warn if it is already bound.
 (define-key org-mode-map (kbd "C-c i") 'org-time-stamp-inactive)
 #+end_src
 
+** Display fancy characters
+
+Display fancy symbols that can be specified with L^{A}T_{E}X notation:
+- ~L^{A}T_{E}X~ \Rightarrow L^{A}T_{E}X
+- ~x_Subscripts and y^superscripts~ \Rightarrow x_Subscripts and y^superscripts
+- ~Some math \Rightarrow \int ymbols~
+#+begin_src emacs-lisp
+(org-toggle-pretty-entities)
+#+end_src
+
+Even during editing it is pretty convenient but if we find ourselves getting
+annoyed by the symbols popping in and out of existence, we can quickly toggle it
+with =C-c C-x \=
+
 * Agenda
 ** Set agenda files
    :PROPERTIES:
