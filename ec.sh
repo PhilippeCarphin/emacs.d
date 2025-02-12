@@ -41,7 +41,7 @@ with(open(os.path.expanduser('~/.config/tmux-finder.yml'))) as f:
     y = yaml.safe_load(f)
 print('\n'.join(y['hosts-to-check']))" \
     | while read jh ; do
-        printf "\033[1;37m==> Doing host $h\033[0m\n"
+        printf "\033[1;37m==> Doing host $jh\033[0m\n"
         local -a cmd=(ssh)
         if [[ $jh == *:* ]] ; then
             j=${jh%%:*}
