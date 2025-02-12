@@ -630,9 +630,11 @@ pressed fast enough, Emacs may perceive this as `M-j'."
                                           text-mode
                                           repos-mode
                                           dired))
-          (setq evil-insert-state-cursor '((box . 2) "lime green"))
+          (setq evil-insert-state-cursor '(box "green"))
           (setq evil-normal-state-cursor '(box "yellow"))
           (setq evil-emacs-state-cursor '(box "red"))
+          (setq evil-replace-state-cursor '(box "purple"))
+          (setq evil-visual-state-cursor '(box "blue"))
           (setq evil-move-cursor-back nil)
           (add-hook 'with-editor-mode-hook 'evil-insert-state))
 #+end_src
@@ -719,7 +721,7 @@ because in the terminal, it seems like the cursor can simply never blink
 and in the GUI, I make the cursor go green in insert mode so the blinking
 doesn't help beause I already have the information from the cursor color.
 
- #+begin_src emacs-lisp
+ #+begin_src emacs-lisp :tangle no
  (blink-cursor-mode 0)
  #+end_src
 
@@ -733,7 +735,7 @@ doesn't help beause I already have the information from the cursor color.
 
  This sets the amount of cursor blinks before the flashing stop.
 
- #+begin_src emacs-lisp
+ #+begin_src emacs-lisp :tangle no
  (setq blink-cursor-blinks 0)
  #+end_src
 
@@ -747,11 +749,11 @@ However this
 showed that setting =visible-cursor= to =nil= stops the blinking in the terminal
 which is indeed true.
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (setq visible-cursor nil)
 #+end_src
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle no
 (add-hook 'evil-insert-state-exit-hook
         (lambda () (setq visible-cursor nil)))
 (add-hook 'evil-insert-state-entry-hook
@@ -2915,3 +2917,55 @@ schedule it to a later date so I don't see it until then.
 ** TODO Add context tags as shown in System Crafters
 
 ** TODO Check out evil-collection
+** TODO Projectile
+
+#+begin_src emacs-lisp
+(use-package projectile :ensure t
+  :config
+  (projectile-mode +1)
+  (define-key leader-key (kbd "p") 'projectile-command-map))
+#+end_src
+** TODO Terminal cursor color per mode [0/3]
+- [ ] Figure out the pcase things
+- [ ] Decide on the type of cursors =('box "green")= vs =('box . "green")=
+- [ ] Consolidate with all my other cursor stuff in evil-mode section
+
+This function almost works.  The message ~specs = ...~ gets printed, and very
+often at that.  However, it doesn't look like the =(send-string-to-terminal ...= runs.
+
+More investigation is required and the problem is that messing up makes Emacs
+unusable because this function runs so often.  Experimenting requires frequent
+emacs restarts and this config is long to launch.  So I'm going to try it in a
+different config.
+
+https://emacs.stackexchange.com/a/14930/19972
+#+begin_src emacs-lisp :tangle yes
+(defun evil-set-cursor-including-terminal (orig-fn specs)
+  (if (display-graphic-p)
+      (funcall orig-fn specs)
+    (when (= (display-color-cells) 256) ; otherwise messes up tmux under xfce4-terminal
+      (pcase specs
+        ((and (or `(,colour) `(,shape . (,colour)))
+              (guard (stringp colour)))
+         (send-string-to-terminal (concat "\033]12;" colour "\a")))))))
+(advice-add #'evil-set-cursor :around #'evil-set-cursor-including-terminal)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no
+(defun green-cursor () (send-string-to-terminal "\033]12;green\a"))
+(defun yellow-cursor () (send-string-to-terminal "\033]12;yellow\a"))
+(defun red-cursor () (send-string-to-terminal "\033]12;red\a"))
+(defun blue-cursor () (send-string-to-terminal "\033]12;blue\a"))
+(defun purple-cursor () (send-string-to-terminal "\033]12;purple\a"))
+(add-hook 'evil-insert-state-entry-hook 'green-cursor)
+(add-hook 'evil-emacs-state-entry-hook 'red-cursor)
+(add-hook 'evil-normal-state-entry-hook 'yellow-cursor)
+(add-hook 'evil-visual-state-entry-hook 'blue-cursor)
+(add-hook 'evil-replace-state-entry-hook 'purple-cursor)
+#+end_src
+
+#+begin_src emacs-lisp
+(pcase evil-insert-state-cursor
+  ((and (or `(,colour) `(,shape . (,colour))))
+   (send-string-to-terminal (concat "\033]12;" colour "\a"))))
+#+end_src
