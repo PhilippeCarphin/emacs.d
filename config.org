@@ -1929,6 +1929,9 @@ ended up with these two functions and as far as I can tell they do the right thi
 (setq org-agenda-custom-commands
       '(("a" "Agenda"
          ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))))
+        ("N" "Project Next Actions"
+         ((todo "GTD-NEXT-ACTION" ((org-agenda-prefix-format
+                                    '((todo . "GTD-PROJECT %(my/org-path-from-todo-keyword \"GTD-PROJECT\")\n    > ")))))))
         ("c" "Complete agenda view"
          ((tags "PRIORITY=\"A\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
           (tags "PRIORITY=\"C\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
@@ -2924,6 +2927,28 @@ schedule it to a later date so I don't see it until then.
   :config
   (projectile-mode +1)
   (define-key leader-key (kbd "p") 'projectile-command-map))
+#+end_src
+
+
+** TODO Agenda: Project view with next action and the project they belong to
+
+https://orgmode.org/worg/dev/org-element-api.html
+#+begin_src emacs-lisp :results none
+(defun my/org-get-parent (e)
+  (plist-get (car (cdr e)) :parent))
+(defun my/org-path-from-todo-keyword (todo-keyword)
+  (interactive "sTodo keyword please ")
+  (let ((eap (org-element-at-point))
+        (path ""))
+    (while (not (string-equal (car eap) "headline"))
+      (setq eap (my/org-get-parent eap)))
+    (while (and eap (not (string-equal (plist-get (car (cdr eap)) :todo-keyword) todo-keyword)))
+      (setq eap (my/org-get-parent eap))
+      (setq path (concat (plist-get (car (cdr eap)) :raw-value) "/" path))
+      (when (string-equal (car eap) "org-data")
+        (setq eap nil)
+        (setq path (format "*Not inside a %s*" todo-keyword))))
+    path))
 #+end_src
 ** TODO Terminal cursor color per mode [0/3]
 - [ ] Figure out the pcase things
