@@ -2982,7 +2982,10 @@ https://emacs.stackexchange.com/a/14930/19972
 (defun evil-set-cursor-including-terminal (orig-fn specs)
   (if (display-graphic-p)
       (funcall orig-fn specs)
-    (when (= (display-color-cells) 256) ; otherwise messes up tmux under xfce4-terminal
+    ;; Only do if support is for 256 or 16M colors
+    ;; otherwise messes up tmux under xfce4-terminal
+    (when (or (= (display-color-cells) 256)
+              (= (display-color-cells) 16777216))
       (pcase specs
         ((and (or `(,colour) `(,shape . (,colour)))
               (guard (stringp colour)))
