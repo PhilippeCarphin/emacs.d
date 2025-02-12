@@ -29,6 +29,7 @@ function main(){
     -f) shift ; _find_emacs_daemons ;;
 	*)  : no -t ; _emacsclient_t "$@" ;;
     esac
+    printf "\033]12;grey\a"
 }
 
 _find_emacs_daemons(){
