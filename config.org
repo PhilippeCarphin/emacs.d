@@ -3006,7 +3006,7 @@ https://emacs.stackexchange.com/a/14930/19972
 (add-hook 'evil-replace-state-entry-hook 'purple-cursor)
 #+end_src
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (pcase evil-insert-state-cursor
   ((and (or `(,colour) `(,shape . (,colour))))
    (send-string-to-terminal (concat "\033]12;" colour "\a"))))
