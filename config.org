@@ -458,7 +458,7 @@ Some packages are installed elsewhere for example org-mode specific packages are
 installed in the org-mode section.
 ** Undo tree
    :PROPERTIES:
-   :HEADER-ARGS: :tangle yes
+   :HEADER-ARGS: :tangle no
    :END:
     Use =C-x u= to get an undo tree buffer, really strong!
 #+begin_src emacs-lisp
