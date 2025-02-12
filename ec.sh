@@ -83,11 +83,10 @@ function gui_open(){
     ensure-server-is-running
     ensure-frame-exists
     if [[ "$@" != "" ]] ; then
-	emacsclient --no-wait "$@"
+        emacsclient --no-wait "$@"
     fi
     focus-current-frame
 }
-    
 
 # From https://superuser.com/a/862809
 function frame-exists() {
