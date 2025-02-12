@@ -562,6 +562,36 @@ Originally developped for spacemacs, now part of the standard emacs packages.
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes
   :END:
+
+*** Functions for evil bindings
+**** Fast esc-j, esc-k
+
+Terminal emulators send various key sequences by sending Esc then something else
+really fast. This is independant of the things like doing =ESC x= instead of
+=M-x= because you can do it slowly.
+
+A common thing in evil-mode is that I will be in insert mode I want to exit
+insert mode and start moving.  I press =ESC= then =k= really fast and if I do it
+fast enoug, Emacs itself actually receives =M-k= which is bound to
+=kill-sentence=.
+
+I used to accidentally delete text this way somewhat often.
+
+#+begin_src emacs-lisp
+(defun my/evil-esc-up ()
+  "Function to bind to `M-k' instead of =kill-sentence=.  When `ESC k' is
+pressed fast enough, Emacs may perceive this as `M-k'."
+  (interactive)
+  (evil-normal-state)
+  (evil-previous-visual-line))
+(defun my/evil-esc-down ()
+  "Function to bind to `M-j' instead of `default-indent-new-line'.  When `ESC j' is
+pressed fast enough, Emacs may perceive this as `M-j'."
+  (interactive)
+  (evil-normal-state)
+  (evil-next-visual-line))
+#+end_src
+
 *** Package evil
 #+begin_src emacs-lisp :results none
 (use-package evil
@@ -583,7 +613,11 @@ Originally developped for spacemacs, now part of the standard emacs packages.
           ;; I don't want this evil-paste-pop and evil-paste-pop-next or whatever
           (define-key evil-normal-state-map (kbd "C-n") 'evil-next-line)
           (define-key evil-normal-state-map (kbd "C-p") 'evil-previous-line)
-                (evil-set-undo-system 'undo-redo)
+          (evil-global-set-key 'insert (kbd "M-k") 'my/evil-esc-up)
+          (evil-global-set-key 'insert (kbd "M-j") 'my/evil-esc-down)
+          (evil-global-set-key 'normal (kbd "M-k") 'evil-previous-visual-line)
+          (evil-global-set-key 'normal (kbd "M-j") 'evil-next-visual-line)
+          (evil-set-undo-system 'undo-redo)
           (global-set-key (kbd "M-u") 'universal-argument)
           (setq evil-default-state 'emacs)
                 (define-key evil-emacs-state-map (kbd "ESC ESC") 'evil-normal-state)
