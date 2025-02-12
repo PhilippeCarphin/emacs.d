@@ -71,7 +71,7 @@ _open_in_current_frame(){
 }
 
 _emacsclient_t(){
-    if [[ $(uname) == Linux ]] && ! [[ -S $TMPDIR/emacs66553/server ]] ; then
+    if ! [[ -S "$TMPDIR/emacs$(id -u)/server" ]] ; then
         exec $HOME/fs1/bin/vim -p "$@"
     fi
     emacsclient -t "$@"
