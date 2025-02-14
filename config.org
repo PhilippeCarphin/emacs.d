@@ -630,6 +630,7 @@ pressed fast enough, Emacs may perceive this as `M-j'."
                                           text-mode
                                           repos-mode
                                           dired))
+          (setq evil-motion-state-cursor '('box "orange"))
           (setq evil-insert-state-cursor '(box "green"))
           (setq evil-normal-state-cursor '(box "yellow"))
           (setq evil-emacs-state-cursor '(box "red"))
@@ -2986,10 +2987,12 @@ https://emacs.stackexchange.com/a/14930/19972
     ;; otherwise messes up tmux under xfce4-terminal
     (when (or (= (display-color-cells) 256)
               (= (display-color-cells) 16777216))
-      (pcase specs
-        ((and (or `(,colour) `(,shape . (,colour)))
-              (guard (stringp colour)))
-         (send-string-to-terminal (concat "\033]12;" colour "\a")))))))
+      (if (eq specs 'evil-half-cursor)
+        (send-string-to-terminal (concat "\033]12;orange\a"))
+        (pcase specs
+          ((and (or `(,colour) `(,shape . (,colour)))
+                (guard (stringp colour)))
+           (send-string-to-terminal (concat "\033]12;" colour "\a"))))))))
 (advice-add #'evil-set-cursor :around #'evil-set-cursor-including-terminal)
 #+end_src
 
