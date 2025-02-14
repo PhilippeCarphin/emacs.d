@@ -3024,3 +3024,24 @@ https://emacs.stackexchange.com/a/14930/19972
   ((and (or `(,colour) `(,shape . (,colour))))
    (send-string-to-terminal (concat "\033]12;" colour "\a"))))
 #+end_src
+
+** TODO Snippet key
+
+I should figure out real snippets but let me do this to match Vim
+#+begin_src emacs-lisp
+(defun super-shebang (arg) (interactive "P")
+       (save-excursion
+         (beginning-of-buffer)
+         (if arg
+            (insert "#!/usr/bin/env -S bash -o errexit -o nounset -o errtrace -o pipefail -O inherit_errexit -O nullglob -O extglob\n")
+           (insert "#!/usr/bin/env bash\n\n"))))
+(defun super-shebang-options (arg) (interactive "P")
+       (save-excursion
+         (beginning-of-buffer)
+         (forward-line)
+         (insert "\nset -o errexit\nset -o nounset\nset -o errtrace\nset -o pipefail\nshopt -s inherit_errexit\nshopt -s nullglob\nshopt -s extglob\n\n")))
+(define-prefix-command 'snippets)
+(define-key leader-key (kbd "s") 'snippets)
+(define-key snippets (kbd "s") 'super-shebang)
+(define-key snippets (kbd "s") 'super-shebang)
+#+end_src
