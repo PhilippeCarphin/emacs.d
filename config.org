@@ -1795,6 +1795,16 @@ Don't show the file and control spacing so that all entries are aligned.
 (setq org-agenda-prefix-format  '((agenda . "    %-12t%-12s")))
 #+end_src
 
+Normally it shows 2 hour blocks.  It takes up less space but I don't like it
+because if I have something scheduled at 13:30, at 12:05, the lines "now" and
+"13:30" are consecutive which makes me feel like the meeting is imminent.
+
+#+begin_src emacs-lisp
+(setq org-agenda-time-grid '((daily today require-timed)
+                             (800 900 1000 1100 1200 1300 1400 1500 1600 1700 1800)
+                             "......" "----------------"))
+#+end_src
+
 ** Define new todo keywords for GTD
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
