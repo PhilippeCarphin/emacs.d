@@ -1946,7 +1946,7 @@ ended up with these two functions and as far as I can tell they do the right thi
          ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))))
         ("N" "Project Next Actions"
          ((todo "GTD-NEXT-ACTION" ((org-agenda-prefix-format
-                                    '((todo . "GTD-PROJECT %(my/org-path-from-todo-keyword \"GTD-PROJECT\")\n    > ")))))))
+                                    '((todo . "%(my/org-path-from-todo-keyword \"GTD-PROJECT\")\n    > ")))))))
         ("c" "Complete agenda view"
          ((tags "PRIORITY=\"A\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
           (tags "PRIORITY=\"C\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
