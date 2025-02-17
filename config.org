@@ -1140,6 +1140,15 @@ the error faces.
   (add-hook 'prog-mode-hook #'rainbow-identifiers-mode))
 #+end_src
 
+** Projectile
+
+#+begin_src emacs-lisp
+(use-package projectile :ensure t
+  :config
+  (projectile-mode +1)
+  (define-key leader-key (kbd "p") 'projectile-command-map))
+#+end_src
+
 * Helper functions
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
@@ -3036,14 +3045,7 @@ schedule it to a later date so I don't see it until then.
 ** TODO Add context tags as shown in System Crafters
 
 ** TODO Check out evil-collection
-** TODO Projectile
 
-#+begin_src emacs-lisp
-(use-package projectile :ensure t
-  :config
-  (projectile-mode +1)
-  (define-key leader-key (kbd "p") 'projectile-command-map))
-#+end_src
 
 
 ** TODO Agenda: Project view with next action and the project they belong to
