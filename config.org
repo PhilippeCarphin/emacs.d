@@ -1050,6 +1050,96 @@ git clone https://github.com/jonathanchu/emacs-powerline.git
   (define-key leader-key (kbd "p") 'projectile-command-map))
 #+end_src
 
+** Rainbow delimiters
+
+Show pairs of parentheses in different colors
+
+This function sets the colors.  I have another one below that sets the same
+colors as Spacemacs.
+
+#+begin_src emacs-lisp
+(defun set-my-rainbow-delimiter-colors ()
+  (interactive)
+  (custom-set-faces
+   '(rainbow-delimiters-base-face ((t (:weight bold))))
+   '(rainbow-delimiters-base-error-face ((t (:foreground "white" :weight bold))))
+   '(rainbow-delimiters-depth-1-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-82" :background "color-240"))))
+   '(rainbow-delimiters-depth-2-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-87"))))
+   '(rainbow-delimiters-depth-3-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-190"))))
+   '(rainbow-delimiters-depth-4-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-208"))))
+   '(rainbow-delimiters-depth-5-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-199"))))
+   '(rainbow-delimiters-depth-6-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-39"))))
+   '(rainbow-delimiters-depth-7-face ((t (:inherit rainbow-delimiters-base-face :foreground "blue"))))
+   '(rainbow-delimiters-depth-8-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-208"))))
+   '(rainbow-delimiters-depth-9-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-199"))))
+   '(rainbow-delimiters-mismatched-face ((t (:inherit rainbow-delimiters-base-error-face :background "orange"))))
+   '(rainbow-delimiters-unmatched-face ((t (:inherit rainbow-delimiters-base-error-face :background "red"))))))
+#+end_src
+
+This function turns on rainbow delimiters in every mode except =sh-mode= because
+Bash has contexts that use double delimiters like =if [[ $a == HELLO]] ; then=
+and I don't like those it when they have different colors.
+
+#+begin_src emacs-lisp
+(defun my/maybe-activate-rainbow-delimiters ()
+  (unless (string-equal major-mode "sh-mode")
+    (rainbow-delimiters-mode)))
+#+end_src
+
+Setup the package using the above functions.
+
+#+begin_src emacs-lisp
+(use-package rainbow-delimiters
+    :ensure t
+    :defer t
+    :init (add-hook 'prog-mode-hook #'my/maybe-activate-rainbow-delimiters)
+    :config (set-my-rainbow-delimiter-colors)
+)
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :exports none
+((((((((()))))))))     ; Sample
+(]                     ; Mismatched
+())                    ; Unmatched
+#+end_src
+
+I started out with Spacemacs so if I want, I can bring back memories of it with
+the spacemacs choice of colors for rainbow delimiters.
+
+In the file =spacemacs-theme.el= from the [[https://github.com/syl20bnr/spacemacs][spacemacs repo]] the function
+=create-spacemacs-theme= sets these colors for the terminal and possibly
+different colors for the GUI.
+
+The only difference with the spacemacs colors is that I use =:underline t= for
+the error faces.
+
+#+begin_src emacs-lisp
+(defun set-spacemacs-rainbow-delimiters-colors (variant)
+  (interactive `(,(car (read-from-string (completing-read "Select variant: " (list 'light 'dark))))))
+  (message "variant:'%s' symbolp:'%s', stringp:'%s'" variant (symbolp variant) (stringp variant))
+  (if (eq variant 'dark)
+      (message "Dark variant selected"))
+  (custom-set-faces
+   `(rainbow-delimiters-depth-1-face ((t (:foreground ,(if (eq variant 'dark) "#268bd2" "#268bd2")))))
+   `(rainbow-delimiters-depth-2-face ((t (:foreground ,(if (eq variant 'dark) "#d75fd7" "#8700af")))))
+   `(rainbow-delimiters-depth-3-face ((t (:foreground ,(if (eq variant 'dark) "#2aa198" "#2aa198")))))
+   `(rainbow-delimiters-depth-4-face ((t (:foreground ,(if (eq variant 'dark) "#67b11d" "#5faf00")))))
+   `(rainbow-delimiters-depth-5-face ((t (:foreground ,(if (eq variant 'dark) "#875f00" "#875f00")))))
+   `(rainbow-delimiters-depth-6-face ((t (:foreground ,(if (eq variant 'dark) "#268bd2" "#268bd2")))))
+   `(rainbow-delimiters-depth-7-face ((t (:foreground ,(if (eq variant 'dark) "#d75fd7" "#8700af")))))
+   `(rainbow-delimiters-depth-8-face ((t (:foreground ,(if (eq variant 'dark) "#2aa198" "#2aa198")))))
+   `(rainbow-delimiters-mismatched-face ((t (:foreground ,(if (eq variant 'dark) "#e0211d" "#e0211d") :underline t :weight bold))))
+   `(rainbow-delimiters-unmatched-face ((t (:foreground ,(if (eq variant 'dark) "#e0211d" "#e0211d") :underline t :weight bold))))))
+#+end_src
+
+** Rainbow Identifiers
+
+#+begin_src emacs-lisp :tangle no
+(use-package rainbow-identifiers :ensure t
+  :init
+  (add-hook 'prog-mode-hook #'rainbow-identifiers-mode))
+#+end_src
+
 * Helper functions
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
