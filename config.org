@@ -1248,16 +1248,21 @@ mistake so having it quit the client instead of killing emacs is nice.
    :HEADER-ARGS: :tangle yes
    :END:
  Places the current line in the center of the screen after a =S-TAB= in orgmode.
+
+I'm not sure why the function needs to be interactive.  Something to do with the
+=recenter= function.  I also tried to make =my/org-post-global-cycle= not
+interactive and doing =(call-interactively 'recenter)= but that did not work.
+May investigate later but for now just leaving a note of it.
  #+begin_src emacs-lisp
- (defun org-post-global-cycle () (interactive)
+ (defun my/org-post-global-cycle () (interactive)
         (recenter)
         (org-beginning-of-line))
  ;; This one is the new fuction
  (advice-add 'org-cycle-global
-             :after #'org-post-global-cycle)
+             :after #'my/org-post-global-cycle)
  ;; This one is the old function which is now aliased to org-cycle-global
  (advice-add 'org-global-cycle
-             :after #'org-post-global-cycle)
+             :after #'my/org-post-global-cycle)
  #+end_src
 
 See [[help:advice-add]], basically, we can ask Emacs to add code to be run
