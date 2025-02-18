@@ -3121,3 +3121,27 @@ I should figure out real snippets but let me do this to match Vim
 (define-key snippets (kbd "s") 'super-shebang)
 #+end_src
 
+
+
+** TODO Weblink at point
+
+#+begin_src emacs-lisp
+(defun git@-to-https (ssh-url)
+  (let* ((words (string-split ssh-url "[@:]"))
+        (domain (car (cdr words)))
+        (namespace/repo (car (cdr (cdr words)))))
+    (list words domain namespace/repo)
+    (format "https://%s/%s" domain namespace/repo)))
+
+(defun browse-gitlab-file ()
+  "Place URL to visit the current revision of the current file at the current
+line in a gitlab remote repo"
+  (interactive)
+  (let* ((push-default (car (process-lines "git" "config" "--get" "remote.pushDefault")))
+         (push-default-url (car (process-lines "git" "config" "--get" (format "remote.%s.url" push-default))))
+         (file (buffer-file-name))
+         (lineno (line-number-at-pos))
+         (path-within-repo (car (process-lines "git" "ls-files" "--full-name" file)))
+         (commit (car (process-lines "git" "rev-parse" "HEAD"))))
+    (kill-new (format "%s/-/blob/%s/%s#L%s" (git@-to-https push-default-url) commit path-within-repo lineno))))
+#+end_src
