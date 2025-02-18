@@ -1063,17 +1063,17 @@ colors as Spacemacs.
   (custom-set-faces
    '(rainbow-delimiters-base-face ((t (:weight bold))))
    '(rainbow-delimiters-base-error-face ((t (:foreground "white" :weight bold))))
-   '(rainbow-delimiters-depth-1-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-82" :background "color-240"))))
-   '(rainbow-delimiters-depth-2-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-87"))))
-   '(rainbow-delimiters-depth-3-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-190"))))
-   '(rainbow-delimiters-depth-4-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-208"))))
-   '(rainbow-delimiters-depth-5-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-199"))))
-   '(rainbow-delimiters-depth-6-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-39"))))
-   '(rainbow-delimiters-depth-7-face ((t (:inherit rainbow-delimiters-base-face :foreground "blue"))))
-   '(rainbow-delimiters-depth-8-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-208"))))
-   '(rainbow-delimiters-depth-9-face ((t (:inherit rainbow-delimiters-base-face :foreground "color-199"))))
-   '(rainbow-delimiters-mismatched-face ((t (:inherit rainbow-delimiters-base-error-face :background "orange"))))
-   '(rainbow-delimiters-unmatched-face ((t (:inherit rainbow-delimiters-base-error-face :background "red"))))))
+   '(rainbow-delimiters-depth-1-face ((t (:inherit rainbow-delimiters-base-face :foreground "#5fff00" :background "#585858"))))
+   '(rainbow-delimiters-depth-2-face ((t (:inherit rainbow-delimiters-base-face :foreground "#5fffff"))))
+   '(rainbow-delimiters-depth-3-face ((t (:inherit rainbow-delimiters-base-face :foreground "#d7ff00"))))
+   '(rainbow-delimiters-depth-4-face ((t (:inherit rainbow-delimiters-base-face :foreground "#ff8700"))))
+   '(rainbow-delimiters-depth-5-face ((t (:inherit rainbow-delimiters-base-face :foreground "#ff00af"))))
+   '(rainbow-delimiters-depth-6-face ((t (:inherit rainbow-delimiters-base-face :foreground "#00afff"))))
+   '(rainbow-delimiters-depth-7-face ((t (:inherit rainbow-delimiters-base-face :foreground "#5c5cff"))))
+   '(rainbow-delimiters-depth-8-face ((t (:inherit rainbow-delimiters-base-face :foreground "#ff8700"))))
+   '(rainbow-delimiters-depth-9-face ((t (:inherit rainbow-delimiters-base-face :foreground "#ff00af"))))
+   '(rainbow-delimiters-mismatched-face ((t (:inherit rainbow-delimiters-base-error-face :background "#ff5f00"))))
+   '(rainbow-delimiters-unmatched-face ((t (:inherit rainbow-delimiters-base-error-face :background "#e0211d"))))))
 #+end_src
 
 This function turns on rainbow delimiters in every mode except =sh-mode= because
