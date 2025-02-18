@@ -2979,64 +2979,26 @@ if [[ "$TERM" == "dumb" ]] ; then
 fi
 #+end_src
 
-* New stuff
-** which command
-:PROPERTIES:
-:HEADER-ARGS: :tangle no
-:END:
+* Stuff to check out
+** TODO Check out evil-collection
+** TODO Helm-org is nice
 
-For debugging, it is useful to be able to do a kind of =which= from within Emacs
-to get what the server will run when we ask it to run an external command.
+Someone asked a question about in Emacs Stack Exchange so I installed it to
+answer their question and it gives functions to navigate to headlines.
+** TODO Check how spacemacs makes insert state cursor into a bar in the terminal
+** TODO Org-global-cycle+
 
-#+begin_src emacs-lisp
-(defun which (cmd) (interactive "s" "command name")
-       (let ((r (executable-find cmd)))
-         (if r
-             (message "%s is %s" cmd r)
-           (message "%s not found in PATH" cmd))))
-#+end_src
+I had my own =org-global-cycle= that I think did
 
-Original implementation before I discovered it already existed
-#+begin_src emacs-lisp :tangle no
-(defun which (cmd) (interactive "s" "command name")
-       ;;; (seq-find FUNC SEQUENCE)
-       ;;; Evaluates FUNC on elements of SEQUENCE.  Returns the first element of
-       ;;; SEQUENCE for which FUNC evaluates to non-nil and stops iteration.
-       (let ((r (seq-find
-                 (lambda (x) (member cmd (directory-files x)))
-                 (string-split (getenv "PATH") ":"))))
-         (if r
-             (message "%s is %s/%s" cmd r cmd)
-           (message "%s not found in PATH" cmd))))
-#+end_src
+I would like it to go from
+- All folded
+- Expand level 1 headers
+- Expand level 2 headers
+- Expand level 3 headers
+- Expand level 4 headers
+- Then back to overview
 
-** Server experiment
-:PROPERTIES:
-:HEADER-ARGS: :tangle no
-:END:
-Reading this:
-[[ https://www.gnu.org/software/emacs/manual/html_node/emacs/TCP-Emacs-server.html]]
-I thought I could set something up to have a single emacs server running for
-my whole local home network.
-
-#+begin_src emacs-lisp
-(setq server-host "0.0.0.0")
-(setq server-port "8888")
-(setq server-tcp-mode t)
-#+end_src
-
-It did create a file =~/.emacs.d/server= but going on another computer, I
-changed the 0.0.0.0 to the IP of the computer where I started the daemon:
-
-#+being_example
-"192.168.2.24:8888 913544"
-"#9~Yn>22Ww7p/zWZ`lD#d>1ybhAsL1uwwDE}lD)sB{Y+a>(>sV\(BjPp%mV!2%=k"
-#+end_example
-
-Then on the client computer, I launched =emacsclient --server-file <file>=.
-It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
-
-** Org Context tags                                                  :@work:
+** TODO Setup Org Context tags                                       :@work:
 
 #+begin_src emacs-lisp
 (setq my/org-common-tag-alist '(("@x" . ?x)))
@@ -3061,21 +3023,24 @@ It did connect but it failed sayin it was not able to open a =/dev/ttys011=.
 #+end_src
 
 ** TODO Modify the waiting sections in agenda views so they only show stuff that is scheduled.
-
 I want to be able to set a date before which I don't see the waiting item.
 
 When I reach the date, the thing starts showing up so I can check on the thing
 I'm waiting on.  And if the thing I'm waiting for has not happened, then I
 schedule it to a later date so I don't see it until then.
 
-** TODO Add context tags as shown in System Crafters
+** TODO Add =org= to export backends
 
-** TODO Check out evil-collection
+I'm supposed to be able to export to org but I don't see it in the menu.
+
+I want to use that do a sparse tree and export only what is visible.
 
 
 
 
-** TODO Terminal cursor color per mode [0/3]
+* New stuff
+
+** TODO Reorganize cursor stuff to include this section [0/3]
 - [ ] Figure out the pcase things
 - [ ] Decide on the type of cursors =('box "green")= vs =('box . "green")=
 - [ ] Consolidate with all my other cursor stuff in evil-mode section
@@ -3125,7 +3090,17 @@ https://emacs.stackexchange.com/a/14930/19972
    (send-string-to-terminal (concat "\033]12;" colour "\a"))))
 #+end_src
 
-** TODO Snippet key
+| Terminal emulator | Reacts to =\033]12;<color>\007= |
+|-------------------+---------------------------------|
+| Konsole           | Yes                             |
+| Mate Terminal     | No                              |
+| Terminal.app      | Only in TMUX                    |
+| iTerm.app         | Only in TMUX                    |
+| VSCode shell      | Only in TMUX                    |
+| Windows Terminal  | Yes                             |
+| Windows CMD       | Yes                             |
+
+** TODO File this: Snippet key
 
 I should figure out real snippets but let me do this to match Vim
 #+begin_src emacs-lisp
@@ -3146,8 +3121,3 @@ I should figure out real snippets but let me do this to match Vim
 (define-key snippets (kbd "s") 'super-shebang)
 #+end_src
 
-** TODO Add =org= to export backends
-
-I'm supposed to be able to export to org but I don't see it in the menu.
-
-I want to use that do a sparse tree and export only what is visible.
