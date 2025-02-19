@@ -3125,23 +3125,47 @@ I should figure out real snippets but let me do this to match Vim
 
 ** TODO Weblink at point
 
-#+begin_src emacs-lisp
-(defun git@-to-https (ssh-url)
-  (let* ((words (string-split ssh-url "[@:]"))
-        (domain (car (cdr words)))
-        (namespace/repo (car (cdr (cdr words)))))
-    (list words domain namespace/repo)
-    (format "https://%s/%s" domain namespace/repo)))
+Create an HTTPS link to the current line of the current file at the current
+commit at the remote URL of the repo containing the file and store it in the
+kill ring.
 
-(defun browse-gitlab-file ()
-  "Place URL to visit the current revision of the current file at the current
-line in a gitlab remote repo"
+- Should error on untracked files
+- Should print a better error message when not in a git repo
+- Could store ~[[<URL>][=<NAME>:<FILE-WITHIN-REPO>:<LINE>=]]~ instead of just =<URL>=
+- Would be nice if it used =org-store-link=
+
+#+begin_src emacs-lisp :results value
+(defun split-git-url (url)
+  (cond ((string-prefix-p "git@" url)
+         (cdr (string-split url "[@:/]")))
+        ((string-prefix-p "https://" url)
+         (cdr (cdr (string-split url "[/]"))))))
+
+(defun compose-url (domain namespace repo commit file lineno)
+  (pcase domain
+    ("github.com"
+     (format "https://%s/%s/%s/blob/%s/%s?plain=1#L%s"
+             domain namespace repo commit file lineno))
+    ((or "gitlab.science.gc.ca" "gitlab.com")
+     (format "https://%s/%s/%s/-/blob/%s/%s#L%s"
+             domain namespace repo commit file lineno))))
+
+(defun my/org-store-git-link ()
   (interactive)
   (let* ((push-default (car (process-lines "git" "config" "--get" "remote.pushDefault")))
-         (push-default-url (car (process-lines "git" "config" "--get" (format "remote.%s.url" push-default))))
+         (push-default-url (process-lines "git" "config" "--get" (format "remote.%s.url" push-default)))
          (file (buffer-file-name))
          (lineno (line-number-at-pos))
          (path-within-repo (car (process-lines "git" "ls-files" "--full-name" file)))
          (commit (car (process-lines "git" "rev-parse" "HEAD"))))
-    (kill-new (format "%s/-/blob/%s/%s#L%s" (git@-to-https push-default-url) commit path-within-repo lineno))))
+    (pcase (split-git-url push-default-url)
+      (`(,domain ,namespace ,repo)
+       (let ((link (compose-url domain namespace repo commit path-within-repo lineno))
+             (desc (format "=<%s>:%s:%s=" repo path-within-repo lineno)))
+         (push (list link desc) org-stored-links)
+         (message "Stored %s link to %s:%s in repo %s" domain path-within-repo lineno repo))))))
+#+end_src
+
+#+begin_src emacs-lisp
+(define-key 'my/org-links (kbd "g") #'my/org-store-git-link)
 #+end_src
