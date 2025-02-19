@@ -1239,7 +1239,7 @@ mistake so having it quit the client instead of killing emacs is nice.
           (when (string-equal system-type "gnu/linux")
             (setq repos-remote-host "hpcr5-in"
                   repos-remote-command-fmt "TERM=xterm /bin/bash -lc '%s'"))
-          (define-key leader-key (kbd "r") 'repos))
+          (define-key leader-key (kbd "r") 'repos-map))
 #+end_src
 
 ** Open in gui frame

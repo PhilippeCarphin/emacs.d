@@ -382,20 +382,25 @@ See `%s'" (symbol-name func) (symbol-name func))
 ;; Magit does this, not sure what it does
 (add-hook 'repos-mode-hook 'evil-normalize-keymaps)
 
-(define-prefix-command 'repos)
-(define-key repos (kbd "r") 'repos-overview)
-(define-key repos (kbd "R") 'repos-overview-other)
-(define-key repos (kbd "o") 'repos-switch-to-buffer)
-(define-key repos (kbd "e") 'repos-switch-to-errors)
-(define-key repos (kbd "O") 'repos-switch-to-buffer-other)
-(define-key repos (kbd "E") 'repos-switch-to-errors-other)
-(define-key repos (kbd "k") 'repos-kill-buffers)
-(define-key repos (kbd "K") 'repos-kill-buffers-other)
-(define-key repos (kbd "a") 'repos-toggle-overview-all)
-(define-key repos (kbd "i") 'repos-toggle-overview-ignore)
-(define-key repos (kbd "f") 'repos-find-files)
-(define-key repos (kbd "s") 'repos-shell-in-repo-select)
-(define-key repos (kbd "l") 'repos-local-shell-in-repo-select)
+;; Using 'repos-map' instead of 'repos' because I used I made a typo
+;; "(substring repos a b)" where 'repo' was a local argument of my function.
+;; The added 's' caused errors that were less than obvious.  With the debugger
+;; it was easy but could have been even easier if it had just told me "repos"
+;; was undefined.
+(define-prefix-command 'repos-map)
+(define-key repos-map (kbd "r") 'repos-overview)
+(define-key repos-map (kbd "R") 'repos-overview-other)
+(define-key repos-map (kbd "o") 'repos-switch-to-buffer)
+(define-key repos-map (kbd "e") 'repos-switch-to-errors)
+(define-key repos-map (kbd "O") 'repos-switch-to-buffer-other)
+(define-key repos-map (kbd "E") 'repos-switch-to-errors-other)
+(define-key repos-map (kbd "k") 'repos-kill-buffers)
+(define-key repos-map (kbd "K") 'repos-kill-buffers-other)
+(define-key repos-map (kbd "a") 'repos-toggle-overview-all)
+(define-key repos-map (kbd "i") 'repos-toggle-overview-ignore)
+(define-key repos-map (kbd "f") 'repos-find-files)
+(define-key repos-map (kbd "s") 'repos-shell-in-repo-select)
+(define-key repos-map (kbd "l") 'repos-local-shell-in-repo-select)
 
 (provide 'repos)
 
