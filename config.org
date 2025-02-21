@@ -3169,11 +3169,16 @@ kill ring.
 
 #+begin_src emacs-lisp :results value
 (defun split-git-url (url)
-  "Returns '(DOMAIN NAMESPACE REPO) from a git URL"
-  (cond ((string-prefix-p "git@" url)
-         (cdr (string-split url "[@:/]")))
-        ((string-prefix-p "https://" url)
-         (cdr (cdr (string-split url "[/]"))))))
+  (let ((split (string-split
+                (cond ((string-prefix-p "git@" url)
+                       (substring url 4))
+                      ((string-prefix-p "https://" url)
+                       (substring url 8))
+                      (_ (error "URL '%s' does not start with 'git@' or 'https://'" url)))
+                "[:/]")))
+    (when (not (eq (length split) 3))
+      (error "Could not split git URL '%s' into 3 parts" url))
+    split))
 
 (defun strip.git (repo)
   (if (string-suffix-p ".git" repo)
@@ -3187,25 +3192,51 @@ kill ring.
              domain namespace (strip.git repo) ref file lineno))
     ((or "gitlab.science.gc.ca" "gitlab.com")
      (format "https://%s/%s/%s/-/blob/%s/%s#L%s"
-             domain namespace (strip.git repo) ref file lineno))))
+             domain namespace (strip.git repo) ref file lineno))
+    (_ (error (format "No URL formation method known for domain '%s'" domain)))))
+
+(defun path-within-repo (filename)
+  (let ((default-directory (file-name-directory filename)))
+    (message "filename: '%s'" filename)
+    (condition-case err
+        (car (process-lines "git" "ls-files" "--full-name" filename))
+      (t (error "Error in getting path of file '%s' within repo: '%s'" filename err)))))
+
+(defun push-default-url ()
+  (message "push-default-url")
+  (condition-case err
+      (let ((default-push-remote (car (process-lines "git" "config" "--get" "remote.pushDefault"))))
+        (car (process-lines "git" "config" "--get" (format "remote.%s.url" default-push-remote))))
+    (t (error "Could not get default git push url in default-directory '%s': %s" default-directory err))))
 
 (defun my/org-store-git-link (arg)
+  "Store an org-mode link for visiting the current revision of the current file
+at the current line on a git web hosting service.  With no prefix argument, the
+current revision is the branch name, and with a prefix argument, the hash of the
+current commit is used."
   (interactive "P")
-  (let* ((push-default (car (process-lines "git" "config" "--get" "remote.pushDefault")))
-         (push-default-url (car (process-lines "git" "config" "--get" (format "remote.%s.url" push-default))))
-         (lineno (line-number-at-pos))
-         (path-within-repo (car (process-lines "git" "ls-files" "--full-name" (buffer-file-name)))
-         (branch (ignore-errors (car (process-lines "git" "symbolic-ref" "--short" "HEAD"))))))
-    (pcase (split-git-url push-default-url)
+  (let* ((lineno (line-number-at-pos))
+         (file (path-within-repo (buffer-file-name)))
+         (branch (ignore-errors (car (process-lines "git" "symbolic-ref" "--short" "HEAD")))))
+    (pcase (split-git-url (push-default-url))
       (`(,domain ,namespace ,repo)
        (pcase (process-lines "git" "rev-parse" "HEAD" "--short" "HEAD")
          (`(,long-hash ,short-hash)
-          (let ((link (compose-ref-url domain namespace repo (if arg long-hash branch) path-within-repo lineno))
-                (desc (format "=<%s%s>%s:%s=" (strip.git repo) (if arg (concat ":" short-hash) "") path-within-repo lineno )))
+          (let ((link (compose-ref-url domain namespace repo
+                                       (if (or arg (not branch)) long-hash branch)
+                                       file lineno))
+                (desc (format "=<%s:%s>%s:%s=" (strip.git repo)
+                              (if (or arg (not branch)) short-hash branch)
+                              file lineno )))
             (push (list link desc) org-stored-links)
-            (message "(%s) Stored: %s on %s" arg desc domain))))))))
+            (message "Stored: %s on %s" desc domain))))))))
 #+end_src
 
+(setq debug-on-error nil)
+[[No URL formation method known for domain ’piss-bucket.com’][=<bdsm:evil-mode>config.org:3158=]
 #+begin_src emacs-lisp
 (define-key 'my/org-links (kbd "g") #'my/org-store-git-link)
 #+end_src
+
+
+=backward-up-list= to move out of one level of parens
