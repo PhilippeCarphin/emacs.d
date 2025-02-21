@@ -623,6 +623,7 @@ pressed fast enough, Emacs may perceive this as `M-j'."
                 (define-key evil-emacs-state-map (kbd "ESC ESC") 'evil-normal-state)
           (setq evil-insert-state-modes nil)
           (setq evil-motion-state-modes nil)
+          (setq evil-emacs-state-modes '(messages-buffer-mode))
           (setq evil-normal-state-modes '(fundamental-mode
                                           ssh-config-mode
                                           conf-mode
