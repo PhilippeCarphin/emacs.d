@@ -147,24 +147,25 @@ See `repos-shell-in-repo'"
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Creating the command argument list
 (defun repos--create-base-command ()
-  ;; Add-to-list adds to the front
-  ;; Also some guy who looks like he gets LISP says add-to-list isn't good
-  ;; for building a list the way I want.
-  (let ((l (list)))
-    (when repos-overview-all (add-to-list 'l "-all"))
+  ;; This method is suggested by https://stackoverflow.com/a/43211401/5795941
+  ;; and shynur who answered my question ;; https://stackoverflow.com/a/43211401/5795941
+  (let ((args (list)))
+    (push repos-command args)
     (when repos-overview-n-jobs
-      (add-to-list 'l (number-to-string repos-overview-n-jobs))
-      (add-to-list 'l "-j"))
-    (when (not repos-overview-ignore)
-      (add-to-list 'l "-noignore"))
+      (push "-j" args)
+      (push (number-to-string repos-overview-n-jobs) args))
+    (when repos-overview-all
+      (push "-all" args))
+    (unless repos-overview-ignore
+      (push "-noignore" args))
     (unless repos-overview-fetch
-      (add-to-list 'l "-no-fetch"))
-    (if (boundp 'other-config-file)
-        (add-to-list 'l other-config-file)
-      (add-to-list 'l repos-config-file))
-    (add-to-list 'l "-F")
-    (add-to-list 'l repos-command)
-    l))
+      (push "-no-fetch" args))
+    (push "-F" args)
+    (push (if (boundp 'other-config-file)
+              other-config-file
+            repos-config-file)
+          args)
+    (nreverse args)))
 
 (defun repos--create-command ()
   "Create command "
