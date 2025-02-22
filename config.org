@@ -1242,6 +1242,38 @@ mistake so having it quit the client instead of killing emacs is nice.
           (define-key leader-key (kbd "r") 'repos))
 #+end_src
 
+** Open in gui frame
+
+These functions are used by =ec.sh= to open the given file in a GUI frame.
+
+#+begin_src emacs-lisp
+(defun find-gui-frame (&rest args)
+  "Find a GUI frame if there is one.  If there are more than one, the frame that
+this function will return depends on the order of the list returned by
+`frame-list'.  In this case, the result will be the last GUI frame from that list."
+  (let ((gui-frame nil))
+    (dolist (frame (frame-list))
+      (with-selected-frame frame
+        (when (display-graphic-p)
+          (setq gui-frame frame))))
+    gui-frame))
+
+(defun open-in-gui-frame (filename)
+  "Open FILENAME in a GUI frame, creating a GUI frame if there are none and
+focus the GUI window containing that frame.  If there are multiple GUI frames
+available, then the selected one will depend on what `find-gui-frame'"
+  (interactive (list (helm-read-file-name "Open file in GUI frame")))
+  (let ((frame (or (find-gui-frame)
+                   (make-frame-on-display ":0"))))
+    (with-selected-frame frame
+      (find-file filename)
+      (select-frame-set-input-focus frame))))
+#+end_src
+
+*** TODO Try this on Windows to see if =":0"= as the display argument works
+
+Update answer on (Emacs) Stack Exchange.
+
 * Orgmode
 ** Center cursor after shift-tab in orgmode
    :PROPERTIES:

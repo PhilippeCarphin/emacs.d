@@ -79,7 +79,7 @@ _emacsclient_t(){
 }
 
 
-function gui_open(){
+function open-in-any-frame(){
     ensure-server-is-running
     ensure-frame-exists
     if [[ "$@" != "" ]] ; then
@@ -97,6 +97,13 @@ function ensure-frame-exists() {
     if ! frame-exists ; then
 	emacsclient -c --no-wait
     fi
+}
+function gui_open(){
+    # Requires user-defined Elisp function 'open-in-gui-frame'
+    # see config.org
+    local elisp_code="(let ((default-directory \"$PWD\"))
+                         (open-in-gui-frame \"$1\"))"
+    emacsclient --eval "${elisp_code}"
 }
 
 # From https://emacs.stackexchange.com/a/54139/19972
