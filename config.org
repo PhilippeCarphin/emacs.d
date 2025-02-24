@@ -2699,7 +2699,7 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
 #+begin_src emacs-lisp
 (define-prefix-command 'my/org-links)
 (define-key leader-key (kbd "l") 'my/org-links)
-(define-key my/org-links (kbd "g") 'org-open-at-point)
+(define-key my/org-links (kbd "o") 'org-open-at-point)
 (define-key my/org-links (kbd "s") 'org-store-link)
 (define-key my/org-links (kbd "i") 'org-insert-link)
 (define-key my/org-links (kbd "i") 'org-insert-link)
@@ -3168,34 +3168,41 @@ kill ring.
 
 #+begin_src emacs-lisp :results value
 (defun split-git-url (url)
+  "Returns '(DOMAIN NAMESPACE REPO) from a git URL"
   (cond ((string-prefix-p "git@" url)
          (cdr (string-split url "[@:/]")))
         ((string-prefix-p "https://" url)
          (cdr (cdr (string-split url "[/]"))))))
 
-(defun compose-url (domain namespace repo commit file lineno)
+(defun strip.git (repo)
+  (if (string-suffix-p ".git" repo)
+      (substring repo 0 -4)
+    repo))
+
+(defun compose-ref-url (domain namespace repo ref file lineno)
   (pcase domain
     ("github.com"
      (format "https://%s/%s/%s/blob/%s/%s?plain=1#L%s"
-             domain namespace repo commit file lineno))
+             domain namespace (strip.git repo) ref file lineno))
     ((or "gitlab.science.gc.ca" "gitlab.com")
      (format "https://%s/%s/%s/-/blob/%s/%s#L%s"
-             domain namespace repo commit file lineno))))
+             domain namespace (strip.git repo) ref file lineno))))
 
-(defun my/org-store-git-link ()
-  (interactive)
+(defun my/org-store-git-link (arg)
+  (interactive "P")
   (let* ((push-default (car (process-lines "git" "config" "--get" "remote.pushDefault")))
-         (push-default-url (process-lines "git" "config" "--get" (format "remote.%s.url" push-default)))
-         (file (buffer-file-name))
+         (push-default-url (car (process-lines "git" "config" "--get" (format "remote.%s.url" push-default))))
          (lineno (line-number-at-pos))
-         (path-within-repo (car (process-lines "git" "ls-files" "--full-name" file)))
-         (commit (car (process-lines "git" "rev-parse" "HEAD"))))
+         (path-within-repo (car (process-lines "git" "ls-files" "--full-name" (buffer-file-name)))
+         (branch (ignore-errors (car (process-lines "git" "symbolic-ref" "--short" "HEAD"))))))
     (pcase (split-git-url push-default-url)
       (`(,domain ,namespace ,repo)
-       (let ((link (compose-url domain namespace repo commit path-within-repo lineno))
-             (desc (format "=<%s>:%s:%s=" repo path-within-repo lineno)))
-         (push (list link desc) org-stored-links)
-         (message "Stored %s link to %s:%s in repo %s" domain path-within-repo lineno repo))))))
+       (pcase (process-lines "git" "rev-parse" "HEAD" "--short" "HEAD")
+         (`(,long-hash ,short-hash)
+          (let ((link (compose-ref-url domain namespace repo (if arg long-hash branch) path-within-repo lineno))
+                (desc (format "=<%s%s>%s:%s=" (strip.git repo) (if arg (concat ":" short-hash) "") path-within-repo lineno )))
+            (push (list link desc) org-stored-links)
+            (message "(%s) Stored: %s on %s" arg desc domain))))))))
 #+end_src
 
 #+begin_src emacs-lisp
