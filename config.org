@@ -631,7 +631,7 @@ pressed fast enough, Emacs may perceive this as `M-j'."
                                           text-mode
                                           repos-mode))
           (setq evil-motion-state-cursor '('box "orange"))
-          (setq evil-insert-state-cursor '(box "green"))
+          (setq evil-insert-state-cursor '(bar "green"))
           (setq evil-normal-state-cursor '(box "yellow"))
           (setq evil-emacs-state-cursor '(bar "red"))
           (setq evil-replace-state-cursor '(box "purple"))
@@ -715,50 +715,125 @@ exceptions that include window movement.  Otherwise it's really annoying to do
 #+begin_src emacs-lisp
 (define-key help-mode-map (kbd "SPC") 'leader-key)
 #+end_src
+
 *** Cursor blinking
 
-Make the cursor blink only in insert state.  This is of limited usefulness
-because in the terminal, it seems like the cursor can simply never blink
-and in the GUI, I make the cursor go green in insert mode so the blinking
-doesn't help beause I already have the information from the cursor color.
+**** In the GUI
 
- #+begin_src emacs-lisp :tangle no
- (blink-cursor-mode 0)
- #+end_src
+Turn off blinking cursor
 
+#+begin_src emacs-lisp :tangle yes
+(blink-cursor-mode 0)
+#+end_src
 
- #+begin_src emacs-lisp :tangle no
- (add-hook 'evil-insert-state-exit-hook
-           (lambda () (setq visible-cursor nil)))
- (add-hook 'evil-insert-state-entry-hook
-           (lambda () (setq visible-cursor t)))
- #+end_src
+When cursor is blinking, make it blink indefinitely.  Setting this to a positive
+value decides how many times the cursor blinks before it stops blinking.
 
- This sets the amount of cursor blinks before the flashing stop.
+#+begin_src emacs-lisp :tangle yes
+(setq blink-cursor-blinks 0)
+#+end_src
 
- #+begin_src emacs-lisp :tangle no
- (setq blink-cursor-blinks 0)
- #+end_src
+**** In the terminal
+***** Basic
 
-*** Set cursor blink off in terminal
-
-According to the documentation, =cursor-blink-mode= has no effect on the
-terminal.
-
-However this
-[[https://stackoverflow.com/questions/14270758/blink-cursor-mode-with-nicer-blinking][Stack Overflow post]]
-showed that setting =visible-cursor= to =nil= stops the blinking in the terminal
-which is indeed true.
-
-#+begin_src emacs-lisp :tangle no
+Terminals have a "visible cursor" setting which terminal emulators usually
+implement by making the cursor blink.  We do something else.
+#+begin_src emacs-lisp :tangle yes
 (setq visible-cursor nil)
 #+end_src
 
+This code, which I am not using could be used to make the cursor blink in insert
+mode and not blink when not in insert mode.
 #+begin_src emacs-lisp :tangle no
-(add-hook 'evil-insert-state-exit-hook
-        (lambda () (setq visible-cursor nil)))
-(add-hook 'evil-insert-state-entry-hook
-        (lambda () (setq visible-cursor t)))
+(add-hook 'evil-insert-state-exit-hook (lambda () (setq visible-cursor nil)))
+(add-hook 'evil-insert-state-entry-hook (lambda () (setq visible-cursor t)))
+#+end_src
+
+- Ref [[https://stackoverflow.com/questions/14270758/blink-cursor-mode-with-nicer-blinking][Stack Overflow post]]
+
+***** Changing cursor color and shape based on evil state
+
+Set advice on =evil-set-cursor= to implement cursor shape and color changes in
+the terminal using the =evil-<X>-state-cursor= specs.
+
+#+begin_src emacs-lisp :tangle yes
+(defun evil-set-cursor-including-terminal (orig-fn specs)
+  (if (display-graphic-p)
+      (funcall orig-fn specs)
+    (when (or (= (display-color-cells) 256)
+              (= (display-color-cells) 16777216))
+      ;; (message "evil-set-cursor-including-terminal: specs:'%S'" specs)
+      (pcase specs
+        ((and (or `(,colour) `(,shape . (,colour)))
+              (guard (stringp colour)))
+         (send-string-to-terminal (concat "\033]12;" colour "\a"))
+         (cond ((eq shape 'bar)
+                (send-string-to-terminal "\033[6 q"))
+               (t (send-string-to-terminal "\033[2 q"))))
+        ((and x (guard (eq x 'evil-half-cursor)))
+         (send-string-to-terminal "\033]12;orange\007\033[6 q"))))))
+(advice-add #'evil-set-cursor :around #'evil-set-cursor-including-terminal)
+#+end_src
+
+- I have to do something special for motion state because it doesn't seem to
+  have any effect when I set =evil-motion-state-cursor=.  In the terminal at
+  least, doing a key that expects a motion causes this function to be called
+  with =specs= equal to =evil-half-cursor=.
+- The check on =display-color-cells= was in the answer that inspired this code
+  but in all the terminals I have tried it wasn't necessary since they either
+  respond to the codes or don't do anything with them.
+- Careful when playing with this, setting =evil-set-cursor= to a function that
+  causes errors might make Emacs unusable.  It may be possible to recover by
+  =C-x C-e='ing this: =(defun evil-set-cursor-including-terminal (f s) nil)= but
+  while working on this, I have had to use =pgrep emacs | xargs kill= a few
+  times.
+
+https://emacs.stackexchange.com/a/14930/19972
+
+Codes used here:
+
+| Code            | Effect                                           |
+|-----------------+--------------------------------------------------|
+| =\033]12;_\007= | Set cursor color using the name of the color     |
+| =\033[6 q=      | Make the cursor a vertical bar                   |
+| =\033[2 q=      | Make the cursor a box                            |
+| =\033[112\007=  | Set the cursor back to default (color and shape) |
+
+Terminal emulators that respond to these codes:
+
+
+| Terminal emulator | Reacts to =\033]12;<color>\007= |
+|-------------------+---------------------------------|
+| Konsole           | Yes                             |
+| Mate Terminal     | No                              |
+| Terminal.app      | Only in TMUX                    |
+| iTerm.app         | Only in TMUX                    |
+| VSCode shell      | Only in TMUX                    |
+| Windows Terminal  | Yes                             |
+| Windows CMD       | Yes                             |
+
+
+References:
+- Cursor shape [[https://github.com/syl20bnr/spacemacs/issues/7112#issuecomment-389855491][issue on Spacemacs repo]] which cites [[https://vt100.net/docs/vt510-rm/DECSCUSR][the VT100 documentation]].
+
+***** Initial attempt
+
+This works if the cursor remains in the same window, but when moving, from a
+window that is in insert state to a window that is in normal state, none of
+these hooks are run.  The solution above does not have this drawback because
+=evil-set-cursor= is run when changing from one window to another.
+
+#+begin_src emacs-lisp :tangle no
+(defun green-cursor () (send-string-to-terminal "\033]12;green\a"))
+(defun yellow-cursor () (send-string-to-terminal "\033]12;yellow\a"))
+(defun red-cursor () (send-string-to-terminal "\033]12;red\a"))
+(defun blue-cursor () (send-string-to-terminal "\033]12;blue\a"))
+(defun purple-cursor () (send-string-to-terminal "\033]12;purple\a"))
+(add-hook 'evil-insert-state-entry-hook 'green-cursor)
+(add-hook 'evil-emacs-state-entry-hook 'red-cursor)
+(add-hook 'evil-normal-state-entry-hook 'yellow-cursor)
+(add-hook 'evil-visual-state-entry-hook 'blue-cursor)
+(add-hook 'evil-replace-state-entry-hook 'purple-cursor)
 #+end_src
 
 *** Evil describe command
@@ -3072,66 +3147,6 @@ I want to use that do a sparse tree and export only what is visible.
 
 
 * New stuff
-
-** TODO Reorganize cursor stuff to include this section [0/3]
-- [ ] Figure out the pcase things
-- [ ] Decide on the type of cursors =('box "green")= vs =('box . "green")=
-- [ ] Consolidate with all my other cursor stuff in evil-mode section
-
-This function almost works.  The message ~specs = ...~ gets printed, and very
-often at that.  However, it doesn't look like the =(send-string-to-terminal ...= runs.
-
-More investigation is required and the problem is that messing up makes Emacs
-unusable because this function runs so often.  Experimenting requires frequent
-emacs restarts and this config is long to launch.  So I'm going to try it in a
-different config.
-
-https://emacs.stackexchange.com/a/14930/19972
-#+begin_src emacs-lisp :tangle yes
-(defun evil-set-cursor-including-terminal (orig-fn specs)
-  (if (display-graphic-p)
-      (funcall orig-fn specs)
-    ;; Only do if support is for 256 or 16M colors
-    ;; otherwise messes up tmux under xfce4-terminal
-    (when (or (= (display-color-cells) 256)
-              (= (display-color-cells) 16777216))
-      (if (eq specs 'evil-half-cursor)
-        (send-string-to-terminal (concat "\033]12;orange\a"))
-        (pcase specs
-          ((and (or `(,colour) `(,shape . (,colour)))
-                (guard (stringp colour)))
-           (send-string-to-terminal (concat "\033]12;" colour "\a"))))))))
-(advice-add #'evil-set-cursor :around #'evil-set-cursor-including-terminal)
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(defun green-cursor () (send-string-to-terminal "\033]12;green\a"))
-(defun yellow-cursor () (send-string-to-terminal "\033]12;yellow\a"))
-(defun red-cursor () (send-string-to-terminal "\033]12;red\a"))
-(defun blue-cursor () (send-string-to-terminal "\033]12;blue\a"))
-(defun purple-cursor () (send-string-to-terminal "\033]12;purple\a"))
-(add-hook 'evil-insert-state-entry-hook 'green-cursor)
-(add-hook 'evil-emacs-state-entry-hook 'red-cursor)
-(add-hook 'evil-normal-state-entry-hook 'yellow-cursor)
-(add-hook 'evil-visual-state-entry-hook 'blue-cursor)
-(add-hook 'evil-replace-state-entry-hook 'purple-cursor)
-#+end_src
-
-#+begin_src emacs-lisp :tangle no
-(pcase evil-insert-state-cursor
-  ((and (or `(,colour) `(,shape . (,colour))))
-   (send-string-to-terminal (concat "\033]12;" colour "\a"))))
-#+end_src
-
-| Terminal emulator | Reacts to =\033]12;<color>\007= |
-|-------------------+---------------------------------|
-| Konsole           | Yes                             |
-| Mate Terminal     | No                              |
-| Terminal.app      | Only in TMUX                    |
-| iTerm.app         | Only in TMUX                    |
-| VSCode shell      | Only in TMUX                    |
-| Windows Terminal  | Yes                             |
-| Windows CMD       | Yes                             |
 
 ** TODO File this: Snippet key
 
