@@ -92,10 +92,13 @@ untracked files."
     (t (error "Could not get default git push url in default-directory '%s': %s" default-directory err))))
 
 (defun git-weblink-to-point (exact-commit)
-  "Store an org-mode link for visiting the current revision of the current file
-at the current line on a git web hosting service.  With no prefix argument, the
-current revision is the branch name, and with a prefix argument, the hash of the
-current commit is used."
+  "Return a link to the current line of the current file at the current revision
+in the web interface of the remote repository
+
+Returns '(link desc domain)' to compose various types of links.
+
+If EXACT-COMMIT is not nil or if there is no current branch, the link will be to
+the current commit, otherwise the current branch is used."
   (let* ((lineno (line-number-at-pos))
          (file (or (git-weblink-path-within-repo (buffer-file-name))
                    (error "Could not get path of file '%s' within repo (may be an untracked file)" (buffer-file-name))))
