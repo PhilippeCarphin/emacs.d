@@ -69,6 +69,10 @@ allways send the `cd' command to the shell regardless of the value
 (defvar-local repos-config-file (expand-file-name "~/.config/repos.yml")
   "The location of the YAML config file for repos")
 
+(defvar repos-bin-path nil
+  "Path to the directory containing the repos command.  If non-nil, repos
+  commands will be made with `repos-bin-path/repos' instead of simply 'repos'")
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Base functions
@@ -150,7 +154,9 @@ See `repos-shell-in-repo'"
   ;; This method is suggested by https://stackoverflow.com/a/43211401/5795941
   ;; and shynur who answered my question ;; https://stackoverflow.com/a/43211401/5795941
   (let ((args (list)))
-    (push repos-command args)
+    (if repos-bin-path
+        (push (concat repos-bin-path "/repos") args)
+      (push repos-command args))
     (when repos-overview-n-jobs
       (push "-j" args)
       (push (number-to-string repos-overview-n-jobs) args))
