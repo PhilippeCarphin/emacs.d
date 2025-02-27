@@ -160,9 +160,9 @@ otherwise use the current branch"
   (interactive "P")
   (pcase (git-weblink-to-point arg)
     (`(,link ,desc, domain)
-     (let ((html-desc (string-replace "<" "&lt;" (string-replace ">" "&gt;" desc)))))
-     (kill-new (format "<a href=\"%s\">%s</a>" link html-desc))
-     (message "Copied hyperlink <a href=\"https://%s/...\">%s" domain html-desc))))
+     (let ((html-desc (string-replace "<" "&lt;" (string-replace ">" "&gt;" desc))))
+       (kill-new (format "<a href=\"%s\">%s</a>" link html-desc))
+       (message "Copied hyperlink <a href=\"https://%s/...\">%s" domain html-desc))))
 
 (defun git-weblink-copy-path-within-repo ()
   "Copy the path of the current file relative to the root of the git repository"
