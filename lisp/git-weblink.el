@@ -115,6 +115,17 @@ the current commit, otherwise the current branch is used."
                               file lineno )))
             (list link desc domain))))))))
 
+(defun git-weblink-send-string-to-system-clipboard (string)
+  "This function uses OSC 52 to ask the terminal emulator to put STRING into the
+system clipboard.  This is not supported on all terminals terminal emulators
+and inside TMUX, tmux will swallow OSC 52 unless the TMUX option 'set-clipboard'
+has the value 'on'."
+  (interactive)
+  (unless (display-graphic-p)
+    ;; - xTerm refernce: https://invisible-island.net/xterm/ctlseqs/ctlseqs.html#h3-Operating-System-Commands
+    ;; - Tmux documentation: https://github.com/tmux/tmux/wiki/Clipboard#the-set-clipboard-option
+    (send-string-to-terminal (concat "\033]52;c;" (base64-encode-string string) "\007"))))
+
 (defun git-weblink-store-org-link (arg)
   "Store web link to current line of current file at current revision for org
 insert link
@@ -137,6 +148,7 @@ otherwise use the current branch"
   (pcase (git-weblink-to-point arg)
     (`(,link ,desc, domain)
      (kill-new link)
+     (git-weblink-send-string-to-system-clipboard link)
      (message "Stored: link to %s on %s in kill ring" desc domain))))
 
 (defun git-weblink-copy-markdown-link (arg)
@@ -148,8 +160,10 @@ otherwise use the current branch"
   (interactive "P")
   (pcase (git-weblink-to-point arg)
     (`(,link ,desc, domain)
-     (kill-new (format "(%s)[%s]" desc link))
-     (message "Stored: Markdown link (%s)[...] on %s in kill ring" desc domain))))
+     (let ((markdown-link (format "(%s)[%s]" desc link)))
+       (kill-new markdown-link)
+       (git-weblink-send-string-to-system-clipboard markdown-link)
+       (message "Stored: Markdown link (%s)[...] on %s in kill ring" desc domain)))))
 
 (defun git-weblink-copy-hyperlink (arg)
   "Copy web link to current line of current file at current revision as a
@@ -160,15 +174,19 @@ otherwise use the current branch"
   (interactive "P")
   (pcase (git-weblink-to-point arg)
     (`(,link ,desc, domain)
-     (let ((html-desc (string-replace "<" "&lt;" (string-replace ">" "&gt;" desc))))
-       (kill-new (format "<a href=\"%s\">%s</a>" link html-desc))
-       (message "Copied hyperlink <a href=\"https://%s/...\">%s" domain html-desc))))
+     (let ((html-desc (string-replace "<" "&lt;" (string-replace ">" "&gt;"
+                                                                 desc)))
+           (href (format "<a href=\"%s\">%s</a>" link html-desc)))
+       (kill-new href)
+       (git-weblink-send-string-to-system-clipboard href)
+       (message "Copied hyperlink <a href=\"https://%s/...\">%s" domain html-desc)))))
 
 (defun git-weblink-copy-path-within-repo ()
   "Copy the path of the current file relative to the root of the git repository"
   (interactive)
   (let ((path-within-repo (git-weblink-path-within-repo (buffer-file-name))))
     (kill-new path-within-repo)
+    (git-weblink-send-string-to-system-clipboard path-within-repo)
     (message "Copied path within repo: %s" path-within-repo)))
 
 (defun git-weblink-copy-repo-url ()
@@ -177,7 +195,10 @@ otherwise use the current branch"
   (interactive)
   (pcase (git-weblink-split-remote-url (git-weblink-push-default-url))
     (`(,domain ,namespace ,repo)
-     (kill-new (format "https://%s/%s/%s" domain namespace repo)))))
+     (let ((repo-url (format "https://%s/%s/%s" domain namespace repo)))
+       (kill-new repo-url)
+       (git-weblink-send-string-to-system-clipboard repo-url)
+       (message "Copied repo URL")))))
 
 (define-prefix-command 'git-weblink-map)
 (define-key 'git-weblink-map (kbd "s") #'git-weblink-store-org-link)
