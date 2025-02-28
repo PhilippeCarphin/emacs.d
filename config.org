@@ -1252,6 +1252,40 @@ the error faces.
 (use-package git-weblink)
 #+end_src
 
+** Clipetty
+
+Send copied text from terminal to system clipboard using OSC52.
+
+[[https://github.com/spudlyo/clipetty][Clipetty github page]]
+
+#+begin_src emacs-lisp
+(use-package clipetty :ensure t
+  :hook (after-init . global-clipetty-mode))
+#+end_src
+
+This works by using something like this (evaluating this block from Terminal
+Emacs should put "clipetty OSC52" in the system clipboard if the terminal
+emulator supports it).
+
+#+begin_src emacs-lisp :tangle no
+(send-string-to-terminal (concat "\033]52;c;" (base64-encode-string "clipetty OSC52") "\007"))
+#+end_src
+
+Note that in TMUX, the above code will only work if the option =set-clipboard=
+has the value =on=.  However I think clipetty does stuff so that it works in
+TMUX no matter what.
+
+The documentation shows that it has a bunch of things regarding TMUX and SSH
+sessions.  For full support, this is needed in the TMUX configuration file.
+
+#+begin_src :tangle no
+set -ag update-environment "SSH_TTY"
+#+end_src
+
+Terminals emulators that I've tried and that support this.
+- iTerm2
+- Windows Terminal (Windows 11)
+
 * Helper functions
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
