@@ -2078,11 +2078,11 @@ can be.
 (setq org-todo-keywords '((sequence "TODO(!@)"
                                     "|"
                                     "DONE(!@)")
-                          (sequence "GTD-IN(i)"
+                          (sequence "GTD-ACTION(a)"
+                                    "GTD-IN(i)"
                                     "GTD-CLARIFY(c)"
                                     "GTD-PROJECT(p)"
                                     "GTD-SOMEDAY-MAYBE(s)"
-                                    "GTD-ACTION(a)"
                                     "GTD-NEXT-ACTION(n)"
                                     "GTD-WAITING(w)"
                                     "|"
