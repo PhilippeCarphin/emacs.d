@@ -2091,7 +2091,9 @@ can be.
                                     "GTD-DONE(d)")
                           (sequence "HABIT(h)" "|" "done-habit(x!)")
                           (sequence "APPOINTMENT(p)"
-                                    "MEETING(m)" "|" )))
+                                    "MEETING(m)"
+                                    "EVENT(e)"
+                                    "|" )))
 
 (setq org-todo-keyword-faces
       '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
@@ -2104,7 +2106,9 @@ can be.
         ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)
 
         ("HABIT" :foreground "#7c7c74" :weight bold :underline nil)
+
         ("MEETING" :foreground "#5faf00" :weight bold :underline nil)
+        ("EVENT" :foreground "#5faf00" :weight bold :underline nil)
         ("APPOINTMENT" :foreground "#5faf00" :weight bold :underline nil)))
 #+end_src
 
