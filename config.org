@@ -2761,6 +2761,7 @@ movement keys.
 (define-key orgmode (kbd "<M-S-right>") 'org-demote-subtree)
 (define-key orgmode (kbd "<M-up>") 'org-demote-subtree)
 (define-key orgmode (kbd "n") 'org-narrow-to-subtree)
+(define-key orgmode (kbd "w") 'widen)
 (define-key orgmode (kbd "c") 'org-columns)
 #+end_src
 *** Item insertion
