@@ -209,17 +209,37 @@ Helps to not get confused with vim.
 (blink-cursor-mode)
 #+end_src
 
-** Wrapping
-*** Hard wrap as you type
-    :PROPERTIES:
-    :HEADER-ARGS: :tangle yes
-    :END:
-Automattically hard-wrap text on 80 chars as you type.
+** Wrapping and text width
+
+*** Default text width
+
+Set default text width to 80 chars.  This can be changed on a per-mode basis
+using hooks but I do 80 everywhere since I only auto-fill in org mode and in
+other modes, I just use an indicator line at 80 chars without autofill.
 
 #+begin_src emacs-lisp
-(setq-default auto-fill-function 'do-auto-fill)
 (setq-default fill-column 80)
 #+end_src
+
+*** Autofill and column indicator
+:PROPERTIES:
+:HEADER-ARGS: :tangle yes
+:END:
+
+In orgmode, I want to have auto-fill on to auto fill my paragraphs of text.
+#+begin_src emacs-lisp
+(add-hook 'org-mode-hook #'auto-fill-mode)
+#+end_src
+
+But in programming modes (modes that derive from =prog-mode=), I want to be able
+to go over the 80 char limit without my code getting messed up.
+#+begin_src emacs-lisp
+(add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+#+end_src
+This means that prose in comments doesn't auto-fill but just doing it manually
+by selecting the lines and doing =gq= (=evil-fill-and-move=) is super easy,
+barely an inconvenience.
+
 
 *** Wrap lines visually
     :PROPERTIES:
@@ -227,6 +247,9 @@ Automattically hard-wrap text on 80 chars as you type.
     :END:
 Wrap lines visually (lines that are too long are /displayed/ on multiple lines
 with a special char indicating visual wrapping).
+
+This also changes what certain commands operate on.  I think this mostly
+concerns native Emacs commands so I don't know.
 
 #+begin_src emacs-lisp
 (global-visual-line-mode 1)
@@ -297,16 +320,20 @@ To change the font, as per this [[http://emacs.1067599.n8.nabble.com/Changing-fo
  '(visual-line-fringe-indicators
    '(left-curly-arrow right-curly-arrow)))
 #+end_src
+
 ** Line numbers
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
 :END:
 
-Display line numbers except in orgmode.
+Display line numbers except in orgmode.  Basically in all modes that derive from
+=prog-mode=.  However some "programming language" modes do not derive from
+=prog-mode= so we need to add the hook for them specifically too.
+
 #+begin_src emacs-lisp
-(add-hook 'prog-mode-hook
-          #'(lambda () (display-line-numbers-mode t)))
-;;(remove-hook 'text-mode-hook '(lambda () (display-line-numbers-mode t)))
+(add-hook 'prog-mode-hook #'display-line-numbers-mode)
+(add-hook 'ssh-config-mode-hook #'display-line-numbers-mode)
+(add-hook 'conf-mode-hook #'display-line-numbers-mode)
 #+end_src
 
 *** Failed attempt
