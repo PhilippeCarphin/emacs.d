@@ -799,7 +799,7 @@ the terminal using the =evil-<X>-state-cursor= specs.
               (= (display-color-cells) 16777216))
       ;; (message "evil-set-cursor-including-terminal: specs:'%S'" specs)
       (pcase specs
-        ((and (or `(,colour) `(,shape . (,colour)))
+        ((and (or `(,colour) `(,shape . ,colour) `(,shape ,colour))
               (guard (stringp colour)))
          (send-string-to-terminal (concat "\033]12;" colour "\a"))
          (cond ((eq shape 'bar)
