@@ -877,10 +877,13 @@ these hooks are run.  The solution above does not have this drawback because
 (defun my/evil-ex-describe-command ()
   "Find and describe the elisp function associated with an ex command"
   (interactive)
-  (let ((cmd (helm-comp-read "Select an evil-command"
+  (let ((cmd (helm-comp-read "Select an evil-command: "
                              evil-ex-commands :fuzzy t)))
     (describe-function cmd)))
 #+end_src
+
+If =helm-comp-read= gets an [[info:elisp#Association Lists][=alist=]] then it uses the =car= of each cons cell as
+the candidates and returns the =cdr= of the cons cell whose =car= we selected.
 
 ** Magit
    :PROPERTIES:
