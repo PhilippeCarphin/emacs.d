@@ -3263,3 +3263,25 @@ I should figure out real snippets but let me do this to match Vim
 
 
 =backward-up-list= to move out of one level of parens
+
+
+* Notes
+
+** Entering visual state using mouse produces error
+
+When I enter =evil-visual-state= with the mouse, I see the message
+#+begin_example
+evil-visual-activate-hook: Symbol’s function definition is void: post-command-hook
+#+end_example
+With =debug-on-error=,
+#+begin_example
+Debugger entered--Lisp error: (void-function post-command-hook)
+  post-command-hook(nil t "evil-activate-visual-state")
+  evil-visual-activate-hook()
+  run-hooks(activate-mark-hook)
+  activate-mark(no-tmm)
+  set-mark(113785)
+  (let ((range (evil-mouse-start-end start-point start-point click-count))) (set-mark (nth 0 range)) (goto-char (nth 1 range)))
+#+end_example
+
+Also this only happens on Linux.
