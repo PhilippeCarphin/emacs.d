@@ -33,7 +33,7 @@ function main(){
 }
 
 _find_emacs_daemons(){
-    local j h cmd
+    local j h jh cmd
     source ~/.philconfig/shell_lib/functions.sh
     python3 -c "
 import yaml
@@ -43,7 +43,7 @@ with(open(os.path.expanduser('~/.config/tmux-finder.yml'))) as f:
 print('\n'.join(y['hosts-to-check']))" \
     | while read jh ; do
         printf "\033[1;37m==> Doing host $jh\033[0m\n"
-        local -a cmd=(ssh)
+        cmd=(ssh)
         if [[ $jh == *:* ]] ; then
             j=${jh%%:*}
             h=${jh##*:}
