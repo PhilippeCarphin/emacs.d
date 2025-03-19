@@ -3285,3 +3285,14 @@ Debugger entered--Lisp error: (void-function post-command-hook)
 #+end_example
 
 Also this only happens on Linux.
+
+I also had another bug where doing =:s/x/y= would give the error 'no pattern
+given'. I tried to find the problem by checking out previous commits but even
+after checking out commits from several weeks ago, it was still there.  I would
+have noticed that since I use that feature a lot.
+
+So I suspected that it might be that I updated the package =evil=.  I was on
+=evil-20250302.655= and now I'm on =evil-20250318.1816= and the problem with the
+=:s/...= is gone, the problem described above with entering visual mode with the
+mouse is gone, AND the problem of cursor going to Emacs mode in elisp when the
+documentation shows stuff in the minibuffer is also gone!
