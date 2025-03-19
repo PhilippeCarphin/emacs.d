@@ -810,18 +810,23 @@ the terminal using the =evil-<X>-state-cursor= specs.
 (advice-add #'evil-set-cursor :around #'evil-set-cursor-including-terminal)
 #+end_src
 
-- I have to do something special for motion state because it doesn't seem to
-  have any effect when I set =evil-motion-state-cursor=.  In the terminal at
-  least, doing a key that expects a motion causes this function to be called
-  with =specs= equal to =evil-half-cursor=.
+
+
+- The half cursor clause in the pcase is for "operator-pending" operators like
+  when you press =d= and it waits for the next thing.
 - The check on =display-color-cells= was in the answer that inspired this code
   but in all the terminals I have tried it wasn't necessary since they either
   respond to the codes or don't do anything with them.
-- Careful when playing with this, setting =evil-set-cursor= to a function that
-  causes errors might make Emacs unusable.  It may be possible to recover by
-  =C-x C-e='ing this: =(defun evil-set-cursor-including-terminal (f s) nil)= but
+- Careful when playing with this, the =evil-set-cursor= function is called
+  /very/ often.  If its advice throws an error, this may make Emacs borderline
+  unusable.  It may be possible to recover by =C-c C-c='ing the block below but
   while working on this, I have had to use =pgrep emacs | xargs kill= a few
-  times.
+  times.  Since =evil-set-cursor= is called on evil-state change, if it throws
+  an error, this might cancel the state change preventing us from going into
+  insert mode to type text.
+  #+begin_src emacs-lisp :tangle no
+  (advice-remove #'evil-set-cursor #'evil-set-cursor-including-terminal)
+  #+end_src
 
 https://emacs.stackexchange.com/a/14930/19972
 
