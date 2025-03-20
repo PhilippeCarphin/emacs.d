@@ -2773,12 +2773,12 @@ movement keys.
 #+end_src
 ** Orgmode
 #+begin_src emacs-lisp
-(define-prefix-command 'orgmode)
+(define-prefix-command 'my/orgmode-map)
 #+end_src
 *** Subset of C-c commands
 #+begin_src emacs-lisp
 (define-prefix-command '__orgmode__C-c_favorites_)
-(define-key orgmode (kbd "C-c") '__orgmode__C-c_favorites_)
+(define-key my/orgmode-map (kbd "C-c") '__orgmode__C-c_favorites_)
 (define-key __orgmode__C-c_favorites_ (kbd "C-,") 'org-insert-structure-template)
 (define-key __orgmode__C-c_favorites_ (kbd "C-c") 'org-ctrl-c-ctrl-c)
 (define-key __orgmode__C-c_favorites_ (kbd "C-w") 'org-refile)
@@ -2791,32 +2791,32 @@ movement keys.
 
 *** Orgmode favorites
 #+begin_src emacs-lisp
-(define-key leader-key (kbd "o") 'orgmode)
-(define-key orgmode (kbd "t") 'my/org-align-tags)
-(define-key orgmode (kbd "a") 'org-agenda)
-(define-key orgmode (kbd "v") 'org-tags-view)
-(define-key orgmode (kbd "C-c /") 'org-match-sparse-tree)
-(define-key orgmode (kbd "<M-S-left>") 'org-promote-subtree)
-(define-key orgmode (kbd "<M-S-right>") 'org-demote-subtree)
-(define-key orgmode (kbd "<M-up>") 'org-demote-subtree)
-(define-key orgmode (kbd "n") 'org-narrow-to-subtree)
-(define-key orgmode (kbd "w") 'widen)
-(define-key orgmode (kbd "c") 'org-columns)
+(define-key leader-key (kbd "o") 'my/orgmode-map)
+(define-key my/orgmode-map (kbd "t") 'my/org-align-tags)
+(define-key my/orgmode-map (kbd "a") 'org-agenda)
+(define-key my/orgmode-map (kbd "v") 'org-tags-view)
+(define-key my/orgmode-map (kbd "C-c /") 'org-match-sparse-tree)
+(define-key my/orgmode-map (kbd "<M-S-left>") 'org-promote-subtree)
+(define-key my/orgmode-map (kbd "<M-S-right>") 'org-demote-subtree)
+(define-key my/orgmode-map (kbd "<M-up>") 'org-demote-subtree)
+(define-key my/orgmode-map (kbd "n") 'org-narrow-to-subtree)
+(define-key my/orgmode-map (kbd "w") 'widen)
+(define-key my/orgmode-map (kbd "c") 'org-columns)
 #+end_src
 *** Item insertion
 #+begin_src emacs-lisp
-(define-prefix-command 'org-heading-insertion)
-(define-key orgmode (kbd "i") 'org-heading-insertion)
-(define-key 'org-heading-insertion (kbd "h") 'my/org-insert-heading)
-(define-key 'org-heading-insertion (kbd "H") 'my/org-insert-heading-respect-content)
-(define-key 'org-heading-insertion (kbd "s") 'my/org-insert-subheading)
-(define-key 'org-heading-insertion (kbd "S") 'my/org-insert-subheading-respect-content)
+(define-prefix-command 'my/org-heading-insertion)
+(define-key my/orgmode-map (kbd "i") 'my/org-heading-insertion)
+(define-key 'my/org-heading-insertion (kbd "h") 'my/org-insert-heading)
+(define-key 'my/org-heading-insertion (kbd "H") 'my/org-insert-heading-respect-content)
+(define-key 'my/org-heading-insertion (kbd "s") 'my/org-insert-subheading)
+(define-key 'my/org-heading-insertion (kbd "S") 'my/org-insert-subheading-respect-content)
 #+end_src
 
 *** Subtree movement and promotions
 #+begin_src emacs-lisp
 (define-prefix-command 'org-subtree)
-(define-key orgmode (kbd "s") 'org-subtree)
+(define-key my/orgmode-map (kbd "s") 'org-subtree)
 (define-key 'org-subtree (kbd "h") 'org-promote-subtree)
 (define-key 'org-subtree (kbd "l") 'org-demote-subtree)
 (define-key 'org-subtree (kbd "k") 'org-move-subtree-up)
@@ -2825,14 +2825,14 @@ movement keys.
 
 *** Org present
 #+begin_src emacs-lisp
-(define-prefix-command 'org-present-map)
-(define-key leader-key (kbd "p") 'org-present-map)
-(define-key org-present-map (kbd "P") 'org-present)
-(define-key org-present-map (kbd "n") 'org-present-next)
-(define-key org-present-map (kbd "p") 'org-present-prev)
-(define-key org-present-map (kbd "b") 'org-present-big)
-(define-key org-present-map (kbd "s") 'org-present-small)
-(define-key org-present-map (kbd "q") 'org-present-quit)
+(define-prefix-command 'my/org-present-map)
+(define-key leader-key (kbd "p") 'my/org-present-map)
+(define-key my/org-present-map (kbd "P") 'org-present)
+(define-key my/org-present-map (kbd "n") 'org-present-next)
+(define-key my/org-present-map (kbd "p") 'org-present-prev)
+(define-key my/org-present-map (kbd "b") 'org-present-big)
+(define-key my/org-present-map (kbd "s") 'org-present-small)
+(define-key my/org-present-map (kbd "q") 'org-present-quit)
 #+end_src
 
 *** Org Time Commands
