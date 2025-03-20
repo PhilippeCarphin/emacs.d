@@ -2826,7 +2826,7 @@ movement keys.
 *** Org present
 #+begin_src emacs-lisp
 (define-prefix-command 'my/org-present-map)
-(define-key leader-key (kbd "p") 'my/org-present-map)
+(define-key my/orgmode-map (kbd "p") 'my/org-present-map)
 (define-key my/org-present-map (kbd "P") 'org-present)
 (define-key my/org-present-map (kbd "n") 'org-present-next)
 (define-key my/org-present-map (kbd "p") 'org-present-prev)
