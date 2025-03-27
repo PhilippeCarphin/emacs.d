@@ -3309,6 +3309,12 @@ theme and the HTML export is over a white background.
 
 ** TODO Highlight-parentheses
 
+** TODO Enable narrow : File it
+
+#+begin_src emacs-lisp
+(put 'narrow-to-region 'disabled nil)
+#+end_src
+
 * Notes
 
 ** Entering visual state using mouse produces error
