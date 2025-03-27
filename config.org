@@ -891,6 +891,27 @@ these hooks are run.  The solution above does not have this drawback because
 If =helm-comp-read= gets an [[info:elisp#Association Lists][=alist=]] then it uses the =car= of each cons cell as
 the candidates and returns the =cdr= of the cons cell whose =car= we selected.
 
+*** Emacs keybindings
+
+Set =C-a= and =C-e= to do what they normally do in vanilla Emacs in
+evil-normal-state and evil-insert-state.
+
+#+begin_src emacs-lisp
+(evil-global-set-key 'normal (kbd "C-e") 'evil-end-of-line)
+(evil-global-set-key 'normal (kbd "C-a") 'evil-beginning-of-line)
+(defun my/evil-end-of-line ()
+  "Move to end of line for evil-insert-state.  In vim, when in insert mode, the
+cursor can be past the end of the line."
+  (interactive)
+  (evil-end-of-line)
+  ;; We only do right-char if the line is non-empty.  When the line is
+  ;; empty, doing right-char would move us to the next line.
+  (unless (string-match-p "\\`$" (thing-at-point 'line))
+    (right-char)))
+(evil-global-set-key 'insert (kbd "C-e") 'my/evil-end-of-line)
+(evil-global-set-key 'insert (kbd "C-a") 'evil-beginning-of-line)
+#+end_src
+
 ** Magit
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
