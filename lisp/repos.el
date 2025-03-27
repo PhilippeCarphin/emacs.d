@@ -150,28 +150,33 @@ See `repos-shell-in-repo'"
 ;;; Creating the repos-overview buffer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Creating the command argument list
+(defmacro build-list (&rest pairs)
+  "Build a list incrementally using pairs (PRED EXPR) pairs.
+
+This macro produces a list of the EXPR's where PRED is true.
+
+EXPR is only evaluated if PRED is true.  Furthermore, if EXPR evaluates to a
+list, then its elements get added to the list, no the list itslef."
+  (let ((to-evaluate (list)))
+    (dolist (p pairs)
+      (when (eval (car p))
+        (push (cadr p) to-evaluate)))
+    `(let ((result (list)))
+       (dolist (e ',to-evaluate)
+         (let ((val (eval e)))
+           (cond ((listp val)
+                  (setq result (append val result)))
+                 ((stringp val)
+                  (push val result)))))
+       result)))
+
 (defun repos--create-base-command ()
-  ;; This method is suggested by https://stackoverflow.com/a/43211401/5795941
-  ;; and shynur who answered my question ;; https://stackoverflow.com/a/43211401/5795941
-  (let ((args (list)))
-    (if repos-bin-path
-        (push (concat repos-bin-path "/repos") args)
-      (push repos-command args))
-    (when repos-overview-n-jobs
-      (push "-j" args)
-      (push (number-to-string repos-overview-n-jobs) args))
-    (when repos-overview-all
-      (push "-all" args))
-    (unless repos-overview-ignore
-      (push "-noignore" args))
-    (unless repos-overview-fetch
-      (push "-no-fetch" args))
-    (push "-F" args)
-    (push (if (boundp 'other-config-file)
-              other-config-file
-            repos-config-file)
-          args)
-    (nreverse args)))
+  (build-list (t                           "repos")
+              (repos-overview-all          "-all")
+              (nil (error "Crash if this gets evaluated"))
+              (repos-overview-n-jobs       `("-j" ,(number-to-string repos-overview-n-jobs)))
+              ((not repos-overview-ignore) "-noignore")
+              ((not repos-overview-fetch)  "-no-fetch")))
 
 (defun repos--create-command ()
   "Create command "
