@@ -3259,7 +3259,29 @@ I should figure out real snippets but let me do this to match Vim
 #+end_src
 
 
+** Org-export
 
+I want to do export to html with a certain theme and certain options.
+
+My current faces for rainbow-delimiters to highlight top level parentheses looks
+really ugly in HTML.  Furthermore, colors usually look bad because I use a dark
+theme and the HTML export is over a white background.
+
+#+begin_src emacs-lisp
+(setq org-html-htmlize-output-type "inline-css")
+(defun preexport (a b c d) (interactive)
+       (setq saved-themes (copy-sequence custom-enabled-themes))
+       (set-spacemacs-rainbow-delimiters-colors 'light)
+       (dolist (th custom-enabled-themes)
+         (disable-theme th)))
+(defun postexport (x y z w) (interactive)
+       (set-my-rainbow-delimiter-colors)
+       (dolist (th saved-themes)
+         (load-theme th)))
+(advice-add 'org-html-export-to-html :before #'preexport)
+(advice-add 'org-html-export-to-html :after #'postexport)
+;; (advice-remove 'org-html-export-to-html #'preexport)
+;; (advice-remove 'org-html-export-to-html #'postexport)
 #+end_src
 
 
