@@ -745,6 +745,7 @@ exceptions that include window movement.  Otherwise it's really annoying to do
 
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-w") evil-window-map)
+(evil-global-set-key 'emacs (kbd "C-w") 'evil-window-map)
 #+end_src
 
 #+begin_src emacs-lisp
