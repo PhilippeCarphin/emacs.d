@@ -3279,8 +3279,7 @@ I should figure out real snippets but let me do this to match Vim
 (define-key snippets (kbd "s") 'super-shebang)
 #+end_src
 
-
-** Org-export
+** TODO Org-export (decide if I want to keep this)
 
 I want to do export to html with a certain theme and certain options.
 
@@ -3308,6 +3307,7 @@ theme and the HTML export is over a white background.
 
 =backward-up-list= to move out of one level of parens
 
+** TODO Highlight-parentheses
 
 * Notes
 
