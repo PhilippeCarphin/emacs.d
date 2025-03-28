@@ -160,10 +160,10 @@ otherwise use the current branch"
   (interactive "P")
   (pcase (git-weblink-to-point arg)
     (`(,link ,desc, domain)
-     (let ((markdown-link (format "(%s)[%s]" desc link)))
+     (let ((markdown-link (format "[%s](%s)" desc link)))
        (kill-new markdown-link)
        (git-weblink-send-string-to-system-clipboard markdown-link)
-       (message "Stored: Markdown link (%s)[...] on %s in kill ring" desc domain)))))
+       (message "Stored: Markdown link [%s](...) on %s in kill ring" desc domain)))))
 
 (defun git-weblink-copy-hyperlink (arg)
   "Copy web link to current line of current file at current revision as a
