@@ -3317,7 +3317,7 @@ theme and the HTML export is over a white background.
 ** TODO Add Jupyter
 - Add a use-package ensure t installing jupyter.  I think that's it but I need
   to check, then I can add this.
-#+begin_src emacs-lisp :no
+#+begin_src emacs-lisp :tangle no
 (org-babel-do-load-languages
  'org-babel-load-languages
  '((emacs-lisp . t)
