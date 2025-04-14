@@ -2330,6 +2330,10 @@ https://orgmode.org/worg/dev/org-element-api.html
 (defun my/org-get-parent (e)
   (plist-get (car (cdr e)) :parent))
 (defun my/org-path-from-todo-keyword (todo-keyword)
+  "Create a string that reprensents a path to the current headline from the
+first ancestor headline whose TODO keyword is TODO-KEYWORD.
+
+When called interactively, the user is prompted for the TODO keyword."
   (interactive "sTodo keyword please ")
   (let ((eap (org-element-at-point))
         (path ""))
