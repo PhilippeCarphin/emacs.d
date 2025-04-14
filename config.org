@@ -2306,6 +2306,8 @@ ended up with these two functions and as far as I can tell they do the right thi
 
 Run the agenda with "c" custom command.
 
+**** TODO Add a view for all the unscheduled next actions with and show them with their conaining GTD-PROJECT
+
 *** Agenda view commands
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
