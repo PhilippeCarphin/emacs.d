@@ -1,0 +1,98 @@
+#+PROPERTY: header-args :kernel python3 :session py
+
+This file is my first try at using org-mode with jupyter.
+
+* Notes
+** Initial steps
+
+Install the package =jupyter= with =package-install=
+- It had to compile some stuff.  Everything worked out of the box.
+
+Install jupyter witn =pip install jupyter=
+- No problem there
+
+Launch a server myself using =jupyter-server= and note
+- URL (=http://127.0.0.1:8888=)
+- Token (separately)
+
+Run =M-x jupyter-server-launch-kernel= with a prefix argument so it asks me to
+select the server.
+- Enter the URL *without the token*
+- It asks if there is a token, say yes, then enter the token.
+
+I also did this at the very start
+#+begin_src emacs-lisp
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((emacs-lisp . t)
+   (python . t)
+   (jupyter . t)))
+#+end_src
+
+#+RESULTS:
+
+And finally, tried to just put =:kernel python3 :session py= in the header args
+of SRC blocks but it's only when I added the property
+#+begin_comment
+,#+PROPERTY: header-args :kernel python3 :session py
+#+end_comment
+at the top level (and did =org-mode-restart=) that it worked.  The
+=org-babel-do-load-languages= thing had already been done at this point.
+
+See https://emacs.stackexchange.com/questions/73986/how-do-i-stop-org-babel-from-trying-to-edit-a-source-block-in-a-dedicated-buffer?rq=1
+about SRC blocks becoming un-editable.
+** References
+This is where I learned that this existed
+https://emacs.stackexchange.com/questions/73986/how-do-i-stop-org-babel-from-trying-to-edit-a-source-block-in-a-dedicated-buffer?rq=1
+
+This is where I got some help.  The readme only says to do the
+=org-babel-do-load-languages= thing like that's all it takes to make it work but
+when I did that I did =C-c C-c= on an SRC block and got the error mentionned in
+the issue.
+
+People did answer about setting the header args property but no one mentionned
+that it needs to be at the top level.  That may not strictly be the case but it
+did only start working when I set the toplevel property.
+https://github.com/emacs-jupyter/jupyter/issues/306
+
+** Doesn't use my server
+
+When I shut down my server, I expected =C-c C-c= to not work but it did.
+
+Then I killed all the jupyter buffers including one that had a running REPL in
+it.
+
+After that, doing =C-c C-c= on an SRC block caused some messages to be printed
+showint that it was starting its own REPL.
+
+** Starting from scratch
+
+After restarting Emacs, I had to =C-c C-c= the block with the
+=org-babel-do-load-languages= and then do =org-mode-restart=.
+
+
+* The real thing
+
+#+begin_src jupyter-python :kernel python3 :session py
+print('hello')
+import json
+#+end_src
+
+#+RESULTS:
+: hello
+
+#+begin_src jupyter-python
+x = json.loads('{"x": "y"}')
+print(8)
+#+end_src
+
+#+RESULTS:
+: 8
+* Jupyter server
+
+Run =jupyter-server= in a shell.  
+
+
+
+
+

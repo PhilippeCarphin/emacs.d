@@ -1,0 +1,32 @@
+* Capture sources
+
+There are two factors that create friction for entering things into your system.
+- Context
+- Required effort
+
+** Context
+
+I'm storing everything in text files.  I need to be at my computer to
+be able to enter things in those text files.
+
+So when I'm not at my computer, I use some other means.  In my case, I
+send myself an email.  When I check my email on my computer, I
+copy-paste those things in my agenda files.
+
+** Required effort
+
+To keep my things organized, when I something pops into my head "oh I
+just remembered my boss asked me to do X during the meeting", I need
+to find the right place to put it and this increases the effort from
+negligible to enough to break my focus on what I'm currently doing.
+
+For that reason, I have a secondary text file called my "inbox" where
+I just dump whatever todo's pop into my head while I'm at the
+computer.
+
+When something pops into my head, I have two options:
+- Put it in the right place right away
+- Dump it in my "inbox".
+
+After checking my emails, I also check my inbox and spend time
+emptying it.

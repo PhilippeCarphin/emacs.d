@@ -28,3 +28,5 @@ custom-file.el
 old-packages
 projectile-bookmarks.eld
 projects
+.ipynb_checkpoints
+.virtual_documents/

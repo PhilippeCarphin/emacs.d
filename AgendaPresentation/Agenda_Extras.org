@@ -1,0 +1,48 @@
+
+* Example 2
+
+** Work tasks
+
+*** Things with people
+**** JP
+***** TODO Ask JP about the account we use for running the CI jobs
+This is some info about the thing that I wanted to ask JP about
+***** TODO Ask JP for help about what =Georef_Create()= does
+***** TODO Ask JP if he thinks my approach for X will be good
+**** Chantal
+***** TODO Check with Chantal about the script that sets up the CI jobs
+She said we should do this, ask her for some details about how we should do this part of it.
+**** Weekly team meeting
+***** TODO Bring up a concern about X at the weekly team meeting
+***** TODO Bring up a concern about Y at the weekly team meeting
+*** Continuous integration
+**** TODO Implement verification of job resources
+
+JP told me we should do it this way.
+*** Python inteface for library X
+**** TODO List of functions to add python bindings for
+
+*** Optimization of the model coupler
+
+* Example
+  
+** Work tasks
+
+*** Continuous integration
+**** TODO Implement verification of job resources
+JP told me we should do it this way.
+**** TODO Ask JP about the account we use for running the jobs							    :jp:
+This is some info about the thing that I wanted to ask JP about
+**** TODO Check with Chantal about the script that sets up the jobs					       :chantal:
+She said we should do this, ask her for some details about how we should do this part of it.
+
+**** TODO Bring up a concern at the weekly team meeting							  :team_meeting:
+
+*** Python inteface for library X
+**** TODO List of functions to add python bindings for
+**** TODO Ask JP for help about what =Georef_Create()= does							    :jp:
+**** TODO Bring up a concern at the weekly team meeting							  :team_meeting:
+
+*** Optimization of the model coupler
+
+**** TODO Ask JP if he thinks my approach for X will be good							    :jp:

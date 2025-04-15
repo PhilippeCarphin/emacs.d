@@ -1,0 +1,71 @@
+
+
+You have a single org-mode file with headlines.
+
+That's it.  Just write things down in a text file!
+
+It's super useful even if you never look at it.  You know you've
+written down the information and /could/ find it if you wanted to.
+This frees some brain energy.
+
+The reason this is powerful can be seen by pressing the TAB key on a 
+
+** My Story
+
+I started doing this when I was reading "Getting Things Done" by David
+Allen (often referred to as "GTD" online).
+
+His main idea is to use your brain for things that only it can do and
+all the stuff that can be done by a tool.
+
+Remembering things is something that can be done by a paper notebook,
+a text file on your computer, the notes app on your phone, sending
+yourself an email...
+
+In his method, there are two components
+- A place where you store all your information about various tasks
+- A few tips about deciding what to do now given that information
+
+He describes a way of organizing your information in a way that
+facilitates deciding what to do now.
+
+In deciding what to do next, a few factors that are important are the
+following:
+- Current context
+- Available time
+- Energy
+- Priority
+if you think about it, computer tasks can only be done when the
+current context is "I'm at the computer", you can't do an hour long
+task if you have a meeting in 10 minutes.  Priority and energy are
+more fluid.
+
+The only one that really matters as far as organizing your data is
+context.  Priority, energy and available time is something that we
+consider naturally in the moment.
+
+So basically, we can organize things by context and maybe
+subcategories that help us find things more easily.
+
+In tree terms, I like to keep the number of children each node of a
+tree has to below 7.  If it has more than 7, I can probalby think up
+some categories.  For example, if the "Home" todo list gets too long,
+I can notice that half the tasks are cleanup and stuff and half or
+them are bills and stuff.
+
+* Example
+** Errands
+*** TODO Go to Costco
+*** DONE Buy batteries
+
+** Home
+
+*** Bills and payments
+**** TODO Pay rent by wednesday
+
+*** Cleanup
+
+**** TODO Do Laundry
+**** TODO Vacuum and mop
+**** TODO Reorganize the kitchen cabinets
+

@@ -1,0 +1,67 @@
+* Querying
+
+For years, having everything in a single org-mode file in a well kept tree structure has been super beneficial for me.
+
+However, there is one problem with the tree: a node can't have two parents.
+
+Why is this a problem?  It's simple, it means you can't organize things in two ways.
+
+In the example, I have tasks organized by project.  This is how I do it in real life.
+
+In this example, each project has some tasks that are "ask JP about something".  The problem is they're children of different nodes.  One thing that I could do is have a different category for things I need to ask JP about: See =Agneda_level_2.1.org=.
+
+We can do better.  First set this file as your agenda file to try it out.  Do =C-c C-c= on this block of code and if prompted enter 'y'.
+
+#+BEGIN_SRC emacs-lisp :results none
+(setq org-agenda-files (list (buffer-file-name)))
+#+END_SRC
+
+** Query by keyword
+
+The simplest thing we can do is to click on Org -> Agenda Command in the menu bar and select
+=s= for =search for keywords=.  With this I can find all items whose title or content contain the word "JP".
+
+This brings up a view showing me those items.  I can then do Agenda -> Write View To File.  If I save it as =.txt=, it will save exactly the content of the view.  If I save it as =.org=, it will also save the contents of the headlines shown in the view.
+
+And if I hit Enter with my cursor on an item in the view it will take me to the org file where the headline is.
+
+*** Drawbacks
+
+This works really well but notice that it picked up everything where JP appeared including the sections "Implementing verification..." because I mentionned JP in it.
+
+One solution would be to use a particular keyword for things I need to
+talk to JP about like "@JP" and search for that.  That is a perfectly
+valid solution but the keyword search is more general and there is
+something specific that works a bit better.
+
+But there is already a more "builtin" thing for that called tags.
+Tags are good to use when organizing because we can search by tags and
+we can give many tags to the same headline.
+
+* Example
+
+** Work tasks
+
+*** Continuous integration
+**** TODO Implement verification of job resources
+JP Told me to do it this way
+**** TODO Ask JP about the account we use for running the jobs
+
+This is some info about the thing that I wanted to ask JP about
+
+**** TODO Check with Chantal about the script that sets up the jobs
+
+She said we should do this, ask her for some details about how we should do this part of it.
+
+**** TODO Bring up a concern at the weekly team meeting
+
+*** Python inteface for library X
+**** TODO List of functions to add python bindings for
+**** TODO Ask JP for help about what =Georef_Create()= does
+**** TODO Bring up a concern at the weekly team meeting
+
+*** Optimization of the model coupler
+
+**** TODO Ask JP if he thinks my approach for X will be good
+
+
