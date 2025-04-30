@@ -2139,6 +2139,7 @@ can be.
                                     "GTD-IN(i)"
                                     "GTD-CLARIFY(c)"
                                     "GTD-PROJECT(p)"
+                                    "GTD-DORMANT(O)"
                                     "GTD-SOMEDAY-MAYBE(s)"
                                     "GTD-NEXT-ACTION(n)"
                                     "GTD-WAITING(w)"
@@ -2155,6 +2156,7 @@ can be.
 (setq org-todo-keyword-faces
       '(("GTD-IN" :foreground "#ff8800" :weight normal :underline t :size small)
         ("GTD-PROJECT" :foreground "#0088ff" :weight bold :underline t)
+        ("GTD-DORMANT" :foreground "#7c7c74" :weight bold :underline nil)
         ("GTD-ACTION" :foreground "#0088ff" :weight normal :underline nil)
         ("GTD-NEXT-ACTION" :foreground "#0088ff" :weight bold :underline nil)
         ("GTD-WAITING" :foreground "#aaaa00" :weight normal :underline nil)
