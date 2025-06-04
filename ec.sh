@@ -33,6 +33,21 @@ function main(){
     printf "\033[2 q"
 }
 
+rearrange_vim_lineno_args_by_ref(){
+    # Vim works with `vim FILENAME +LINENO` but emacs works with
+    # `emacs +LINENO FILENAME` so a simple thing to do can be to say that if
+    # the last argument starts with `+`, then it's a vim type call so we
+    # just invert the two last arguments.
+    local -n _args=$1
+    if (( ${#_args[@]} < 2 )) ; then
+        return
+    fi
+
+    if [[ ${_args[-1]} == +* ]] ; then
+        _args=("${_args[@]:0:$((${#_args[@]}-2))}" "${_args[-1]}" "${_args[-2]}")
+    fi
+}
+
 _find_emacs_daemons(){
     local j h jh cmd
     source ~/.philconfig/shell_lib/functions.sh
@@ -76,7 +91,9 @@ _emacsclient_t(){
     if ! [[ -S "$TMPDIR/emacs$(id -u)/server" ]] ; then
         exec $HOME/fs1/bin/vim -p "$@"
     fi
-    emacsclient -t "$@"
+    local args=("$@")
+    rearrange_vim_lineno_args_by_ref args
+    emacsclient -t "${args[@]}"
 }
 
 
@@ -102,8 +119,15 @@ function ensure-frame-exists() {
 function gui_open(){
     # Requires user-defined Elisp function 'open-in-gui-frame'
     # see config.org
+    local elisp_goto_line=""
+    for a in "$@" ; do
+        if [[ $a == +* ]] ; then
+            elisp_goto_line="(goto-line ${a#+})"
+        fi
+    done
     local elisp_code="(let ((default-directory \"$PWD\"))
-                         (open-in-gui-frame \"$1\"))"
+                         (open-in-gui-frame \"$1\"))
+                      ${elisp_goto_line}"
     emacsclient --eval "${elisp_code}"
 }
 
