@@ -487,6 +487,12 @@ configurable).
 #+begin_src emacs-lisp
 (xterm-mouse-mode 1)
 #+end_src
+** Ensure final newline
+
+#+begin_src emacs-lisp
+(setq-default require-final-newline t)
+#+end_src
+
 * Packages
 
 Some packages are installed elsewhere for example org-mode specific packages are
