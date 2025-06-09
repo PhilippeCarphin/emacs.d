@@ -3342,6 +3342,23 @@ theme and the HTML export is over a white background.
    (jupyter . t)))
 #+end_src
 
+** TODO TRAMP Improvement
+
+See [[https://github.com/joaotavora/eglot/issues/859#issuecomment-1227694392][this GitHub issue]].
+
+I was sometimes getting "emacs forbidden reentrant call of Tramp" while trying
+to open files over SSH using TRAMP.
+
+[[https://github.com/joaotavora/eglot/issues/859#issuecomment-1227694392][This comment on a GitHub issue]] said to do
+
+#+begin_src emacs-lisp
+(setq tramp-use-ssh-controlmaster-options nil)
+#+end_src
+
+and that this would improve the situation.  It did seem to help because I was
+trying to open a remote file and it didn't work but when I ran this =(setq)=, it
+worked and stopped giving me trouble.
+
 * Notes
 
 ** Entering visual state using mouse produces error
