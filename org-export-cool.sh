@@ -1,5 +1,7 @@
 #!/usr/bin/env -S bash -o errexit -o nounset -o errtrace -o pipefail -O inherit_errexit -O nullglob -O extglob
 
+# This is from https://emacs.stackexchange.com/a/79635/19972
+
 this_dir=$(cd -P $(dirname $0) && pwd)
 file_to_export="$1"
 
