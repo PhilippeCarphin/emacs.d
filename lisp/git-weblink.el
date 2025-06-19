@@ -110,7 +110,7 @@ the current commit, otherwise the current branch is used."
           (let ((link (git-weblink-compose-ref-url domain namespace repo
                                                    (if (or exact-commit (not branch)) long-hash branch)
                                                    file lineno))
-                (desc (format "<%s:%s>%s:%s" (git-weblink-strip.git repo)
+                (desc (format "[%s:%s] %s:%s" (git-weblink-strip.git repo)
                               (if (or exact-commit (not branch)) short-hash branch)
                               file lineno )))
             (list link desc domain))))))))
