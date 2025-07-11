@@ -11,24 +11,29 @@ fi
 if [[ -n ${INSIDE_EMACS} ]] ; then
     exec emacsclient --no-wait "$@"
 fi
+debug=""
 function main(){
 
     # Special actions
-    case "$1" in
-	-k) emacsclient -t -c -e '(save-buffers-kill-emacs)' ;;
-	-K) kill_emacs_by_pid ;;
-	-s) emacs --daemon ;;
-	-g) shift ; gui_open "$@" ;;
-	-t) shift ; _emacsclient_t "$@" ;;
-	-x) shift ; exec emacsclient "$@" ;;
-	-y) shift ; _open_in_current_frame "$@" ;;
-	-i) shift
-	    readlink -f $(which emacsclient)
-	    readlink -f $(which emacs)
-	    ;;
-    -f) shift ; _find_emacs_daemons ;;
-	*)  : no -t ; _emacsclient_t "$@" ;;
-    esac
+    while (($#)) ; do
+        case "$1" in
+        -d) debug="--debug-init" ;;
+        -k) emacsclient -t -c -e '(save-buffers-kill-emacs)' ;;
+        -K) kill_emacs_by_pid ;;
+        -s) emacs --daemon ${debug} ;;
+        -g) shift ; gui_open "$@" ;;
+        -t) shift ; _emacsclient_t "$@" ;;
+        -x) shift ; exec emacsclient "$@" ;;
+        -y) shift ; _open_in_current_frame "$@" ;;
+        -i) shift
+            readlink -f $(which emacsclient)
+            readlink -f $(which emacs)
+            ;;
+        -f) shift ; _find_emacs_daemons ;;
+        *)  : no -t ; _emacsclient_t "$@" ;;
+        esac
+        shift
+    done
     printf "\033]112\a"
     printf "\033[2 q"
 }
@@ -145,7 +150,7 @@ function ensure-server-is-running(){
     if ! server-is-running ; then
 	echo "Need to start daemon, press enter to continue, C-c to abort"
 	read
-	emacs --daemon
+	emacs --daemon ${debug}
     fi
 }
 
