@@ -658,6 +658,10 @@ pressed fast enough, Emacs may perceive this as `M-j'."
           (evil-global-set-key 'insert (kbd "M-j") 'my/evil-esc-down)
           (evil-global-set-key 'normal (kbd "M-k") 'evil-previous-visual-line)
           (evil-global-set-key 'normal (kbd "M-j") 'evil-next-visual-line)
+          ;; Same physical keys as '/' and '?' on the Canadian Multilingual
+          ;; Standard keyboard
+          (evil-global-set-key 'normal (kbd "é") 'evil-search-forward)
+          (evil-global-set-key 'normal (kbd "É") 'evil-search-backward)
           (evil-set-undo-system 'undo-redo)
           (global-set-key (kbd "M-u") 'universal-argument)
           (setq evil-default-state 'emacs)
