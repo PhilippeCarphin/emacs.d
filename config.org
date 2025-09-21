@@ -3363,6 +3363,12 @@ and that this would improve the situation.  It did seem to help because I was
 trying to open a remote file and it didn't work but when I ran this =(setq)=, it
 worked and stopped giving me trouble.
 
+** Changing wordbreaks
+
+#+begin_src emacs-lisp
+(add-hook 'c-mode-common-hook (lambda () (modify-syntax-entry ?_ "w")))
+#+end_src
+
 * Notes
 
 ** Entering visual state using mouse produces error
