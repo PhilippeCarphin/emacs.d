@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 # set -x
 
 # Yet again, a per-process TMPDIR that contains the PID of the current shell
