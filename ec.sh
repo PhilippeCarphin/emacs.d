@@ -13,29 +13,33 @@ if [[ -n ${INSIDE_EMACS} ]] ; then
 fi
 debug=""
 function main(){
+    local status
 
     # Special actions
     while (($#)) ; do
         case "$1" in
         -d) debug="--debug-init" ;;
         -k) emacsclient -t -c -e '(save-buffers-kill-emacs)' ;;
-        -K) kill_emacs_by_pid ;;
-        -s) emacs --daemon ${debug} ;;
-        -g) shift ; gui_open "$@" ;;
-        -t) shift ; _emacsclient_t "$@" ;;
-        -x) shift ; exec emacsclient "$@" ;;
-        -y) shift ; _open_in_current_frame "$@" ;;
+        -p) emacsclient -e "(setenv \"PATH\" \"${PATH}\")" ; status=0 ; break ;;
+        -l) : lisp mode ; shift ; emacsclient "$@" ; status=$? ; break ;;
+        -K) kill_emacs_by_pid ; status=$? ; break ;;
+        -s) emacs --daemon ${debug} ; status=$? ; break ;;
+        -g) shift ; gui_open "$@" ; status=$? ; break ;;
+        -t) shift ; _emacsclient_t "$@" ; status=$? ; break ;;
+        -x) shift ; exec emacsclient "$@" ; status=$? ; break ;;
+        -y) shift ; _open_in_current_frame "$@" ; status=$? ; break ;;
         -i) shift
             readlink -f $(which emacsclient)
             readlink -f $(which emacs)
             ;;
-        -f) shift ; _find_emacs_daemons ;;
-        *)  : no -t ; _emacsclient_t "$@" ;;
+        -f) shift ; _find_emacs_daemons ; status=$? ; break ;;
+        *)  : no -t ; _emacsclient_t "$@" ; status=$? ; break ;;
         esac
         shift
     done
     printf "\033]112\a"
     printf "\033[2 q"
+    return ${status}
 }
 
 rearrange_vim_lineno_args_by_ref(){
