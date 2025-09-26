@@ -42,6 +42,35 @@ function main(){
     return ${status}
 }
 
+function kill_emacs_by_pid(){
+    if [[ $(uname) == Darwin ]] ; then
+        emacs_pid=$(ps -aupcarphin| grep Emacs.app | grep -v grep | awk '{print $2}')
+    else
+        emacs_pid=$(pgrep -u $USER -f 'emacs --daemon')
+    fi
+
+    if [[ -z $emacs_pid ]] ; then
+        echo "No emacs process found"
+        return 1
+    fi
+
+    echo "emacs_process:"
+    ps -f ${emacs_pid} | sed 's/^/    /'
+    echo -n "Kill this process? (y/n): "; read answer
+
+    if [[ -z $answer ]] ; then
+        return
+    fi
+
+    if [[ -z $answer ]] || ! ([[ $answer == y ]] || [[ $answer == Y ]]) ; then
+        return
+    fi
+
+    echo kill $emacs_pid
+    kill $emacs_pid
+}
+
+
 rearrange_vim_lineno_args_by_ref(){
     # Vim works with `vim FILENAME +LINENO` but emacs works with
     # `emacs +LINENO FILENAME` so a simple thing to do can be to say that if
