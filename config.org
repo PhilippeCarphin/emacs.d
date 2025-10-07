@@ -476,7 +476,7 @@ that stuff in a separate file.
 #+begin_src emacs-lisp
 ;; (setq whitespace-style (list 'trailing 'face))
 ;; (setq whitespace-style (list 'trailing 'face 'tabs 'tab-mark))
-(setq whitespace-style '(face tabs trailing lines space-before-tab indentation empty
+(setq whitespace-style '(face tabs trailing space-before-tab indentation empty
       space-after-tab tab-mark missing-newline-at-eof))
 (add-hook 'prog-mode-hook 'whitespace-mode)
 (add-hook 'org-mode-hook 'whitespace-mode)
