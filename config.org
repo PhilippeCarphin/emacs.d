@@ -1079,21 +1079,6 @@ One thing it does is that it normally stores it's data by default in
   :custom (keyfreq-file "~/.emacs.d/keyfreq"))
 #+end_src
 
-** Modus themes
-:PROPERTIES:
-:HEADER-ARGS: :tangle yes
-:END:
-
-#+begin_quote
-Accessible themes for GNU Emacs, conforming with the highest standard for colour contrast between background and foreground values (WCAG AAA) - [[https://protesilaos.com/modus-themes/][Modus Themes]]
-#+end_quote
-
-#+begin_src emacs-lisp
-(use-package modus-themes :ensure t)
-#+end_src
-
-I am not loading the theme because I want to continue with built-in themes for now.
-
 ** command-log-mode
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
