@@ -3471,7 +3471,29 @@ rules don't apply.  This association also handles any file that ends with
 It's a little bit annoying.  If the window is not wide enough, blamer output
 wraps to the next line pushing the text after it down one line.  And it works
 weirdly in the terminal.
->>>>>>> 6558002 (Whitespace, no highilight current line, delimiter colors, magit blame keys)
+
+** Functions to resolve ansi-colors
+
+Resolve ANSI colors when visiting certain files.  We also need to reset the
+buffer's "modified" flag so that we can quit this buffer without being prompted
+to save the file since resolving the colors changes the buffer's contents and
+the goal is just to view the file.
+
+#+begin_src emacs-lisp
+(defun my-ansi ()
+  "Call ansi-color-apply-on-region for the whole file"
+  (interactive)
+  (ansi-color-apply-on-region (point-min) (point-max)))
+(defun apply-ansi-if-needed ()
+  "Resolve ANSI colors when visiting files with certain names"
+  (when (and (stringp buffer-file-name)
+             (or (string-match-p "maestro_tid")
+                 (string-match-p ".out$")))
+    (ansi-color-apply-on-region (point-min) (point-max))
+    (set-buffer-modified-p nil)))
+(add-hook 'find-file-hook #'apply-ansi-if-needed)
+#+end_src
+
 * Notes
 
 ** Entering visual state using mouse produces error
@@ -3503,3 +3525,4 @@ So I suspected that it might be that I updated the package =evil=.  I was on
 =:s/...= is gone, the problem described above with entering visual mode with the
 mouse is gone, AND the problem of cursor going to Emacs mode in elisp when the
 documentation shows stuff in the minibuffer is also gone!
+
