@@ -174,9 +174,9 @@ otherwise use the current branch"
   (interactive "P")
   (pcase (git-weblink-to-point arg)
     (`(,link ,desc, domain)
-     (let ((html-desc (string-replace "<" "&lt;" (string-replace ">" "&gt;"
-                                                                 desc)))
-           (href (format "<a href=\"%s\">%s</a>" link html-desc)))
+     (let* ((html-desc (string-replace "<" "&lt;" (string-replace ">" "&gt;"
+                                                                  desc)))
+            (href (format "<a href=\"%s\">%s</a>" link html-desc)))
        (kill-new href)
        (git-weblink-send-string-to-system-clipboard href)
        (message "Copied hyperlink <a href=\"https://%s/...\">%s" domain html-desc)))))
