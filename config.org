@@ -3449,7 +3449,7 @@ rules don't apply.  This association also handles any file that ends with
 
 ** Git blamer
 
-#+begin_src emacs-lisp
+#+begin_src emacs-lisp :tangle no
 (use-package blamer
   :ensure t
   :bind (("s-i" . blamer-show-commit-info)
