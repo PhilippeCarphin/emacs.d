@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+if ! this_dir=$(cd -P $(dirname $0) && pwd) ; then
+    printf "$0: ERROR: Could not get directory of self\n" >&2
+    exit 1
+fi
+
+if ! elpa=$(cd -P ${this_dir}/../elpa && pwd) ; then
+    printf "$0: ERROR: Could not locate normal elpa dir\n" >&2
+    exit 1
+fi
+
+# for d in ../elpa/* ; do
+#     code+="(add-to-list 'load-path \"$d\")"$'\n'
+# done
+
+cmd=(
+    #/usr/bin/emacs
+    emacs
+        --debug-init
+        --no-init-file
+        --no-site-file
+        --eval "(setq elpa-dir \"${this_dir}/elpa\")" \
+        -l ${this_dir}/init.el "$@"
+)
+
+"${cmd[@]}"
