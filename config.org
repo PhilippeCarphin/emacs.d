@@ -3487,8 +3487,8 @@ the goal is just to view the file.
 (defun apply-ansi-if-needed ()
   "Resolve ANSI colors when visiting files with certain names"
   (when (and (stringp buffer-file-name)
-             (or (string-match-p "maestro_tid")
-                 (string-match-p ".out$")))
+             (or (string-match-p "maestro_tid" buffer-file-name)
+                 (string-match-p ".out$" buffer-file-name)))
     (ansi-color-apply-on-region (point-min) (point-max))
     (set-buffer-modified-p nil)))
 (add-hook 'find-file-hook #'apply-ansi-if-needed)
