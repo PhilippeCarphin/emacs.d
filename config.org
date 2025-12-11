@@ -3481,16 +3481,18 @@ the goal is just to view the file.
 
 #+begin_src emacs-lisp
 (defun my-ansi ()
-  "Call ansi-color-apply-on-region for the whole file"
+  "Call ansi-color-apply-on-region for the whole file with 3rd argument
+equal to 't' so that to hide ansi codes instead of removing them and thus
+not modifying the file."
   (interactive)
-  (ansi-color-apply-on-region (point-min) (point-max)))
+  (ansi-color-apply-on-region (point-min) (point-max) t))
 (defun apply-ansi-if-needed ()
   "Resolve ANSI colors when visiting files with certain names"
   (when (and (stringp buffer-file-name)
              (or (string-match-p "maestro_tid" buffer-file-name)
-                 (string-match-p ".out$" buffer-file-name)))
-    (ansi-color-apply-on-region (point-min) (point-max))
-    (set-buffer-modified-p nil)))
+                 (string-match-p ".out$" buffer-file-name)
+                 (string-match-p ".log$" buffer-file-name)))
+    (ansi-color-apply-on-region (point-min) (point-max) t)))
 (add-hook 'find-file-hook #'apply-ansi-if-needed)
 #+end_src
 
