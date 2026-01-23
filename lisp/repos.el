@@ -137,6 +137,12 @@ sent to the shell via `vterm-send-string'."
   (let ((vterm-buffer-name (concat "Vterm:repo: " repo-name)))
     (repos--shell-in-directory (repos-get-dir repo-name) vterm-buffer-name)))
 
+(defun repos-ignore-repo (repo-name)
+  "Run the command `repos ignore --name REPO-NAME' for the given repo"
+  (let ((exit-code (call-process "repos" nil nil nil "ignore" "--name" repo-name)))
+    (if (equal 0 exit-code)
+        (message "Set ignore flag to 'true' for repo '%s'" repo-name)
+      (message "ERROR: `repos ignore --name %s` returned %d" repo-name exit-code))))
 
 (defun repos-local-shell-in-repo (repo-name)
   "Open a local vterm shell in repo regardless of `repos-remote-host'
@@ -300,6 +306,7 @@ See `%s'" (symbol-name func) (symbol-name func))
 (repos-make-buffer-function repos-magit-in-repo-at-point magit-status :dir)
 (repos-make-buffer-function repos-dired-in-repo-at-point dired :dir)
 (repos-make-buffer-function repos-shell-in-repo-at-point repos-shell-in-repo :name)
+(repos-make-buffer-function repos-ignore-repo-at-point repos-ignore-repo :name)
 (repos-make-buffer-function repos-local-shell-in-repo-at-point repos-local-shell-in-repo :name)
 (repos-make-buffer-function repos-find-files-in-repo-at-point helm-find-files-1 :dir)
 
@@ -385,6 +392,7 @@ See `%s'" (symbol-name func) (symbol-name func))
   (kbd "d") 'repos-dired-in-repo-at-point
   (kbd "s") 'repos-shell-in-repo-at-point
   (kbd "l") 'repos-local-shell-in-repo-at-point
+  (kbd "i") 'repos-ignore-repo-at-point
   (kbd "q") 'quit-window)
 ;; Magit does this, not sure what it does
 (add-hook 'repos-mode-hook 'evil-normalize-keymaps)
