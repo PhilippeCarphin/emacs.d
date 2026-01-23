@@ -78,7 +78,7 @@ see if that works.
 ;; from https://gnu.emacs.bug.narkive.com/GK4dLaQT/bug-36725-26-1-emacs-can-t-connect-to-gnu-elpa
 ;; Older emacs may need this line uncommented otherwise connection to GNU
 ;; elpa may not work
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
