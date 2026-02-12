@@ -959,6 +959,33 @@ cursor can be past the end of the line."
 (add-hook 'with-editor-mode-hook #'(lambda () (company-mode -1)))
 #+end_src
 
+*** Blame nicely
+
+The default blame format is borderline unusable.  The way Fugitive does it for
+Vim is simple and superior to it.
+
+I found this on a [[https://www.reddit.com/r/emacs/comments/tunyg3/comment/ndodewc/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button][Reddit post]] which gives a way to define a style that puts
+blame info side by side but without much of the niceties of Fugitive.  At least
+it's not awful like the default one.
+
+#+begin_src emacs-lisp
+(setq magit-blame-styles
+           '((margin
+              (margin-width . 42)
+              (margin-format . ("%h %C %a %f"))
+              (margin-face . magit-blame-margin)
+              (margin-body-face . magit-blame-dimmed)
+              (show-message . t))))
+#+end_src
+
+Also note that the above snippet is almost verbatim in the documentation for
+=magit-blame-styles= where they explain that this style is slow and its cost
+always needs to be paid even if we use another style so the solution is to not
+even have it in the styles which is why cycling doesn't give us this thing.
+
+It's weird because all you have to do is run =git blame= for one file, truncate
+the lines and display them beside the file.
+
 ** Yasnippet
    :PROPERTIES:
    :HEADER-ARGS: :tangle no
