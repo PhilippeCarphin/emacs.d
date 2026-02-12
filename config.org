@@ -3416,6 +3416,8 @@ worked and stopped giving me trouble.
 
 #+begin_src emacs-lisp
 (add-hook 'c-mode-common-hook (lambda () (modify-syntax-entry ?_ "w")))
+(add-hook 'sh-mode-hook (lambda () (modify-syntax-entry ?_ "w") (modify-syntax-entry ?- "w")))
+(add-hook 'prog-mode-hook (lambda () (modify-syntax-entry ?_ "w")))
 #+end_src
 
 ** TODO With editor mode for fc
