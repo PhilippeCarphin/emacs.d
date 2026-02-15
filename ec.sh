@@ -157,15 +157,13 @@ function ensure-frame-exists() {
 function gui_open(){
     # Requires user-defined Elisp function 'open-in-gui-frame'
     # see config.org
-    local elisp_goto_line=""
+    local elisp_code="(let ((default-directory \"$PWD\"))
+                         (open-in-gui-frame \"$1\"))"
     for a in "$@" ; do
         if [[ $a == +* ]] ; then
-            elisp_goto_line="(goto-line ${a#+})"
+            elisp_code+="(goto-line ${a#+})"
         fi
     done
-    local elisp_code="(let ((default-directory \"$PWD\"))
-                         (open-in-gui-frame \"$1\"))
-                      ${elisp_goto_line}"
     emacsclient --eval "${elisp_code}"
 }
 
