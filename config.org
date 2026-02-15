@@ -3525,6 +3525,21 @@ not modifying the file."
     (ansi-color-apply-on-region (point-min) (point-max) t)))
 (add-hook 'find-file-hook #'apply-ansi-if-needed)
 #+end_src
+** Abbrev-mode
+
+#+begin_src emacs-lisp
+(abbrev-mode 1)
+#+end_src
+
+Abbreviations are stored in =~/.emacs.d/etc/abbrev.el=.  They can be added by
+hand or with =C-x a g=.  The expansion is the current region or something like
+word at point and the command prompts for the abbreviation.
+
+It doesn't seem like there is a global abbrev mode so I'll have to add it to
+some mode hooks sometime.
+
+Also it seems like the in-memory ='global-abbrev-table= gets saved back to the
+file maybe when some file is saved.
 
 * Notes
 
