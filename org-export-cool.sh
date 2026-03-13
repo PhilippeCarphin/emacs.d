@@ -7,20 +7,20 @@ file_to_export="$1"
 
 if [[ $2 == "retro" ]] ; then
     # Produces a file that looks exactly like the emacs buffer
-    lisp_export='
-       (progn (outline-show-all)
+    lisp_export="
+       (progn
               (font-lock-flush)
               (font-lock-fontify-buffer)
               (with-current-buffer
                 (htmlize-buffer)
                 (write-region (point-min)
                               (point-max)
-                              "${file_to_export%.org}.html")))'
+                              \"${file_to_export%.org}.html\")))"
 else
     # Produces something that looks a lot like an export done interactively.
     # org-export-simple.sh does pretty much the same thing though.
     lisp_export='
-        (progn (outline-show-all)
+        (progn
                (font-lock-flush)
                (font-lock-fontify-buffer)
                (org-html-export-to-html))'
