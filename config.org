@@ -3541,6 +3541,109 @@ some mode hooks sometime.
 Also it seems like the in-memory ='global-abbrev-table= gets saved back to the
 file maybe when some file is saved.
 
+
+** Capture and agenda from terminal
+These two sections use code from https://tomasfarias.dev/articles/org-capture-and-org-agenda-shell-commands/
+with the small change that I used the author's name in my frames.
+
+*** Terminal capture
+
+The function =tomas/org-capture-frame= is run by the =capture.sh= script:
+#+begin_src shell :tangle no
+emacsclient -c -e '(tomas/org-capture-frame "i")' -F '((name . "**tomas-capture**"))'
+#+end_src
+
+and this script is bound to a key in tmux:
+#+begin_src shell :tangle no
+bind i display-popup -EE -w 120 -h 40% $HOME/.emacs.d/capture.sh
+#+end_src
+
+#+begin_src emacs-lisp
+(defcustom tomas/org-capture-frame-name "**tomas-capture**"
+  "Customize dedicated frame name to launch `org-capture' in."
+  :type 'string)
+
+(defun tomas/org-capture-frame (template)
+  "Invoke `org-capture' in a dedicated Emacs frame.
+
+     This function is designed to be called from a shell script using `emacsclient'.
+     If the dedicated frame already exists, we will use it, otherwise we will create a
+     new frame.
+
+     Finally, the dedicated frame will be deleted up after `org-capture' finalizes."
+  (interactive '(nil))
+
+  (if (not (equal tomas/org-capture-frame-name (frame-parameter nil 'name)))
+      (make-frame '((name . tomas/org-capture-frame-name))))
+
+  (select-frame-by-name tomas/org-capture-frame-name)
+  (delete-other-windows)
+
+  (defun org-capture-after-finalize-clean-up ()
+    "Clean up after `org-capture' finalizes.
+
+    We delete the dedicated frame and removing advice."
+    (advice-remove 'org-capture-place-template 'delete-other-windows)
+    (remove-hook 'org-capture-after-finalize-hook 'org-capture-after-finalize-clean-up)
+
+    (select-frame-by-name tomas/org-capture-frame-name)
+    (delete-frame nil t))
+
+  (add-hook 'org-capture-after-finalize-hook 'org-capture-after-finalize-clean-up)
+  (advice-add #'org-capture-place-template :after 'delete-other-windows)
+
+  (org-capture nil template))
+#+end_src
+
+** Terminal Agenda
+
+Similarly to the capture one, the function =tomas/org-agenda-frame= is run by
+the =capture.sh= script:
+#+begin_src shell :tangle no
+emacsclient -c -e '(tomas/org-agenda-frame-frame "c")' -F '((name . "**tomas-agenda**"))'
+#+end_src
+
+and this script is bound to a key in tmux:
+#+begin_src shell :tangle no
+bind A display-popup -w 120 -h 90% $HOME/.emacs.d/agenda.sh
+#+end_src
+
+#+begin_src emacs-lisp
+(defcustom tomas/org-agenda-frame-name "**tomas-agenda**"
+  "Customize dedicated frame name to launch `org-agenda' in."
+  :type 'string)
+
+(defun tomas/org-agenda-frame (command)
+  "Invoke `org-agenda' in a dedicated Emacs frame.
+
+   This function is designed to be called from a shell script using `emacsclient'.
+   If the dedicated frame already exists, we will use it, otherwise we will create a
+   new frame.
+
+   Finally, the dedicated frame will be deleted up after `org-agenda' finalizes."
+  (interactive '(nil))
+
+  (if (not (equal tomas/org-agenda-frame-name (frame-parameter nil 'name)))
+      (make-frame '((name . tomas/org-agenda-frame-name))))
+
+  (select-frame-by-name tomas/org-agenda-frame-name)
+  (delete-other-windows)
+
+  (defun org-agenda-quit--clean-up ()
+    "Close the frame after `org-agenda-quit'."
+    (advice-remove 'org-agenda 'delete-other-windows)
+    (advice-remove 'org-agenda-quit 'org-agenda-quit--clean-up)
+    (advice-remove 'org-agenda-Quit 'org-agenda-quit--clean-up)
+
+    (select-frame-by-name tomas/org-agenda-frame-name)
+    (delete-frame nil t))
+
+  (advice-add 'org-agenda-quit :after #'org-agenda-quit--clean-up)
+  (advice-add 'org-agenda-Quit :after #'org-agenda-quit--clean-up)
+  (advice-add 'org-agenda :after #'delete-other-windows)
+
+  (org-agenda nil command))
+#+end_src
 * Notes
 
 ** Entering visual state using mouse produces error
