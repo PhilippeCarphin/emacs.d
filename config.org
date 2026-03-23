@@ -696,7 +696,7 @@ pressed fast enough, Emacs may perceive this as `M-j'."
           (setq evil-motion-state-cursor '('box "orange"))
           (setq evil-insert-state-cursor '(bar "green"))
           (setq evil-normal-state-cursor '(box "yellow"))
-          (setq evil-emacs-state-cursor '(bar "red"))
+          (setq evil-emacs-state-cursor '(box "red"))
           (setq evil-replace-state-cursor '(box "purple"))
           (setq evil-visual-state-cursor '(box "blue"))
           (setq evil-move-cursor-back nil)
