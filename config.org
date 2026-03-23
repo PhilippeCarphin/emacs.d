@@ -2177,6 +2177,15 @@ keywords to items without having them be part of my GTD.
 The GTD-* keywords map to the various things that what David Allen calls "stuff"
 can be.
 
+- Regular keywords =TODO= and =DONE=
+- Bunch of GTD keywords with a few different "done" type keywords
+- Habit keywords because when a habit repeats, you mark it as done and it
+  automatically goes back to the first "not done" keyword of that group.  So
+  having a separate group is useful so that a habit doesn't become =GTD-ACTION=
+  when marked as done.
+- A group of "not done" keywords colored to look like "done" keywords
+  used to mark points in time in the agenda.
+
 #+begin_src emacs-lisp
 (setq org-todo-keywords '((sequence "TODO(!@)"
                                     "|"
@@ -2360,7 +2369,7 @@ Run the agenda with "c" custom command.
     :PROPERTIES:
     :HEADER-ARGS: :tangle yes
     :END:
-This is equivalent to launching =org-agenda= and pressing a.
+This is equivalent to launching =org-agenda= and pressing a, h, c respectively.
 #+begin_src emacs-lisp
 (defun gtd-agenda-view () (interactive) (org-agenda nil "a"))
 (defun gtd-habits-view () (interactive) (org-agenda nil "h"))
@@ -2541,6 +2550,17 @@ This requires only stock emacs
        (let ((org-agenda-files (list "/ssh:ppp4:/home/phc001/public_org/")))
          (org-agenda-list)))
 #+end_src
+** Open someone else's agenda
+
+#+begin_src emacs-lisp
+(defun other-agenda-view (dir)
+  (interactive "DSelect agenda dir: ")
+  (let ((org-agenda-files (list dir)))
+    (org-agenda)))
+(defun jsf-agenda () (interactive) (other-agenda-view "/home/jsf012/Documents/gtd"))
+#+end_src
+
+
 ** Org Habits
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
