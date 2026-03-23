@@ -3546,6 +3546,11 @@ file maybe when some file is saved.
 These two sections use code from https://tomasfarias.dev/articles/org-capture-and-org-agenda-shell-commands/
 with the small change that I used the author's name in my frames.
 
+They both function the same way:
+- Add our cleanup function as a hook
+- Add advice to delete other windows.
+- The cleanup function undoes those two actions.
+
 *** Terminal capture
 
 The function =tomas/org-capture-frame= is run by the =capture.sh= script:
@@ -3577,7 +3582,6 @@ bind i display-popup -EE -w 120 -h 40% $HOME/.emacs.d/capture.sh
       (make-frame '((name . tomas/org-capture-frame-name))))
 
   (select-frame-by-name tomas/org-capture-frame-name)
-  (delete-other-windows)
 
   (defun org-capture-after-finalize-clean-up ()
     "Clean up after `org-capture' finalizes.
@@ -3595,7 +3599,7 @@ bind i display-popup -EE -w 120 -h 40% $HOME/.emacs.d/capture.sh
   (org-capture nil template))
 #+end_src
 
-** Terminal Agenda
+*** Terminal Agenda
 
 Similarly to the capture one, the function =tomas/org-agenda-frame= is run by
 the =capture.sh= script:
@@ -3627,7 +3631,6 @@ bind A display-popup -w 120 -h 90% $HOME/.emacs.d/agenda.sh
       (make-frame '((name . tomas/org-agenda-frame-name))))
 
   (select-frame-by-name tomas/org-agenda-frame-name)
-  (delete-other-windows)
 
   (defun org-agenda-quit--clean-up ()
     "Close the frame after `org-agenda-quit'."
