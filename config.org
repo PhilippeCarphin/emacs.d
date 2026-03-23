@@ -1343,7 +1343,7 @@ the error faces.
                 repos-overview-n-jobs 80
                 repos-overview-ignore t)
           (when (string-equal system-type "gnu/linux")
-            (setq repos-remote-host "hpcr5-in"
+            (setq repos-remote-host "hpcr7-in"
                   repos-remote-command-fmt "TERM=xterm /bin/bash -lc '%s'"))
           (define-key leader-key (kbd "r") 'repos-map))
 #+end_src
@@ -3344,6 +3344,7 @@ I want to use that do a sparse tree and export only what is visible.
 
 
 
+** TODO Come up with a more general way to decide if I'm at work or not
 
 * New stuff
 
