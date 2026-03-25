@@ -2367,27 +2367,43 @@ ended up with these two functions and as far as I can tell they do the right thi
     :HEADER-ARGS: :tangle yes :results none
     :END:
 #+begin_src emacs-lisp
+(setq my/agenda-view-next-action-paths
+      '(todo "GTD-NEXT-ACTION"
+             ((org-agenda-prefix-format
+               '((todo . "%(my/org-path-from-todo-keyword \"GTD-PROJECT\")\n    > "))))))
+(setq my/agenda-view-current-day
+      '(agenda "" ((org-agenda-start-day ".")
+                   (org-agenda-span 'day)
+                   (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done)))))
+
+(setq my/agenda-view-singular-actions
+      '(todo "GTD-ACTION" ((org-agenda-files (list gtd-next-actions-file))
+                           (org-agenda-prefix-format '((todo . " ")))
+                           (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline)))))
+(setq my/agenda-view-waiting
+      '(todo "GTD-WAITING" ((org-agenda-prefix-format '((todo . "vvvvvvvvvvv [WAITING_ON:%(org-entry-get (point) \"WAITING_ON\")]\n "))))))
+
+(setq my/agenda-group-complete
+      `((tags "PRIORITY=\"A\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
+        (tags "PRIORITY=\"C\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
+        (stuck "")
+        ,my/agenda-view-next-action-paths
+        ,my/agenda-view-current-day
+        ,my/agenda-view-singular-actions
+        ,my/agenda-view-waiting))
+(setq my/agenda-view-with-timestamp '(agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline)))))
+(setq my/agenda-view-scheduled '(agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline)))))
+(setq my/agenda-view-deadline '(agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled)))))
+
 (setq org-agenda-custom-commands
-      '(("a" "Agenda"
+      `(("a" "Agenda"
          ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))))
-        ("N" "Project Next Actions"
-         ((todo "GTD-NEXT-ACTION" ((org-agenda-prefix-format
-                                    '((todo . "%(my/org-path-from-todo-keyword \"GTD-PROJECT\")\n    > ")))))))
-        ("c" "Complete agenda view"
-         ((tags "PRIORITY=\"A\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
-          (tags "PRIORITY=\"C\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
-          (stuck "")
-          (agenda "" ((org-agenda-start-day ".")
-                      (org-agenda-span 'day)
-                      (org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
-          (todo "GTD-ACTION" ((org-agenda-files (list gtd-next-actions-file))
-                              (org-agenda-prefix-format '((todo . " ")))
-                              (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-          (todo "GTD-WAITING" ((org-agenda-prefix-format '((todo . "vvvvvvvvvvv [WAITING_ON:%(org-entry-get (point) \"WAITING_ON\")]\n ")))))))
+        ("N" "Project Next Actions" ,(list my/agenda-view-next-action-paths))
+        ("c" "Complete agenda view" ,my/agenda-group-complete)
         ("s" "Split agenda view"
-         ((agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline))))
-          (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled))))
-          (agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline))))))
+         (,my/agenda-view-with-timestamp
+          ,my/agenda-view-scheduled
+          ,my/agenda-view-deadline))
         ("h" "Habits" tags "STYLE=\"habit\"" ((org-agenda-prefix-format " ")
                                               (org-habit-graph-column 30)
                                               (org-agenda-overriding-header "Habits")))
