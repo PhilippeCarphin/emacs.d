@@ -732,7 +732,8 @@ pressed fast enough, Emacs may perceive this as `M-j'."
                                           conf-mode
                                           prog-mode
                                           text-mode
-                                          repos-mode))
+                                          repos-mode
+                                          evil-command-window-mode))
           (setq evil-motion-state-cursor '('box "orange"))
           (setq evil-insert-state-cursor '(bar "green"))
           (setq evil-normal-state-cursor '(box "yellow"))
@@ -3809,3 +3810,18 @@ So I suspected that it might be that I updated the package =evil=.  I was on
 mouse is gone, AND the problem of cursor going to Emacs mode in elisp when the
 documentation shows stuff in the minibuffer is also gone!
 
+
+** =q:= in evil-mode and the command window
+
+- The key =q= is bound to =evil-record-macro= which waits for a register to be enterred
+- When the register is =:=, instead of recording a macro, we go to the ex
+  command window (calls =evil-command-window-ex=).
+- I have no idea what this does.
+- Disabling this would require either
+  - Redefining =evil-command-window-ex= do be a noop function
+  - Changing the code of =evil-record-macro=, the case where register is =:=, to
+    do nothing.
+
+In any evil state, =C-x 0= closes that window, and if we are in normal state,
+=:q= also closes it.  My solution is to set =evil-command-window-mode= as one of
+the =evil-normal-state-modes= so that both are possible.
