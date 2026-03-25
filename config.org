@@ -2440,26 +2440,79 @@ This is equivalent to launching =org-agenda= and pressing a, h, c respectively.
 
 *** Function to create a prefix for the projects agenda view
 
+The function takes something like
+#+begin_example
+,* Apple
+,** ...
+,* Apricot
+,** GTD-PROJECT Banana
+,*** Cherry
+,**** GTD-NEXT-ACTION Durian
+#+end_example
+With =point= on or inside the headline =Durian= produce the path =Banana/Cherry=
+which is formed by concatenating the titles of the headlines of the ancestors of
+=Durian= starting at the first =GTD-PROJECT=.
+
+With
+#+begin_src emacs-lisp
+(setq my/agenda-view-next-action-paths
+      '(todo "GTD-NEXT-ACTION"
+             ((org-agenda-prefix-format
+               '((todo . "%(my/org-path-from-todo-keyword \"GTD-PROJECT\")\n    > "))))))
+#+end_src
+Because items of type GTD-NEXT-ACTIONS can sometimes not make sense without the
+context of the project they belong to, displaying items like so
+
+#+begin_example
+/Banana/Cherry
+    > GTD-NEXT-ACTION Durian
+#+end_example
+gives the needed context information.
+
+Consider
+#+begin_example
+/Software Project A/Sub-project
+    > GTD-NEXT-ACTION Take preliminary notes
+/Software Project B/External distribution
+    > GTD-NEXT-ACTION Make a list of dependencies that users will need to install
+#+end_example
+with the context, it's easy to see what's up.  Without the context, I would need
+to include information about the project in the title like "Take preliminary
+notes about Sub-project of Project A"
+
 https://orgmode.org/worg/dev/org-element-api.html
 #+begin_src emacs-lisp :results none
-(defun my/org-get-parent (e)
-  (plist-get (car (cdr e)) :parent))
-(defun my/org-path-from-todo-keyword (todo-keyword)
-  "Create a string that reprensents a path to the current headline from the
-first ancestor headline whose TODO keyword is TODO-KEYWORD.
-
-When called interactively, the user is prompted for the TODO keyword."
-  (interactive "sTodo keyword please ")
-  (let ((eap (org-element-at-point))
-        (path ""))
-    (while (not (string-equal (car eap) "headline"))
-      (setq eap (my/org-get-parent eap)))
-    (while (and eap (not (string-equal (plist-get (car (cdr eap)) :todo-keyword) todo-keyword)))
-      (setq eap (my/org-get-parent eap))
-      (setq path (concat (plist-get (car (cdr eap)) :raw-value) "/" path))
-      (when (string-equal (car eap) "org-data")
-        (setq eap nil)
-        (setq path (format "*Not inside a %s*" todo-keyword))))
+(defun is-headline (element)
+  "Return 't' if ELEMENT is a headline"
+  (string-equal (car element) "headline"))
+(defun is-headline-with-keyword (element keyword)
+  "Return 't' if element is a headline with 'keyword' as its TODO keyword"
+  (and (is-headline element)
+       (string-equal (org-element-property :todo-keyword element) keyword)))
+(defun my/org-lineage-from-keyword (element keyword)
+  "Return the ancestry of ELEMENT starting at the first ancestor having KEYWORD
+  as its TODO keyword"
+  (let ((lineage (reverse (org-element-lineage element nil t))))
+    (while (not (is-headline-with-keyword (car lineage) keyword))
+      (setq lineage (cdr lineage)))
+    lineage))
+(defun my/org-headline-lineage-from-keyword (element keyword)
+  "Return the ancestry of ELMENT starting at the first ancestor having KEYWORD
+  as its TODO keyword and removing all ancestors that are not headlines"
+  (let ((lineage (my/org-lineage-from-keyword element keyword)))
+    (let ((headlines (list)))
+      (while (is-headline (car lineage))
+        (setq headlines (cons (car lineage) headlines))
+        (setq lineage (cdr lineage)))
+    (reverse headlines))))
+(defun my/org-path-from-todo-keyword (keyword)
+  "Return a path string representing the ancestry of the element at point
+  starting with the first headline having KEYWORD as its TODO keyword and ending
+  at the headline containing point."
+  (interactive)
+  (let ((path ""))
+    (dolist (e (butlast (my/org-headline-lineage-from-keyword (org-element-at-point) keyword)))
+      (setq path (format "%s/%s" path (org-element-property :title e))))
     path))
 #+end_src
 
