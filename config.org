@@ -549,6 +549,46 @@ We also add a few ourselves.
 #+begin_src emacs-lisp
 (helm-mode)
 #+end_src
+*** Restoring normal tab behavior
+
+In most helm completion buffers, TAB normally switches to some kind of "action"
+menu which has always bothered me.  I got used to it but I could see how it was
+messing up someone who showed helm to so I looked into how to get a simple
+behavior of just moving to the next choice.
+
+#+begin_src emacs-lisp
+(define-key helm-find-files-map (kbd "<TAB>") 'helm-next-line)
+(define-key helm-find-files-map (kbd "<DEL>") 'helm-delete-char-backward)
+(define-key helm-comp-read-map (kbd "<TAB>") 'helm-next-line)
+(define-key helm-buffer-map (kbd "<TAB>") 'helm-next-line)
+#+end_src
+I got the idea to do =(define-key helm-something-map ...)= from these
+- [[https://stackoverflow.com/a/45929435/5795941][Stack Overflow: How to restore anything like behavior for tab autocomplete in helm]]
+  He maps TAB to =helm-execute-persistent-action= which doesn't seem to do
+  anything.  With =(kbd "<tab>")=, it has no effect and with =(kbd "<TAB>")= it
+  makes TAB do something weird.
+- [[https://www.reddit.com/r/emacs/comments/15jx710/tab_behavior_in_helmfindfiles/][Reddit: Tab behavior in helm-find-files]] Also uses =(kbd "<tab>")= in lowercase
+  but he makes it do a function =my/helm-ff-tab=.  I don't get why they don't
+  just do =helm-next-line=.
+
+Also note that in =helm-find-files-map=, backspace does
+=helm-ff-delete-char-backward-with-subkeys= which makes it so that =backspace
+tab= doesn't do the same thing.  I don't get it, I just made back do
+=delete-char-backward= and it solved my problem of TAB doing something different
+if it was right after pressing backspace.
+
+**** Trying to make tab add the common prefix of the candidates
+
+When there is a common prefix to all current candidates, adding that prefix
+makes sense since it doesn't change the possible matches.
+
+However because of the fuzzy nature of helm, candidates don't necessarily have a
+common prefix.  For example, with "org-agen" the candidates are all the
+functions that begin with "org-agenda" but there is also
+- =org-drag-element-forward=
+- =org-cycle-agenda-files=
+so even though all functions that begin with "org-agen" have a common prefix of
+"org-agenda", we can't add the "da" in helm.
 
 *** Remapped functions
 
