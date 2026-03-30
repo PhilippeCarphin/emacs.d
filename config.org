@@ -733,7 +733,10 @@ pressed fast enough, Emacs may perceive this as `M-j'."
                                           prog-mode
                                           text-mode
                                           repos-mode
-                                          evil-command-window-mode))
+                                          evil-command-window-mode
+                                          magit-mode
+                                          dired-mode
+                                          org-agenda-mode))
           (setq evil-motion-state-cursor '('box "orange"))
           (setq evil-insert-state-cursor '(bar "green"))
           (setq evil-normal-state-cursor '(box "yellow"))
@@ -979,6 +982,15 @@ cursor can be past the end of the line."
     (right-char)))
 (evil-global-set-key 'insert (kbd "C-e") 'my/evil-end-of-line)
 (evil-global-set-key 'insert (kbd "C-a") 'evil-beginning-of-line)
+#+end_src
+
+*** Evil bindings in other contexts
+
+#+begin_src emacs-lisp
+(use-package evil-collection
+  :ensure t
+  :config (setq evil-want-keybinding nil)
+          (evil-collection-init '(calendar dired magit agenda)))
 #+end_src
 
 ** Magit
