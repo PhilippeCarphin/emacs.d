@@ -2562,31 +2562,24 @@ It normally does org-agenda-goto-date")
 - Dr. Tam: It does?
 k is deactivated
 It normally does org-agenda-capture (do C-h f to find out what key it is)")
-(add-hook 'org-agenda-mode-hook
-          (lambda ()
-            (define-key org-agenda-mode-map (kbd "j")
-                        (lambda () (interactive)
-                          (message the-shadow-quote-1)))))
-;; Originally org-agenda-capture : I use C-c c and I can't use k
-(add-hook 'org-agenda-mode-hook
-          (lambda ()
-            (define-key org-agenda-mode-map (kbd "k")
-                        (lambda () (interactive)
-                          (message the-shadow-quote-2)))))
-(add-hook 'org-agenda-mode-hook (lambda () (hl-line-mode -1)))
-#+end_src
-
-#+begin_src emacs-lisp
-(add-hook 'org-agenda-mode-hook
-          (lambda ()
-            (define-key org-agenda-mode-map
-                        (kbd "SPC") 'leader-key)))
+(define-key org-agenda-mode-map (kbd "j") (lambda () (interactive) (message the-shadow-quote-1)))
+(define-key org-agenda-mode-map (kbd "k") (lambda () (interactive) (message the-shadow-quote-2)))
+(define-key org-agenda-mode-map (kbd "SPC") #'leader-key)
 #+end_src
 
 NOTE: I would normally just do the =(define-key org-agenda-mode-map (kbd "SPC")
 'leader-key)= so the fact that I didn't probably means that I had to do it that
 way but I don't remember why.  My guess is that the map might not exist at the
 time when the =define-key= gets run.
+
+NOTE Followup: It seems like now I can do just the define-key instead of doing
+what I used to do:
+#+begin_src emacs-lisp :tangle no
+(add-hook 'org-agenda-mode-hook
+          (lambda () (define-key org-agenda-mode-map (kbd "k")
+                                 (lambda () (interactive)
+                                   (message the-shadow-quote-2)))))
+#+end_src
 
 ** Search result visibility
    :PROPERTIES:
