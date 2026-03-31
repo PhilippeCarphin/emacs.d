@@ -2870,6 +2870,12 @@ This has two relevant consequences:
     | =B=     | Do bulk action to marked entries       |
     | =C-u B= | Do bulk action with universal argument |
 
+** Set =q= to do =org-agenda-quit= in evil normal mode
+
+#+begin_src emacs-lisp
+(evil-define-key 'normal org-agenda-mode-map (kbd "q") #'org-agenda-quit)
+#+end_src
+
 * Leader Keymap
   :PROPERTIES:
   :HEADER-ARGS: :tangle yes :results none
