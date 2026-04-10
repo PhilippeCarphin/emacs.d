@@ -3429,6 +3429,13 @@ I would like it to go from
 
 ** TODO Setup Org Context tags                                       :@work:
 
+Tag system somewhat based on GTD's concept of context.
+- =@= where I am
+- =#= who I am with
+- I remember there were four things but I don't remember what the two others were.
+  I think they were "how much time I have" and "how much energy I have".  And
+  I'm pretty sure that "how important is the task" is not one of them.
+
 #+begin_src emacs-lisp
 (setq my/org-common-tag-alist '(("@x" . ?x)))
 (if (string-equal system-type "darwin")
