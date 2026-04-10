@@ -2810,14 +2810,17 @@ and their =WAITING_ON= value.
 (defun my/org-set-waiting-property (waiting-for)
   "Set a WAITING_ON property on the current headline"
   (interactive "sWaiting for what (value for :WAITING_ON: property): ")
-  (org-set-property "WAITING_ON" waiting-for))
+  (org-set-property "WAITING_ON" (format "%s since %s" waiting-for (format-time-string "[%Y-%m-%d %a %H:%02M]"))))
 (defun my/org-maybe-clear-waiting-property ()
   "Offer to remove a WAITING_ON property on the current headline if there is one"
   (interactive)
   (let ((waiting-on (org-entry-get (point) "WAITING_ON")))
     (when waiting-on
-      (when (y-or-n-p (concat "Remove property WAITING_ON: " waiting-on))
-        (org-entry-delete (point) "WAITING_ON")))))
+      (org-entry-delete (point) "WAITING_ON")
+      (save-excursion
+        (goto-char (org-log-beginning t))
+        (insert
+         (format "- WAITED ON '%s' done on %s\n" waiting-on (format-time-string "[%Y-%m-%d %a %H:%02M]")))))))
 #+end_src
 
 When the todo state changes *to* =GTD-WAITING=, we prompt the user for a value
