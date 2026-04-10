@@ -1379,15 +1379,6 @@ the error faces.
   (add-hook 'prog-mode-hook #'rainbow-identifiers-mode))
 #+end_src
 
-** Projectile
-
-#+begin_src emacs-lisp
-(use-package projectile :ensure t
-  :config
-  (projectile-mode +1)
-  (define-key leader-key (kbd "p") 'projectile-command-map))
-#+end_src
-
 ** Open file from repo
 
 #+begin_src emacs-lisp
