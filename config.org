@@ -3755,6 +3755,16 @@ and this script is bound to a key in tmux:
 bind A display-popup -w 120 -h 90% $HOME/.emacs.d/agenda.sh
 #+end_src
 
+This function might leave advice on =org-agenda= which will only be removed when
+=org-agenda-quit= is called which will cause =org-agenda-quit--clean-up= to do
+the advice removal.  Between when the advice is added and when it is removed,
+some things will be broken in the agenda.  If that happens, I've made the clean
+up function interactive so I can call it myself when I need to.
+
+Since =agenda.sh= is meant for a popup that blocks everything else, if I quit by
+pressing =q= (=org-agenda-quit=), then the cleanup is run and we're good.  If I
+quit by doing =ESC= or =:q=, then this doesn't call =org-agenda-quit=.
+
 #+begin_src emacs-lisp
 (defcustom tomas/org-agenda-frame-name "**tomas-agenda**"
   "Customize dedicated frame name to launch `org-agenda' in."
@@ -3774,9 +3784,11 @@ bind A display-popup -w 120 -h 90% $HOME/.emacs.d/agenda.sh
       (make-frame '((name . tomas/org-agenda-frame-name))))
 
   (select-frame-by-name tomas/org-agenda-frame-name)
+  (delete-other-windows)
 
   (defun org-agenda-quit--clean-up ()
     "Close the frame after `org-agenda-quit'."
+    (interactive)
     (advice-remove 'org-agenda 'delete-other-windows)
     (advice-remove 'org-agenda-quit 'org-agenda-quit--clean-up)
     (advice-remove 'org-agenda-Quit 'org-agenda-quit--clean-up)
@@ -3787,6 +3799,7 @@ bind A display-popup -w 120 -h 90% $HOME/.emacs.d/agenda.sh
   (advice-add 'org-agenda-quit :after #'org-agenda-quit--clean-up)
   (advice-add 'org-agenda-Quit :after #'org-agenda-quit--clean-up)
   (advice-add 'org-agenda :after #'delete-other-windows)
+  (advice-add 'evil-quit :before #'org-agenda-quit--clean-up)
 
   (org-agenda nil command))
 #+end_src
