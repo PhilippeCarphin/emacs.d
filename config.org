@@ -3131,6 +3131,15 @@ Moved to section =Other stuff/Vterm= to be in a single =(cond ((not "On windows"
 ;; (evil-define-key 'motion 'magit-blame-read-only-mode-map (kbd "RET") 'magit-show-commit)
 #+end_src
 
+** Projectile
+
+#+begin_src emacs-lisp
+(define-prefix-command 'projectile)
+(define-key leader-key (kbd "p") #'projectile)
+(define-key projectile (kbd "g") #'projectile-grep)
+(define-key projectile (kbd "f") #'projectile-find-file)
+#+end_src
+
 ** Misc
 
 #+begin_src emacs-lisp
