@@ -2858,6 +2858,7 @@ This has two relevant consequences:
 
 #+begin_src emacs-lisp
 (evil-define-key 'normal org-agenda-mode-map (kbd "q") #'org-agenda-quit)
+(evil-define-key 'normal org-agenda-mode-map (kbd "r") #'org-agenda-redo)
 #+end_src
 
 * Leader Keymap
