@@ -151,6 +151,15 @@ See `repos-shell-in-repo'"
   (let ((repos-remote-host nil)
         (vterm-buffer-name (concat "Vterm:repo: " repo-name "<local>")))
     (repos--shell-in-directory (repos-get-dir repo-name) vterm-buffer-name)))
+(defun repos-update-repo (repo-name)
+  (interactive)
+  (message "Repo name: '%s'" repo-name)
+  (let ((line (shell-command-to-string (format "repos --name %s" repo-name) )))
+    (read-only-mode -1)
+    (delete-line)
+    (insert line)
+    (ansi-color-apply-on-region (point-min) (point-max))
+    (read-only-mode)))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Creating the repos-overview buffer
@@ -309,6 +318,7 @@ See `%s'" (symbol-name func) (symbol-name func))
 (repos-make-buffer-function repos-ignore-repo-at-point repos-ignore-repo :name)
 (repos-make-buffer-function repos-local-shell-in-repo-at-point repos-local-shell-in-repo :name)
 (repos-make-buffer-function repos-find-files-in-repo-at-point helm-find-files-1 :dir)
+(repos-make-buffer-function repos-update-repo-at-point repos-update-repo :name)
 
 (defun repos-update-current-buffer ()
   ;; TODO Should definitely setup a buffer-local update function
@@ -387,12 +397,13 @@ See `%s'" (symbol-name func) (symbol-name func))
   (kbd "RET") 'repos-magit-in-repo-at-point
   (kbd "f") 'repos-find-files-in-repo-at-point)
 (evil-define-key 'normal repos-mode-map
-  (kbd "u") 'repos-update-current-buffer
+  (kbd "U") 'repos-update-current-buffer
   (kbd "g") 'repos-magit-in-repo-at-point
   (kbd "d") 'repos-dired-in-repo-at-point
   (kbd "s") 'repos-shell-in-repo-at-point
   (kbd "l") 'repos-local-shell-in-repo-at-point
   (kbd "i") 'repos-ignore-repo-at-point
+  (kbd "u") 'repos-update-repo-at-point
   (kbd "q") 'quit-window)
 ;; Magit does this, not sure what it does
 (add-hook 'repos-mode-hook 'evil-normalize-keymaps)
