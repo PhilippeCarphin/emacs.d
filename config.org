@@ -134,6 +134,15 @@ Add a directory for more involved elisp code.
 #+end_src
 
 * Small basic configs
+** Disable startup screen
+
+I always use Emacs as a daemon so I never see this screen anyway but in the rare
+case when I do start a standalone emacs instance, I don't want to see it.
+
+#+begin_src emacs-lisp
+(setq inhibit-startup-screen t)
+#+end_src
+
 ** Indent with spaces
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
