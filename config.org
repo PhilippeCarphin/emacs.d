@@ -599,6 +599,16 @@ functions that begin with "org-agenda" but there is also
 so even though all functions that begin with "org-agen" have a common prefix of
 "org-agenda", we can't add the "da" in helm.
 
+*** Don't get stuck in history
+
+Without this, when there is a history source, moving by lines is stuck in it or
+cycles back staying within the history and we would need to press =C-o= to go to
+the next source (getting out of history).  With this, the line movement commands
+*don't* cycle in source so they move to the next one.
+#+begin_src emacs-lisp
+(setq helm-move-to-line-cycle-in-source nil)
+#+end_src
+
 *** Remapped functions
 
 Notable remapped functions:
