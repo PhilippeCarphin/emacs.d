@@ -7,6 +7,10 @@ if [[ $(uname) != Darwin ]] ; then
     export TMPDIR=/tmp/$USER
     unset XDG_RUNTIME_DIR
     mkdir -p $TMPDIR
+else
+    export TMPDIR=/tmp/$(id -u)
+    mkdir -p $TMPDIR
+    unset XDG_RUNTIME_DIR
 fi
 if [[ -n ${INSIDE_EMACS} ]] ; then
     exec emacsclient --no-wait "$@"
