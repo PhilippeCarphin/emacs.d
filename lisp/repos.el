@@ -161,6 +161,16 @@ See `repos-shell-in-repo'"
     (ansi-color-apply-on-region (point-min) (point-max))
     (read-only-mode)))
 
+(defun repos-delete-current-line () (interactive)
+       "Delete the current line from the repos buffer.  The function
+repos-update-repo gives us the new state of the repo but it is a bit complicated
+to check if, in the updated state, the repo should no longer appear in the list.
+This command allows manual removal from the list for repos that no longer need
+to be there or that I just don't want to see."
+       (read-only-mode -1)
+       (delete-line)
+       (read-only-mode))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; Creating the repos-overview buffer
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -401,6 +411,7 @@ See `%s'" (symbol-name func) (symbol-name func))
   (kbd "U") 'repos-update-current-buffer
   (kbd "g") 'repos-magit-in-repo-at-point
   (kbd "d") 'repos-dired-in-repo-at-point
+  (kbd "D") 'repos-delete-current-line
   (kbd "s") 'repos-shell-in-repo-at-point
   (kbd "l") 'repos-local-shell-in-repo-at-point
   (kbd "i") 'repos-ignore-repo-at-point
