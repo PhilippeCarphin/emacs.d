@@ -267,6 +267,7 @@ See `repos-shell-in-repo'"
            (view-buffer repos-buffer-other))))
 
 (defun repos-process-sentinel (proc event-string out err)
+  ;; Function that gets run when the process ends
   (interactive) ;; Only interactive for testing
   (message "Repos process ended: %s" event-string)
   ;; I should also check (process-status proc) because this function
