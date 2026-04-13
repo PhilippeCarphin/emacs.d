@@ -1407,7 +1407,7 @@ the error faces.
                 repos-overview-ignore t)
           (when (string-equal system-type "gnu/linux")
             (setq repos-remote-host "hpcr7-in"
-                  repos-remote-command-fmt "TERM=xterm /bin/bash -lc '%s'"))
+                  repos-remote-command-fmt "TERM=xterm /bin/bash -lc '%s 2>/dev/null'"))
           (define-key leader-key (kbd "r") 'repos-map))
 #+end_src
 

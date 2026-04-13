@@ -151,15 +151,18 @@ See `repos-shell-in-repo'"
   (let ((repos-remote-host nil)
         (vterm-buffer-name (concat "Vterm:repo: " repo-name "<local>")))
     (repos--shell-in-directory (repos-get-dir repo-name) vterm-buffer-name)))
+
 (defun repos-update-repo (repo-name)
   (interactive)
-  (message "Repo name: '%s'" repo-name)
-  (let ((line (shell-command-to-string (format "repos --name %s" repo-name) )))
-    (read-only-mode -1)
-    (delete-line)
-    (insert line)
-    (ansi-color-apply-on-region (point-min) (point-max))
-    (read-only-mode)))
+  (let ((cmd (repos--create-custom-command-string (list "-no-fetch" "--name" repo-name))))
+    (message "Updating: '%s' with '%s'" repo-name cmd)
+    (let ((line (shell-command-to-string cmd)))
+      (read-only-mode -1)
+      (delete-line)
+      (insert line)
+      (ansi-color-apply-on-region (point-min) (point-max))
+      (read-only-mode)
+      (message "Repo: '%s' updated" repo-name))))
 
 (defun repos-delete-current-line () (interactive)
        "Delete the current line from the repos buffer.  The function
@@ -211,6 +214,12 @@ to be there or that I just don't want to see."
                  'shell-quote-argument
                  (repos--create-base-command)
                  " "))))
+
+(defun repos--create-custom-command-string (args)
+  (let ((command (concat "repos " (string-join args " "))))
+    (if repos-remote-host
+        (concat "ssh" " " repos-remote-host " \"" (format repos-remote-command-fmt command) "\" 2>/dev/null")
+      command)))
 
 ;;; Creating and updating the buffer
 (defun create-repos-buffer ()
