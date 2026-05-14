@@ -3832,6 +3832,15 @@ quit by doing =ESC= or =:q=, then this doesn't call =org-agenda-quit=.
 
   (org-agenda nil command))
 #+end_src
+
+** Change textwidth and stuff in =git-commit-mode=
+
+#+begin_src emacs-lisp
+(add-hook 'git-commit-mode-hook (lambda () (setq fill-column 70)(auto-fill-mode -1)(display-fill-column-indicator-mode)))
+#+end_src
+
+There is some work to do: It doesn't look like =auto-fill-mode= is turned off.
+
 * Notes
 
 ** Entering visual state using mouse produces error
