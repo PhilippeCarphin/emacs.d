@@ -76,17 +76,27 @@ function kill_emacs_by_pid(){
 
 
 rearrange_vim_lineno_args_by_ref(){
+    local -n _args_in=$1
+    local -n _args_out=$2
     # Vim works with `vim FILENAME +LINENO` but emacs works with
     # `emacs +LINENO FILENAME` so a simple thing to do can be to say that if
     # the last argument starts with `+`, then it's a vim type call so we
     # just invert the two last arguments.
-    local -n _args=$1
-    if (( ${#_args[@]} < 2 )) ; then
+    local arg
+    for arg in "${_args_in[@]}" ; do
+        if [[ "${arg}" == *:* ]] ; then
+            _args_out+=("+${arg##*:}" "${arg%%:*}")
+        else
+            _args_out+=("${arg}")
+        fi
+    done
+
+    if (( ${#_args_out[@]} < 2 )) ; then
         return
     fi
 
-    if [[ ${_args[-1]} == +* ]] ; then
-        _args=("${_args[@]:0:$((${#_args[@]}-2))}" "${_args[-1]}" "${_args[-2]}")
+    if [[ ${_args_out[-1]} == +* ]] ; then
+        _args_out=("${_args[@]:0:$((${#_args[@]}-2))}" "${_args[-1]}" "${_args[-2]}")
     fi
 }
 
@@ -133,9 +143,10 @@ _emacsclient_t(){
     if ! [[ -S "$TMPDIR/emacs$(id -u)/server" ]] ; then
         exec $HOME/fs1/bin/vim -p "$@"
     fi
-    local args=("$@")
-    rearrange_vim_lineno_args_by_ref args
-    emacsclient -t "${args[@]}"
+    local args_in=("$@")
+    local args_out=()
+    rearrange_vim_lineno_args_by_ref args_in args_out
+    emacsclient -t "${args_out[@]}"
 }
 
 
