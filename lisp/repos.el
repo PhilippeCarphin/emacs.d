@@ -39,6 +39,8 @@ without taking much processing power.")
 (defvar repos-overview-fetch t "Run git fetch for each repo.  If this is on, a
 high value of `repos-over-view-n-jobs' like 8 or more is worth it.")
 
+(defvar repos-overview-fetch-timeout 60 "Timeout in seconds for fetch commands")
+
 (defvar repos-overview-all t "Show all repos.  Normally repos filters out repos
 that
 - Are up-to-date with the remote (not ahead or behind)
@@ -194,6 +196,9 @@ to be there or that I just don't want to see."
       (push "-noignore" args))
     (unless repos-overview-fetch
       (push "-no-fetch" args))
+    (when repos-overview-fetch-timeout
+      (push "-fetch-timeout" args)
+      (push (number-to-string repos-overview-fetch-timeout) args))
     (push "-F" args)
     (push (if (boundp 'other-config-file)
               other-config-file
