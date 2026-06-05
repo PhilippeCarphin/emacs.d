@@ -159,7 +159,7 @@ See `repos-shell-in-repo'"
   (let ((cmd (repos--create-custom-command-string (list "-no-fetch" "--name" repo-name))))
     (message "Updating: '%s' with '%s'" repo-name cmd)
     (let ((line (shell-command-to-string cmd)))
-      (read-only-mode -1)
+      (read-orly-mode -1)
       (delete-line)
       (insert line)
       (ansi-color-apply-on-region (point-min) (point-max))
