@@ -3035,6 +3035,7 @@ movement keys.
 (define-key my/orgmode-map (kbd "n") 'org-narrow-to-subtree)
 (define-key my/orgmode-map (kbd "w") 'widen)
 (define-key my/orgmode-map (kbd "c") 'org-columns)
+(define-key my/orgmode-map (kbd "l") 'org-add-note)
 #+end_src
 *** Item insertion
 #+begin_src emacs-lisp
