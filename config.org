@@ -1403,10 +1403,10 @@ the error faces.
 #+begin_src emacs-lisp
 (use-package repos
   :config (setq repos-overview-all nil
-                repos-overview-n-jobs 80
+                repos-overview-n-jobs 8
                 repos-overview-ignore t)
           (when (string-equal system-type "gnu/linux")
-            (setq repos-remote-host "hpcr7-in"
+            (setq repos-remote-host "hpcr8-in"
                   repos-remote-command-fmt "TERM=xterm /bin/bash -lc '%s 2>/dev/null'"))
           (define-key leader-key (kbd "r") 'repos-map))
 #+end_src
