@@ -166,6 +166,21 @@ See `repos-shell-in-repo'"
       (read-only-mode)
       (message "Repo: '%s' updated" repo-name))))
 
+(defun repos-comment (repo-name)
+  (interactive)
+  (let ((comment (read-string "Comment (empty to clear) ")))
+    ;; (message (shell-command-to-string "/Users/pcarphin/user-venv/bin/python3 -c 'import yaml'"))
+    ;; (message (shell-command-to-string "python3 -c 'import yaml'"))
+    ;; (message (shell-command-to-string "which python3"))
+    ;; (message (shell-command-to-string (format "%s -c 'import yaml'" repos-python-exec)))
+    (shell-command
+     (if (string-empty-p comment)
+         (repos--create-custom-command-string
+          (list "comment" "--name" repo-name "--clear"))
+       (repos--create-custom-command-string
+        (list "comment" "--name" repo-name "--set" comment))))))
+;; (repos-make-buffer-function repos-comment-repo-at-point repos-comment :name)
+
 (defun repos-delete-current-line () (interactive)
        "Delete the current line from the repos buffer.  The function
 repos-update-repo gives us the new state of the repo but it is a bit complicated
@@ -344,6 +359,7 @@ See `%s'" (symbol-name func) (symbol-name func))
 (repos-make-buffer-function repos-local-shell-in-repo-at-point repos-local-shell-in-repo :name)
 (repos-make-buffer-function repos-find-files-in-repo-at-point helm-find-files-1 :dir)
 (repos-make-buffer-function repos-update-repo-at-point repos-update-repo :name)
+(repos-make-buffer-function repos-comment-repo-at-point repos-comment :name)
 
 (defun repos-update-current-buffer ()
   ;; TODO Should definitely setup a buffer-local update function
@@ -430,6 +446,7 @@ See `%s'" (symbol-name func) (symbol-name func))
   (kbd "l") 'repos-local-shell-in-repo-at-point
   (kbd "i") 'repos-ignore-repo-at-point
   (kbd "u") 'repos-update-repo-at-point
+  (kbd "c") 'repos-comment-repo-at-point
   (kbd "q") 'quit-window)
 ;; Magit does this, not sure what it does
 (add-hook 'repos-mode-hook 'evil-normalize-keymaps)
