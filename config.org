@@ -2516,7 +2516,7 @@ https://orgmode.org/worg/dev/org-element-api.html
   "Return the ancestry of ELEMENT starting at the first ancestor having KEYWORD
   as its TODO keyword"
   (let ((lineage (reverse (org-element-lineage element nil t))))
-    (while (not (is-headline-with-keyword (car lineage) keyword))
+    (while (and lineage (not (is-headline-with-keyword (car lineage) keyword)))
       (setq lineage (cdr lineage)))
     lineage))
 (defun my/org-headline-lineage-from-keyword (element keyword)
@@ -2533,10 +2533,13 @@ https://orgmode.org/worg/dev/org-element-api.html
   starting with the first headline having KEYWORD as its TODO keyword and ending
   at the headline containing point."
   (interactive)
-  (let ((path ""))
-    (dolist (e (butlast (my/org-headline-lineage-from-keyword (org-element-at-point) keyword)))
-      (setq path (format "%s/%s" path (org-element-property :title e))))
-    path))
+  (let ((path "")
+        (lineage (my/org-headline-lineage-from-keyword (org-element-at-point) keyword)))
+        (if lineage
+            (dolist (e (butlast lineage))
+              (setq path (format "%s/%s" path (org-element-property :title e))))
+          (setq path (format "(not descendant of a %s headline)" keyword)))
+        path))
 #+end_src
 
 ** Prompt for closing notes when change from a not-done state to a done state
