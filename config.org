@@ -2208,6 +2208,28 @@ templates.
 *** Keys                                                              :keys:
 | =C-c C-w= | =org-capture-input= | (Custom) Org apture with selected template "i". |
 
+** Refile at position
+
+Refile at beginning or end based on the todo keyword.  The not-done ones
+go at the beginning and the others go at the end.
+
+#+begin_src emacs-lisp
+(defun get-todo-keyword-at-point ()
+  (let ((element (org-element-lineage (org-element-at-point) nil t)))
+    ;; Go up the tree until we land on a headline
+    (while (and element (not (string-equal (car (car element)) "headline")))
+      (setq element (cdr element)))
+    (org-element-property :todo-keyword (car element))))
+(defun my/org-refile () (interactive)
+       (let ((todo-keyword (get-todo-keyword-at-point)))
+         (let ((org-reverse-note-order (or (and (stringp todo-keyword)
+                                                (seq-contains-p '("GTD-IN" "GTD-ACTION" "GTD-NEXT-ACTION" "GTD-DORMANT")
+                                                                todo-keyword))
+                                           org-reverse-note-order)))
+           (org-refile))))
+(define-key org-mode-map (kbd "C-c C-w") #'my/org-refile)
+(setq org-reverse-note-order t)
+#+end_src
 ** Agenda display control
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
