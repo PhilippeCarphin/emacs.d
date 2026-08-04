@@ -84,16 +84,24 @@ see if that works.
 (add-to-list 'package-archives '("org"   . "http://orgmode.org/elpa/") t)
 (add-to-list 'package-archives '("gnu"   . "http://elpa.gnu.org/packages/") t)
 (add-to-list 'package-archives '("gnu-devel" "https://elpa.gnu.org/devel/") t)
-(package-initialize)
 #+end_src
-*** TODO extra call to =package-initialize=
 
-I get a warning that there is an extra call to =package-initialize= because
-=package= added it automatically to my init file so get rid of this one
-and make sure that everything still works.
+** Call =package-initialize= in older emacs
 
-One thing I'm unsure of is I adding the package archives could need to be done
-before doing =package-initialize=.
+This is here only for reference because I use a bunch of packages that are
+incompatible with older versions of Emacs.
+
+As of Emacs 27, =(package-initialize)= is called automatically.  This can be
+seen in =etc/NEWS:182= of https://ftpmirror.gnu.org/emacs/emacs-27.1.tar.gz.
+
+If =(package-initialize)= is called in the init file in emacs 27+, a warning
+about an unnecessary call to this function is printed.
+
+Therefore
+#+begin_src emacs-lisp
+(when (< emacs-major-version 27)
+  (package-initialize))
+#+end_src
 
 ** =use-package= macro
 Standard way for installing packages.  This replaces the use of =(require
