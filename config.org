@@ -722,7 +722,8 @@ pressed fast enough, Emacs may perceive this as `M-j'."
 #+begin_src emacs-lisp :results none
 (use-package evil
   :ensure t
-  :init (setq evil-want-C-i-jump nil)
+  :init (setq evil-want-keybinding nil)
+        (setq evil-want-C-i-jump nil)
         (setq evil-want-integration t)
         (setq evil-want-C-u-scroll t)
   :config (evil-mode 1)
@@ -1016,8 +1017,7 @@ cursor can be past the end of the line."
 #+begin_src emacs-lisp
 (use-package evil-collection
   :ensure t
-  :config (setq evil-want-keybinding nil)
-          (evil-collection-init '(calendar dired magit agenda)))
+  :config (evil-collection-init '(calendar dired magit agenda)))
 #+end_src
 
 ** Magit
