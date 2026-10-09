@@ -2445,6 +2445,10 @@ ended up with these two functions and as far as I can tell they do the right thi
            (org-agenda-redo))))
 (define-key org-agenda-mode-map (kbd "b") 'my/org-agenda-previous-week)
 (define-key org-agenda-mode-map (kbd "f") 'my/org-agenda-next-week)
+
+(evil-define-key 'normal org-agenda-mode-map
+  (kbd "b") 'my/org-agenda-previous-week
+  (kbd "f") 'my/org-agenda-next-week)
 #+end_src
 
 ** Agenda custom commands
