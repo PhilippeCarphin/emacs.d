@@ -2389,6 +2389,12 @@ In the complete agenda view, I have a section for waiting items which I can
 review.  And I could add something to show how long it's been waiting if I
 figure out how to do that.
 
+To exclude projects from being listed as stuck, I added the =GTD-DORMANT=.  This
+comes with the risk of it staying dormant even if I refile something into it.
+
+So I added an agenda view to list items with type =GTD-DORMANT= that contain an
+item of type =GTD-WAITING=, =GTD-ACTION=, or =GTD-NEXT-ACTION=.
+
 ** Date interval for agenda view
    :PROPERTIES:
    :HEADER-ARGS: :tangle yes
@@ -2463,6 +2469,11 @@ ended up with these two functions and as far as I can tell they do the right thi
                            (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline)))))
 (setq my/agenda-view-waiting
       '(todo "GTD-WAITING" ((org-agenda-prefix-format '((todo . "vvvvvvvvvvv [WAITING_ON:%(org-entry-get (point) \"WAITING_ON\")]\n "))))))
+(setq my/agenda-view-shouldnt-be-dormant
+      '(todo "GTD-DORMANT" ((org-agenda-files (list gtd-project-list-file))
+                            (org-agenda-skip-function '(org-agenda-skip-subtree-if 'notregexp " GTD-ACTION\\| GTD-NEXT-ACTION\\| GTD-WAITING\\| GTD-IN"))
+                            (org-agenda-overriding-header "Dormant projects that contain actions (shouldn't be dormant)"))))
+
 
 (setq my/agenda-group-complete
       `((tags "PRIORITY=\"A\"" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))))
@@ -2471,7 +2482,8 @@ ended up with these two functions and as far as I can tell they do the right thi
         ,my/agenda-view-next-action-paths
         ,my/agenda-view-current-day
         ,my/agenda-view-singular-actions
-        ,my/agenda-view-waiting))
+        ,my/agenda-view-waiting
+        ,my/agenda-view-shouldnt-be-dormant))
 (setq my/agenda-view-with-timestamp '(agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled 'deadline)))))
 (setq my/agenda-view-scheduled '(agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notdeadline)))))
 (setq my/agenda-view-deadline '(agenda "" ((org-agenda-skip-function '(org-agenda-skip-entry-if 'notscheduled)))))
@@ -2488,6 +2500,7 @@ ended up with these two functions and as far as I can tell they do the right thi
         ("h" "Habits" tags "STYLE=\"habit\"" ((org-agenda-prefix-format " ")
                                               (org-habit-graph-column 30)
                                               (org-agenda-overriding-header "Habits")))
+        ("d" "Shouldn't be dormant" (,my/agenda-view-shouldnt-be-dormant))
         ("g" . "GTD keyword searches searches")
         ("gt" todo "TODO")
         ("gi" todo "GTD-IN")
