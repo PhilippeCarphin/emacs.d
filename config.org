@@ -2320,7 +2320,8 @@ can be.
                                     "|"
                                     "GTD-REFERENCE(r!)"
                                     "GTD-DELEGATED(g)"
-                                    "GTD-DONE(d)")
+                                    "GTD-DONE(d)"
+                                    "GTD-CANCELED(C)")
                           (sequence "HABIT(h)" "|" "done-habit(x!)")
                           (sequence "APPOINTMENT(p)"
                                     "MEETING(m)"
@@ -2337,6 +2338,7 @@ can be.
         ("GTD-REFERENCE" :foreground "#00ff00" :weight normal :underline nil)
         ("GTD-SOMEDAY-MAYBE" :foreground "#7c7c74" :weight normal :underline nil)
         ("GTD-DONE" :foreground "#00ff00" :weight normal :underline nil)
+        ("GTD-CANCELED" :foreground "#ff3333" :weight normal :underline nil)
 
         ("HABIT" :foreground "#7c7c74" :weight bold :underline nil)
 
