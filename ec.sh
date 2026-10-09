@@ -135,8 +135,8 @@ _open_in_current_frame(){
 }
 
 _emacsclient_t(){
-    if ! [[ -S "$TMPDIR/emacs$(id -u)/server" ]] ; then
-        exec $HOME/fs1/bin/vim -p "$@"
+    if ! server-is-running ; then
+        exec vim -p "$@"
     fi
     local args_in=("$@")
     local args_out=()
