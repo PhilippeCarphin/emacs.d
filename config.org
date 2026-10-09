@@ -1461,6 +1461,29 @@ Terminals emulators that I've tried and that support this.
 - iTerm2
 - Windows Terminal (Windows 11)
 
+*** Non-clipetty version
+
+Clipetty doesn't seem to work on MacOS locally.  However iTerm suppports OSC52 so I
+think the problem is that I have no =SSH_TTY= variable.
+
+The non-clipetty version will probably set the clipboard of multiple machines if
+we have remote and local clients attached to a session.
+#+begin_src emacs-lisp :tangle no
+(defun my/clip (orig-fun string)
+  (send-string-to-terminal
+   (concat "\033]52;c;"
+           (base64-encode-string string)
+           "\007"))
+  (funcall orig-fun string))
+(add-function :around (local 'interprogram-cut-function) #'my/clip)
+#+end_src
+
+** git-modes
+
+#+begin_src emacs-lisp
+(use-package git-modes :ensure t)
+#+end_src
+
 * Helper functions
 :PROPERTIES:
 :HEADER-ARGS: :tangle yes
