@@ -3968,3 +3968,97 @@ documentation shows stuff in the minibuffer is also gone!
 In any evil state, =C-x 0= closes that window, and if we are in normal state,
 =:q= also closes it.  My solution is to set =evil-command-window-mode= as one of
 the =evil-normal-state-modes= so that both are possible.
+
+
+** Convert org link at point
+
+#+begin_src emacs-lisp
+(defun url-from-file-link () (interactive)
+       (let* ((context
+	       ;; Only consider supported types, even if they are not the
+	       ;; closest one.
+	       (org-element-lineage
+	        (org-element-context)
+	        '(citation citation-reference clock comment comment-block
+                           footnote-definition footnote-reference headline
+                           inline-src-block inlinetask keyword link node-property
+                           planning src-block timestamp))))
+         (if t
+             (progn
+               (let ((link-type (org-element-property :type context))
+	             (link-path (org-element-property :path context))
+                     (link-search (org-element-property :search-option context)))
+                 (message "LINK: %s:%s::%s" link-type link-path link-search)
+                 (with-temp-buffer
+                   (org-link-open-from-string (format "%s:%s::%s" link-type link-path link-search))
+                   (call-interactively #'git-weblink-store-org-link))
+)))))
+
+
+(defun get-link-at-point () (interactive)
+       (let* ((context
+	       ;; Only consider supported types, even if they are not the
+	       ;; closest one.
+	       (org-element-lineage
+	        (org-element-context)
+	        '(citation citation-reference clock comment comment-block
+                           footnote-definition footnote-reference headline
+                           inline-src-block inlinetask keyword link node-property
+                           planning src-block timestamp)
+	        t))
+	      (type (org-element-type context))
+	      (value (org-element-property :value context)))
+         (message "type: %s" type)
+         (message "value: %s" value)
+         (let* ((link-type (org-element-property :type context))
+	        (link-path (org-element-property :path context))
+                (link-search (org-element-property :search-option context)))
+           (message "link-type: %s" link-type)
+           (message "link-path: %s" link-path)
+           (message "link-search: %s" link-search)
+
+)))
+(defun visit-file-from-git-weblink () (interactive)
+       (let* ((context
+	       ;; Only consider supported types, even if they are not the
+	       ;; closest one.
+	       (org-element-lineage
+	        (org-element-context)
+	        '(citation citation-reference clock comment comment-block
+                           footnote-definition footnote-reference headline
+                           inline-src-block inlinetask keyword link node-property
+                           planning src-block timestamp))))
+         (if t
+             (progn
+               (message "PISS")
+               (let ((link-type (org-element-property :type context))
+	             (link-path (org-element-property :path context))
+                     (link-search (org-element-property :search-option context)))
+                 (let ((components (string-split link-path "/")))
+                   (message "LINK: %s:%s::%s" link-type link-path link-search)
+                   (message "path: %s" link-path)
+                   (message "comps: %s" components)
+                   (message "len: %d" (length components))
+                   (message "nodomain: %s" (cdr (cdr (cdr components))))
+                   (let ((newcomps (list))
+                         (line nil)
+                         (comp (cdr (cdr (cdr components)))))
+                     (message "comp: %s" comp)
+                     (while comp
+                       (message "while loop: (car comp): %s" (car comp))
+                       ;; (push (car comp) newcomps)
+                       (pcase (car comp)
+                         ("blob" (setq comp (cdr comp)))
+                         ("-" nil)
+                         (_ (push (car comp) newcomps)))
+                       (setq comp (cdr comp)))
+                     (message "newcomps: %s" (string-join (nreverse newcomps) "/"))
+                   ;;(message "domain: %s" (car components))
+)))))))
+#+end_src
+  (pcase domain
+    ("github.com"
+     (format "https://%s/%s/%s/blob/%s/%s?plain=1#L%s"
+             domain namespace (git-weblink-strip.git repo) ref file lineno))
+    ((or "gitlab.science.gc.ca" "gitlab.com")
+    
