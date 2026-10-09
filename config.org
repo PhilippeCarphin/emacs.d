@@ -728,7 +728,9 @@ pressed fast enough, Emacs may perceive this as `M-j'."
         (setq evil-want-C-u-scroll t)
   :config (evil-mode 1)
           (define-key evil-normal-state-map (kbd "SPC") 'leader-key)
-          (define-key evil-insert-state-map (kbd "C-g") 'evil-normal-state)
+          ;; Set C-g to enter normal-mode but not when in the minibuffer (in the
+          ;; minibuffer, we want C-g to exit the minibuffer
+          (evil-define-key 'insert text-mode-map (kbd "C-g") #'evil-normal-state)
           (evil-global-set-key 'motion "j" 'evil-next-visual-line)
           (evil-global-set-key 'motion "k" 'evil-previous-visual-line)
           ;; Normally insert-mode 'C-w' deletes a word but I hate that
