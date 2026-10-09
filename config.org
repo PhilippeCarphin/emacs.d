@@ -752,8 +752,8 @@ pressed fast enough, Emacs may perceive this as `M-j'."
           (evil-global-set-key 'normal (kbd "É") 'evil-search-backward)
           (evil-set-undo-system 'undo-redo)
           (global-set-key (kbd "M-u") 'universal-argument)
-          (setq evil-default-state 'emacs)
-                (define-key evil-emacs-state-map (kbd "ESC ESC") 'evil-normal-state)
+          (setq evil-default-state 'insert)
+          (define-key evil-emacs-state-map (kbd "ESC ESC") 'evil-normal-state)
           (setq evil-insert-state-modes nil)
           (setq evil-motion-state-modes nil)
           (setq evil-emacs-state-modes '(messages-buffer-mode))
@@ -766,7 +766,8 @@ pressed fast enough, Emacs may perceive this as `M-j'."
                                           evil-command-window-mode
                                           magit-mode
                                           dired-mode
-                                          org-agenda-mode))
+                                          org-agenda-mode
+                                          with-editor-mode))
           (setq evil-motion-state-cursor '('box "orange"))
           (setq evil-insert-state-cursor '(bar "green"))
           (setq evil-normal-state-cursor '(box "yellow"))
@@ -774,7 +775,7 @@ pressed fast enough, Emacs may perceive this as `M-j'."
           (setq evil-replace-state-cursor '(box "purple"))
           (setq evil-visual-state-cursor '(box "blue"))
           (setq evil-move-cursor-back nil)
-          (add-hook 'with-editor-mode-hook 'evil-insert-state))
+)
 #+end_src
 
 The =evil-want-C-i-jump= is very important.  When running emacs in the shell,
