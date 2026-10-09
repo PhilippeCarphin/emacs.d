@@ -2457,7 +2457,8 @@ ended up with these two functions and as far as I can tell they do the right thi
 (setq my/agenda-view-next-action-paths
       '(todo "GTD-NEXT-ACTION"
              ((org-agenda-prefix-format
-               '((todo . "%(my/org-path-from-todo-keyword \"GTD-PROJECT\")\n    > "))))))
+               '((todo . "%(my/org-path-from-todo-keyword \"GTD-PROJECT\") -->\t")))
+              (org-agenda-skip-function '(org-agenda-skip-entry-if 'scheduled)))))
 (setq my/agenda-view-current-day
       '(agenda "" ((org-agenda-start-day ".")
                    (org-agenda-span 'day)
