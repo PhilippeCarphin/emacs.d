@@ -3,7 +3,12 @@
 
 # Yet again, a per-process TMPDIR that contains the PID of the current shell
 # causes a problem.  Lets define this then.
-if [[ $(uname) != Darwin ]] ; then
+emacs=emacs
+emacsclient=emacsclient
+if [[ $(hostname) == linode ]] ; then
+    emacsclient=/snap/bin/emacsclient
+    emacs=/snap/bin/emacs
+elif [[ $(uname) != Darwin ]] ; then
     export TMPDIR=/tmp/$USER
     unset XDG_RUNTIME_DIR
     mkdir -p $TMPDIR
@@ -12,8 +17,9 @@ else
     mkdir -p $TMPDIR
     unset XDG_RUNTIME_DIR
 fi
+
 if [[ -n ${INSIDE_EMACS} ]] ; then
-    exec emacsclient --no-wait "$@"
+    exec ${emacsclient} --no-wait "$@"
 fi
 debug=""
 function main(){
@@ -23,18 +29,18 @@ function main(){
     while (($#)) ; do
         case "$1" in
         -d) debug="--debug-init" ;;
-        -k) emacsclient -t -c -e '(save-buffers-kill-emacs)' ;;
-        -p) emacsclient -e "(setenv \"PATH\" \"${PATH}\")" ; status=0 ; break ;;
-        -l) : lisp mode ; shift ; emacsclient "$@" ; status=$? ; break ;;
+        -k) ${emacsclient} -t -c -e '(save-buffers-kill-emacs)' ;;
+        -p) ${emacsclient} -e "(setenv \"PATH\" \"${PATH}\")" ; status=0 ; break ;;
+        -l) : lisp mode ; shift ; ${emacsclient} "$@" ; status=$? ; break ;;
         -K) kill_emacs_by_pid ; status=$? ; break ;;
         -s) emacs --daemon ${debug} ; status=$? ; break ;;
         -g) shift ; gui_open "$@" ; status=$? ; break ;;
         -t) shift ; _emacsclient_t "$@" ; status=$? ; break ;;
-        -x) shift ; exec emacsclient "$@" ; status=$? ; break ;;
+        -x) shift ; exec ${emacsclient} "$@" ; status=$? ; break ;;
         -y) shift ; _open_in_current_frame "$@" ; status=$? ; break ;;
         -i) shift
-            readlink -f $(which emacsclient)
-            readlink -f $(which emacs)
+            echo ${emacsclient}
+            echo ${emacs}
             ;;
         -f) shift ; _find_emacs_daemons ; status=$? ; break ;;
         *)  : no -t ; _emacsclient_t "$@" ; status=$? ; break ;;
@@ -130,7 +136,7 @@ _open_in_current_frame(){
     ensure-server-is-running
     ensure-frame-exists
     for f in "$@"; do
-        emacsclient --eval "(find-file \"$f\")" >/dev/null
+        ${emacsclient} --eval "(find-file \"$f\")" >/dev/null
     done
 }
 
@@ -141,7 +147,7 @@ _emacsclient_t(){
     local args_in=("$@")
     local args_out=()
     rearrange_vim_lineno_args_by_ref args_in args_out
-    emacsclient -t "${args_out[@]}"
+    ${emacsclient} -t "${args_out[@]}"
 }
 
 
@@ -149,19 +155,19 @@ function open-in-any-frame(){
     ensure-server-is-running
     ensure-frame-exists
     if [[ "$@" != "" ]] ; then
-        emacsclient --no-wait "$@"
+        ${emacsclient} --no-wait "$@"
     fi
     focus-current-frame
 }
 
 # From https://superuser.com/a/862809
 function frame-exists() {
-    emacsclient -n -e "(if (> (length (frame-list)) 1) 't)" 2>/dev/null | grep -v nil >/dev/null 2>&1
+    ${emacsclient} -n -e "(if (> (length (frame-list)) 1) 't)" 2>/dev/null | grep -v nil >/dev/null 2>&1
 }
 
 function ensure-frame-exists() {
     if ! frame-exists ; then
-	emacsclient -c --no-wait
+	${emacsclient} -c --no-wait
     fi
 }
 function gui_open(){
@@ -174,17 +180,17 @@ function gui_open(){
             elisp_code+="(goto-line ${a#+})"
         fi
     done
-    emacsclient --eval "${elisp_code}"
+    ${emacsclient} --eval "${elisp_code}"
 }
 
 # From https://emacs.stackexchange.com/a/54139/19972
 function focus-current-frame() {
-    emacsclient --eval "(progn (select-frame-set-input-focus (selected-frame)))"
+    ${emacsclient} --eval "(progn (select-frame-set-input-focus (selected-frame)))"
 }
 
 # From https://emacs.stackexchange.com/a/12896/19972
 function server-is-running() {
-    emacsclient -e '(+ 1 0)' > /dev/null 2>&1
+    ${emacsclient} -e '(+ 1 0)' > /dev/null 2>&1
 }
 
 function ensure-server-is-running(){
